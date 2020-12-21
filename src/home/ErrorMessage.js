@@ -22,7 +22,7 @@ export default class ErrorMessage extends Component {
   render() {
     return (
       <View>
-        {(this.props.value == undefined || this.props.value == '') ? <Text style={styles.errorStyle}>{this.props.message}</Text> : <Text style={styles.errorStyle}>&nbsp;   &nbsp;&nbsp;</Text>}
+        {(this.props.value == undefined || this.props.value == '') ? <Text style={[styles.errorStyle]}>{this.props.message}</Text> : <Text style={styles.errorStyle}>&nbsp;   &nbsp;&nbsp;</Text>}
       </View>
 
 
@@ -35,5 +35,6 @@ const styles = StyleSheet.create({
     color: 'red',
     fontSize: 14,
     paddingLeft : 5,
+    fontStyle :'italic'
   }
 });

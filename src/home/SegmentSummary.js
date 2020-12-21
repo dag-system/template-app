@@ -23,7 +23,7 @@ import MapView from 'react-native-maps';
 import ApiUtils from '../ApiUtils';
 import AsyncStorage from '@react-native-community/async-storage';
 import { connect } from 'react-redux'
-
+import Logo from '../assets/logo_header.png';
 
 const mapStateToProps = (state) => {
   return {
@@ -295,15 +295,22 @@ class SegmentSummary extends Component {
 
 
         <Header style={styles.header}>
-          <Body>
-            <View style={{ flexDirection: 'row', justifyContent: 'flex-start', width: '100%', paddingRight: 0, paddingLeft: 0, marginTop: 20, marginBottom: 20 }}>
+        <Left style={{flex: 1}}>
+            {/* <View style={{ flexDirection: 'row', justifyContent: 'flex-start', width: '100%', paddingRight: 0, paddingLeft: 0, marginTop: 20, marginBottom: 20 }}> */}
               <Button style={styles.drawerButton} onPress={() => this.onGoBack()}>
                 <Icon style={styles.saveText} name="chevron-left" type="FontAwesome5" />
-                <Text style={styles.saveText}>Précedent</Text>
+                {/* <Text style={styles.saveText}>Précedent</Text> */}
               </Button>
-            </View>
-
-          </Body>
+            {/* </View> */}
+          </Left>
+          <Body style={{flex: 0}} />
+            <Right style={{flex: 1}}>
+              <Image
+                resizeMode="contain"
+                source={Logo}
+                style={styles.logo}
+              />
+            </Right>
         </Header>
         <View style={styles.loginButtonSection}>
           <ScrollView contentContainerStyle={styles.loginButtonSection}>
@@ -401,7 +408,7 @@ class SegmentSummary extends Component {
                   <View style={{ justifyContent: 'center' }}>
 
                     <View >
-                      <Text style={{ padding: 10, backgroundColor: '#D7D7D7', textAlign: 'center' }}>VOS EFFORTS</Text>
+                      <Text style={{ padding: 10, textAlign: 'center', color : ApiUtils.getBackgroundColor() }}>VOS EFFORTS</Text>
                       <View style={{
                         marginBottom: 0, paddingLeft: 10, paddingRight: 10, padding: 10,
                         marginTop: 0,
@@ -426,14 +433,17 @@ class SegmentSummary extends Component {
 
                           <TouchableHighlight
                             underlayColor='rgba(255,255,255,1,0.6)'
-                            onPress={() => this.openLive(item.idLive)}><View style={styles.rowContainer}>
+                            disabled={true}
+                            // onPress={() => this.openLive(item.idLive)}
+                            ><View style={styles.rowContainer}>
                               <View ><Text style={{ fontWeight: 'bold' }}>{item.dateEffort}</Text></View>
                               <View ><Text style={{ fontWeight: 'bold' }}>{item.tempsEffort}</Text></View>
                             </View>
                           </TouchableHighlight> :
                           <TouchableHighlight
                             underlayColor='rgba(255,255,255,1,0.6)'
-                            onPress={() => this.openLive(item.idLive)}>
+                            // onPress={() => this.openLive(item.idLive)}
+                            >
 
                             <View style={styles.rowContainer}>
                               <View >
@@ -460,18 +470,20 @@ class SegmentSummary extends Component {
                   : null}
 
                 {this.state.segment.classement != null ?
+                
 
                   <View style={{ justifyContent: 'center' }}>
 
-                    <Text style={{ padding: 10, backgroundColor: '#D7D7D7', textAlign: 'center' }}>CLASSEMENT</Text>
+                    <Text style={{ padding: 10,textAlign: 'center', color : ApiUtils.getBackgroundColor() }}>CLASSEMENT</Text>
 
 
                     <FlatList style={{ height: '85%', width: '100%' }}
                       data={this.state.segment.classement}
                       renderItem={({ item }) =>
 
-                        item.idUtilisateur == this.state.userdata.idUtilisateur ?
+                        item.idUtilisateur == this.props.userData.idUtilisateur ?
                           <View style={styles.rowContainer}>
+                            <Text></Text>
                             <View ><Text style={{ fontWeight: 'bold' }}>{item.classement}</Text></View>
                             <View ><Text style={{ fontWeight: 'bold', textAlign: 'left' }}>{item.prenomUtilisateur} {item.nomUtilisateur}</Text></View>
                             <View ><Text style={{ fontWeight: 'bold' }}>{item.tempsEffort} - le {item.dateEffort}</Text></View>
@@ -503,7 +515,7 @@ class SegmentSummary extends Component {
 
 const styles = StyleSheet.create({
   header: {
-    backgroundColor: ApiUtils.getBackgroundColor(),
+    backgroundColor: 'white',
     width: '100%'
   },
   title: {
@@ -562,13 +574,19 @@ const styles = StyleSheet.create({
   },
   loginButtonSection: {
     width: '100%',
-    height: '180%'
+    // height: '140%',
+    paddingBottom : 100,
   },
   centerLogo: {
     color: '#000'
   },
   container: {
     width: '100%',
+  },
+  logo: {
+    width: '100%',
+    height: 50,
+    alignSelf: 'center',
   },
   rowContainer: {
     flexDirection: 'row',

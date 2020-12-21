@@ -7,6 +7,7 @@ import {
   TextInput,
   SafeAreaView,
   TouchableHighlight,
+  TouchableOpacity,KeyboardAvoidingView, ActivityIndicator
 } from 'react-native';
 import {
   Container,
@@ -28,12 +29,15 @@ import Logo from '../assets/logo.png';
 import Loading from './Loading';
 import {Modal} from 'react-native';
 import WebviewJetCode from './WebviewJetCode';
+import GlobalStyles from '../styles';
 
 const mapStateToProps = state => {
   return {
     userData: state.userData,
   };
 };
+
+
 
 class Home extends Component {
   constructor(props) {
@@ -48,10 +52,14 @@ class Home extends Component {
       isLoading: false,
       isModalJetcodeVisible: false,
     };
+
+    this._unsubscribe = this.props.navigation.addListener('focus', payload => {
+      this.componentDidMount();
+    });
   }
 
   componentDidMount() {
-    this.getinformationStation();
+
     // #stop BackroundGeolocation and remove-listeners when Home Screen is rendered.
     if (this.props.userData != null) {
       this.onClickNavigate('Lives');
@@ -60,9 +68,10 @@ class Home extends Component {
       BackgroundGeolocation.removeListeners();
     }
 
-    setTimeout(() => this.checkIsConnected(), 2);
+    setTimeout(() => this.checkIsConnected(), 200);
+    this.getinformationStation();
   }
-  checkIsConnected() {
+  checkIsConnected = () => {
     if (this.props.userData != null) {
       this.onClickNavigate('Lives');
     }
@@ -219,7 +228,7 @@ class Home extends Component {
     const formData = new FormData();
     formData.append('method', 'getInformationStation');
     formData.append('auth', ApiUtils.getAPIAuth());
-    formData.append('idStation', "36");
+    formData.append('idStation', '36');
     //fetch followCode API
 
     fetch(ApiUtils.getAPIUrl(), {
@@ -234,56 +243,47 @@ class Home extends Component {
       .then(response => response.json())
       .then(responseJson => {
         //save values in cache
-    
-          var result = responseJson;
-  
-            if (
-              result.traces != null &&
-              result.traces.length != 0
-            ) {
-              console.log('la')
-              this.setState({nomStation: result.nomStation});
 
-              this.setState({descriptionStation: result.descriptionStation});
-              var tracesArray = Object.values(result.traces);
+        var result = responseJson;
 
-              var finalTraceArray = []; // new Object(this.props.polylines);
-              if ((tracesArray != null) & (tracesArray.length != 0)) {
-                tracesArray.forEach(trace => {
-                  var finalTrace = trace;
+        if (result.traces != null && result.traces.length != 0) {
+          this.setState({nomStation: result.nomStation});
 
-                  var positionArray = Object.values(trace.positionsTrace);
-                  trace.positionsTrace = positionArray;
+          this.setState({descriptionStation: result.descriptionStation});
+          var tracesArray = Object.values(result.traces);
 
-                  var finalTrace = {
-                    positionsTrace: positionArray,
-                    couleurTrace: trace.couleurTrace,
-                    nomTrace: trace.nomTrace,
-                    isActive: true,
-                    sportTrace: trace.sportTrace,
-                    distanceTrace: trace.distanceTrace,
-                    dplusTrace: trace.dplusTrace,
-                  };
-                  finalTraceArray.push(finalTrace);
-                });
-              }
+          var finalTraceArray = []; // new Object(this.props.polylines);
+          if ((tracesArray != null) & (tracesArray.length != 0)) {
+            tracesArray.forEach(trace => {
+              var finalTrace = trace;
 
-        
+              var positionArray = Object.values(trace.positionsTrace);
+              trace.positionsTrace = positionArray;
 
-              var station = {
-                nomStation: result.nomStation,
-                descriptionStation: result.descriptionStation,
-                polylines: finalTraceArray,
-                // pointsInterets: finalinterestArray
+              var finalTrace = {
+                positionsTrace: positionArray,
+                couleurTrace: trace.couleurTrace,
+                nomTrace: trace.nomTrace,
+                isActive: true,
+                sportTrace: trace.sportTrace,
+                distanceTrace: trace.distanceTrace,
+                dplusTrace: trace.dplusTrace,
               };
-
-          
-
-              var action = {type: 'UPDATE_STATION_DATA', data: station};
-              this.props.dispatch(action);
-            }
+              finalTraceArray.push(finalTrace);
+            });
           }
-      )
+
+          var station = {
+            nomStation: result.nomStation,
+            descriptionStation: result.descriptionStation,
+            polylines: finalTraceArray,
+            // pointsInterets: finalinterestArray
+          };
+
+          var action = {type: 'UPDATE_STATION_DATA', data: station};
+          this.props.dispatch(action);
+        }
+      })
       .catch(e => console.log(e.message))
       .then();
   }
@@ -299,7 +299,7 @@ class Home extends Component {
           style={{flex: 0, backgroundColor: ApiUtils.getBackgroundColor()}}
         />
         <Content style={styles.body} scrollEnabled={true}>
-          <View style={styles.loginButtonSection}>
+          <KeyboardAvoidingView style={styles.loginButtonSection}>
             <View
               style={{
                 zIndex: 10,
@@ -322,75 +322,45 @@ class Home extends Component {
                 />
               </TouchableHighlight>
 
-              <TextInput
-                style={styles.inputCode}
-                placeholder="folocode"
-                placeholderTextColor="white"
-                value={this.state.followCode}
-                onChangeText={followCode => this.setState({followCode})}
-                clearButtonMode="always"
-              />
-
-              <View
-                style={{
-                  flexDirection: 'row',
-                  justifyContent: 'center',
-                  alignSelf: 'center',
-                }}>
-                <Button
-                  full
-                  style={[
-                    styles.buttonok,
-                    this.state.followCode == ''
-                      ? {backgroundColor: '#95a5a6'}
-                      : {backgroundColor: '#2c3e50'},
-                  ]}
-                  onPress={() => this.onClickSendFollowCode()}
-                  disabled={this.state.followCode == ''}>
-                  <Text>VALIDER</Text>
-                </Button>
-              </View>
-
-              {/* <TextInput style={styles.inputCode} placeholder="Adresse mail" placeholderTextColor="white"
+          
+              <TextInput style={[styles.inputCode, {borderBottomColor : 'white', color : 'white'}]} placeholder="Adresse mail" placeholderTextColor="white"
                 value={this.state.email} onChangeText={(email) => this.setState({ email })}
                 clearButtonMode='always' keyboardType='email-address'
               />
 
-              <TextInput style={styles.inputCode} placeholder="Mot de passe" placeholderTextColor="white"
+              <TextInput style={[styles.inputCode, {borderBottomColor : 'white', color : 'white'}]} placeholder="Mot de passe" placeholderTextColor="white"
                 secureTextEntry={true} value={this.state.password}
                 onChangeText={(password) => this.setState({ password })} />
 
               <View style={{ flexDirection: 'row', justifyContent: 'center', alignSelf: 'center', marginTop: 10 }}>
-                <Button style={[styles.buttonok,
+                <TouchableOpacity style={[GlobalStyles.button,{
+                  width : '80%',
+                  borderColor : 'white', padding : 10
+                },
                 this.isErrorForm() ?
-                  { backgroundColor: '#95a5a6' } : { backgroundColor: '#2c3e50' }]}
+                  { backgroundColor: 'transparent' } : { backgroundColor: 'white' }]}
                   onPress={() => this.onLogin()} disabled={this.state.email == '' || this.state.password == ''} >
-                  {this.state.isLoading ? <ActivityIndicator color="white"></ActivityIndicator>
-                    : <Text style={{ textAlign: 'center' }}>CONNEXION</Text>}
-                </Button>
+                  {this.state.isLoading ? <ActivityIndicator color={ApiUtils.getBackgroundColor()}></ActivityIndicator>
+                    : <Text style={{ textAlign: 'center', fontWeight: 'bold', color :  this.isErrorForm() ? 'white' : ApiUtils.getBackgroundColor() }}>CONNEXION</Text>}
+                </TouchableOpacity>
               </View>
-              <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
-                <Text full style={styles.textLink} onPress={() => this.createAccount()} >Créer un compte</Text>
-                <Text full style={styles.textLink} onPress={() => this.forgotPassword()} >Mot de passe oublié</Text>
-
-              </View> */}
-
-              <View style={{flexDirection: 'row', justifyContent: 'center'}}>
-                <Text
-                  full
-                  style={styles.textLink}
+              <View style={{ flexDirection: 'row', justifyContent: 'space-evenly', width : '80%', marginTop : 20 }}>
+              <TouchableOpacity
+                  style={[GlobalStyles.button, {marginTop: 10, borderColor : 'white', opacity : 0.5}]}
                   onPress={() => this.createAccountOld()}>
-                  Créer un compte
-                </Text>
-                {/* <Text
-                  full
-                  style={styles.textLink}
+                  <Text style={{color : 'white', fontSize : 12}}>Créer un compte</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={[GlobalStyles.button, {marginTop: 10, borderColor : 'white', opacity : 0.5}]}
                   onPress={() => this.forgotPassword()}>
-                  Mot de passe oublié
-                </Text> */}
+                  <Text style={{color : 'white', fontSize : 12}}>Mot de passe oublié</Text>
+                </TouchableOpacity>
+         
               </View>
 
-              {ApiUtils.ISDEBUG() ? (
+       
+
+              {/* {ApiUtils.ISDEBUG() ? (
                 <Text style={styles.versionInfo}>
                   Debug version {ApiUtils.VersionNumber()}
                 </Text>
@@ -402,29 +372,67 @@ class Home extends Component {
                 <Text style={styles.versionInfo}>
                   V{ApiUtils.VersionNumber()}
                 </Text>
-              )}
+              )} */}
             </View>
 
             {/* <Border animation="fadeInLeft" delay={200} position='left' mode="up"
               style={{ alignSelf: 'left', position: 'abolute', top: 0 }} /> */}
-          </View>
+          </KeyboardAvoidingView>
 
-          {/* <Animated.View animation="fadeInLeft" delay={200}
+          <KeyboardAvoidingView
             style={styles.followCodeLoginSection}>
-            <Text style={{ color: '#7f8c8d' }} >Mode invité</Text>
 
-            <TextInput style={styles.inputCode} placeholder="folocode" placeholderTextColor="white"
-              value={this.state.followCode} onChangeText={(followCode) => this.setState({ followCode })}
-              clearButtonMode='always' />
+              <Text>FOULEE CODE</Text>
+          <TextInput
+                style={styles.inputCode}
+                placeholder="Entrez votre Foulée code"
+                placeholderTextColor="black"
+                value={this.state.followCode}
+                onChangeText={followCode =>
+                  this.setState({followCode: followCode})
+                }
+                clearButtonMode="always"
+              />
 
-            <View style={{ flexDirection: 'row', justifyContent: 'center', alignSelf: 'center' }}>
-              <Button full style={[styles.buttonok,
-              this.state.followCode == '' ?
-                { backgroundColor: '#95a5a6' } : { backgroundColor: '#2c3e50' }]}
-                onPress={() => this.onClickSendFollowCode()} disabled={this.state.followCode == ''} ><Text>VALIDER</Text></Button>
-            </View>
+              <View
+                style={{
+                  flexDirection: 'row',
+                  justifyContent: 'center',
+                  alignSelf: 'center',
+                }}>
+                <TouchableOpacity
+                  full
+                  style={[
+                    GlobalStyles.button,
+                    {
+                      width: '80%',
+                      elevation: 0,
+                      borderColor:   this.state.followCode == '' ? 'black' : ApiUtils.getBackgroundColor(),
+                      borderWidth: 1,
+                      padding: 10,
+                    },
 
-          </Animated.View> */}
+                    this.state.followCode == ''
+                      ? {backgroundColor: 'transparent'}
+                      : {backgroundColor: ApiUtils.getBackgroundColor()},
+                  ]}
+                  onPress={() => this.onClickSendFollowCode()}
+                  disabled={this.state.followCode == ''}>
+                  <Text
+                    style={{
+                      textAlign: 'center',
+                      color:
+                        this.state.followCode == ''
+                          ? 'black'
+                          : 'white',
+                    }}>
+                    CONNEXION
+                  </Text>
+                </TouchableOpacity>
+              </View>
+
+
+          </KeyboardAvoidingView>
 
           <Modal
             visible={this.state.isModalJetcodeVisible}
@@ -487,24 +495,22 @@ const styles = StyleSheet.create({
     borderBottomLeftRadius: 100,
   },
   followCodeLoginSection: {
-    backgroundColor: '#c8d6e5',
+    backgroundColor: 'white',
     width: '100%',
     height: '100%',
     // justifyContent: 'center',
     alignItems: 'center',
     paddingTop: 30,
     paddingBottom: 200,
-    borderTopRightRadius: 70,
   },
   inputCode: {
-    borderBottomColor: 'white',
+
     borderBottomWidth: 1,
     width: '80%',
     height: 30,
     padding: 0,
     marginBottom: 20,
     marginTop: 20,
-    color: 'white',
   },
   p: {
     fontSize: 12,

@@ -18,7 +18,7 @@ var ApiUtils = {
   },
   getBackgroundColor()
   {
-    return '#6BACCB';
+    return '#3266aa';
   },
   VersionNumber()
   {
@@ -37,7 +37,6 @@ var ApiUtils = {
 
   getPhotoUrl(idStation, photo) {
     var url = ApiUtils.getUrl() + 'fichiers/interets/' + idStation + '/' + photo;
-    // console.log(photo.length);
     return url;
   },
 

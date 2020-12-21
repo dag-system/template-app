@@ -22,6 +22,42 @@ const initialState = {
   currentLiveFromSegment: null,
   currentLiveFromSegmentId: null,
   currentMapStyle: Platform.OS == 'android' ? 'terrain' : 'hybrid',
+  folocodes : [],
+  isOkPopupGps : false,
+  isOkPopupBAttery : false,
+};
+
+const initialMockState = {
+  userData: {
+    idUtilisateur : 7000
+  },
+  sports: [],
+  lives: [{idLive :1, libelleLive : "test"}],
+  clubs: [],
+  isRecording: false,
+  currentLive: {
+    idLive : 3
+  },
+  dates: [],
+  markers: [],
+  coordinates: [],
+  showsUserLocation: false,
+  isMoving: false,
+  isStarted: false,
+  odometer: 0,
+  odometerInitialValue: null,
+  isFirstPoint: null,
+  pointsInterets: [],
+  polylines: [],
+  nomStation: null,
+  descriptionStation: null,
+  currentPosition: null,
+  currentLiveFromSegment: null,
+  currentLiveFromSegmentId: null,
+  currentMapStyle: Platform.OS == 'android' ? 'terrain' : 'hybrid',
+  folocodes : [],
+  isOkPopupGps : false,
+  isOkPopupBAttery : false,
 };
 
 const reducer = (state = initialState, action) => {

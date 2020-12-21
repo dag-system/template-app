@@ -79,13 +79,16 @@ export default class Navigator extends Component {
           options={{
             animationEnabled: false,
           }}>
-          <Stack.Screen name="Home" component={Home} headerMode="none" />
-          <Stack.Screen name="Lives" component={Lives} headerMode="none" options={{
+                <Stack.Screen name="Home" component={Home} headerMode="none" />
+        
+                <Stack.Screen name="SimpleMap" component={SimpleMap}  options={{
             animationEnabled: false,
           }}/>
-          <Stack.Screen name="SimpleMap" component={SimpleMap}  options={{
+              <Stack.Screen name="Lives" component={Lives} headerMode="none" options={{
             animationEnabled: false,
           }}/>
+      
+      
           <Stack.Screen name="LiveSummary" component={LiveSummary}  options={{
             animationEnabled: false,
           }} />
