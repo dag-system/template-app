@@ -32,6 +32,7 @@ import {
   H3,
 } from 'native-base';
 import ApiUtils from '../ApiUtils';
+import {colors} from 'react-native-elements';
 
 export default class Sidebar extends Component {
   constructor(props) {
@@ -81,9 +82,10 @@ export default class Sidebar extends Component {
                 justifyContent: 'flex-start',
                 padding: 10,
               }}>
-              <Image
-                source={require('../assets/mesActivites.png')}
-                style={[styles.icon]}
+                <Icon
+                name="skiing-nordic"
+                type="FontAwesome5"
+                style={[styles.icon, {color: this.props.selected == 'Lives' ? 'black' : 'white'}]}
               />
               <Text
                 style={[
@@ -106,9 +108,10 @@ export default class Sidebar extends Component {
                 justifyContent: 'flex-start',
                 padding: 10,
               }}>
-              <Image
-                source={require('../assets/startLive.png')}
-                style={[styles.icon]}
+               <Icon
+                name="plus-circle"
+                type="FontAwesome5"
+                style={[styles.icon, {color: 'white'}]}
               />
               <Text style={[styles.menuText, {color: 'white'}]}>
                 Ajouter une activité
@@ -133,16 +136,95 @@ export default class Sidebar extends Component {
                 justifyContent: 'flex-start',
                 padding: 10,
               }}>
-              <Image
-                source={require('../assets/profil.png')}
-                style={[styles.icon]}
+               <Icon
+                name="user"
+                type="FontAwesome5"
+                style={[styles.icon, {color:  this.props.selected == 'Preferences' ? 'black' : 'white'}]}
               />
-              <Text  style={[
+              <Text
+                style={[
                   styles.menuText,
-                  {color: this.props.selected == 'Preferences' ? 'black' : 'white'},
-                ]}>Mon profil</Text>
+                  {
+                    color:
+                      this.props.selected == 'Preferences' ? 'black' : 'white',
+                  },
+                ]}>
+                Mon profil
+              </Text>
             </View>
           </TouchableHighlight>
+
+          <TouchableHighlight
+            underlayColor="rgba(255,255,255,1,0.6)"
+            onPress={() => this.onClickNavigate('Help')}
+            style={{
+              width: '100%',
+              backgroundColor:
+                this.props.selected == 'Help'
+                  ? '#E9E9E9'
+                  : 'transparent',
+            }}>
+            <View
+              style={{
+                display: 'flex',
+                flexDirection: 'row',
+                justifyContent: 'flex-start',
+                padding: 10,
+              }}>
+               <Icon
+                name="question-circle"
+                type="FontAwesome5"
+                style={[styles.icon, {color:  this.props.selected == 'Help' ? 'black' : 'white'}]}
+              />
+              <Text
+                style={[
+                  styles.menuText,
+                  {
+                    color:
+                      this.props.selected == 'Help' ? 'black' : 'white',
+                  },
+                ]}>
+               Aide
+              </Text>
+            </View>
+          </TouchableHighlight>
+
+          <TouchableHighlight
+            underlayColor="rgba(255,255,255,1,0.6)"
+            onPress={() => this.onClickNavigate('Partenaires')}
+            style={{
+              width: '100%',
+              backgroundColor:
+                this.props.selected == 'Partenaires'
+                  ? '#E9E9E9'
+                  : 'transparent',
+            }}>
+            <View
+              style={{
+                display: 'flex',
+                flexDirection: 'row',
+                justifyContent: 'flex-start',
+                padding: 10,
+              }}>
+               <Icon
+                name="handshake"
+                type="FontAwesome5"
+                style={[styles.icon, { fontSize : 20, width: 27, color:  this.props.selected == 'Partenaires' ? 'black' : 'white'}]}
+              />
+              <Text
+                style={[
+                  styles.menuText,
+                  {
+                    marginLeft : 25,
+                    color:
+                      this.props.selected == 'Partenaires' ? 'black' : 'white',
+                  },
+                ]}>
+               Nos partenaires
+              </Text>
+            </View>
+          </TouchableHighlight>
+
 
           <TouchableHighlight
             underlayColor="rgba(255,255,255,1,0.6)"
@@ -155,14 +237,14 @@ export default class Sidebar extends Component {
                 justifyContent: 'flex-start',
                 padding: 10,
               }}>
-              <Image
-                source={require('../assets/deconnexion.png')}
-                style={[styles.icon]}
+              <Icon
+                name="power-off"
+                type="FontAwesome5"
+                style={[styles.icon, {color: 'white'}]}
               />
-              <Text  style={[
-                  styles.menuText,
-                  {color: 'white'},
-                ]}>Se déconnecter</Text>
+              <Text style={[styles.menuText, {color: 'white'}]}>
+                Se déconnecter
+              </Text>
             </View>
           </TouchableHighlight>
         </Body>
@@ -196,5 +278,6 @@ const styles = StyleSheet.create({
   icon: {
     width: 24,
     height: 24,
+    fontSize: 24,
   },
 });

@@ -12,7 +12,7 @@ if(__DEV__) {
 
 AppRegistry.registerComponent(appName, () => App);
 
-// console.disableYellowBox = true;
+console.disableYellowBox = true;
 // Define a simple "HeadlessTask" with an async function. 
 // This function will receive all events from the BackgroundGeolocation plugin
 // while in the "Headless" state

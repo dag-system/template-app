@@ -172,13 +172,13 @@ class Preferences extends Component {
     // }
 
 
-    if (!!this.state.newPassword && this.state.newPassword != '') {
-      if (this.state.newPasswordConfirmation != this.state.newPassword) {
-        isError = true;
-      } else {
-        withPassword = true;
-      }
-    }
+    // if (!!this.state.newPassword && this.state.newPassword != '') {
+    //   if (this.state.newPasswordConfirmation != this.state.newPassword) {
+    //     isError = true;
+    //   } else {
+    //     withPassword = true;
+    //   }
+    // }
 
     return isError;
   }
@@ -248,9 +248,19 @@ class Preferences extends Component {
     {
       acceptChallengeUtilisateur = 1;
     }
- 
+
     formData.append('acceptChallengeUtilisateur', acceptChallengeUtilisateur);
-    console.log(acceptChallengeUtilisateur)
+
+    
+    var acceptChallengeNameUtilisateur = 0;
+    if(this.state.userdata.acceptChallengeNameUtilisateur || this.state.userdata.acceptChallengeNameUtilisateur )
+    {
+      acceptChallengeNameUtilisateur = 1;
+    }
+
+    formData.append('acceptChallengeNameUtilisateur', acceptChallengeNameUtilisateur);
+
+    
 
     if (withPassword) {
       formData.append('passUtilisateur', md5(this.state.newPassword));
@@ -317,6 +327,7 @@ class Preferences extends Component {
         content={<Sidebar navigation={this.props.navigation} drawer={this.drawer} selected="Preferences" />}
       >
         <Container>
+          <Root>
           <Header style={styles.header}>
             <Left>
               <Button style={styles.drawerButton} onPress={() => this.onDrawer()}>
@@ -485,12 +496,12 @@ class Preferences extends Component {
               {/* <Text style={styles.label}>Ville</Text>
                 <TextInput style={styles.inputCode} clearButtonMode='always' placeholder="Ville" value={this.state.userdata.villeUtilisateur} onChangeText={(phoneNumber) => this.setState({ userdata: { ...this.state.userdata, villeUtilisateur: phoneNumber } })} /> */}
 
-              <Item stackedLabel style={{ marginBottom: 5 }}>
+              {/* <Item stackedLabel style={{ marginBottom: 5 }}>
                 <Label>Equipe</Label>
                 <Input returnKeyType="next" clearButtonMode='always' value={this.state.userdata.clubUtilisateur} onChangeText={(phoneNumber) => this.setState({ userdata: { ...this.state.userdata, clubUtilisateur: phoneNumber } })} />
-              </Item>
+              </Item> */}
 
-              <Item stackedLabel style={{ marginBottom: 5 }}>
+              {/* <Item stackedLabel style={{ marginBottom: 5 }}>
                 <Label>Mot de passe</Label>
                 <Input returnKeyType="next" secureTextEntry={true} clearButtonMode='always' value={this.state.newPassword} onChangeText={(newPassword) => this.setState({ newPassword })} />
               </Item>
@@ -501,15 +512,23 @@ class Preferences extends Component {
                 <Input returnKeyType="next" secureTextEntry={true} clearButtonMode='always' value={this.state.newPasswordConfirmation} onChangeText={(newPasswordConfirmation) => this.setState({ newPasswordConfirmation })} />
               </Item>
 
-              {this.state.newPassword != '' && this.state.newPasswordConfirmation != this.state.newPassword ? <ErrorMessage value={''} message="Les mots de passe ne correspondent pas" /> : null}
+              {this.state.newPassword != '' && this.state.newPasswordConfirmation != this.state.newPassword ? <ErrorMessage value={''} message="Les mots de passe ne correspondent pas" /> : null} */}
 
             </Form>
 
             <View style={{ marginTop: 20, paddingLeft: 10, width: '80%', display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
               <Switch tyle={{ paddingTop: 20 }} onValueChange={(text) => this.setState({ userdata: { ...this.state.userdata, acceptChallengeUtilisateur: text } })} value={this.state.userdata.acceptChallengeUtilisateur == 1} />
-              <Text style={{ marginLeft: 10 }}>J'accepte que mon nom apparaisse dans le classement des spéciales</Text>
+              <Text style={{ marginLeft: 10 }}>Je participe aux challenges</Text>
 
             </View>
+
+            <View style={{ marginTop: 20, paddingLeft: 10, width: '80%', display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
+              <Switch tyle={{ paddingTop: 20 }} onValueChange={(text) => this.setState({ userdata: { ...this.state.userdata, acceptChallengeNameUtilisateur: text } })} value={this.state.userdata.acceptChallengeNameUtilisateur == 1} />
+              <Text style={{ marginLeft: 10 }}>J'accepte que mon nom apparaisse dans le classement des challenges</Text>
+
+            </View>
+
+        
 
             {ApiUtils.ISDEBUG() ? <Text full style={{ textAlign: 'center', fontSize: 12, marginTop: 30 }}>Debug version {ApiUtils.VersionNumber()}</Text> :
 
@@ -517,6 +536,7 @@ class Preferences extends Component {
 
                 <Text full style={{ textAlign: 'center', fontSize: 12, marginTop: 30, marginBottom: 100 }}>Version V{ApiUtils.VersionNumber()}</Text>}
           </Content>
+          </Root>
         </Container>
       </Drawer >
     );
@@ -525,7 +545,7 @@ class Preferences extends Component {
 
 const styles = StyleSheet.create({
   header: {
-    backgroundColor: ApiUtils.getBackgroundColor(),
+    backgroundColor: 'white',
     // width: '100%'
   },
   title: {

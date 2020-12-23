@@ -7,7 +7,12 @@ import {
   TextInput,
   SafeAreaView,
   TouchableHighlight,
-  TouchableOpacity,KeyboardAvoidingView, ActivityIndicator
+  TouchableOpacity,
+  KeyboardAvoidingView,
+  ActivityIndicator,
+  Image,
+  ImageBackground,
+  StatusBar,
 } from 'react-native';
 import {
   Container,
@@ -18,6 +23,7 @@ import {
   Left,
   Right,
   Icon,
+  Picker,
 } from 'native-base';
 import * as Animated from 'react-native-animatable';
 import md5 from 'md5';
@@ -25,19 +31,31 @@ import BackgroundGeolocation from '../react-native-background-geolocation';
 import {connect} from 'react-redux';
 
 import ApiUtils from '../ApiUtils';
-import Logo from '../assets/logo.png';
+// import Logo from '../assets/logoHome.svg';
+import Logo from '../assets/logoHome.svg';
+import skieur from '../assets/skieur.png';
+import Titre from '../assets/titre.svg';
+
+import Rhonealpes from '../assets/rhonealpes.svg';
+import Ccmv from '../assets/CCMV.png';
+import Alpesisere from '../assets/alpesisere.svg';
+import Isere from '../assets/isere.svg';
+
+import Autrans from '../assets/autrans.svg';
+import Date from '../assets/date.svg';
+
 import Loading from './Loading';
 import {Modal} from 'react-native';
 import WebviewJetCode from './WebviewJetCode';
 import GlobalStyles from '../styles';
+import {Sponsors} from './Sponsors';
 
 const mapStateToProps = state => {
   return {
     userData: state.userData,
+    folocodes: state.folocodes,
   };
 };
-
-
 
 class Home extends Component {
   constructor(props) {
@@ -51,6 +69,7 @@ class Home extends Component {
       password: '',
       isLoading: false,
       isModalJetcodeVisible: false,
+      selectedFolocode: -1,
     };
 
     this._unsubscribe = this.props.navigation.addListener('focus', payload => {
@@ -59,8 +78,8 @@ class Home extends Component {
   }
 
   componentDidMount() {
-
     // #stop BackroundGeolocation and remove-listeners when Home Screen is rendered.
+    this.setState({selectedFolocode: -1});
     if (this.props.userData != null) {
       this.onClickNavigate('Lives');
     } else {
@@ -75,7 +94,7 @@ class Home extends Component {
     if (this.props.userData != null) {
       this.onClickNavigate('Lives');
     }
-  }
+  };
 
   onClickNavigate(routeName) {
     this.props.navigation.navigate(routeName);
@@ -138,11 +157,17 @@ class Home extends Component {
   }
 
   onClickSendFollowCode() {
-    if (this.state.followCode != '') {
+    if (this.state.followCode != '' || this.state.selectedFolocode != -1) {
       let formData = new FormData();
       formData.append('method', 'getInformationsUtilisateur');
       formData.append('auth', ApiUtils.getAPIAuth());
-      formData.append('folocode', this.state.followCode);
+
+      if (this.state.selectedFolocode != -1) {
+        formData.append('folocode', this.state.selectedFolocode);
+      } else {
+        formData.append('folocode', this.state.followCode);
+      }
+
       //fetch followCode API
       fetch(ApiUtils.getAPIUrl(), {
         method: 'POST',
@@ -162,6 +187,7 @@ class Home extends Component {
             //SaveData
 
             var action = {type: 'LOGIN', data: responseJson};
+            console.log(responseJson);
             this.props.dispatch(action);
             this.setState({isLoading: false});
             this.onClickNavigate('Lives');
@@ -224,6 +250,13 @@ class Home extends Component {
     this.logo.animate('bounce', 1000); // animate({ 0: { opacity: 0 }, 1: { opacity: 1 } });
   }
 
+  onValueFolocodeChange(value) {
+    console.log(value);
+    this.setState({
+      selectedFolocode: value,
+    });
+  }
+
   getinformationStation() {
     const formData = new FormData();
     formData.append('method', 'getInformationStation');
@@ -273,11 +306,66 @@ class Home extends Component {
             });
           }
 
+          if (
+            result.pointsInterets != null &&
+            result.pointsInterets.length != 0
+          ) {
+            var finalinterestArray = [];
+            var interestArray = Object.values(result.pointsInterets);
+            var count = 0;
+            interestArray.forEach(interest => {
+              var coordinate = {
+                latitude: parseFloat(interest.latitudeInteret),
+                longitude: parseFloat(interest.longitudeInteret),
+              };
+
+              var finalInterest = {
+                id: 'interest' + count,
+                idInteret: interest.idInteret,
+                idStation: interest.idStation,
+                coordinates: coordinate,
+                libelleInteret: interest.libelleInteret,
+                couleurTrace: interest.couleurTrace,
+                descriptionInteret: interest.descriptionInteret,
+                telephoneInteret: interest.telephoneInteret,
+                lienInteret: interest.lienInteret,
+                photoInteret: interest.photoInteret,
+              };
+
+              if (
+                finalInterest.descriptionInteret == null &&
+                interest.externalData != null
+              ) {
+                var extraData = JSON.parse(interest.externalData);
+                if (
+                  extraData.hasDescription.length > 0 &&
+                  extraData.hasDescription[0] != null
+                ) {
+                  if (
+                    extraData.hasDescription[0].shortDescription != null &&
+                    extraData.hasDescription[0].shortDescription.length > 1
+                  ) {
+                    finalData.description =
+                      extraData.hasDescription[0].shortDescription[1];
+                  } else {
+                    finalData.description =
+                      extraData.hasDescription[0].shortDescription[0];
+                  }
+                }
+              }
+              if (interest.actifInteret == '1') {
+                finalinterestArray.push(finalInterest);
+                count++;
+              }
+            });
+            this.setState({pointsInterets: finalinterestArray});
+          }
+
           var station = {
             nomStation: result.nomStation,
             descriptionStation: result.descriptionStation,
             polylines: finalTraceArray,
-            // pointsInterets: finalinterestArray
+            pointsInterets: finalinterestArray,
           };
 
           var action = {type: 'UPDATE_STATION_DATA', data: station};
@@ -296,9 +384,10 @@ class Home extends Component {
     return (
       <Container style={{backgroundColor: ApiUtils.getBackgroundColor()}}>
         <SafeAreaView
-          style={{flex: 0, backgroundColor: ApiUtils.getBackgroundColor()}}
+          style={{backgroundColor: ApiUtils.getBackgroundColor()}}
         />
-        <Content style={styles.body} scrollEnabled={true}>
+
+        <Content style={[styles.body]} scrollEnabled={true}>
           <KeyboardAvoidingView style={styles.loginButtonSection}>
             <View
               style={{
@@ -306,132 +395,196 @@ class Home extends Component {
                 alignItems: 'center',
                 backgroundColor: ApiUtils.getBackgroundColor(),
               }}>
-              <TouchableHighlight
-                underlayColor="transparent"
-                onPress={() => this.pressLogo()}
-                style={styles.logo}>
-                <Animated.Image
-                  ref={ref => {
-                    this.logo = ref;
-                  }}
-                  animation="bounceInDown"
-                  delay={300}
-                  resizeMode="contain"
-                  source={Logo}
-                  style={styles.logo}
+              <ImageBackground
+                source={skieur}
+                style={{width: '100%', minHeight: 10}}>
+                <TouchableHighlight
+                  underlayColor="transparent"
+                  onPress={() => this.pressLogo()}
+                  style={styles.logo}>
+                  <Animated.View
+                    ref={ref => {
+                      this.logo = ref;
+                    }}
+                    style={[GlobalStyles.row, {justifyContent: 'center'}]}
+                    animation="bounceInDown"
+                    delay={300}>
+                    <Date
+                      width={'30%'}
+                      height={50}
+                      style={{alignSelf: 'center', marginRight: 10}}
+                    />
+                    <Logo
+                      width={'70%'}
+                      height={120}
+                      style={{alignSelf: 'center'}}
+                    />
+                    <Autrans
+                      width={'30%'}
+                      height={70}
+                      style={{alignSelf: 'center', opacity: 1}}
+                    />
+                  </Animated.View>
+                </TouchableHighlight>
+                <Animated.View   animation="bounceInLeft"
+                    delay={200}>
+               <Titre
+                  width={'55%'}
+                  height={140}
+                  style={{alignSelf: 'center'}}
                 />
-              </TouchableHighlight>
+          </Animated.View>
 
-          
-              <TextInput style={[styles.inputCode, {borderBottomColor : 'white', color : 'white'}]} placeholder="Adresse mail" placeholderTextColor="white"
-                value={this.state.email} onChangeText={(email) => this.setState({ email })}
-                clearButtonMode='always' keyboardType='email-address'
-              />
-
-              <TextInput style={[styles.inputCode, {borderBottomColor : 'white', color : 'white'}]} placeholder="Mot de passe" placeholderTextColor="white"
-                secureTextEntry={true} value={this.state.password}
-                onChangeText={(password) => this.setState({ password })} />
-
-              <View style={{ flexDirection: 'row', justifyContent: 'center', alignSelf: 'center', marginTop: 10 }}>
-                <TouchableOpacity style={[GlobalStyles.button,{
-                  width : '80%',
-                  borderColor : 'white', padding : 10
-                },
-                this.isErrorForm() ?
-                  { backgroundColor: 'transparent' } : { backgroundColor: 'white' }]}
-                  onPress={() => this.onLogin()} disabled={this.state.email == '' || this.state.password == ''} >
-                  {this.state.isLoading ? <ActivityIndicator color={ApiUtils.getBackgroundColor()}></ActivityIndicator>
-                    : <Text style={{ textAlign: 'center', fontWeight: 'bold', color :  this.isErrorForm() ? 'white' : ApiUtils.getBackgroundColor() }}>CONNEXION</Text>}
-                </TouchableOpacity>
-              </View>
-              <View style={{ flexDirection: 'row', justifyContent: 'space-evenly', width : '80%', marginTop : 20 }}>
-              <TouchableOpacity
-                  style={[GlobalStyles.button, {marginTop: 10, borderColor : 'white', opacity : 0.5}]}
-                  onPress={() => this.createAccountOld()}>
-                  <Text style={{color : 'white', fontSize : 12}}>Créer un compte</Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                  style={[GlobalStyles.button, {marginTop: 10, borderColor : 'white', opacity : 0.5}]}
-                  onPress={() => this.forgotPassword()}>
-                  <Text style={{color : 'white', fontSize : 12}}>Mot de passe oublié</Text>
-                </TouchableOpacity>
-         
-              </View>
-
-       
-
-              {/* {ApiUtils.ISDEBUG() ? (
-                <Text style={styles.versionInfo}>
-                  Debug version {ApiUtils.VersionNumber()}
-                </Text>
-              ) : ApiUtils.ISDEMO() ? (
-                <Text style={styles.versionInfo}>
-                  Demo version {ApiUtils.VersionNumber()}
-                </Text>
-              ) : (
-                <Text style={styles.versionInfo}>
-                  V{ApiUtils.VersionNumber()}
-                </Text>
-              )} */}
+           
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    justifyContent: 'space-evenly',
+                    width: '100%',
+                    marginTop: 20,
+                  }}>
+                  <TouchableOpacity
+                    style={[
+                      GlobalStyles.button,
+                      {
+                        marginTop: 10,
+                        borderColor: 'white',
+                        opacity: 1,
+                        width: '80%',
+                        borderColor: 'white',
+                        padding: 10,
+                      },
+                    ]}
+                    onPress={() => this.createAccountOld()}>
+                    <Text
+                      style={{
+                        textAlign: 'center',
+                        fontWeight: 'bold',
+                        color: 'white',
+                        textTransform: 'uppercase',
+                      }}>
+                      Créer un compte
+                    </Text>
+                  </TouchableOpacity>
+                </View>
+              </ImageBackground>
             </View>
-
-            {/* <Border animation="fadeInLeft" delay={200} position='left' mode="up"
-              style={{ alignSelf: 'left', position: 'abolute', top: 0 }} /> */}
           </KeyboardAvoidingView>
 
-          <KeyboardAvoidingView
-            style={styles.followCodeLoginSection}>
+          <KeyboardAvoidingView style={styles.followCodeLoginSection}>
+            <Text style={{fontWeight: 'bold', textTransform: 'uppercase'}}>
+              Vous avez déjà un compte ?
+            </Text>
+            <Text style={{marginTop: 10}}>
+              Entrez votre Foulée code pour vous connecter
+            </Text>
+            <TextInput
+              style={styles.inputCode}
+              placeholder="Foulée code"
+              placeholderTextColor="black"
+              value={this.state.followCode}
+              onChangeText={followCode =>
+                this.setState({followCode: followCode})
+              }
+              clearButtonMode="always"
+            />
 
-              <Text>FOULEE CODE</Text>
-          <TextInput
-                style={styles.inputCode}
-                placeholder="Entrez votre Foulée code"
-                placeholderTextColor="black"
-                value={this.state.followCode}
-                onChangeText={followCode =>
-                  this.setState({followCode: followCode})
-                }
-                clearButtonMode="always"
-              />
-
-              <View
-                style={{
-                  flexDirection: 'row',
-                  justifyContent: 'center',
-                  alignSelf: 'center',
-                }}>
-                <TouchableOpacity
-                  full
-                  style={[
-                    GlobalStyles.button,
-                    {
-                      width: '80%',
-                      elevation: 0,
-                      borderColor:   this.state.followCode == '' ? 'black' : ApiUtils.getBackgroundColor(),
-                      borderWidth: 1,
-                      padding: 10,
-                    },
-
-                    this.state.followCode == ''
-                      ? {backgroundColor: 'transparent'}
-                      : {backgroundColor: ApiUtils.getBackgroundColor()},
-                  ]}
-                  onPress={() => this.onClickSendFollowCode()}
-                  disabled={this.state.followCode == ''}>
-                  <Text
-                    style={{
-                      textAlign: 'center',
-                      color:
-                        this.state.followCode == ''
-                          ? 'black'
-                          : 'white',
-                    }}>
-                    CONNEXION
-                  </Text>
-                </TouchableOpacity>
+            {this.props.folocodes?.length > 0 ? (
+              <View style={{flex: 1}}>
+                <Text style={{textAlign: 'center'}}>ou </Text>
+                <Picker
+                  style={{width: 300}}
+                  mode="dropdown"
+                  accessibilityLabel={'Choisir le Foulée Code'}
+                  iosHeader={'Choisir le Foulée Code'}
+                  iosIcon={<Icon name="chevron-down" type="FontAwesome5" />}
+                  selectedValue={this.state.selectedFolocode}
+                  onValueChange={this.onValueFolocodeChange.bind(this)}
+                  placeholder={'Choisissez le Foulée Code'}
+                  placeholderStyle={{
+                    color: ApiUtils.getBackgroundColor(),
+                  }}
+                  placeholderIconColor={ApiUtils.getBackgroundColor()}
+                  textStyle={{color: ApiUtils.getBackgroundColor()}}
+                  itemStyle={{
+                    color: ApiUtils.getBackgroundColor(),
+                    marginLeft: 0,
+                    paddingLeft: 10,
+                    borderBottomColor: ApiUtils.getBackgroundColor(),
+                    borderBottomWidth: 1,
+                  }}
+                  itemTextStyle={{
+                    color: ApiUtils.getBackgroundColor(),
+                    borderBottomColor: ApiUtils.getBackgroundColor(),
+                    borderBottomWidth: 1,
+                  }}>
+                  <Picker.Item label="Choisissez le Foulée Code" value={-1} />
+                  {this.props.folocodes.map(folocode => {
+                    return (
+                      <Picker.Item
+                        label={
+                          folocode.folocode +
+                          ' ' +
+                          folocode.prenom +
+                          ' ' +
+                          folocode.nom
+                        }
+                        value={folocode.folocode}
+                      />
+                    );
+                  })}
+                </Picker>
               </View>
+            ) : null}
 
+            <View
+              style={{
+                flexDirection: 'row',
+                justifyContent: 'center',
+                alignSelf: 'center',
+              }}>
+              <TouchableOpacity
+                full
+                style={[
+                  GlobalStyles.button,
+                  {
+                    width: '80%',
+                    elevation: 0,
+                    borderColor:
+                      this.state.followCode == '' &&
+                      this.state.selectedFolocode == -1
+                        ? 'black'
+                        : ApiUtils.getBackgroundColor(),
+                    borderWidth: 1,
+                    padding: 10,
+                  },
 
+                  this.state.followCode == '' &&
+                  this.state.selectedFolocode == -1
+                    ? {backgroundColor: 'transparent'}
+                    : {backgroundColor: ApiUtils.getBackgroundColor()},
+                ]}
+                onPress={() => this.onClickSendFollowCode()}
+                disabled={
+                  this.state.followCode == '' &&
+                  this.state.selectedFolocode == -1
+                }>
+                <Text
+                  style={{
+                    fontWeight: 'bold',
+                    textAlign: 'center',
+                    color:
+                      this.state.followCode == '' &&
+                      this.state.selectedFolocode == -1
+                        ? 'black'
+                        : 'white',
+                  }}>
+                  CONNEXION
+                </Text>
+              </TouchableOpacity>
+            </View>
+
+            <View style={{marginBottom: 0}} />
           </KeyboardAvoidingView>
 
           <Modal
@@ -454,7 +607,14 @@ class Home extends Component {
             <WebviewJetCode uri={'https://google.com'} />
           </Modal>
         </Content>
-        <SafeAreaView style={{flex: 0, backgroundColor: '#DADADA'}} />
+        <View style={{backgroundColor: 'white'}}>
+          <Animated.View   animation="bounceInUp"
+                    delay={200}>
+            <Sponsors />
+          </Animated.View>
+        </View>
+
+        {/* <SafeAreaView style={{flex: 0, backgroundColor: '#DADADA'}} /> */}
       </Container>
     );
   }
@@ -473,6 +633,7 @@ const styles = StyleSheet.create({
     fontFamily: 'Roboto',
   },
   body: {
+    // paddingBottom : 300
     // width: '100%',
     // // backgroundColor: '#DADADA',
     // height: '140%',
@@ -484,7 +645,7 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     // marginLeft: 25,
     // marginRight: 25,
-    marginTop: Platform.OS == 'ios' ? 20 : 20,
+    marginTop: Platform.OS == 'ios' ? 20 : 25,
     marginBottom: 20,
   },
   loginButtonSection: {
@@ -495,16 +656,16 @@ const styles = StyleSheet.create({
     borderBottomLeftRadius: 100,
   },
   followCodeLoginSection: {
+    flex: 1,
     backgroundColor: 'white',
     width: '100%',
-    height: '100%',
+    height: '140%',
     // justifyContent: 'center',
     alignItems: 'center',
     paddingTop: 30,
     paddingBottom: 200,
   },
   inputCode: {
-
     borderBottomWidth: 1,
     width: '80%',
     height: 30,

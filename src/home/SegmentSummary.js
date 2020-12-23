@@ -24,7 +24,7 @@ import ApiUtils from '../ApiUtils';
 import AsyncStorage from '@react-native-community/async-storage';
 import { connect } from 'react-redux'
 import Logo from '../assets/logo_header.png';
-
+import Autrans from '../assets/autrans.svg';
 const mapStateToProps = (state) => {
   return {
     userData: state.userData,
@@ -309,6 +309,16 @@ class SegmentSummary extends Component {
                 resizeMode="contain"
                 source={Logo}
                 style={styles.logo}
+              />
+                   <Autrans
+                width={'40%'}
+                height={50}
+                style={{
+                  alignSelf: 'center',
+                  opacity: 1,
+                  marginLeft: 10,
+                  marginBottom: 5,
+                }}
               />
             </Right>
         </Header>

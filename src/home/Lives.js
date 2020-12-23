@@ -1,11 +1,7 @@
 import React, {Component} from 'react';
 import {
-  Platform,
   StyleSheet,
-  Alert,
-  Linking,
   View,
-  TextInput,
   Image,
   FlatList,
   TouchableHighlight,
@@ -17,37 +13,30 @@ import {
   Container,
   Header,
   Content,
-  Footer,
   Left,
   Body,
   Right,
-  Card,
-  CardItem,
   Text,
-  H1,
-  Button,
-  Title,
   Icon,
   Drawer,
-  Form,
-  Item,
-  Input,
-  Label,
-  H3,
-  Spinner,
+  H1,
 } from 'native-base';
-import * as Animated from 'react-native-animatable';
 import Swipeout from 'react-native-swipeout';
 // import { Icon } from 'react-native-elements';
 import ApiUtils from '../ApiUtils';
 import Logo from '../assets/logo_header.png';
+import LogoHome from '../assets/logo.png';
 import Sidebar from './SideBar';
 import AsyncStorage from '@react-native-community/async-storage';
 // import Geolocation from 'react-native-geolocation-service';
 import {connect} from 'react-redux';
-import {isPointWithinRadius} from 'geolib';
 import GlobalStyles from '../styles';
-
+import {Modal} from 'react-native';
+import Help from './Help';
+import {Sponsors} from './Sponsors';
+import Autrans from '../assets/autrans.svg';
+import { PermissionsAndroid } from 'react-native';
+import DocumentPicker from 'react-native-document-picker';
 const mapStateToProps = state => {
   return {
     userData: state.userData,
@@ -55,6 +44,8 @@ const mapStateToProps = state => {
     lives: state.lives,
     sports: state.sports,
     currentLive: state.currentLive,
+    isOkPopupGps: state.isOkPopupGps,
+    isOkPopupBAttery: state.isOkPopupBAttery,
   };
 };
 
@@ -62,9 +53,10 @@ class Lives extends Component {
   constructor(props) {
     super(props);
 
-    let navigation = props.navigation;
     this.state = {
       spinner: false,
+
+      isOpenModalHelp: false,
       //   username: navigation.state.params.username,
       // url: TRACKER_HOST + navigation.state.params.username,
       userdata: {
@@ -83,7 +75,7 @@ class Lives extends Component {
       isLoadingDeleting: false,
     };
 
-    this._unsubscribe = this.props.navigation.addListener('focus', payload => {
+    this._unsubscribe = this.props.navigation.addListener('focus', () => {
       this.componentDidMount();
     });
   }
@@ -220,6 +212,153 @@ class Lives extends Component {
       .then(this.setState({isLoading: false}));
   }
 
+
+
+
+  checkPermissions() {
+    if (Platform.OS == 'android') {
+      try {
+        PermissionsAndroid.request(
+          'android.permission.READ_EXTERNAL_STORAGE',
+        ).then(res => {
+          console.warn(res);
+          if (res == 'granted') {
+          } else {
+            // alert('error')
+            this.requestStoragePermission();
+          }
+        });
+      } catch (error) {
+        console.warn('location set error:', error);
+      }
+    }
+  }
+
+
+  requestStoragePermission = async () => {
+    try {
+      const granted = await PermissionsAndroid.request(
+        'android.permission.READ_EXTERNAL_STORAGE',
+        {
+          title: 'Accèder à vos fichiers',
+          message: '',
+          buttonNeutral: 'Plus tard',
+          buttonNegative: 'Annuler',
+          buttonPositive: 'OK',
+        },
+      );
+      if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+        console.warn('You can use the camera');
+      } else {
+        // console.log("location permission denied");
+      }
+    } catch (err) {
+      // console.warn(err);
+    }
+  };
+
+  async onClickCreateLiveNew()
+  {
+    this.checkPermissions();
+
+       // Pick a single file
+       try {
+        const res = await DocumentPicker.pick({
+          // type: 'application/gpx+xml',
+        });
+        console.log(
+          res.uri,
+          res.type, // mime type
+          res.name,
+          res.size,
+        );
+  
+        var uri = res.uri;
+        var filePath = uri;
+  
+        if (res.name.includes('.gpx')) {
+          setTimeout(() => this.sendFile(res), 100);
+        } else {
+          alert("Le fichier n'est pas un fichier gpx");
+        }
+      } catch (err) {
+        // alert(err)
+        if (DocumentPicker.isCancel(err)) {
+          // User cancelled the picker, exit any dialogs or menus and move on
+        } else {
+          throw err;
+        }
+      }
+  }
+
+  normalize(path) {
+    if (Platform.OS === 'ios' || Platform.OS === 'android') {
+      const filePrefix = 'file://';
+      if (path.startsWith(filePrefix)) {
+        path = path.substring(filePrefix.length);
+        try {
+          path = decodeURI(path);
+        } catch (e) {}
+      }
+    }
+    return path;
+  }
+
+async  sendFile(fileToUpload) {
+    // var path = this.normalize(filePath);
+    var _this = this;
+
+    // const file = {
+    //   uri  :path ,             // e.g. 'file:///path/to/file/image123.jpg'
+    //   name : 'test',            // e.g. 'image123.jpg',
+    //   type : 'gpx'             // e.g. 'image/jpg'
+    // }
+    
+    let formData = new FormData();
+    // body.append('file', file)
+    formData.append('file_attachment', fileToUpload);
+
+    formData.append('method', 'createLive');
+    formData.append('auth', ApiUtils.getAPIAuth());
+    formData.append('idUtilisateur', this.props.userData.idUtilisateur);
+
+    // console.log(fileToUpload);
+    
+    // fetch('https://folomi.fr/api/uploadgpx.php', {
+    //   method: 'POST',
+    //   body : body,
+    //   headers: {
+    //     'Content-Type': 'multipart/form-data; ',
+    //   },
+    // })
+
+    let res = await fetch(
+      'https://www.folomi.fr/api/uploadgpx.php',
+      {
+        method: 'post',
+        body: formData,
+        headers: {
+          'Content-Type': 'multipart/form-data; ',
+        },
+      }
+    );
+
+    let responseJson = await res.json();
+    console.log(responseJson);
+    if (responseJson.status == 1) {
+      alert('Upload Successful');
+    }else{
+      console.log(responseJson);
+    }
+
+
+    // .then(ApiUtils.checkStatus)
+    // .then(response=> {
+    //   console.log(response)
+    // })
+    // .catch(e => console.log(e))
+  }
+
   onClickCreateLive() {
     this.setState({spinner: true});
     let formData = new FormData();
@@ -296,7 +435,7 @@ class Lives extends Component {
     if (live.etatLive == 0 || live.etatLive == 1) {
       if (!this.props.isRecording) {
         //set time à zero pour la map
-        this.initTimer(live.idLive).then(r => {
+        this.initTimer(live.idLive).then(() => {
           this.props.navigation.navigate('SimpleMap');
         });
       } else {
@@ -340,7 +479,6 @@ class Lives extends Component {
         // alert("success http");
         //save values in cache
 
- 
         if (responseJson.codeErreur == 'SUCCESS') {
           //SaveData
           // this.setState({
@@ -370,7 +508,7 @@ class Lives extends Component {
       })
       .catch(
         e => {
-          console.log(e)
+          console.log(e);
           var deletingIds = this.state.deletingIds;
           deletingIds = deletingIds.filter(d => d != idLive);
 
@@ -414,7 +552,6 @@ class Lives extends Component {
       var splitDate = justDate.split(':');
       var hour = splitDate[0];
       var minutes = splitDate[1];
-      var secondes = splitDate[2];
       return hour + 'H' + minutes;
     } else {
       return '';
@@ -433,7 +570,16 @@ class Lives extends Component {
   getStatsInfo(json) {
     if (json != undefined) {
       var infos = JSON.parse(json);
-      return infos.distance + ' km | ' + infos.duree;
+      return infos.distance + ' km';
+    }
+
+    return 0;
+  }
+
+  getStatsTimeInfo(json) {
+    if (json != undefined) {
+      var infos = JSON.parse(json);
+      return infos.duree;
     }
 
     return 0;
@@ -468,6 +614,7 @@ class Lives extends Component {
           var tracesArray = Object.values(result.traces);
 
           var finalTraceArray = []; // new Object(this.props.polylines);
+          var finalinterestArray = [];
           if ((tracesArray != null) & (tracesArray.length != 0)) {
             tracesArray.forEach(trace => {
               var finalTrace = trace;
@@ -487,20 +634,70 @@ class Lives extends Component {
               finalTraceArray.push(finalTrace);
             });
           }
+          if (result.interets != null && result.interets.length != 0) {
+            var interestArray = Object.values(result.interets);
+            var count = 0;
+            interestArray.forEach(interest => {
+              var coordinate = {
+                latitude: parseFloat(interest.latitudeInteret),
+                longitude: parseFloat(interest.longitudeInteret),
+              };
+
+              var finalInterest = {
+                id: 'interest' + count,
+                idInteret: interest.idInteret,
+                idStation: interest.idStation,
+                coordinates: coordinate,
+                libelleInteret: interest.libelleInteret,
+                couleurTrace: interest.couleurTrace,
+                descriptionInteret: interest.descriptionInteret,
+                telephoneInteret: interest.telephoneInteret,
+                lienInteret: interest.lienInteret,
+                photoInteret: interest.photoInteret,
+              };
+
+              if (
+                finalInterest.descriptionInteret == null &&
+                interest.externalData != null
+              ) {
+                var extraData = JSON.parse(interest.externalData);
+                if (
+                  extraData.hasDescription.length > 0 &&
+                  extraData.hasDescription[0] != null
+                ) {
+                  if (
+                    extraData.hasDescription[0].shortDescription != null &&
+                    extraData.hasDescription[0].shortDescription.length > 1
+                  ) {
+                    finalData.description =
+                      extraData.hasDescription[0].shortDescription[1];
+                  } else {
+                    finalData.description =
+                      extraData.hasDescription[0].shortDescription[0];
+                  }
+                }
+              }
+              if (interest.actifInteret == '1') {
+                finalinterestArray.push(finalInterest);
+                count++;
+              }
+            });
+          }
 
           var station = {
             nomStation: result.nomStation,
             descriptionStation: result.descriptionStation,
             polylines: finalTraceArray,
-            // pointsInterets: finalinterestArray
+            pointsInterets: finalinterestArray,
           };
 
+          console.log('pointsInterets', finalinterestArray);
 
           var action = {type: 'UPDATE_STATION_DATA', data: station};
           this.props.dispatch(action);
         }
       })
-      .catch(e => alert('test', JSON.stringify(e)))
+      // .catch(e => alert('test', JSON.stringify(e)))
       .then();
   }
 
@@ -574,9 +771,21 @@ class Lives extends Component {
                 <Icon style={styles.saveText} name="bars" type="FontAwesome5" />
               </TouchableOpacity>
             </Left>
-            <Body style={{flex: 0}} />
+            <Body style={{flex: 0}}>
+           
+            </Body>
             <Right style={{flex: 1}}>
-              <Image resizeMode="contain" source={Logo} style={styles.logo} />
+            <Image resizeMode="contain" source={Logo} style={styles.logo} />
+              <Autrans
+                width={'40%'}
+                height={50}
+                style={{
+                  alignSelf: 'center',
+                  opacity: 1,
+                  marginLeft: 10,
+                  marginBottom: 5,
+                }}
+              />
             </Right>
           </Header>
 
@@ -681,7 +890,9 @@ class Lives extends Component {
                                     <Text
                                       style={{width: 135, fontWeight: 'bold'}}>
                                       {this.getShortDate(item.dateCreationLive)}{' '}
-                                      |
+                                      <Text style={{fontWeight: 'normal'}}>
+                                        |
+                                      </Text>
                                       {this.getShortTime(item.dateCreationLive)}
                                     </Text>
                                   </Text>
@@ -710,12 +921,21 @@ class Lives extends Component {
                                     {this.getLiveStatusLibelle(item.etatLive)}
                                   </Text>
                                 ) : (
-                                  <Text
-                                    style={{
-                                      fontWeight: 'bold',
-                                    }}>
-                                    {this.getStatsInfo(item.statsLive)}
-                                  </Text>
+                                  <View style={[GlobalStyles.row]}>
+                                    <Text
+                                      style={{
+                                        fontWeight: 'bold',
+                                      }}>
+                                      {this.getStatsInfo(item.statsLive)}
+                                    </Text>
+                                    <Text> | </Text>
+                                    <Text
+                                      style={{
+                                        fontWeight: 'bold',
+                                      }}>
+                                      {this.getStatsTimeInfo(item.statsLive)}
+                                    </Text>
+                                  </View>
                                 )}
                               </View>
                               <View style={styles.line}>
@@ -762,7 +982,7 @@ class Lives extends Component {
           <TouchableHighlight
             underlayColor="rgba(255,255,255,1,0.6)"
             disabled={this.state.spinner}
-            style={styles.buttonok}
+            style={[styles.buttonok, {zIndex: 12}]}
             onPress={() => this.onClickCreateLive()}>
             {this.state.spinner ? (
               <ActivityIndicator
@@ -783,6 +1003,21 @@ class Lives extends Component {
               />
             )}
           </TouchableHighlight>
+
+          <Sponsors />
+
+          <Modal
+            visible={
+              !this.props.isOkPopupBAttery || this.state.isOpenModalHelp
+            }>
+            <Container style={{flex: 1}} scrollEnabled={true}>
+              <View style={{flex: 1}}>
+                <Help noHeader={true} />
+
+                {/* <View style={{height: 300}} /> */}
+              </View>
+            </Container>
+          </Modal>
         </Container>
       </Drawer>
     );
@@ -845,13 +1080,14 @@ const styles = StyleSheet.create({
     fontFamily: 'Roboto',
   },
   body: {
+    flex: 1,
     width: '100%',
     //  justifyContent: 'center',
     backgroundColor: 'white',
   },
   logo: {
     width: '100%',
-    height: 50,
+    height: 70,
     alignSelf: 'center',
   },
   p: {
@@ -884,7 +1120,7 @@ const styles = StyleSheet.create({
     // paddingLeft: 18,
     position: 'absolute',
     right: 20,
-    bottom: 40,
+    bottom: 120,
     justifyContent: 'center',
   },
   plusButtonLogo: {
@@ -894,6 +1130,7 @@ const styles = StyleSheet.create({
     color: 'white',
     // marginLeft: -3,
     alignSelf: 'center',
+    zIndex: 10,
   },
   container: {
     // flex: 1,

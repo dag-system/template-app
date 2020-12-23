@@ -41,6 +41,7 @@ import {
   Picker,
   Left,
   Right,
+  Content,
 } from 'native-base';
 // import Geolocation from 'react-native-geolocation-service';
 import Geolocation from '@react-native-community/geolocation';
@@ -66,6 +67,8 @@ import BackgroundGeolocation from '../react-native-background-geolocation';
 import MapView, {Polyline, Marker} from 'react-native-maps';
 import DocumentPicker from 'react-native-document-picker';
 import GlobalStyles from '../styles';
+import {Sponsors} from '../home/Sponsors';
+import {Dimensions} from 'react-native';
 
 // const LATITUDE_DELTA = 0.00922;
 // const LONGITUDE_DELTA = 0.00421;
@@ -99,6 +102,7 @@ const mapStateToProps = state => {
     descriptionStation: state.descriptionStation,
     nomStation: state.nomStation,
     currentMapStyle: state.currentMapStyle,
+    isOkPopupGps: state.isOkPopupGps,
   };
 };
 
@@ -167,6 +171,7 @@ class SimpleMap extends Component {
         photoInteret: '',
       },
       currentPolyline: null,
+      isGpsNotOk: true,
     };
     // const didBlurSubscription = this.props.navigation.addListener(
     //   'willFocus',
@@ -211,7 +216,7 @@ class SimpleMap extends Component {
 
   componentWillUnmount() {
     console.log('willunmount');
-    alert('ok');
+    // alert('ok');
     BackgroundGeolocation.removeListeners();
   }
 
@@ -337,6 +342,10 @@ class SimpleMap extends Component {
       // BackgroundGeolocation.getLocations().then((result) => {
       //   console.log("resu : " + JSON.stringify(result));
       // })
+    } else {
+      if (this.props.isOkPopupGps) {
+        this.getFirstLocation();
+      }
     }
 
     this.setState({
@@ -409,7 +418,7 @@ class SimpleMap extends Component {
         stopOnTerminate: false, //TODO TO DO
         startOnBoot: true,
         foregroundService: true,
-        disableElasticity : true,
+        disableElasticity: true,
         debug: false,
         desiredAccuracy: BackgroundGeolocation.DESIRED_ACCURACY_HIGH,
         desiredOdometerAccuracy: 10, //If you only want to calculate odometer from GPS locations, you could set desiredOdometerAccuracy: 10. This will prevent odometer updates when a device is moving around indoors, in a shopping mall, for example.
@@ -555,7 +564,7 @@ class SimpleMap extends Component {
       this.refs.map
         .getMapBoundaries()
         .then(data => {
-          var isInside = isPointInPolygon(newCoordinate, [
+          var isInside = isPointInPolygon(newCoordinate.coords, [
             {
               latitude: data.northEast.latitude,
               longitude: data.southWest.longitude,
@@ -567,8 +576,11 @@ class SimpleMap extends Component {
             },
             data.southWest,
           ]);
+          console.log(data);
+          console.log(newCoordinate);
 
           if (!isInside) {
+            console.log('ici');
             this.setCenter(newCoordinate);
           }
         })
@@ -591,13 +603,16 @@ class SimpleMap extends Component {
   }
 
   getFirstLocation() {
-    Geolocation.requestAuthorization();
     Geolocation.setRNConfiguration({authorizationLevel: 'always'});
+    // Geolocation.requestAuthorization();
 
     Geolocation.getCurrentPosition(
       position => {
         this.setCenter(position);
-
+        console.log(position);
+        if (position.accuracy != 0) {
+          this.setState({isGpsNotOk: false});
+        }
         this.setState({currentPosition: position});
       },
       error => {
@@ -614,6 +629,11 @@ class SimpleMap extends Component {
 
   onLocation(location) {
     this.addMarker(location);
+
+    if (location.coords.accuracy != 0) {
+      console.log(location)
+      this.setState({isGpsNotOk: false});
+    }
 
     if (!location.sample) {
       var odometerCurrent = location.odometer;
@@ -768,6 +788,8 @@ class SimpleMap extends Component {
 
   onToggleEnabled(isMoving, isRecording) {
     if (isMoving) {
+      clearInterval(this.interval);
+      this.interval = setInterval(() => this.setState({time: Date.now()}), 800);
       BackgroundGeolocation.start(
         state => {
           // NOTE:  We tell react-native-maps to show location only AFTER BackgroundGeolocation
@@ -1062,10 +1084,55 @@ class SimpleMap extends Component {
   }
 
   onTimerPause() {
-    this.onTimerStartPause();
+    if (this.props.isMoving) {
+      Alert.alert(
+        'Mettre en pause',
+        'Etes vous sûr de mettre en pause ?',
+        [
+          {
+            text: 'Annuler',
+            onPress: () => console.log('Cancel Pressed'),
+            style: 'cancel',
+          },
+          {text: 'Mettre en pause', onPress: () => this.onTimerStartPause()},
+        ],
+        {cancelable: false},
+      );
+    } else {
+      Alert.alert(
+        'Reprendre',
+        "êtes vous sûr de reprendre l'activité ?",
+        [
+          {
+            text: 'Annuler',
+            onPress: () => console.log('Cancel Pressed'),
+            style: 'cancel',
+          },
+          {text: 'Reprendre', onPress: () => this.onTimerStartPause()},
+        ],
+        {cancelable: false},
+      );
+    }
+
+    // this.onTimerStartPause();
   }
 
   onStop() {
+    Alert.alert(
+      "Arrêter l'activité",
+      "Etes vous sûr d'arrêter ?",
+      [
+        {
+          text: 'Annuler',
+          onPress: () => console.log('Cancel Pressed'),
+          style: 'cancel',
+        },
+        {text: 'Arrêter', onPress: () => this.onStopOk()},
+      ],
+      {cancelable: false},
+    );
+  }
+  onStopOk() {
     if (this.props.isMoving) {
       this.onTimerStartPause();
     }
@@ -1364,7 +1431,6 @@ class SimpleMap extends Component {
         formData.append('libelleLive', this.state.libelleLive);
         formData.append('idSport', this.state.selectedSport);
         var acceptChallengeUtilisateur = 0;
-        console.log(this.state.acceptChallengeUtilisateur);
         if (
           this.state.acceptChallengeUtilisateur ||
           this.state.acceptChallengeUtilisateur == 1 ||
@@ -1378,6 +1444,19 @@ class SimpleMap extends Component {
           acceptChallengeUtilisateur,
         );
 
+        var acceptChallengeNameUtilisateur = 0;
+        if (
+          this.state.acceptChallengeNameUtilisateur ||
+          this.state.acceptChallengeNameUtilisateur == 1 ||
+          this.state.acceptChallengeNameUtilisateur == 'true'
+        ) {
+          acceptChallengeNameUtilisateur = 1;
+        }
+
+        formData.append(
+          'acceptChallengeNameUtilisateur',
+          acceptChallengeNameUtilisateur,
+        );
         fetch(ApiUtils.getAPIUrl(), {
           method: 'POST',
           headers: {
@@ -1397,7 +1476,10 @@ class SimpleMap extends Component {
 
               var action = {
                 type: 'UPDATE_ACCEPT_CHALLENGE',
-                data: acceptChallengeUtilisateur,
+                data: {
+                  acceptChallengeUtilisateur: acceptChallengeUtilisateur,
+                  acceptChallengeNameUtilisateur: acceptChallengeNameUtilisateur,
+                },
               };
               this.props.dispatch(action);
               // .then(
@@ -1635,6 +1717,12 @@ class SimpleMap extends Component {
     });
   }
 
+  onAcceptGps() {
+    this.getFirstLocation();
+    var action = {type: 'VIEW_POPUPGPS', data: null};
+    this.props.dispatch(action);
+  }
+
   getInvites() {
     if (!!this.props.currentLive) {
       var invites = this.props.currentLive.invites;
@@ -1712,7 +1800,7 @@ class SimpleMap extends Component {
                     <Text style={{color: 'black'}}>
                       {this.props.userData.nomUtilisateur}
                     </Text>
-                    <Text style={{color: 'black', marginLeft : 5}}>
+                    <Text style={{color: 'black', marginLeft: 5}}>
                       {this.props.userData.prenomUtilisateur}
                     </Text>
                   </View>
@@ -1767,6 +1855,14 @@ class SimpleMap extends Component {
           </Text>
         </View>
 
+        {this.state.isGpsNotOk ? (
+              <View style={[styles.liveNameBanner, {zIndex: 12, backgroundColor : ApiUtils.getBackgroundColor()}]}>
+                <Text style={[styles.liveNameText,{color : 'white', textTransform : 'uppercase'}]}>
+                  Aquisition du Signal GPS...
+                </Text>
+              </View>
+            ) : null}
+
         <Button
           onPress={() => this.onClickGetCurrentPosition()}
           style={{
@@ -1776,7 +1872,7 @@ class SimpleMap extends Component {
             backgroundColor: 'white',
             zIndex: 5,
             position: 'absolute',
-            top: Platform.OS == 'android' ? 153 : 203,
+            top: Platform.OS == 'android' ? (this.state.isGpsNotOk  ? 173 : 153 ) : (this.state.isGpsNotOk  ? 205 : 185 ) ,
             right: 100,
           }}>
           {Platform.OS == 'ios' ? (
@@ -1805,7 +1901,7 @@ class SimpleMap extends Component {
               backgroundColor: 'white',
               zIndex: 5,
               position: 'absolute',
-              top: Platform.OS == 'android' ? 153 : 203,
+              top: Platform.OS == 'android' ? 153 : 185,
               left: 20,
             }}>
             <Icon
@@ -1890,24 +1986,22 @@ class SimpleMap extends Component {
               </MapView.Marker>))
             } */}
 
-            {/* {this.props.pointsInterets != null ? this.props.pointsInterets.map((marker) => (
-              <Marker
-                onPress={() => this.onClickInterestPoint(marker)}
-                // onCalloutPress={() => this.onClickInterestPoint(marker)}
-                key={marker.id}
-                coordinate={marker.coordinates}
-                tracksViewChanges={false}
-
-              >
-                <ImageBackground
-                  style={{ height: 25, width: 20 }}
-                  source={MarkerInteret}
-                >
-                  <Text style={{ width: 25, height: 25 }}></Text>
-                </ImageBackground>
-                
-              </Marker>)) : null
-            } */}
+            {this.props.pointsInterets != null
+              ? this.props.pointsInterets.map(marker => (
+                  <Marker
+                    onPress={() => this.onClickInterestPoint(marker)}
+                    // onCalloutPress={() => this.onClickInterestPoint(marker)}
+                    key={marker.id}
+                    coordinate={marker.coordinates}
+                    tracksViewChanges={false}>
+                    <ImageBackground
+                      style={{height: 25, width: 20}}
+                      source={MarkerInteret}>
+                      <Text style={{width: 25, height: 25}} />
+                    </ImageBackground>
+                  </Marker>
+                ))
+              : null}
           </MapView>
 
           {this.props.currentMapStyle == 'standard' ||
@@ -2345,30 +2439,30 @@ class SimpleMap extends Component {
             <View style={styles.modal}>
               <Header style={styles.headerModal}>
                 <Left>
-             
-                    <Button
-                      style={styles.drawerButton}
-                      onPress={() => {
-                        this.toggleModal3(!this.state.modal3Visible);
-                      }}>
-                      <Icon
-                        style={styles.saveText}
-                        name="chevron-left"
-                        type="FontAwesome5"
-                      />
-                    </Button>
-               
+                  <Button
+                    style={styles.drawerButton}
+                    onPress={() => {
+                      this.toggleModal3(!this.state.modal3Visible);
+                    }}>
+                    <Icon
+                      style={styles.saveText}
+                      name="chevron-left"
+                      type="FontAwesome5"
+                    />
+                  </Button>
                 </Left>
-                <Body style={{justifyContent : 'center'}}>
-                    <Text style={{fontWeight : 'bold'}}>Enregistrez votre activité</Text>
+                <Body style={{justifyContent: 'center'}}>
+                  <Text style={{fontWeight: 'bold'}}>
+                    Enregistrez votre activité
+                  </Text>
                 </Body>
                 {/* <Right></Right> */}
               </Header>
 
-              <ScrollView contentContainerStyle={styles.loginButtonSection}>
+              <ScrollView scrollEnabled={true}>
                 <View style={styles.loginButtonSection}>
                   <TextInput
-                    style={[styles.inputCode,{fontWeight : 'bold'}]}
+                    style={[styles.inputCode, {fontWeight: 'bold'}]}
                     clearButtonMode="always"
                     placeholder="Titre"
                     value={this.state.libelleLive}
@@ -2386,12 +2480,14 @@ class SimpleMap extends Component {
                       mode="dropdown"
                       accessibilityLabel={'choisirSport'}
                       iosHeader={'Choisir le sport'}
-                      iosIcon={<Icon name="arrow-down" />}
+                      iosIcon={<Icon name="chevron-down" type="FontAwesome5" />}
                       style={{marginTop: 0}}
                       selectedValue={this.state.selectedSport}
                       onValueChange={this.onValueSportChange.bind(this)}
                       placeholder={"Choisissez le type d'activité"}
-                      placeholderStyle={{color: ApiUtils.getBackgroundColor()}}
+                      placeholderStyle={{
+                        color: ApiUtils.getBackgroundColor(),
+                      }}
                       placeholderIconColor={ApiUtils.getBackgroundColor()}
                       textStyle={{color: ApiUtils.getBackgroundColor()}}
                       itemStyle={{
@@ -2410,7 +2506,7 @@ class SimpleMap extends Component {
                         label="Choisissez le type d'activité"
                         value="-1"
                       />
-                      <Picker.Item label={'CLASSSIQUE'} value="14" />
+                      <Picker.Item label={'CLASSIQUE'} value="14" />
                       <Picker.Item label={'SKATING'} value="15" />
                     </Picker>
                     {/* <RNPickerSelect
@@ -2435,7 +2531,7 @@ class SimpleMap extends Component {
                           color: 'red',
                           fontSize: 14,
                           paddingLeft: 5,
-                          fontStyle : 'italic'
+                          fontStyle: 'italic',
                         }}>
                         Le type d'activité doit être renseigné
                       </Text>
@@ -2451,10 +2547,17 @@ class SimpleMap extends Component {
                         marginTop: 20,
                         paddingTop: 0,
                       }}>
-                      <Text style={{fontWeight : 'bold', paddingBottom : 8,borderBottomWidth : 1,
-                      borderBottomColor : "#DDDDDD"}}>Commentaire : </Text>
+                      <Text
+                        style={{
+                          fontWeight: 'bold',
+                          paddingBottom: 8,
+                          borderBottomWidth: 1,
+                          borderBottomColor: '#DDDDDD',
+                        }}>
+                        Commentaire :
+                      </Text>
                       <TextInput
-                        style={{marginTop: 0}}
+                        style={{marginTop: 0, paddingBottom: 10}}
                         multiline={true}
                         numberOfLines={4}
                         onChangeText={text => this.setState({comments: text})}
@@ -2465,7 +2568,7 @@ class SimpleMap extends Component {
 
                     <View
                       style={{
-                        marginTop: 20,
+                        marginTop: 30,
                         width: '80%',
                         display: 'flex',
                         flexDirection: 'row',
@@ -2479,9 +2582,19 @@ class SimpleMap extends Component {
                         }}
                         value={this.state.acceptChallengeUtilisateur}
                       />
-                      <Text style={{marginLeft: 10}}>
-                        J'accepte de participer aux challenges de la foulée blanche 2021
-                      </Text>
+                      <TouchableOpacity
+                        onPress={text => {
+                          console.log(text);
+                          this.setState({
+                            acceptChallengeUtilisateur: !this.state
+                              .acceptChallengeUtilisateur,
+                          });
+                        }}>
+                        <Text style={{marginLeft: 10}}>
+                          J'accepte de participer aux challenges de la foulée
+                          blanche 2021
+                        </Text>
+                      </TouchableOpacity>
                     </View>
 
                     <View
@@ -2496,14 +2609,26 @@ class SimpleMap extends Component {
                         tyle={{paddingTop: 20}}
                         onValueChange={text => {
                           console.log(text);
-                          this.setState({acceptChallengeNameUtilisateur: text});
+                          this.setState({
+                            acceptChallengeNameUtilisateur: text,
+                          });
                         }}
                         value={this.state.acceptChallengeNameUtilisateur}
                       />
-                      <Text style={{marginLeft: 10}}>
-                        J'accepte que mon nom apparaisse dans le classement des
-                        spéciales
-                      </Text>
+
+                      <TouchableOpacity
+                        onPress={text => {
+                          console.log(text);
+                          this.setState({
+                            acceptChallengeNameUtilisateur: !this.state
+                              .acceptChallengeNameUtilisateur,
+                          });
+                        }}>
+                        <Text style={{marginLeft: 10}}>
+                          J'accepte que mon nom apparaisse dans le classement
+                          des spéciales
+                        </Text>
+                      </TouchableOpacity>
                     </View>
                   </View>
 
@@ -2525,31 +2650,49 @@ class SimpleMap extends Component {
                     <Button
                       style={{
                         marginTop: 10,
-                        paddingHorizontal : 50,
-                        elevation : 0,
+                        paddingHorizontal: 50,
+                        elevation: 0,
                         alignSelf: 'center',
-                        borderColor : this.isErrorFormStop() ? 'black' : ApiUtils.getBackgroundColor(),
-                        borderWidth : 1,
+                        borderColor: this.isErrorFormStop()
+                          ? 'black'
+                          : ApiUtils.getBackgroundColor(),
+                        borderWidth: 1,
                         backgroundColor: this.isErrorFormStop()
                           ? 'transparent'
                           : ApiUtils.getBackgroundColor(),
                       }}
                       onPress={() => this.onClickValidateStop()}
                       disabled={this.isErrorFormStop()}>
-                      <Text style={{color :this.isErrorFormStop() ? 'black' : 'white' }}>ENREGISTRER</Text>
+                      <Text
+                        style={{
+                          color: this.isErrorFormStop() ? 'black' : 'white',
+                        }}>
+                        ENREGISTRER
+                      </Text>
                     </Button>
                   )}
 
                   <View style={{textAlign: 'center', marginTop: -5}}>
                     <Text
-                      full
                       style={styles.ignoreActivityLink}
                       onPress={() => this.ignoreActivity()}>
                       Ignorer l'activité
                     </Text>
                   </View>
+
+                  <View style={{marginBottom: 300}} />
                 </View>
               </ScrollView>
+              <View
+                style={{
+                  marginBottom: 0,
+                  position: 'absolute',
+                  bottom: 50,
+                  zIndex: 12,
+                  backgroundColor: 'white',
+                }}>
+                <Sponsors />
+              </View>
             </View>
           ) : null}
         </Modal>
@@ -2568,6 +2711,36 @@ class SimpleMap extends Component {
             onclosesuccess={this.closeModalAddInterestSuccess}
           />
         </Modal> */}
+
+        {/******** modal4 : Alert gps   *****************/}
+        <ModalSmall
+          animationType={'none'}
+          transparent={false}
+          isVisible={!this.props.isOkPopupGps}>
+          <View style={{backgroundColor: 'white', padding: 20}}>
+            <Text
+              style={{
+                textAlign: 'center',
+                fontWeight: 'bold',
+                marginTop: 0,
+                marginBottom: 20,
+              }}>
+              Accès à votre position GPS en arrière plan
+            </Text>
+            <Text style={{textAlign: 'justify'}}>
+              L'application a besoin d'accèder à votre position en arrière plan
+              pour pouvoir enregistrer la totalité de votre activité. Nous
+              enregistrons votre position GPS même quand l'application est
+              arretée ou en arrière plan.
+            </Text>
+            <TouchableOpacity
+              onPress={() => this.onAcceptGps()}
+              style={{justifyContent: 'flex-end'}}
+              style={{marginTop: 30}}>
+              <Text style={{textAlign: 'right'}}>Ok</Text>
+            </TouchableOpacity>
+          </View>
+        </ModalSmall>
 
         {/******** modal5 : Traces list  *****************/}
         <ModalSmall
@@ -2704,7 +2877,10 @@ class SimpleMap extends Component {
                             }}>
                             <View>
                               <IconElement
-                                style={{alignSelf: 'center', color: 'black'}}
+                                style={{
+                                  alignSelf: 'center',
+                                  color: 'black',
+                                }}
                                 name="search-plus"
                                 type="font-awesome"
                               />
@@ -2866,35 +3042,53 @@ class SimpleMap extends Component {
           </ScrollView>
         </ModalSmall>
 
-        <Footer style={styles.footer}>
-          <Body style={styles.footerBody}>
+        <Footer
+          style={[styles.footer]}>
+          <View style={{flex: 1}}>
+           
             {!this.props.isRecording ? (
-              <Button full style={{backgroundColor : '#39F800'}}
-               onPress={this.onstart.bind(this)}>
-                       <Text style={[styles.buttonText,{color : 'black'}]}>DEMARRER</Text>
+              <Button
+                full
+                style={{backgroundColor: '#39F800', width: '100%', height : '100%'}}
+                onPress={this.onstart.bind(this)}>
+                <Text style={[styles.buttonText, {color: 'black'}]}>
+                  DEMARRER
+                </Text>
               </Button>
             ) : (
               <View
                 style={{
+                   height : '100%',
                   flexDirection: 'row',
                   justifyContent: 'flex-start',
-                  width: '100%',
+                  width: Dimensions.get('screen').width,
                   paddingRight: 0,
                   paddingLeft: 0,
+                  paddingBottom : 0
                 }}>
                 <Button
-                  full style={{backgroundColor : '#C7C7C9'}}
+                  full
+                  style={{
+                    backgroundColor: '#C7C7C9',
+                    width: '50%',
+                    height: '100%',
+                  }}
                   onPress={this.onTimerPause.bind(this)}>
-                  <Text style={[styles.buttonText,{color : 'black'}]}>
+                  <Text style={[styles.buttonText, {color: 'black'}]}>
                     {this.props.isMoving ? 'PAUSE' : 'RELANCER'}
                   </Text>
                 </Button>
-                <Button full  onPress={this.onStop.bind(this)} style={{backgroundColor :'#FE3C03'}}>
-                <Text style={[styles.buttonText,{color : 'white'}]}>STOP</Text>
+                <Button
+                  full
+                  onPress={this.onStop.bind(this)}
+                  style={{backgroundColor: '#FE3C03', width: '50%',     height: '100%'}}>
+                  <Text style={[styles.buttonText, {color: 'white'}]}>
+                    STOP
+                  </Text>
                 </Button>
               </View>
             )}
-          </Body>
+          </View>
         </Footer>
       </Container>
     );
@@ -2987,17 +3181,23 @@ var styles = StyleSheet.create({
   liveNameText: {
     color: 'black',
     textAlign: 'center',
-    fontWeight : 'bold'
+    fontWeight: 'bold',
   },
   footer: {
-    backgroundColor: ApiUtils.getBackgroundColor(),
+    backgroundColor: 'transparent',
     paddingLeft: 0,
     paddingRight: 0,
-    height: 56,
+    paddingBottom: 0,
+    marginBottom: -5,
+    width: Dimensions.get('screen').width,
+    height:60,
   },
   footerBody: {
-    justifyContent: 'center',
+    // justifyContent: 'center',
+    display: 'flex',
+    flexDirection: 'column',
     flex: 1,
+    width: Dimensions.get('screen').width,
   },
   icon: {
     color: '#fff',
@@ -3062,7 +3262,7 @@ var styles = StyleSheet.create({
   errorMessage: {
     marginLeft: 10,
     marginTop: 10,
-    fontStyle : 'italic'
+    fontStyle: 'italic',
   },
   saveButton: {
     backgroundColor: 'transparent',
@@ -3100,7 +3300,8 @@ var styles = StyleSheet.create({
     padding: 10,
   },
   ignoreActivityLink: {
-    marginTop: 60,
+    marginTop: 10,
+    marginBottom: 20,
     alignSelf: 'center',
     fontSize: 14,
     textDecorationLine: 'underline',
@@ -3119,7 +3320,7 @@ var styles = StyleSheet.create({
   map: {
     flex: 1,
     borderColor: 'black',
-    borderWidth: 2,
+    borderWidth: 0,
     zIndex: -1,
   },
   status: {

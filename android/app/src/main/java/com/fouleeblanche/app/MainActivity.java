@@ -1,4 +1,4 @@
-package com.dag.folomi.app;
+package com.fouleeblanche.app;
 
 import com.facebook.react.ReactActivity;
 

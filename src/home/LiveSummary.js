@@ -33,7 +33,8 @@ import RNFetchBlob from 'rn-fetch-blob';
 import Share from 'react-native-share';
 import Logo from '../assets/logo_header.png';
 import GlobalStyles from '../styles';
-
+import {Sponsors} from './Sponsors';
+import Autrans from '../assets/autrans.svg';
 const mapStateToProps = state => {
   return {
     userData: state.userData,
@@ -104,9 +105,7 @@ class LiveSummary extends Component {
         )[0].libelleSport;
         this.setState({libelleSport: libelleSport});
 
-   
         this.saveCoordinates(responseJson.positions.tracks[0].trkseg[0].points);
-
 
         this.setState({isloading: false});
       })
@@ -221,7 +220,14 @@ class LiveSummary extends Component {
   }
 
   onClickShare() {
-    ShareRn.share(
+
+    this.shareImage();
+ 
+  }
+
+  shareOldStyle()
+  {
+   ShareRn.share(
       {
         message:
           'Découvrez mon activité à la Foulée Blanche  : ' +
@@ -235,6 +241,38 @@ class LiveSummary extends Component {
       },
     );
   }
+
+  shareImage = () => {
+    RNFetchBlob.fetch('GET', 'https://www.folomi.fr/s/compte/photo-foulee.php?c='+this.state.live.codeLive)
+      .then(resp => {
+        console.log('response : ', resp);
+        console.log(resp.data);
+        let base64image = resp.data;
+        this.share('data:image/png;base64,' + base64image);
+      })
+      .catch(err => this.shareOldStyle());
+
+
+  };
+
+  share = (base64image) => {
+    console.log('base64image : ', base64image);
+    let shareOptions = {
+      title: 'Title',
+      url: base64image,
+      message: 'https://www.folomi.fr/s/compte/partage-fouleeblanche.php?c=' +
+      this.state.live.codeLive,
+      subject: 'Subject',
+    };
+
+    Share.open(shareOptions)
+      .then(res => {
+        console.log(res);
+      })
+      .catch(err => {
+        err && console.log(err);
+      });
+  };
 
   openLink(url) {
     Linking.canOpenURL(url).then(supported => {
@@ -406,6 +444,16 @@ class LiveSummary extends Component {
           <Body style={{flex: 0}} />
           <Right style={{flex: 1}}>
             <Image resizeMode="contain" source={Logo} style={styles.logo} />
+            <Autrans
+              width={'40%'}
+              height={50}
+              style={{
+                alignSelf: 'center',
+                opacity: 1,
+                marginLeft: 10,
+                marginBottom: 5,
+              }}
+            />
           </Right>
         </Header>
         <Content style={styles.body} scrollEnabled={true}>
@@ -818,10 +866,11 @@ class LiveSummary extends Component {
                   </TouchableOpacity>
                 ) : null}
 
-                {this.state.live.idActiviteStravaLive == null && !this.state.isloading ?
-                    <View style={{marginTop : 10}}>
+                {this.state.live.idActiviteStravaLive == null &&
+                !this.state.isloading ? (
+                  <View style={{marginTop: 10}}>
                     <Text style={{textAlign: 'center'}}>
-                      Vos challenges sont en cours sur notre serveur
+                      Vos challenges sont en cours de calcul sur notre serveur
                     </Text>
                     <TouchableOpacity
                       onPress={() =>
@@ -831,13 +880,13 @@ class LiveSummary extends Component {
                         style={{
                           textAlign: 'center',
                           textDecorationLine: 'underline',
-                          marginTop : 10
+                          marginTop: 10,
                         }}>
                         Cliquez ici pour actualiser
                       </Text>
                     </TouchableOpacity>
                   </View>
-                 : null}
+                ) : null}
 
                 {this.state.live.segmentEfforts != null &&
                 this.state.live.segmentEfforts.length > 0 ? (
@@ -898,36 +947,54 @@ class LiveSummary extends Component {
                                   width: '100%',
                                 }}>
                                 <View>
-                                  <Text style={{textAlign : 'center', alignSelf : 'center', marginBottom : 3}}>Distance</Text>
+                                  <Text
+                                    style={{
+                                      textAlign: 'center',
+                                      alignSelf: 'center',
+                                      marginBottom: 3,
+                                    }}>
+                                    Distance
+                                  </Text>
                                   <Text>{segment.distanceSegment} km</Text>
                                 </View>
 
                                 <Text>|</Text>
                                 <View>
-                                <Text style={{textAlign : 'center', marginBottom : 3}}>Temps</Text>
+                                  <Text
+                                    style={{
+                                      textAlign: 'center',
+                                      marginBottom: 3,
+                                    }}>
+                                    Temps
+                                  </Text>
                                   <Text>{segment.tempsSegmentString}</Text>
                                 </View>
                                 <Text>|</Text>
                                 <View>
-                                <Text style={{textAlign : 'center', marginBottom : 3}}>Allure</Text>
+                                  <Text
+                                    style={{
+                                      textAlign: 'center',
+                                      marginBottom: 3,
+                                    }}>
+                                    Allure
+                                  </Text>
                                   <Text>
                                     {segment.vitesseMoyenneSegment}/km
                                   </Text>
                                 </View>
                                 <View>
-                                <Text
-                                  style={{
-                                    padding: 5,
-                                    borderColor: ApiUtils.getBackgroundColor(),
-                                    borderWidth: 2,
-                                    // marginTop: -8,
-                                    fontWeight: 'bold',
-                                    color: ApiUtils.getBackgroundColor(),
-                                  }}>
-                                  Voir
-                                </Text>
+                                  <Text
+                                    style={{
+                                      padding: 5,
+                                      borderColor: ApiUtils.getBackgroundColor(),
+                                      borderWidth: 2,
+                                      // marginTop: -8,
+                                      fontWeight: 'bold',
+                                      color: ApiUtils.getBackgroundColor(),
+                                    }}>
+                                    Voir
+                                  </Text>
                                 </View>
-                            
                               </View>
                             </View>
                           </TouchableOpacity>
@@ -940,8 +1007,10 @@ class LiveSummary extends Component {
             )}
             {/* </View> */}
           </ScrollView>
+
           {/* </View> */}
         </Content>
+        <Sponsors />
       </Container>
     );
   }

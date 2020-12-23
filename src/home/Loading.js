@@ -31,7 +31,7 @@ export default class Loading extends Component {
             alignSelf :'center'
           }} />
           <ActivityIndicator color='white' />
-          <Text style={{ color: 'white', textAlign: "center" }}>Chargement test</Text>
+          <Text style={{ color: 'white', textAlign: "center" }}>Chargement</Text>
         </View>
       </Container>
 
