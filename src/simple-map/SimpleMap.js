@@ -631,7 +631,7 @@ class SimpleMap extends Component {
     this.addMarker(location);
 
     if (location.coords.accuracy != 0) {
-      console.log(location)
+      console.log(location);
       this.setState({isGpsNotOk: false});
     }
 
@@ -1856,12 +1856,20 @@ class SimpleMap extends Component {
         </View>
 
         {this.state.isGpsNotOk ? (
-              <View style={[styles.liveNameBanner, {zIndex: 12, backgroundColor : ApiUtils.getBackgroundColor()}]}>
-                <Text style={[styles.liveNameText,{color : 'white', textTransform : 'uppercase'}]}>
-                  Aquisition du Signal GPS...
-                </Text>
-              </View>
-            ) : null}
+          <View
+            style={[
+              styles.liveNameBanner,
+              {zIndex: 12, backgroundColor: ApiUtils.getBackgroundColor()},
+            ]}>
+            <Text
+              style={[
+                styles.liveNameText,
+                {color: 'white', textTransform: 'uppercase'},
+              ]}>
+              Aquisition du Signal GPS...
+            </Text>
+          </View>
+        ) : null}
 
         <Button
           onPress={() => this.onClickGetCurrentPosition()}
@@ -1872,7 +1880,14 @@ class SimpleMap extends Component {
             backgroundColor: 'white',
             zIndex: 5,
             position: 'absolute',
-            top: Platform.OS == 'android' ? (this.state.isGpsNotOk  ? 173 : 153 ) : (this.state.isGpsNotOk  ? 205 : 185 ) ,
+            top:
+              Platform.OS == 'android'
+                ? this.state.isGpsNotOk
+                  ? 173
+                  : 153
+                : this.state.isGpsNotOk
+                ? 205
+                : 185,
             right: 100,
           }}>
           {Platform.OS == 'ios' ? (
@@ -2451,12 +2466,12 @@ class SimpleMap extends Component {
                     />
                   </Button>
                 </Left>
-                <Body style={{justifyContent: 'center'}}>
+                <Body style={{justifyContent: 'center', flex: 1}}>
                   <Text style={{fontWeight: 'bold'}}>
                     Enregistrez votre activité
                   </Text>
                 </Body>
-                {/* <Right></Right> */}
+                <Right syle={{flex: 0}} />
               </Header>
 
               <ScrollView scrollEnabled={true}>
@@ -2687,7 +2702,7 @@ class SimpleMap extends Component {
                 style={{
                   marginBottom: 0,
                   position: 'absolute',
-                  bottom: 50,
+                  bottom: Platform.OS == 'ios' ? 80 : 50,
                   zIndex: 12,
                   backgroundColor: 'white',
                 }}>
@@ -3042,14 +3057,16 @@ class SimpleMap extends Component {
           </ScrollView>
         </ModalSmall>
 
-        <Footer
-          style={[styles.footer]}>
+        <Footer style={[styles.footer]}>
           <View style={{flex: 1}}>
-           
             {!this.props.isRecording ? (
               <Button
                 full
-                style={{backgroundColor: '#39F800', width: '100%', height : '100%'}}
+                style={{
+                  backgroundColor: '#39F800',
+                  width: '100%',
+                  height: '100%',
+                }}
                 onPress={this.onstart.bind(this)}>
                 <Text style={[styles.buttonText, {color: 'black'}]}>
                   DEMARRER
@@ -3058,13 +3075,13 @@ class SimpleMap extends Component {
             ) : (
               <View
                 style={{
-                   height : '100%',
+                  height: '100%',
                   flexDirection: 'row',
                   justifyContent: 'flex-start',
                   width: Dimensions.get('screen').width,
                   paddingRight: 0,
                   paddingLeft: 0,
-                  paddingBottom : 0
+                  paddingBottom: 0,
                 }}>
                 <Button
                   full
@@ -3081,7 +3098,11 @@ class SimpleMap extends Component {
                 <Button
                   full
                   onPress={this.onStop.bind(this)}
-                  style={{backgroundColor: '#FE3C03', width: '50%',     height: '100%'}}>
+                  style={{
+                    backgroundColor: '#FE3C03',
+                    width: '50%',
+                    height: '100%',
+                  }}>
                   <Text style={[styles.buttonText, {color: 'white'}]}>
                     STOP
                   </Text>
@@ -3190,7 +3211,7 @@ var styles = StyleSheet.create({
     paddingBottom: 0,
     marginBottom: -5,
     width: Dimensions.get('screen').width,
-    height:60,
+    height: 60,
   },
   footerBody: {
     // justifyContent: 'center',

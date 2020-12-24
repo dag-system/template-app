@@ -28,6 +28,7 @@ import moment from 'moment';
 import Logo from '../assets/logo_header.png';
 import GlobalStyles from '../styles';
 import Autrans from '../assets/autrans.svg';
+import { Sponsors } from './Sponsors';
 const mapStateToProps = state => {
   return {
     userData: state.userData,
@@ -350,32 +351,27 @@ class Help extends Component {
                   </TouchableOpacity>
                 </Left>
                 <Body style={{flex: 0}} />
-                <Right style={{flex: 1}}>
-             
-                </Right>
+                <Right style={{flex: 1}} />
               </Header>
             )}
 
             <Content style={{padding: 10, paddingTop: 20}} scrollEnabled={true}>
-              <View style={[GlobalStyles.row,{justifyContent :'center'}]}>
-              <Image
-                animation="bounceInDown"
-                delay={300}
-                resizeMode="contain"
-                source={Logo}
-                style={styles.logo}
-              />
-                   <Autrans
-                width={'25%'}
-                height={50}
-                style={{
-                  opacity: 1,
-                  marginLeft: 1,
-                  marginBottom: 5,
-                }}
-              />
+              <View style={[GlobalStyles.row, {justifyContent: 'center'}]}>
+                <Image
+                  resizeMode="contain"
+                  source={Logo}
+                  style={styles.logo}
+                />
+                <Autrans
+                  width={'25%'}
+                  height={50}
+                  style={{
+                    opacity: 1,
+                    marginLeft: 1,
+                    marginBottom: 5,
+                  }}
+                />
               </View>
-           
               <Text
                 style={{
                   textAlign: 'center',
@@ -383,82 +379,42 @@ class Help extends Component {
                   color: ApiUtils.getBackgroundColor(),
                   marginTop: 30,
                 }}>
-                Bienvenue sur l'application de la foulée blanche 2021
+                Bienvenue sur l’application officielle de la foulée Blanche 2021
+                !
               </Text>
-
               <Text style={{marginTop: 10}}>
-                Application officielle de la Foulée Blanche 2021, venez skier et
-                comparez vos temps avec ceux de vos amis ou famille !
+                Venez skier et comparer vos temps avec ceux de vos amis ou
+                famille !
               </Text>
               <Text style={{marginTop: 10}}>
                 Faites la course contre des centaines de personne sans jamais
-                vous croiser, et notamment des skieurs de renoms comme Robin
-                Duvillard, Simon Fourcarde et bien d’autres !
+                les croiser !
+              </Text>
+              <Text style={{marginTop: 10, fontWeight : 'bold'}}>
+                Manuel à lire avant de skier :
               </Text>
               <Text style={{marginTop: 10}}>
-                La foulée Blanche est le seul évènement nordique de l’année à
-                vous proposer ce format de course, donc n’hésitez plus et venez
-                skier à Autrans pour battre vos propres records
+                Avant de partir, assurez-vous d’avoir bien paramétré votre
+                téléphone pour avoir le meilleur enregistrement de votre
+                activité : « suivez les instruction ici »
               </Text>
-
-              <Text
-                style={{
-                  marginTop: 20,
-                  marginBottom: 20,
-                  textAlign: 'center',
-                  fontWeight: 'bold',
-                }}>
-                Manuel à lire avant de lancer une activité
-              </Text>
-              <Text style={{marginTop: 20, marginBottom: 20}}>
-                1 - Enregistrer vos activités
-              </Text>
-              <View style={[GlobalStyles.row, {flexWrap: 'wrap'}]}>
-                <Text style={{width: '80%'}}>
-                  Pour enregistrer une nouvelle activité cliquez sur le bouton :{' '}
-                </Text>
-                <View
-                  style={{
-                    backgroundColor: ApiUtils.getBackgroundColor(),
-                    height: 60,
-                    width: 60,
-                    borderRadius: 30,
-                    padding: 15,
-                    marginTop: -15,
-                    textAlign: 'center',
-                  }}>
-                  <Icon
-                    active
-                    name="plus"
-                    type="AntDesign"
-                    style={styles.plusButtonLogo}
-                  />
-                </View>
-              </View>
+              <Text style={{marginTop: 10}}>Le jour de la course :</Text>
               <Text style={{marginTop: 10}}>
-                Dès que vous êtres prêts cliquez sur "Démarrer" puis lancer vous
-                sur nos parcours
+                Lancer votre activité au début de votre journée et
+                l’application calculera toute seule votre temps sur les pistes
+                dédiées de la Foulée Blanche.
               </Text>
-              <Text style={{textAlign: 'justify', marginTop: 10}}>
-                L'application enregistrera votre activité et calculera vos
-                performances sur nos differents parcours
+              <Text style={{marginTop: 10}}>
+                Appuyez sur le « + » pour démarrer votre activité (de préférence
+                depuis un endroit où vous avez du réseau)
               </Text>
-              <View
-                style={[GlobalStyles.row, {flexWrap: 'wrap', marginTop: 20}]}>
-                <Text style={{width: '50%'}}>
-                  Pour voir la liste des des parcours cliquez sur le bouton :
-                </Text>
-             
-                  <Icon
-                    type="Ionicons"
-                    name="map-outline"
-                    style={{fontSize: 20}}
-                  />
-              </View>
-
-              <Text style={{textAlign: 'center', marginTop: 10}}>
-                Retrouvez les classements sur notre site
+              <Text style={{marginTop: 10}}>Skiez, battez des records !</Text>
+              <Text style={{marginTop: 10}}>
+                Arrêtez votre activité à la fin de votre journée (de preference
+                depuis un endroit où vous avez du réseau)
               </Text>
+              <Text style={{marginTop: 10}}>Vous voilà classez !</Text>
+             <Text> Consulter votre historique et vos classements dans le menu ou depuis notre site internet : </Text>
               <TouchableOpacity
                 onPress={() =>
                   this.openLink('https://www.lafouleeblanche.com/')
@@ -472,8 +428,33 @@ class Help extends Component {
                   https://www.lafouleeblanche.com/
                 </Text>
               </TouchableOpacity>
+  
+      
+     
+              {/* <View style={[GlobalStyles.row, {flexWrap: 'wrap'}]}>
+                <Text style={{width: '80%'}}>
+                  Pour enregistrer une nouvelle activité cliquez sur le bouton :
+                </Text>
+                <View
+                  style={{
+                    backgroundColor: ApiUtils.getBackgroundColor(),
+                    height: 60,
+                    width: 60,
+                    borderRadius: 30,
+                    padding: 15,
+                    marginTop: -15,
+                  }}>
+                  <Icon
+                    active
+                    name="plus"
+                    type="AntDesign"
+                    style={styles.plusButtonLogo}
+                  />
+                </View>
+              </View> */}
+          
               <Text style={{marginTop: 20, marginBottom: 20}}>
-                2 - Paramétrez votre téléphne
+                Pour un bon fonctionnement : 
               </Text>
               <Text style={{textAlign: 'center', marginTop: 10}}>
                 Pour un meilleur enregistrement de votre activité : paramétrez
@@ -493,25 +474,20 @@ class Help extends Component {
                   Suivez nos instructions ici
                 </Text>
               </TouchableOpacity>
-
               <Text style={{marginTop: 20, marginBottom: 20}}>
-                3 - Les challenges
+                Les challenges
               </Text>
-
               <Text>
                 Skiez sur les parcours de la foulée blanche et vous apparaitrez
                 sur le classement
               </Text>
-
               <Text style={{marginTop: 20, marginBottom: 20}}>
                 Fonctionnement
               </Text>
-
               <Text>
                 Pour vous être sûr d'avoir un bon enregistrement de vos
                 performances :{' '}
               </Text>
-
               <Text style={{marginTop: 20, marginBottom: 0}}>
                 1 - S’assurer que la fonction GPS soit en route lors de
                 l’utilisation
@@ -536,26 +512,23 @@ class Help extends Component {
                 6 - Enregistrer son activité lorsque nous sommes couvert par le
                 réseau afin que le classement soit mis à jour automatiquement
               </Text>
-
               {this.props.noHeader ? (
                 <Text style={{textAlign: 'center', marginTop: 10}}>
                   Vous retrouverez ces informations dans le menu d'aide
                 </Text>
               ) : null}
-
               <Text style={{textAlign: 'center', marginTop: 10}}>
                 Bon ski !
               </Text>
-
               {this.props.noHeader ? (
                 <TouchableOpacity
                   onPress={() => this.onPopupOk()}
                   style={{
                     // paddingBottom: 200,
-                    textAlign: 'center',
                     marginTop: 10,
                     justifyContent: 'center',
                     borderColor: ApiUtils.getBackgroundColor(),
+                    backgroundColor :  ApiUtils.getBackgroundColor(),
                     padding: 10,
                     borderWidth: 1,
                   }}>
@@ -563,15 +536,15 @@ class Help extends Component {
                     style={{
                       textAlign: 'center',
                       textTransform: 'uppercase',
-                      color: ApiUtils.getBackgroundColor(),
+                      color: 'white'
                     }}>
                     C'est parti
                   </Text>
                 </TouchableOpacity>
               ) : null}
-
               <View style={{marginBottom: 100}} />
             </Content>
+            <Sponsors ></Sponsors>
           </Root>
         </Container>
       </Drawer>

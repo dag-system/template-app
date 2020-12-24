@@ -220,14 +220,11 @@ class LiveSummary extends Component {
   }
 
   onClickShare() {
-
     this.shareImage();
- 
   }
 
-  shareOldStyle()
-  {
-   ShareRn.share(
+  shareOldStyle() {
+    ShareRn.share(
       {
         message:
           'Découvrez mon activité à la Foulée Blanche  : ' +
@@ -243,26 +240,32 @@ class LiveSummary extends Component {
   }
 
   shareImage = () => {
-    RNFetchBlob.fetch('GET', 'https://www.folomi.fr/s/compte/photo-foulee.php?c='+this.state.live.codeLive)
+    RNFetchBlob.fetch(
+      'GET',
+      'https://www.folomi.fr/s/compte/photo-foulee.php?c=' +
+        this.state.live.codeLive,
+    )
       .then(resp => {
         console.log('response : ', resp);
         console.log(resp.data);
         let base64image = resp.data;
-        this.share('data:image/png;base64,' + base64image);
+        if (Platform.OS == 'ios') {
+          this.shareOldStyle();
+        } else {
+          this.share('data:image/png;base64,' + base64image);
+        }
       })
       .catch(err => this.shareOldStyle());
-
-
   };
 
-  share = (base64image) => {
-    console.log('base64image : ', base64image);
+  share = base64image => {
     let shareOptions = {
-      title: 'Title',
+      title: 'Découvrez mon activité à la Foulée Blanche',
       url: base64image,
-      message: 'https://www.folomi.fr/s/compte/partage-fouleeblanche.php?c=' +
-      this.state.live.codeLive,
-      subject: 'Subject',
+      message:
+        'https://www.folomi.fr/s/compte/partage-fouleeblanche.php?c=' +
+        this.state.live.codeLive,
+      subject: 'Découvrez mon activité à la Foulée Blanche',
     };
 
     Share.open(shareOptions)
