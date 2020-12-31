@@ -28,7 +28,7 @@ import moment from 'moment';
 import Logo from '../assets/logo_header.png';
 import GlobalStyles from '../styles';
 import Autrans from '../assets/autrans.svg';
-import { Sponsors } from './Sponsors';
+import {Sponsors} from './Sponsors';
 const mapStateToProps = state => {
   return {
     userData: state.userData,
@@ -357,11 +357,7 @@ class Help extends Component {
 
             <Content style={{padding: 10, paddingTop: 20}} scrollEnabled={true}>
               <View style={[GlobalStyles.row, {justifyContent: 'center'}]}>
-                <Image
-                  resizeMode="contain"
-                  source={Logo}
-                  style={styles.logo}
-                />
+                <Image resizeMode="contain" source={Logo} style={styles.logo} />
                 <Autrans
                   width={'25%'}
                   height={50}
@@ -383,38 +379,126 @@ class Help extends Component {
                 !
               </Text>
               <Text style={{marginTop: 10}}>
-                Venez skier et comparer vos temps avec ceux de vos amis ou
-                famille !
+                Venez skier et comparez vos temps avec ceux de vos amis ou vos
+                familles !
               </Text>
               <Text style={{marginTop: 10}}>
                 Faites la course contre des centaines de personne sans jamais
                 les croiser !
               </Text>
-              <Text style={{marginTop: 10, fontWeight : 'bold'}}>
+              <Text style={{marginTop: 10}}>
+                Pas besoin de choisir son parcours à l’inscription, c’est au
+                départ des pistes que vous ferez votre choix de distance selon
+                votre forme du jour.
+              </Text>
+              <Text style={{marginTop: 10}}>
+                Chaque fois que vous déciderez de faire VOTRE « Foulée Blanche
+                », rendez-vous au départ des parcours, activez l’application, ne
+                vous souciez plus de rien, prenez le départ et skiez, votre
+                chrono se déclenche automatiquement en fonction de votre
+                position GPS. Vous devez bien sûr garder votre smartphone sur
+                vous.
+              </Text>
+              <Text style={{marginTop: 10}}>
+                Lors de votre inscription vous pouvez choisir de participer
+                également à un ou plusieurs challenge(s), info ici :
+              </Text>
+              <TouchableOpacity
+                onPress={() =>
+                  this.openLink(
+                    'https://www.lafouleeblanche.com/classements-challenges/',
+                  )
+                }>
+                <Text
+                  style={{
+                    textAlign: 'center',
+                    marginTop: 10,
+                    textDecorationLine: 'underline',
+                  }}>
+                  https://www.lafouleeblanche.com/classements-challenges/
+                </Text>
+              </TouchableOpacity>
+              <Text style={{marginTop: 10}}>
+                Consultez votre temps sur l'application puis votre classement
+                sera disponible en fin de journée sur notre site internet
+              </Text>
+              <Text style={{marginTop: 10}}>
+                <Text
+                  style={{
+                    fontWeight: 'bold',
+                    color: ApiUtils.getBackgroundColor(),
+                  }}>
+                  C’EST GRATUIT, A LA CARTE, ILLIMITE
+                </Text>
+                seul un forfait d'accès aux pistes est obligatoire, de quoi
+                améliorer votre résultat à chaque sortie !
+              </Text>
+              <Text
+                style={{
+                  marginTop: 10,
+                  fontWeight: 'bold',
+                  textAlign: 'center',
+                }}>
+                La Foulée Blanche est le seul évènement nordique à vous proposer
+                ce format de course donc n’hésitez plus et venez skier à Autrans
+                pour battre vos propres records.
+              </Text>
+              <Text style={{marginTop: 10, fontWeight: 'bold'}}>
+                Pour les infos complètes rendez-vous sur
+              </Text>
+              <TouchableOpacity
+                onPress={() =>
+                  this.openLink('https://www.lafouleeblanche.com')
+                }>
+                <Text
+                  style={{
+                    textAlign: 'center',
+                    marginTop: 10,
+                    textDecorationLine: 'underline',
+                  }}>
+                  www.lafouleeblanche.com
+                </Text>
+              </TouchableOpacity>
+              <Text
+                style={{
+                  marginTop: 10,
+                  fontWeight: 'bold',
+                  color: ApiUtils.getBackgroundColor(),
+                  textDecorationLine: 'underline',
+                  textTransform: 'uppercase',
+                }}>
                 Manuel à lire avant de skier :
               </Text>
-              <Text style={{marginTop: 10}}>
-                Avant de partir, assurez-vous d’avoir bien paramétré votre
-                téléphone pour avoir le meilleur enregistrement de votre
-                activité : « suivez les instruction ici »
+              <Text style={{marginTop: 10, fontWeight: 'bold'}}>
+                1 - Enregistrer vos activités
               </Text>
-              <Text style={{marginTop: 10}}>Le jour de la course :</Text>
-              <Text style={{marginTop: 10}}>
-                Lancer votre activité au début de votre journée et
-                l’application calculera toute seule votre temps sur les pistes
-                dédiées de la Foulée Blanche.
+              <Text style={{marginTop: 5}}>
+              -  Pour enregistrer une nouvelle activité cliquez sur le bouton « +
+                »
               </Text>
-              <Text style={{marginTop: 10}}>
-                Appuyez sur le « + » pour démarrer votre activité (de préférence
-                depuis un endroit où vous avez du réseau)
+              <Text style={{marginTop: 5}}>
+              -  Dès que vous êtes prêt cliquez sur « démarrer » puis lancez-vous
+                sur nos parcours.
               </Text>
-              <Text style={{marginTop: 10}}>Skiez, battez des records !</Text>
-              <Text style={{marginTop: 10}}>
-                Arrêtez votre activité à la fin de votre journée (de preference
-                depuis un endroit où vous avez du réseau)
+              <Text style={{marginTop: 5}}>
+              - Réalisez votre activité, l’application enregistrera votre
+                activité et calculera vos performances sur nos différents
+                parcours.
               </Text>
-              <Text style={{marginTop: 10}}>Vous voilà classez !</Text>
-             <Text> Consulter votre historique et vos classements dans le menu ou depuis notre site internet : </Text>
+              <Text style={{marginTop: 5}}>
+              - A votre arrivée cliquez sur « stop ».
+              </Text>
+              <Text style={{marginTop: 5}}>
+              - Déclarez dans quel style vous avez réalisé le parcours,
+                classique ou skating, merci de votre honnêteté.
+              </Text>
+              <Text style={{marginTop: 5}}>
+              - Cliquez sur « enregistrer » votre parcours
+              </Text>
+              <Text style={{marginTop: 5}}>
+                Retrouvez les classements sur notre site, mis à jour chaque soir
+                :
+              </Text>
               <TouchableOpacity
                 onPress={() =>
                   this.openLink('https://www.lafouleeblanche.com/')
@@ -428,9 +512,54 @@ class Help extends Component {
                   https://www.lafouleeblanche.com/
                 </Text>
               </TouchableOpacity>
-  
-      
-     
+              <Text style={{marginTop: 10, fontWeight: 'bold'}}>2 - Paramétrez votre téléphone</Text>
+              <Text style={{marginTop: 10}}>
+                Avant de partir, assurez-vous d’avoir bien paramétré votre
+                téléphone pour avoir le meilleur enregistrement de votre
+                activité :
+              </Text>
+              <TouchableOpacity
+                onPress={() =>
+                  this.openLink('https://folomi.fr/api/helpBattery.php')
+                }>
+                <Text
+                  style={{
+                    textAlign: 'center',
+                    marginTop: 10,
+                    textDecorationLine: 'underline',
+                  }}>
+                  Suivez nos instructions ici
+                </Text>
+              </TouchableOpacity>
+
+              <Text style={{marginTop: 10, fontWeight: 'bold'}}>3 – Pour un fonctionnement optimal</Text>
+              <Text style={{marginTop: 10}}>
+                Pour être sûr d’avoir un bon enregistrement de vos performances
+                :
+              </Text>
+              <Text style={{marginTop: 10}}>
+                - Mettre en route la fonction GPS lors de l’utilisation
+              </Text>
+              <Text style={{marginTop: 10}}>
+                 - Désactivez sur le téléphone les fonctionnalités d’économie de
+                batterie
+              </Text>
+              <Text style={{marginTop: 10}}>
+              - Lancer l’activité dans une zone couverte par le réseau (au
+                départ de Gève)
+              </Text>
+              <Text style={{marginTop: 10}}>
+              - Faire strictement le parcours du départ à l’arrivée, ne pas
+                changer de parcours.
+              </Text>
+              <Text style={{marginTop: 10}}>
+              - Ne pas arrêter l’activité sans avoir franchi la ligne d’arrivée
+                de quelques mètres.
+              </Text>
+              <Text>
+              - Enregistrer son activité lorsque nous sommes couverts par le
+                réseau afin que le classement soit mis à jour automatiquement
+              </Text>
               {/* <View style={[GlobalStyles.row, {flexWrap: 'wrap'}]}>
                 <Text style={{width: '80%'}}>
                   Pour enregistrer une nouvelle activité cliquez sur le bouton :
@@ -452,66 +581,8 @@ class Help extends Component {
                   />
                 </View>
               </View> */}
-          
-              <Text style={{marginTop: 20, marginBottom: 20}}>
-                Pour un bon fonctionnement : 
-              </Text>
-              <Text style={{textAlign: 'center', marginTop: 10}}>
-                Pour un meilleur enregistrement de votre activité : paramétrez
-                la gestion de la batterie de votre téléphone pour que l'app ne
-                se stoppe pas pendant votre effort.
-              </Text>
-              <TouchableOpacity
-                onPress={() =>
-                  this.openLink('https://folomi.fr/api/helpBattery.php')
-                }>
-                <Text
-                  style={{
-                    textAlign: 'center',
-                    marginTop: 10,
-                    textDecorationLine: 'underline',
-                  }}>
-                  Suivez nos instructions ici
-                </Text>
-              </TouchableOpacity>
-              <Text style={{marginTop: 20, marginBottom: 20}}>
-                Les challenges
-              </Text>
-              <Text>
-                Skiez sur les parcours de la foulée blanche et vous apparaitrez
-                sur le classement
-              </Text>
-              <Text style={{marginTop: 20, marginBottom: 20}}>
-                Fonctionnement
-              </Text>
-              <Text>
-                Pour vous être sûr d'avoir un bon enregistrement de vos
-                performances :{' '}
-              </Text>
-              <Text style={{marginTop: 20, marginBottom: 0}}>
-                1 - S’assurer que la fonction GPS soit en route lors de
-                l’utilisation
-              </Text>
-              <Text>
-                2 - S’assurer que les fonctionnalités d’économie de batterie
-                soient désactivés sur le téléphone (voir la partie 2)
-              </Text>
-              <Text>
-                3 - Lancer l’activité dans une zone couverte par le réseau (au
-                départ de Gève)
-              </Text>
-              <Text>
-                4 - Faire strictement le parcours du départ à l’arrivée, ne pas
-                changer de trace.
-              </Text>
-              <Text>
-                5 - Ne pas arrêter l’activité sans avoir franchi la ligne
-                d’arrivée de quelques mètres.
-              </Text>
-              <Text>
-                6 - Enregistrer son activité lorsque nous sommes couvert par le
-                réseau afin que le classement soit mis à jour automatiquement
-              </Text>
+      
+
               {this.props.noHeader ? (
                 <Text style={{textAlign: 'center', marginTop: 10}}>
                   Vous retrouverez ces informations dans le menu d'aide
@@ -528,7 +599,7 @@ class Help extends Component {
                     marginTop: 10,
                     justifyContent: 'center',
                     borderColor: ApiUtils.getBackgroundColor(),
-                    backgroundColor :  ApiUtils.getBackgroundColor(),
+                    backgroundColor: ApiUtils.getBackgroundColor(),
                     padding: 10,
                     borderWidth: 1,
                   }}>
@@ -536,7 +607,7 @@ class Help extends Component {
                     style={{
                       textAlign: 'center',
                       textTransform: 'uppercase',
-                      color: 'white'
+                      color: 'white',
                     }}>
                     C'est parti
                   </Text>
@@ -544,7 +615,7 @@ class Help extends Component {
               ) : null}
               <View style={{marginBottom: 100}} />
             </Content>
-            <Sponsors ></Sponsors>
+            <Sponsors />
           </Root>
         </Container>
       </Drawer>

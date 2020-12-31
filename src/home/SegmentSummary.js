@@ -159,12 +159,26 @@ class SegmentSummary extends Component {
         this.setState({ isLoading: false })
 
       })
+     
       .catch(e => {
-        this.setState({ isLoading: false })
-        ApiUtils.logError('LiveSummary loadDetailSegment', e.message)
-      }).then(
+        this.setState({isloading: false});
+        ApiUtils.logError('get segment', JSON.stringify(e.message));
+          // alert('Une erreur est survenue : ' + JSON.stringify(e.message));
+        console.log(e)
+          if (e.message == 'Timeout'
+          || e.message == 'Network request failed') {
+          this.setState({ noConnection: true });
 
-      );
+
+          Toast.show({
+            text: "Vous n'avez pas de connection internet, merci de réessayer",
+            buttonText: 'Ok',
+            type: 'danger',
+            position: 'bottom',
+            duration : 5000
+          });
+          }
+      });
   }
 
   async loaduserData() {

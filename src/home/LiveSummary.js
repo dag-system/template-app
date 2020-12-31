@@ -24,6 +24,8 @@ import {
   Fab,
   Icon,
   Content,
+  Root,
+  Toast,
 } from 'native-base';
 import MapView from 'react-native-maps';
 import ApiUtils from '../ApiUtils';
@@ -109,10 +111,27 @@ class LiveSummary extends Component {
 
         this.setState({isloading: false});
       })
+    
       .catch(e => {
         this.setState({isloading: false});
-        ApiUtils.logError('LiveSummary loadLive', e.message);
+        ApiUtils.logError('create live', JSON.stringify(e.message));
+          // alert('Une erreur est survenue : ' + JSON.stringify(e.message));
+        console.log(e)
+          if (e.message == 'Timeout'
+          || e.message == 'Network request failed') {
+          this.setState({ noConnection: true });
+
+
+          Toast.show({
+            text: "Vous n'avez pas de connection internet, merci de réessayer",
+            buttonText: 'Ok',
+            type: 'danger',
+            position: 'bottom',
+            duration : 5000
+          });
+          }
       });
+
   }
 
   onClickDownloadGpx(url, name) {
@@ -419,6 +438,7 @@ class LiveSummary extends Component {
 
   render() {
     return (
+      <Root>
       <Container>
         <Header style={styles.header}>
           <Left style={{flex: 1}}>
@@ -649,7 +669,7 @@ class LiveSummary extends Component {
                 {this.state.statsLive == null && !this.state.isloading ? (
                   <View>
                     <Text style={{textAlign: 'center'}}>
-                      Votre activité est en cours de calcul sur notre serveur
+                      Votre activité est en cours de calcul
                     </Text>
                     <TouchableOpacity
                       onPress={() =>
@@ -809,7 +829,7 @@ class LiveSummary extends Component {
                         textTransform: 'uppercase',
                         fontWeight: 'bold',
                       }}>
-                      REJOUER VOTRE ACTIVITé
+                      REJOUER VOTRE TRACé
                     </Text>
                   </TouchableOpacity>
                 ) : (
@@ -873,7 +893,7 @@ class LiveSummary extends Component {
                 !this.state.isloading ? (
                   <View style={{marginTop: 10}}>
                     <Text style={{textAlign: 'center'}}>
-                      Vos challenges sont en cours de calcul sur notre serveur
+                      Vos challenges sont en cours de calcul
                     </Text>
                     <TouchableOpacity
                       onPress={() =>
@@ -1014,7 +1034,7 @@ class LiveSummary extends Component {
           {/* </View> */}
         </Content>
         <Sponsors />
-      </Container>
+      </Container></Root>
     );
   }
 }

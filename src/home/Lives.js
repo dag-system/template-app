@@ -20,6 +20,8 @@ import {
   Icon,
   Drawer,
   H1,
+  Toast,
+  Root,
 } from 'native-base';
 import Swipeout from 'react-native-swipeout';
 // import { Icon } from 'react-native-elements';
@@ -407,8 +409,22 @@ async  sendFile(fileToUpload) {
       })
       .catch(e => {
         this.setState({spinner: false});
-        ApiUtils.logError('create live', JSON.stringify(e.message)),
-          alert('Une erreur est survenue : ' + JSON.stringify(e.message));
+        ApiUtils.logError('create live', JSON.stringify(e.message));
+          // alert('Une erreur est survenue : ' + JSON.stringify(e.message));
+        console.log(e)
+          if (e.message == 'Timeout'
+          || e.message == 'Network request failed') {
+          this.setState({ noConnection: true });
+
+
+          Toast.show({
+            text: "Vous n'avez pas de connection internet, merci de réessayer",
+            buttonText: 'Ok',
+            type: 'danger',
+            position: 'bottom',
+            duration : 5000
+          });
+          }
       });
   }
 
@@ -506,21 +522,36 @@ async  sendFile(fileToUpload) {
         }
         this.setState({isLoadingDeleting: false});
       })
-      .catch(
-        e => {
-          console.log(e);
-          var deletingIds = this.state.deletingIds;
-          deletingIds = deletingIds.filter(d => d != idLive);
+      .catch(e => {
 
-          this.setState({
-            isLoading: false,
-            isLoadingDeleting: false,
-            deletingIds: deletingIds,
+        console.log(e);
+        var deletingIds = this.state.deletingIds;
+        deletingIds = deletingIds.filter(d => d != idLive);
+
+        this.setState({
+          isLoading: false,
+          isLoadingDeleting: false,
+          deletingIds: deletingIds,
+        });
+      
+        this.setState({spinner: false});
+        ApiUtils.logError('create live', JSON.stringify(e.message));
+          // alert('Une erreur est survenue : ' + JSON.stringify(e.message));
+        console.log(e);
+          if (e.message == 'Timeout'
+          || e.message == 'Network request failed') {
+          this.setState({ noConnection: true });
+
+
+          Toast.show({
+            text: "Vous n'avez pas de connection internet, merci de réessayer",
+            buttonText: 'Ok',
+            type: 'danger',
+            position: 'bottom',
+            duration : 5000
           });
-        },
-
-        // this.setState({ isLoadingDeleting: false })
-      );
+          }
+      });
   }
 
   getLiveStatusLibelle(status) {
@@ -751,6 +782,7 @@ async  sendFile(fileToUpload) {
     // }
 
     return (
+      <Root>
       <Drawer
         ref={ref => {
           this.drawer = ref;
@@ -1020,6 +1052,7 @@ async  sendFile(fileToUpload) {
           </Modal>
         </Container>
       </Drawer>
+      </Root>
     );
   }
 }

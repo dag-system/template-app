@@ -83,7 +83,7 @@ class Preferences extends Component {
       this.setState({ showDefaultDdn: false })
     }
 
-    this.getClubs();
+   //this.getClubs();
 
   }
 
@@ -304,17 +304,36 @@ class Preferences extends Component {
         }
         this.setState({ isLoading: false });
       })
-      .catch(e => {
-        Toast.show({
-          text: e.message,
-          buttonText: '',
-          duration: 1500,
-          type: 'danger',
-          position: 'top'
-        }); this.setState({ isLoading: false }); ApiUtils.logError('Preferences onSendRequest', e.message)
-      }).then(
+   
 
-      );
+      .catch(e => {
+        this.setState({isLoading: false});
+        ApiUtils.logError('Preferences onSendRequest', JSON.stringify(e.message));
+          // alert('Une erreur est survenue : ' + JSON.stringify(e.message));
+        console.log(e)
+          if (e.message == 'Timeout'
+          || e.message == 'Network request failed') {
+          this.setState({ noConnection: true });
+
+
+          Toast.show({
+            text: "Vous n'avez pas de connection internet, merci de réessayer",
+            buttonText: 'Ok',
+            type: 'danger',
+            position: 'bottom',
+            duration : 5000
+          });
+          }else{
+            Toast.show({
+              text: e.message,
+              buttonText: '',
+              duration: 1500,
+              type: 'danger',
+              position: 'top'
+            });
+          }
+      });
+
   }
 
 
@@ -524,7 +543,7 @@ class Preferences extends Component {
 
             <View style={{ marginTop: 20, paddingLeft: 10, width: '80%', display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
               <Switch tyle={{ paddingTop: 20 }} onValueChange={(text) => this.setState({ userdata: { ...this.state.userdata, acceptChallengeNameUtilisateur: text } })} value={this.state.userdata.acceptChallengeNameUtilisateur == 1} />
-              <Text style={{ marginLeft: 10 }}>J'accepte que mon nom apparaisse dans le classement des challenges</Text>
+              <Text style={{ marginLeft: 10 }}>J'accepte que mon nom apparaisse dans le classement</Text>
 
             </View>
 

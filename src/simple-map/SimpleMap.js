@@ -1490,14 +1490,25 @@ class SimpleMap extends Component {
             }
           })
           .catch(e => {
-            alert('Un erreur est intervenue. Veuillez réessayer');
-            this.setState({spinner: false, spinnerText: ''});
-            ApiUtils.logError(
-              'simpleMap onSendRequestStop',
-              JSON.stringify(e) + ' ' + e.message,
-            );
-          })
-          .then();
+            this.setState({spinner: false});
+            console.log(e);
+            ApiUtils.logError('create live', JSON.stringify(e.message));
+              // alert('Une erreur est survenue : ' + JSON.stringify(e.message));
+    
+              if (e.message == 'Timeout'
+              || e.message == 'Network request failed') {
+              this.setState({ noConnection: true });
+    
+    
+              Toast.show({
+                text: "Vous n'avez pas de connection internet, merci de réessayer",
+                buttonText: 'Ok',
+                type: 'danger',
+                position: 'bottom',
+                duration : 5000
+              });
+              }
+          });
       },
     );
   }
@@ -2451,6 +2462,7 @@ class SimpleMap extends Component {
             this.toggleModal3(!this.state.modal3Visible);
           }}>
           {this.state.modal3Visible ? (
+            <Root>
             <View style={styles.modal}>
               <Header style={styles.headerModal}>
                 <Left>
@@ -2493,13 +2505,13 @@ class SimpleMap extends Component {
                   <View style={styles.picker}>
                     <Picker
                       mode="dropdown"
-                      accessibilityLabel={'choisirSport'}
-                      iosHeader={'Choisir le sport'}
+                      accessibilityLabel={'Choisissez le type de glisse'}
+                      iosHeader={'Choisissez le type de glisse'}
                       iosIcon={<Icon name="chevron-down" type="FontAwesome5" />}
                       style={{marginTop: 0}}
                       selectedValue={this.state.selectedSport}
                       onValueChange={this.onValueSportChange.bind(this)}
-                      placeholder={"Choisissez le type d'activité"}
+                      placeholder={"Choisissez le type de glisse"}
                       placeholderStyle={{
                         color: ApiUtils.getBackgroundColor(),
                       }}
@@ -2518,7 +2530,7 @@ class SimpleMap extends Component {
                         borderBottomWidth: 1,
                       }}>
                       <Picker.Item
-                        label="Choisissez le type d'activité"
+                        label="Choisissez le type de glisse"
                         value="-1"
                       />
                       <Picker.Item label={'CLASSIQUE'} value="14" />
@@ -2548,7 +2560,7 @@ class SimpleMap extends Component {
                           paddingLeft: 5,
                           fontStyle: 'italic',
                         }}>
-                        Le type d'activité doit être renseigné
+                        Le type de glisse doit être renseigné
                       </Text>
                     ) : null}
 
@@ -2641,7 +2653,6 @@ class SimpleMap extends Component {
                         }}>
                         <Text style={{marginLeft: 10}}>
                           J'accepte que mon nom apparaisse dans le classement
-                          des spéciales
                         </Text>
                       </TouchableOpacity>
                     </View>
@@ -2708,8 +2719,11 @@ class SimpleMap extends Component {
                 }}>
                 <Sponsors />
               </View>
+              
             </View>
+            </Root>
           ) : null}
+          
         </Modal>
         {/******** modal4 : Upload interest point  *****************/}
         {/* <Modal

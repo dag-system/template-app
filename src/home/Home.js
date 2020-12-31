@@ -24,6 +24,8 @@ import {
   Right,
   Icon,
   Picker,
+  Toast,
+  Root,
 } from 'native-base';
 import * as Animated from 'react-native-animatable';
 import md5 from 'md5';
@@ -36,10 +38,6 @@ import Logo from '../assets/logoHome.svg';
 import skieur from '../assets/skieur.png';
 import Titre from '../assets/titre.svg';
 
-import Rhonealpes from '../assets/rhonealpes.svg';
-import Ccmv from '../assets/CCMV.png';
-import Alpesisere from '../assets/alpesisere.svg';
-import Isere from '../assets/isere.svg';
 
 import Autrans from '../assets/autrans.svg';
 import Date from '../assets/date.svg';
@@ -149,11 +147,22 @@ class Home extends Component {
       })
       .catch(e => {
         this.setState({isLoading: false});
-        alert(e.message);
-      })
-      .then
-      // this.setState({isLoading : false})
-      ();
+        console.log(e);
+        ApiUtils.logError('login', JSON.stringify(e.message));
+        // alert('Une erreur est survenue : ' + JSON.stringify(e.message));
+
+        if (e.message == 'Timeout' || e.message == 'Network request failed') {
+          this.setState({noConnection: true});
+
+          Toast.show({
+            text: "Vous n'avez pas de connection internet, merci de réessayer",
+            buttonText: 'Ok',
+            type: 'danger',
+            position: 'bottom',
+            duration: 5000,
+          });
+        }
+      });
   }
 
   onClickSendFollowCode() {
@@ -195,12 +204,24 @@ class Home extends Component {
             alert("Votre folocode n'est pas valide");
           }
         })
-        .catch(e => ApiUtils.logError('Home onClickSendFollowCode', e.message))
-        .then
-
-        //  this.onClickNavigate('SimpleMap'));
-        //alert("error gettingData"+ e.message)
-        ();
+        .catch(e => {
+          this.setState({isLoading: false});
+          console.log(e);
+          ApiUtils.logError('login', JSON.stringify(e.message));
+          // alert('Une erreur est survenue : ' + JSON.stringify(e.message));
+  
+          if (e.message == 'Timeout' || e.message == 'Network request failed') {
+            this.setState({noConnection: true});
+  
+            Toast.show({
+              text: "Vous n'avez pas de connection internet, merci de réessayer",
+              buttonText: 'Ok',
+              type: 'danger',
+              position: 'bottom',
+              duration: 5000,
+            });
+          }
+        });
     }
   }
 
@@ -382,6 +403,7 @@ class Home extends Component {
     }
 
     return (
+      <Root>
       <Container style={{backgroundColor: ApiUtils.getBackgroundColor()}}>
         <SafeAreaView
           style={{backgroundColor: ApiUtils.getBackgroundColor()}}
@@ -616,6 +638,7 @@ class Home extends Component {
 
         {/* <SafeAreaView style={{flex: 0, backgroundColor: '#DADADA'}} /> */}
       </Container>
+      </Root>
     );
   }
 }

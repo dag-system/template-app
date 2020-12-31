@@ -49,7 +49,6 @@ const mapStateToProps = state => {
   };
 };
 
-
 class CreateAccount extends ValidationComponent {
   constructor(props) {
     super(props);
@@ -68,11 +67,11 @@ class CreateAccount extends ValidationComponent {
       newPassword: '',
       newPasswordConfirmation: '',
       emailUtilisateur: '',
-
-      clubEntreprise : '',
-      clubFamille : '',
-      clubUniversite : '',
-      unss : ''
+      acceptChallengeUnss: false,
+      clubEntreprise: '',
+      clubFamille: '',
+      clubUniversite: '',
+      unss: '',
     };
   }
 
@@ -105,6 +104,7 @@ class CreateAccount extends ValidationComponent {
   }
 
   onSendRequest() {
+    this.setState({isLoading : true});
     let formData = new FormData();
     formData.append('method', 'createUtilisateur');
     formData.append('auth', ApiUtils.getAPIAuth());
@@ -122,26 +122,22 @@ class CreateAccount extends ValidationComponent {
     //alert(this.state.sexeUtilisateur);
     formData.append('sexeUtilisateur', this.state.sexeUtilisateur);
 
-    let clubs= [];
+    let clubs = [];
 
-    if(this.state.acceptChallengeEntreprise)
-    {
-      clubs.push({club : this.state.clubEntreprise, type:'Entreprise'});
+    if (this.state.acceptChallengeEntreprise) {
+      clubs.push({club: this.state.clubEntreprise, type: 'Entreprise'});
     }
 
-    if(this.state.acceptChallengeFamille)
-    {
-      clubs.push({club : this.state.clubFamille, type:'Famille'});
+    if (this.state.acceptChallengeFamille) {
+      clubs.push({club: this.state.clubFamille, type: 'Famille'});
     }
 
-    if(this.state.acceptChallengeUniversite)
-    {
-      clubs.push({club : this.state.clubUniversite, type:'Ecole'});
+    if (this.state.acceptChallengeUniversite) {
+      clubs.push({club: this.state.clubUniversite, type: 'Ecole'});
     }
 
-    if(this.state.unss != '')
-    {
-      clubs.push({club : this.state.unss, type:'Unss'});
+    if (this.state.acceptChallengeUnss) {
+      clubs.push({club: this.state.unss, type: 'Unss'});
     }
 
     formData.append('emailUtilisateur', this.state.emailUtilisateur);
@@ -172,6 +168,7 @@ class CreateAccount extends ValidationComponent {
       .then(ApiUtils.checkStatus)
       .then(response => response.json())
       .then(responseJson => {
+        this.setState({isLoading : false});
         if (responseJson.codeErreur == 'SUCCESS') {
           var action = {type: 'LOGIN', data: responseJson};
           this.props.dispatch(action);
@@ -186,7 +183,24 @@ class CreateAccount extends ValidationComponent {
           });
         }
       })
-      .catch(e => ApiUtils.logError('CreateAccount onSendRequest', e.message));
+      .catch(e => {
+        this.setState({isLoading : false});
+        console.log(e);
+        ApiUtils.logError('create account', JSON.stringify(e.message));
+        // alert('Une erreur est survenue : ' + JSON.stringify(e.message));
+
+        if (e.message == 'Timeout' || e.message == 'Network request failed') {
+          this.setState({noConnection: true});
+
+          Toast.show({
+            text: "Vous n'avez pas de connection internet, merci de réessayer",
+            buttonText: 'Ok',
+            type: 'danger',
+            position: 'bottom',
+            duration: 5000,
+          });
+        }
+      });
   }
 
   goBack() {
@@ -224,6 +238,7 @@ class CreateAccount extends ValidationComponent {
                 <Item stackedLabel style={{marginBottom: 5}}>
                   <Label>Nom *</Label>
                   <Input
+                     autoCapitalize="characters"
                     ref="nomUtilisateur"
                     returnKeyType="next"
                     clearButtonMode="always"
@@ -243,6 +258,7 @@ class CreateAccount extends ValidationComponent {
                 <Item stackedLabel style={{marginBottom: 5}}>
                   <Label>Prénom *</Label>
                   <Input
+                   autoCapitalize="characters"
                     ref="prenomUtilisateur"
                     returnKeyType="next"
                     clearButtonMode="always"
@@ -263,7 +279,9 @@ class CreateAccount extends ValidationComponent {
                   <Label>Email *</Label>
                   <Input
                     ref="emailUtilisateur"
+                    autoCompleteType='email'
                     returnKeyType="next"
+                    autoCapitalize="characters"
                     clearButtonMode="always"
                     value={this.state.emailUtilisateur}
                     onChangeText={value =>
@@ -348,9 +366,10 @@ class CreateAccount extends ValidationComponent {
                 </View>
 
                 <Text style={styles.label}>Date de naissance</Text>
+                <Text style={{paddingHorizontal : 10, fontSize :12, fontStyle : 'italic'}}>Important pour les classements par catégorie</Text>
                 {this.state != null && !this.state.showDefaultDdn ? (
                   <DatePicker
-                    style={{marginLeft: 20}}
+                    // style={{marginLeft: 20}}
                     date={new Date(this.state.ddnUtilisateur)}
                     defaultDate={
                       this.state.showDefaultDdn
@@ -390,6 +409,7 @@ class CreateAccount extends ValidationComponent {
                 <Item stackedLabel style={{marginBottom: 5}}>
                   <Label>Adresse</Label>
                   <Input
+                   autoCapitalize="characters"
                     returnKeyType="next"
                     clearButtonMode="always"
                     value={this.state.adresseUtilisateur}
@@ -402,6 +422,7 @@ class CreateAccount extends ValidationComponent {
                 <Item stackedLabel style={{marginBottom: 5}}>
                   <Label>Code Postal</Label>
                   <Input
+                   autoCapitalize="characters"
                     returnKeyType="next"
                     clearButtonMode="always"
                     value={this.state.cpUtilisateur}
@@ -414,6 +435,7 @@ class CreateAccount extends ValidationComponent {
                 <Item stackedLabel style={{marginBottom: 5}}>
                   <Label>Ville</Label>
                   <Input
+                   autoCapitalize="characters"
                     returnKeyType="next"
                     clearButtonMode="always"
                     value={this.state.villeUtilisateur}
@@ -476,7 +498,8 @@ class CreateAccount extends ValidationComponent {
                 {/* {this.state.newPassword != '' && this.state.newPasswordConfirmation != this.state.newPassword ? 
             <ErrorMessage value={''} message="Les mots de passe ne correspondent pas" /> : null} */}
 
-                <Text style={{textAlign: 'left', marginTop :20, paddingLeft : 20}}>
+                <Text
+                  style={{textAlign: 'left', marginTop: 20, paddingLeft: 20}}>
                   Informations Complementaires
                 </Text>
 
@@ -490,7 +513,7 @@ class CreateAccount extends ValidationComponent {
                     justifyContent: 'space-between',
                   }}>
                   <Switch
-                     style={{marginTop: -5}}
+                    style={{marginTop: -5}}
                     onValueChange={text =>
                       this.setState({acceptChallengeEntreprise: text})
                     }
@@ -513,6 +536,7 @@ class CreateAccount extends ValidationComponent {
                   <Item stackedLabel style={{marginBottom: 5, marginTop: 10}}>
                     <Label>Nom de mon équipe entreprise</Label>
                     <Input
+                     autoCapitalize="characters"
                       returnKeyType="next"
                       clearButtonMode="always"
                       value={this.state.clubEntreprise}
@@ -533,7 +557,7 @@ class CreateAccount extends ValidationComponent {
                     justifyContent: 'space-between',
                   }}>
                   <Switch
-                     style={{marginTop: -5}}
+                    style={{marginTop: -5}}
                     onValueChange={text =>
                       this.setState({acceptChallengeFamille: text})
                     }
@@ -556,6 +580,7 @@ class CreateAccount extends ValidationComponent {
                   <Item stackedLabel style={{marginBottom: 5, marginTop: 10}}>
                     <Label>Nom de mon équipe Famille/Ami</Label>
                     <Input
+                     autoCapitalize="characters"
                       returnKeyType="next"
                       clearButtonMode="always"
                       value={this.state.clubFamille}
@@ -576,7 +601,7 @@ class CreateAccount extends ValidationComponent {
                     justifyContent: 'space-between',
                   }}>
                   <Switch
-                     style={{marginTop: -5}}
+                    style={{marginTop: -5}}
                     onValueChange={text =>
                       this.setState({acceptChallengeUniversite: text})
                     }
@@ -599,6 +624,7 @@ class CreateAccount extends ValidationComponent {
                   <Item stackedLabel style={{marginBottom: 5, marginTop: 10}}>
                     <Label>Nom de mon équipe Université</Label>
                     <Input
+                     autoCapitalize="characters"
                       returnKeyType="next"
                       clearButtonMode="always"
                       value={this.state.clubUniversite}
@@ -609,17 +635,51 @@ class CreateAccount extends ValidationComponent {
                   </Item>
                 ) : null}
 
-                <Item stackedLabel style={{marginBottom: 5, marginTop: 10}}>
-                  <Label>AS UNSS</Label>
-                  <Input
-                    returnKeyType="next"
-                    clearButtonMode="always"
-                    value={this.state.unss}
-                    onChangeText={value =>
-                      this.setState({unss: value})
+                <View
+                  style={{
+                    marginTop: 20,
+                    paddingLeft: 10,
+                    width: '80%',
+                    display: 'flex',
+                    flexDirection: 'row',
+                    justifyContent: 'space-between',
+                  }}>
+                  <Switch
+                    style={{marginTop: -5}}
+                    onValueChange={text =>
+                      this.setState({acceptChallengeUnss: text})
                     }
+                    value={this.state.acceptChallengeUnss}
                   />
-                </Item>
+                  <TouchableOpacity
+                    onPress={() =>
+                      this.setState({
+                        acceptChallengeUnss: !this.state
+                          .acceptChallengeUnss,
+                      })
+                    }>
+                    <Text style={{marginLeft: 10}}>
+                    je participe à la foulée des jeunes
+                    </Text>
+                  </TouchableOpacity>
+                </View>
+
+
+                {this.state.acceptChallengeUnss ? (
+                  <Item stackedLabel style={{marginBottom: 5, marginTop: 10}}>
+                    <Label>AS UNSS</Label>
+                    <Input
+                     autoCapitalize="characters"
+                      returnKeyType="next"
+                      clearButtonMode="always"
+                      value={this.state.unss}
+                      onChangeText={value =>
+                        this.setState({unss: value})
+                      }
+                    />
+                  </Item>
+                ) : null}
+
               </Form>
 
               <View
@@ -638,26 +698,23 @@ class CreateAccount extends ValidationComponent {
                   }
                   value={this.state.acceptChallengeUtilisateur}
                 />
-              <TouchableOpacity
-                    onPress={() =>
-                      this.setState({
-                        acceptChallengeUtilisateur: !this.state
-                          .acceptChallengeUtilisateur,
-                      })
-                    }>
-                <Text style={{marginLeft: 10}}>
-                  J'accepte que mon nom apparaisse dans le classement des
-                  spéciales
-                </Text>
+                <TouchableOpacity
+                  onPress={() =>
+                    this.setState({
+                      acceptChallengeUtilisateur: !this.state
+                        .acceptChallengeUtilisateur,
+                    })
+                  }>
+                  <Text style={{marginLeft: 10}}>
+                    J'accepte que mon nom apparaisse dans le classement
+                  </Text>
                 </TouchableOpacity>
-           
               </View>
-
 
               {this.state.isLoading ? (
                 <View
                   style={{
-                    marginTop: 10,
+                    marginTop: 20,
                     marginBottom: 20,
                     alignItems: 'center',
                     justifyContent: 'center',
@@ -669,27 +726,32 @@ class CreateAccount extends ValidationComponent {
                 </View>
               ) : (
                 <TouchableOpacity
-                  style={[GlobalStyles.button,{width : '80%', alignSelf :"center", justifyContent : 'center', marginTop : 20}]}
+                  style={[
+                    GlobalStyles.button,
+                    {
+                      width: '80%',
+                      alignSelf: 'center',
+                      justifyContent: 'center',
+                      marginTop: 20,
+                    },
+                  ]}
                   onPress={() => this.onClickValidate()}>
                   <Text
                     style={[
-                      {textAlign : 'center', color: 1 == 1 ? 'black' : 'black'},
+                      {textAlign: 'center', color: 1 == 1 ? 'black' : 'black'},
                     ]}>
                     ENREGISTRER
                   </Text>
                 </TouchableOpacity>
               )}
 
-
               {ApiUtils.ISDEBUG() ? (
                 <Text
-                  
                   style={{textAlign: 'center', fontSize: 12, marginTop: 30}}>
                   Debug version {ApiUtils.VersionNumber()}
                 </Text>
               ) : ApiUtils.ISDEMO() ? (
                 <Text
-                  
                   style={{textAlign: 'center', fontSize: 12, marginTop: 30}}>
                   Demo version {ApiUtils.VersionNumber()}
                 </Text>

@@ -29,6 +29,7 @@ import Logo from '../assets/logo_header.png';
 import GlobalStyles from '../styles';
 
 import Rhonealpes from '../assets/rhonealpes.svg';
+import Region from '../assets/region.jpg';
 import Ccmv from '../assets/CCMV.png';
 import Alpesisere from '../assets/alpesisere.svg';
 import Isere from '../assets/isere.svg';
@@ -72,7 +73,12 @@ export class Sponsors extends Component {
           marginBottom : 20
         }}>
         <View style={{width : '10%', height : 50, flex : 1}}>
-          <Rhonealpes height={'100%'} />
+          <Image
+            source={Region}
+            resizeMethod="resize"
+            resizeMode="contain"
+            style={{height: '100%', width :'90%'}}
+          />
         </View>
        
         <View style={{width : '10%', height : 50, flex : 1, justifyContent :'center', paddingLeft :10}}>
@@ -80,17 +86,17 @@ export class Sponsors extends Component {
             source={Ccmv}
             resizeMethod="resize"
             resizeMode="contain"
-            style={{height: '100%', width :'90%'}}
+            style={{height: '90%', width :'90%'}}
           />
         </View>
 
     
         <View style={{width : '10%', height : 50, flex : 1}}>
-          <Isere height={'70%'} style={{marginTop : 10}}/>
+          <Isere height={'70%'} style={{marginTop : 7}}/>
         </View>
 
         <View style={{width : '10%', height : 50, flex : 1}}>
-          <Alpesisere height={'100%'}/>
+          <Alpesisere height={'80%'}/>
         </View>
      
       </View>
