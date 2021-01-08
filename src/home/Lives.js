@@ -22,6 +22,8 @@ import {
   H1,
   Toast,
   Root,
+  Fab,
+  Button,
 } from 'native-base';
 import Swipeout from 'react-native-swipeout';
 // import { Icon } from 'react-native-elements';
@@ -35,10 +37,16 @@ import {connect} from 'react-redux';
 import GlobalStyles from '../styles';
 import {Modal} from 'react-native';
 import Help from './Help';
+import BatteryModal from './BatteryModal';
+
 import {Sponsors} from './Sponsors';
 import Autrans from '../assets/autrans.svg';
-import { PermissionsAndroid } from 'react-native';
+import {PermissionsAndroid} from 'react-native';
 import DocumentPicker from 'react-native-document-picker';
+import UploadGpx from './UploadGpx';
+import {Platform} from 'react-native';
+import { Linking } from 'react-native';
+import { Alert } from 'react-native';
 const mapStateToProps = state => {
   return {
     userData: state.userData,
@@ -48,6 +56,7 @@ const mapStateToProps = state => {
     currentLive: state.currentLive,
     isOkPopupGps: state.isOkPopupGps,
     isOkPopupBAttery: state.isOkPopupBAttery,
+    isOkPopupBAttery2: state.isOkPopupBAttery2,
   };
 };
 
@@ -75,6 +84,7 @@ class Lives extends Component {
       isLoading: true,
       isRecording: true,
       isLoadingDeleting: false,
+      uploadGpxVisible: false,
     };
 
     this._unsubscribe = this.props.navigation.addListener('focus', () => {
@@ -86,19 +96,23 @@ class Lives extends Component {
     setTimeout(() => this.componentDidMountOk(), 100);
   }
 
-  componentDidMountOk() {
+  async componentDidMountOk() {
     if (this.props.isRecording) {
       this.onClickNavigate('SimpleMap');
     } else {
-      this.getLives(this.props.userData.idUtilisateur);
-      this.getSports();
-      this.getinformationStation();
+      this.downloadData();
     }
+  }
+  async downloadData() {
+    await this.getNewVersion();
+    await this.getLives(this.props.userData.idUtilisateur);
+
+    await this.getinformationStation();
   }
 
   onRefresh() {
-    this.getSports();
     this.getLives(this.props.userData.idUtilisateur);
+    this.getNewVersion();
   }
   componentWillUnmount() {
     this._unsubscribe();
@@ -132,7 +146,7 @@ class Lives extends Component {
     //  App.goHome(this.props.navigation)
   }
 
-  getLives(idUtilisateur) {
+  async getLives(idUtilisateur) {
     this.setState({isLoading: true});
     let formData = new FormData();
     formData.append('method', 'getLives');
@@ -214,9 +228,6 @@ class Lives extends Component {
       .then(this.setState({isLoading: false}));
   }
 
-
-
-
   checkPermissions() {
     if (Platform.OS == 'android') {
       try {
@@ -235,7 +246,6 @@ class Lives extends Component {
       }
     }
   }
-
 
   requestStoragePermission = async () => {
     try {
@@ -259,38 +269,46 @@ class Lives extends Component {
     }
   };
 
-  async onClickCreateLiveNew()
-  {
+  openGpxModal = () => {
+    this.setState({uploadGpxVisible: true});
+  };
+
+  closeGpxModal = () => {
+    this.setState({uploadGpxVisible: false});
+  };
+
+  async onClickCreateLiveNew() {
     this.checkPermissions();
 
-       // Pick a single file
-       try {
-        const res = await DocumentPicker.pick({
-          // type: 'application/gpx+xml',
-        });
-        console.log(
-          res.uri,
-          res.type, // mime type
-          res.name,
-          res.size,
-        );
-  
-        var uri = res.uri;
-        var filePath = uri;
-  
-        if (res.name.includes('.gpx')) {
-          setTimeout(() => this.sendFile(res), 100);
-        } else {
-          alert("Le fichier n'est pas un fichier gpx");
-        }
-      } catch (err) {
-        // alert(err)
-        if (DocumentPicker.isCancel(err)) {
-          // User cancelled the picker, exit any dialogs or menus and move on
-        } else {
-          throw err;
-        }
+    // Pick a single file
+    try {
+      const res = await DocumentPicker.pick({
+        // type: 'application/gpx+xml',
+      });
+      console.log(
+        res.uri,
+        res.type, // mime type
+        res.name,
+        res.size,
+      );
+
+      var uri = res.uri;
+      var filePath = uri;
+
+      if (res.name.includes('.gpx')) {
+        // this.openGpxModal();
+        setTimeout(() => this.sendFile(res), 100);
+      } else {
+        alert("Le fichier n'est pas un fichier gpx");
       }
+    } catch (err) {
+      // alert(err)
+      if (DocumentPicker.isCancel(err)) {
+        // User cancelled the picker, exit any dialogs or menus and move on
+      } else {
+        throw err;
+      }
+    }
   }
 
   normalize(path) {
@@ -306,16 +324,17 @@ class Lives extends Component {
     return path;
   }
 
-async  sendFile(fileToUpload) {
+  async sendFile(fileToUpload) {
     // var path = this.normalize(filePath);
     var _this = this;
+    this.openGpxModal();
 
     // const file = {
     //   uri  :path ,             // e.g. 'file:///path/to/file/image123.jpg'
     //   name : 'test',            // e.g. 'image123.jpg',
     //   type : 'gpx'             // e.g. 'image/jpg'
     // }
-    
+
     let formData = new FormData();
     // body.append('file', file)
     formData.append('file_attachment', fileToUpload);
@@ -323,9 +342,11 @@ async  sendFile(fileToUpload) {
     formData.append('method', 'createLive');
     formData.append('auth', ApiUtils.getAPIAuth());
     formData.append('idUtilisateur', this.props.userData.idUtilisateur);
+    formData.append('idSport', 14);
+    formaData.append('idVersion', ApiUtils.VersionNumber());
 
     // console.log(fileToUpload);
-    
+
     // fetch('https://folomi.fr/api/uploadgpx.php', {
     //   method: 'POST',
     //   body : body,
@@ -334,25 +355,35 @@ async  sendFile(fileToUpload) {
     //   },
     // })
 
-    let res = await fetch(
-      'https://www.folomi.fr/api/uploadgpx.php',
-      {
+    try {
+      let res = await fetch('https://www.folomi.fr/api/uploadgpx.php', {
         method: 'post',
         body: formData,
         headers: {
           'Content-Type': 'multipart/form-data; ',
         },
-      }
-    );
+      });
 
-    let responseJson = await res.json();
-    console.log(responseJson);
-    if (responseJson.status == 1) {
-      alert('Upload Successful');
-    }else{
+      let responseJson = await res.json();
       console.log(responseJson);
-    }
+      if (responseJson.status == 1) {
+        var idLive = responseJson.idLive;
+        var live = {
+          idLive: idLive,
+        };
+        var action = {type: 'SAVE_CURRENT_LIVE', data: live};
 
+        this.props.dispatch(action);
+        this.closeGpxModal();
+
+        this.onClickNavigate('LiveSummary');
+      } else {
+        this.closeGpxModal();
+        console.log(responseJson);
+      }
+    } catch (e) {
+      this.closeGpxModal();
+    }
 
     // .then(ApiUtils.checkStatus)
     // .then(response=> {
@@ -367,7 +398,8 @@ async  sendFile(fileToUpload) {
     formData.append('method', 'createLive');
     formData.append('auth', ApiUtils.getAPIAuth());
     formData.append('idUtilisateur', this.props.userData.idUtilisateur);
-
+    formData.append('idversion', ApiUtils.VersionNumberInt());
+    formData.append('os', Platform.OS);
     var libelleLive = this.getLibelleLive();
 
     formData.append('libelleLive', libelleLive);
@@ -410,21 +442,17 @@ async  sendFile(fileToUpload) {
       .catch(e => {
         this.setState({spinner: false});
         ApiUtils.logError('create live', JSON.stringify(e.message));
-          // alert('Une erreur est survenue : ' + JSON.stringify(e.message));
-        console.log(e)
-          if (e.message == 'Timeout'
-          || e.message == 'Network request failed') {
-          this.setState({ noConnection: true });
-
+        if (e.message == 'Timeout' || e.message == 'Network request failed') {
+          this.setState({noConnection: true});
 
           Toast.show({
             text: "Vous n'avez pas de connection internet, merci de réessayer",
             buttonText: 'Ok',
             type: 'danger',
             position: 'bottom',
-            duration : 5000
+            duration: 5000,
           });
-          }
+        }
       });
   }
 
@@ -523,7 +551,6 @@ async  sendFile(fileToUpload) {
         this.setState({isLoadingDeleting: false});
       })
       .catch(e => {
-
         console.log(e);
         var deletingIds = this.state.deletingIds;
         deletingIds = deletingIds.filter(d => d != idLive);
@@ -533,24 +560,21 @@ async  sendFile(fileToUpload) {
           isLoadingDeleting: false,
           deletingIds: deletingIds,
         });
-      
+
         this.setState({spinner: false});
         ApiUtils.logError('create live', JSON.stringify(e.message));
-          // alert('Une erreur est survenue : ' + JSON.stringify(e.message));
-        console.log(e);
-          if (e.message == 'Timeout'
-          || e.message == 'Network request failed') {
-          this.setState({ noConnection: true });
-
+        // alert('Une erreur est survenue : ' + JSON.stringify(e.message));
+        if (e.message == 'Timeout' || e.message == 'Network request failed') {
+          this.setState({noConnection: true});
 
           Toast.show({
             text: "Vous n'avez pas de connection internet, merci de réessayer",
             buttonText: 'Ok',
             type: 'danger',
             position: 'bottom',
-            duration : 5000
+            duration: 5000,
           });
-          }
+        }
       });
   }
 
@@ -616,7 +640,51 @@ async  sendFile(fileToUpload) {
     return 0;
   }
 
-  getinformationStation() {
+  async getNewVersion() {
+    const formData = new FormData();
+    formData.append('method', 'getnewVersion');
+    formData.append('auth', ApiUtils.getAPIAuth());
+    formData.append('idVersion', ApiUtils.VersionNumberInt());
+
+    fetch(ApiUtils.getAPIUrl(), {
+      method: 'POST',
+      headers: {
+        // Accept: 'application/json',
+        // 'Content-Type': 'application/json',
+      },
+      body: formData,
+    })
+      .then(ApiUtils.checkStatus)
+      .then(response => response.json())
+      .then(responseJson => {
+        if (responseJson == 'ok') {
+        } else {
+          Alert.alert(
+            "Nouvelle version disponible",
+            "Une nouvelle version de l'application est disponible",
+            [
+              {
+                text: 'Annuler',
+                style: 'cancel',
+              },
+              {text: 'Télécharger', onPress: () => this.openStorePage() },
+            ],
+            {cancelable: false},
+          );
+
+        }
+      });
+  }
+
+  openStorePage() {
+    let url =
+      Platform.OS === 'android'
+        ? 'https://play.google.com/store/apps/details?id=com.fouleeblanche.app'
+        : 'https://apps.apple.com/fr/app/la-foul%C3%A9e-blanche/id1546257921';
+    Linking.openURL(url);
+  }
+
+  async getinformationStation() {
     const formData = new FormData();
     formData.append('method', 'getInformationStation');
     formData.append('auth', ApiUtils.getAPIAuth());
@@ -733,14 +801,11 @@ async  sendFile(fileToUpload) {
   }
 
   getSport(idSport) {
-    if (this.props.sports.filter(s => s.idSport == idSport).length > 0) {
-      return this.props.sports.filter(s => s.idSport == idSport)[0]
-        .libelleSport;
+    if (idSport == 14) {
+      return 'CLASSIQUE';
     } else {
-      ApiUtils.logError('lives lists', 'unknow id sport : ' + idSport);
-      return '';
+      return 'SKATING';
     }
-    return '';
   }
   getnbInvites(live) {
     var invites = live.invites;
@@ -783,275 +848,334 @@ async  sendFile(fileToUpload) {
 
     return (
       <Root>
-      <Drawer
-        ref={ref => {
-          this.drawer = ref;
-        }}
-        content={
-          <Sidebar
-            navigation={this.props.navigation}
-            drawer={this.drawer}
-            selected="Lives"
-          />
-        }>
-        <Container>
-          <Header style={styles.header}>
-            <Left style={{flex: 1}}>
-              <TouchableOpacity
-                style={styles.drawerButton}
-                onPress={() => this.onDrawer()}>
-                <Icon style={styles.saveText} name="bars" type="FontAwesome5" />
-              </TouchableOpacity>
-            </Left>
-            <Body style={{flex: 0}}>
-           
-            </Body>
-            <Right style={{flex: 1}}>
-            <Image resizeMode="contain" source={Logo} style={styles.logo} />
-              <Autrans
-                width={'40%'}
-                height={50}
-                style={{
-                  alignSelf: 'center',
-                  opacity: 1,
-                  marginLeft: 10,
-                  marginBottom: 5,
-                }}
-              />
-            </Right>
-          </Header>
-
-          <Content
-            style={styles.body}
-            scrollEnabled={true}
-            refreshControl={
-              <RefreshControl
-                refreshing={this.state.isLoading}
-                onRefresh={() => this.onRefresh()}
-              />
-            }>
-            <View style={styles.loginButtonSection}>
-              {this.props.lives.length == 0 ? (
-                <Text
+        <Drawer
+          ref={ref => {
+            this.drawer = ref;
+          }}
+          content={
+            <Sidebar
+              navigation={this.props.navigation}
+              drawer={this.drawer}
+              selected="Lives"
+            />
+          }>
+          <Container>
+            <Header style={styles.header}>
+              <Left style={{flex: 1}}>
+                <TouchableOpacity
+                  style={styles.drawerButton}
+                  onPress={() => this.onDrawer()}>
+                  <Icon
+                    style={styles.saveText}
+                    name="bars"
+                    type="FontAwesome5"
+                  />
+                </TouchableOpacity>
+              </Left>
+              <Body style={{flex: 0}} />
+              <Right style={{flex: 1}}>
+                <Image resizeMode="contain" source={Logo} style={styles.logo} />
+                <Autrans
+                  width={'40%'}
+                  height={50}
                   style={{
-                    paddingTop: 100,
-                    paddingLeft: 15,
-                    paddingRight: 15,
-                    color: 'black',
-                  }}>
-                  Vous n'avez pas encore créé d'activités
-                </Text>
-              ) : (
-                <FlatList
-                  style={{height: '100%', width: '100%', marginBottom: 100}}
-                  data={this.props.lives.sort(function(a, b) {
-                    return b.idLive - a.idLive;
-                  })}
-                  extraData={this.props.lives}
-                  key={({item}) => item.idLive}
-                  renderItem={({item}) =>
-                    this.state.isLoadingDeleting &&
-                    this.state.deletingIds.filter(d => d == item.idLive)
-                      .length > 0 ? (
-                      <TouchableOpacity
-                        underlayColor="rgba(255,255,255,1,0.6)"
-                        onPress={this.viewLive.bind(this, item)}>
-                        <View style={[styles.rowContainer]}>
-                          <View style={styles.line}>
-                            <Text style={{width: 135}}>
-                              {this.getShortDate(item.dateCreationLive)} -
-                              {this.getShortTime(item.dateCreationLive)}
-                            </Text>
+                    alignSelf: 'center',
+                    opacity: 1,
+                    marginLeft: 10,
+                    marginBottom: 5,
+                  }}
+                />
+              </Right>
+            </Header>
 
-                            <View
-                              style={{color: 'black', alignContent: 'center'}}>
-                              <ActivityIndicator />
-                            </View>
-                          </View>
-                          <View style={styles.line}>
-                            <View
-                              style={{
-                                flexDirection: 'row',
-                                justifyContent: 'flex-start',
-                                width: '60%',
-                              }}>
-                              {item.etatLive > 1 ? (
-                                <Text style={{width: 200}}>
-                                  <Text
-                                    style={{
-                                      fontWeight: 'bold',
-                                      color: ApiUtils.getBackgroundColor(),
-                                    }}>
-                                    {this.getSport(item.idSport)}
-                                  </Text>
-                                </Text>
-                              ) : null}
-                            </View>
-                          </View>
-                          <Text
-                            style={{width: '60%'}}
-                            numberOfLines={1}
-                            ellipsizeMode="tail">
-                            {item.libelleLive}
-                          </Text>
-                        </View>
-                      </TouchableOpacity>
-                    ) : (
-                      <Swipeout
-                        right={this.swipeoutBtns}
-                        autoClose={true}
-                        backgroundColor="transparent"
-                        rowID={item.idLive}
-                        onOpen={(sectionID, rowID) => {
-                          this.setState({
-                            sectionID,
-                            rowID,
-                          });
-                        }}>
+            <Content
+              style={styles.body}
+              scrollEnabled={true}
+              refreshControl={
+                <RefreshControl
+                  refreshing={this.state.isLoading}
+                  onRefresh={() => this.onRefresh()}
+                />
+              }>
+              <View style={styles.loginButtonSection}>
+                {this.props.lives.length == 0 ? (
+                  <Text
+                    style={{
+                      paddingTop: 100,
+                      paddingLeft: 15,
+                      paddingRight: 15,
+                      color: 'black',
+                    }}>
+                    Vous n'avez pas encore créé d'activités
+                  </Text>
+                ) : (
+                  <FlatList
+                    style={{height: '100%', width: '100%', marginBottom: 100}}
+                    data={this.props.lives.sort(function(a, b) {
+                      return b.idLive - a.idLive;
+                    })}
+                    extraData={this.props.lives}
+                    key={({item}) => item.idLive}
+                    renderItem={({item}) =>
+                      this.state.isLoadingDeleting &&
+                      this.state.deletingIds.filter(d => d == item.idLive)
+                        .length > 0 ? (
                         <TouchableOpacity
+                          underlayColor="rgba(255,255,255,1,0.6)"
                           onPress={this.viewLive.bind(this, item)}>
-                          <View>
-                            <View style={styles.rowContainer}>
-                              <View style={styles.line}>
-                                <View
-                                  style={[
-                                    GlobalStyles.row,
-                                    {justifyContent: 'flex-start', width: 200},
-                                  ]}>
-                                  <Text>
-                                    <Text
-                                      style={{width: 135, fontWeight: 'bold'}}>
-                                      {this.getShortDate(item.dateCreationLive)}{' '}
-                                      <Text style={{fontWeight: 'normal'}}>
-                                        |
-                                      </Text>
-                                      {this.getShortTime(item.dateCreationLive)}
-                                    </Text>
-                                  </Text>
-                                  {item.nombreChallenges > 1 ? (
-                                    <View style={{justifyContent: 'center'}}>
-                                      <Icon
-                                        name="trophy"
-                                        type="FontAwesome5"
-                                        color={ApiUtils.getBackgroundColor()}
-                                        fontSize={13}
-                                        style={{
-                                          fontSize: 12,
-                                          marginLeft: 10,
-                                          alignSelf: 'center',
-                                          color: ApiUtils.getBackgroundColor(),
-                                        }}
-                                      />
-                                    </View>
-                                  ) : null}
-                                </View>
-                                {item.etatLive <= 1 ? (
-                                  <Text
-                                    style={{
-                                      color: this.getStatusColor(item.etatLive),
-                                    }}>
-                                    {this.getLiveStatusLibelle(item.etatLive)}
-                                  </Text>
-                                ) : (
-                                  <View style={[GlobalStyles.row]}>
-                                    <Text
-                                      style={{
-                                        fontWeight: 'bold',
-                                      }}>
-                                      {this.getStatsInfo(item.statsLive)}
-                                    </Text>
-                                    <Text> | </Text>
-                                    <Text
-                                      style={{
-                                        fontWeight: 'bold',
-                                      }}>
-                                      {this.getStatsTimeInfo(item.statsLive)}
-                                    </Text>
-                                  </View>
-                                )}
-                              </View>
-                              <View style={styles.line}>
-                                <View
-                                  style={{
-                                    flexDirection: 'row',
-                                    justifyContent: 'flex-start',
-                                    width: '60%',
-                                  }}>
-                                  {item.etatLive > 1 ? (
-                                    <View>
-                                      <Text style={{width: 200}}>
-                                        <Text
-                                          style={{
-                                            color: ApiUtils.getBackgroundColor(),
-                                            fontWeight: 'bold',
-                                          }}>
-                                          {this.getSport(item.idSport)}
-                                        </Text>
-                                      </Text>
-                                    </View>
-                                  ) : null}
-                                </View>
-                              </View>
-                              <Text
-                                style={{
-                                  width: '100%',
-                                }}
-                                numberOfLines={1}
-                                ellipsizeMode="tail">
-                                {item.libelleLive}
+                          <View style={[styles.rowContainer]}>
+                            <View style={styles.line}>
+                              <Text style={{width: 135}}>
+                                {this.getShortDate(item.dateCreationLive)} -
+                                {this.getShortTime(item.dateCreationLive)}
                               </Text>
+
+                              <View
+                                style={{
+                                  color: 'black',
+                                  alignContent: 'center',
+                                }}>
+                                <ActivityIndicator />
+                              </View>
                             </View>
+                            <View style={styles.line}>
+                              <View
+                                style={{
+                                  flexDirection: 'row',
+                                  justifyContent: 'flex-start',
+                                  width: '60%',
+                                }}>
+                                {item.etatLive > 1 ? (
+                                  <Text style={{width: 200}}>
+                                    <Text
+                                      style={{
+                                        fontWeight: 'bold',
+                                        color: ApiUtils.getBackgroundColor(),
+                                      }}>
+                                      {this.getSport(item.idSport)}
+                                    </Text>
+                                  </Text>
+                                ) : null}
+                              </View>
+                            </View>
+                            <Text
+                              style={{width: '60%'}}
+                              numberOfLines={1}
+                              ellipsizeMode="tail">
+                              {item.libelleLive}
+                            </Text>
                           </View>
                         </TouchableOpacity>
-                      </Swipeout>
-                    )
-                  }
-                  keyExtractor={(item, index) => index.toString()}
+                      ) : (
+                        <Swipeout
+                          right={this.swipeoutBtns}
+                          autoClose={true}
+                          backgroundColor="transparent"
+                          rowID={item.idLive}
+                          onOpen={(sectionID, rowID) => {
+                            this.setState({
+                              sectionID,
+                              rowID,
+                            });
+                          }}>
+                          <TouchableOpacity
+                            onPress={this.viewLive.bind(this, item)}>
+                            <View>
+                              <View style={styles.rowContainer}>
+                                <View style={styles.line}>
+                                  <View
+                                    style={[
+                                      GlobalStyles.row,
+                                      {
+                                        justifyContent: 'flex-start',
+                                        width: 200,
+                                      },
+                                    ]}>
+                                    <Text>
+                                      <Text
+                                        style={{
+                                          width: 135,
+                                          fontWeight: 'bold',
+                                        }}>
+                                        {this.getShortDate(
+                                          item.dateCreationLive,
+                                        )}{' '}
+                                        <Text style={{fontWeight: 'normal'}}>
+                                          |
+                                        </Text>
+                                        {this.getShortTime(
+                                          item.dateCreationLive,
+                                        )}
+                                      </Text>
+                                    </Text>
+                                    {item.nombreChallenges > 0 ? (
+                                      <View style={{justifyContent: 'center'}}>
+                                        <Icon
+                                          name="trophy"
+                                          type="FontAwesome5"
+                                          color={ApiUtils.getBackgroundColor()}
+                                          fontSize={13}
+                                          style={{
+                                            fontSize: 12,
+                                            marginLeft: 10,
+                                            alignSelf: 'center',
+                                            color: ApiUtils.getBackgroundColor(),
+                                          }}
+                                        />
+                                      </View>
+                                    ) : null}
+                                  </View>
+                                  {item.etatLive <= 1 ? (
+                                    <Text
+                                      style={{
+                                        color: this.getStatusColor(
+                                          item.etatLive,
+                                        ),
+                                      }}>
+                                      {this.getLiveStatusLibelle(item.etatLive)}
+                                    </Text>
+                                  ) : (
+                                    <View style={[GlobalStyles.row]}>
+                                      <Text
+                                        style={{
+                                          fontWeight: 'bold',
+                                        }}>
+                                        {this.getStatsInfo(item.statsLive)}
+                                      </Text>
+                                      <Text> | </Text>
+                                      <Text
+                                        style={{
+                                          fontWeight: 'bold',
+                                        }}>
+                                        {this.getStatsTimeInfo(item.statsLive)}
+                                      </Text>
+                                    </View>
+                                  )}
+                                </View>
+                                <View style={styles.line}>
+                                  <View
+                                    style={{
+                                      flexDirection: 'row',
+                                      justifyContent: 'flex-start',
+                                      width: '60%',
+                                    }}>
+                                    {item.etatLive > 1 ? (
+                                      <View>
+                                        <Text style={{width: 200}}>
+                                          <Text
+                                            style={{
+                                              color: ApiUtils.getBackgroundColor(),
+                                              fontWeight: 'bold',
+                                            }}>
+                                            {this.getSport(item.idSport)}
+                                          </Text>
+                                        </Text>
+                                      </View>
+                                    ) : null}
+                                  </View>
+                                </View>
+                                <Text
+                                  style={{
+                                    width: '100%',
+                                  }}
+                                  numberOfLines={1}
+                                  ellipsizeMode="tail">
+                                  {item.libelleLive}
+                                </Text>
+                              </View>
+                            </View>
+                          </TouchableOpacity>
+                        </Swipeout>
+                      )
+                    }
+                    keyExtractor={(item, index) => index.toString()}
+                  />
+                )}
+              </View>
+            </Content>
+            <TouchableHighlight
+              underlayColor="rgba(255,255,255,1,0.6)"
+              disabled={this.state.spinner}
+              style={[styles.buttonok, {zIndex: 12}]}
+              onPress={() => this.onClickCreateLive()}>
+              {this.state.spinner ? (
+                <ActivityIndicator
+                  color={'white'}
+                  style={{
+                    alignSelf: 'center',
+                    color: 'white',
+                    height: 20,
+                    width: 20,
+                  }}
+                />
+              ) : (
+                <Icon
+                  active
+                  name="plus"
+                  type="AntDesign"
+                  style={styles.plusButtonLogo}
                 />
               )}
-            </View>
-          </Content>
-          <TouchableHighlight
-            underlayColor="rgba(255,255,255,1,0.6)"
-            disabled={this.state.spinner}
-            style={[styles.buttonok, {zIndex: 12}]}
-            onPress={() => this.onClickCreateLive()}>
-            {this.state.spinner ? (
-              <ActivityIndicator
-                color={'white'}
-                style={{
-                  alignSelf: 'center',
-                  color: 'white',
-                  height: 20,
-                  width: 20,
-                }}
-              />
-            ) : (
-              <Icon
-                active
-                name="plus"
-                type="AntDesign"
-                style={styles.plusButtonLogo}
-              />
-            )}
-          </TouchableHighlight>
+            </TouchableHighlight>
 
-          <Sponsors />
+            {/* <TouchableHighlight
+              underlayColor="rgba(255,255,255,1,0.6)"
+              disabled={this.state.spinner}
+              style={[
+                styles.buttonok,
+                {
+                  zIndex: 12,
+                  left: 10,
+                  justifyContent: 'center',
+                  textAlign: 'center',
+                },
+              ]}
+              onPress={() => this.onClickCreateLiveNew()}>
+              {
+                <Icon
+                  active
+                  name="file-upload"
+                  type="FontAwesome5"
+                  style={[styles.plusButtonLogo, {textAlign: 'center'}]}
+                />
+              }
+            </TouchableHighlight> */}
 
-          <Modal
-            visible={
-              !this.props.isOkPopupBAttery || this.state.isOpenModalHelp
-            }>
-            <Container style={{flex: 1}} scrollEnabled={true}>
-              <View style={{flex: 1}}>
-                <Help noHeader={true} />
+            <Sponsors />
 
-                {/* <View style={{height: 300}} /> */}
-              </View>
-            </Container>
-          </Modal>
-        </Container>
-      </Drawer>
+            <Modal
+              visible={
+                !this.props.isOkPopupBAttery || this.state.isOpenModalHelp
+              }>
+              <Container style={{flex: 1}} scrollEnabled={true}>
+                <View style={{flex: 1}}>
+                  <Help noHeader={true} />
+
+                  {/* <View style={{height: 300}} /> */}
+                </View>
+              </Container>
+            </Modal>
+
+            <Modal
+              visible={
+                !this.props.isOkPopupBAttery2 && this.props.isOkPopupBAttery
+              }>
+              <Container style={{flex: 1}} scrollEnabled={true}>
+                <View style={{flex: 1}}>
+                  <BatteryModal noHeader={true} />
+
+                  {/* <View style={{height: 300}} /> */}
+                </View>
+              </Container>
+            </Modal>
+
+            <Modal
+              visible={this.state.uploadGpxVisible}
+              onRequestClose={() => this.closeGpxModal()}>
+              <UploadGpx onclose={this.closeGpxModal} />
+            </Modal>
+          </Container>
+        </Drawer>
       </Root>
     );
   }

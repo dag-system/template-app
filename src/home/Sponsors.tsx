@@ -66,37 +66,39 @@ export class Sponsors extends Component {
         style={{
           display: 'flex',
           flexDirection: 'row',
-          justifyContent: 'space-evenly',
+          justifyContent: 'space-between',
           marginTop : 10, 
           width : '100%',
-          paddingHorizontal : 20,
+          paddingHorizontal : 10,
           marginBottom : 20
         }}>
-        <View style={{width : '10%', height : 50, flex : 1}}>
+        <View style={{width : '34%', height : 50}}>
           <Image
             source={Region}
             resizeMethod="resize"
             resizeMode="contain"
-            style={{height: '100%', width :'90%'}}
+            style={{height: '100%', width :'100%'}}
           />
         </View>
        
-        <View style={{width : '10%', height : 50, flex : 1, justifyContent :'center', paddingLeft :10}}>
+         
+        <View style={{width : '30%', height : 50}}>
+          <Isere height={'80%'} style={{marginTop : 5}}/>
+        </View>
+
+        <View style={{width : '10%', height : 50, flex : 1, justifyContent :'center', paddingLeft :0}}>
           <Image
             source={Ccmv}
             resizeMethod="resize"
             resizeMode="contain"
-            style={{height: '90%', width :'90%'}}
+            style={{height: '70%', width :'100%'}}
           />
         </View>
 
-    
-        <View style={{width : '10%', height : 50, flex : 1}}>
-          <Isere height={'70%'} style={{marginTop : 7}}/>
-        </View>
+  
 
         <View style={{width : '10%', height : 50, flex : 1}}>
-          <Alpesisere height={'80%'}/>
+          <Alpesisere height={'70%'} style={{marginTop : 7}}/>
         </View>
      
       </View>

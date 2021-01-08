@@ -489,6 +489,36 @@ class Home extends Component {
                     </Text>
                   </TouchableOpacity>
                 </View>
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    justifyContent: 'space-evenly',
+                    width: '100%',
+                    marginTop: 2,
+                  }}>
+                  <TouchableOpacity
+                    style={[{
+                        marginTop: 10,
+                        borderColor: 'white',
+                        opacity: 1,
+                        width: '80%',
+                        borderColor: 'white',
+                        padding: 2,
+                      },
+                    ]}
+                    onPress={() => this.forgotPassword()}>
+                    <Text
+                      style={{
+                        textAlign: 'center',
+                        textDecorationLine : 'underline',
+                        color: 'white',
+                        textTransform: 'uppercase',
+                      }}>
+                     Foulée code oublié ?
+                    </Text>
+                  </TouchableOpacity>
+                </View>
+
               </ImageBackground>
             </View>
           </KeyboardAvoidingView>

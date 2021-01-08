@@ -30,7 +30,8 @@ const mapStateToProps = (state) => {
     userData: state.userData,
     recordingState: state.recordingState,
     lives: state.lives,
-    sports: state.sports
+    sports: state.sports,
+    currentMapStyle : state.currentMapStyle
   }
 }
 
@@ -154,7 +155,7 @@ class SegmentSummary extends Component {
         // this.setState({ segmentEfforts: responseJson.efforts });
 
         this.saveCoordinates(responseJson.coords); // TO DO
-        this.getBestSegment(segment);
+        this.getBestSegment(responseJson);
 
         this.setState({ isLoading: false })
 
@@ -198,8 +199,12 @@ class SegmentSummary extends Component {
       };
       coordinates.push(coordinate);
     });
-    this.refs.map.fitToCoordinates(coordinates, { edgePadding: { top: 10, right: 10, bottom: 10, left: 10 }, animated: false })
+    if(this.refs.map !=null)
+    {
+      this.refs.map.fitToCoordinates(coordinates, { edgePadding: { top: 10, right: 10, bottom: 10, left: 10 }, animated: false })
 
+    }
+ 
     this.setState({ coordinates: coordinates });
   }
 
@@ -370,6 +375,7 @@ class SegmentSummary extends Component {
                   <MapView
                     ref="map"
                     style={styles.map}
+                    mapType={this.props.currentMapStyle}
                     showsUserLocation={false}
                     followsUserLocation={false}
                     showsMyLocationButton={false}

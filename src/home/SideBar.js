@@ -189,6 +189,41 @@ export default class Sidebar extends Component {
             </View>
           </TouchableHighlight>
 
+          {/* <TouchableHighlight
+            underlayColor="rgba(255,255,255,1,0.6)"
+            onPress={() => this.onClickNavigate('AddExternalActivity')}
+            style={{
+              width: '100%',
+              backgroundColor:
+                this.props.selected == 'Help'
+                  ? '#E9E9E9'
+                  : 'transparent',
+            }}>
+            <View
+              style={{
+                display: 'flex',
+                flexDirection: 'row',
+                justifyContent: 'flex-start',
+                padding: 10,
+              }}>
+               <Icon
+                name="question-circle"
+                type="FontAwesome5"
+                style={[styles.icon, {color:  this.props.selected == 'Help' ? 'black' : 'white'}]}
+              />
+              <Text
+                style={[
+                  styles.menuText,
+                  {
+                    color:
+                      this.props.selected == 'Help' ? 'black' : 'white',
+                  },
+                ]}>
+               Importer une activité
+              </Text>
+            </View>
+          </TouchableHighlight> */}
+
           <TouchableHighlight
             underlayColor="rgba(255,255,255,1,0.6)"
             onPress={() => this.onClickNavigate('Partenaires')}

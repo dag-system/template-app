@@ -25,6 +25,7 @@ const initialState = {
   folocodes: [], //{folocode : , nom, prenom ?}
   isOkPopupGps: false,
   isOkPopupBAttery: false,
+  isOkPopupBAttery2 : false
 };
 
 const initialMockState = {
@@ -127,6 +128,14 @@ const reducer = (state = initialState, action) => {
       let nextState = {
         ...state,
         isOkPopupGps: true,
+      };
+      return nextState || state;
+    }
+
+    case 'VIEW_POPUPBATTERY': {
+      let nextState = {
+        ...state,
+        isOkPopupBAttery2: true,
       };
       return nextState || state;
     }
@@ -336,7 +345,7 @@ const reducer = (state = initialState, action) => {
         ...state,
         polylines: traces,
       };
-      // console.log(nextState.polylines)
+      console.log(trace.positionsTrace.length)
       return nextState || state;
     }
     case 'CURRENT_LIVE_FOR_SEGMENT': {

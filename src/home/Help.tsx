@@ -196,6 +196,7 @@ class Help extends Component {
   }
 
   onPopupOk() {
+    console.log('ok');
     var action = {type: 'VIEW_POPUPAIDE', data: null};
     this.props.dispatch(action);
   }
@@ -375,11 +376,11 @@ class Help extends Component {
                   color: ApiUtils.getBackgroundColor(),
                   marginTop: 30,
                 }}>
-                Bienvenue sur l’application officielle de la foulée Blanche 2021
+                Bienvenue sur l’application officielle de la Foulée Blanche 2021
                 !
               </Text>
               <Text style={{marginTop: 10}}>
-                Venez skier et comparez vos temps avec ceux de vos amis ou vos
+                Venez skier et comparer vos temps avec ceux de vos amis ou vos
                 familles !
               </Text>
               <Text style={{marginTop: 10}}>
@@ -520,7 +521,7 @@ class Help extends Component {
               </Text>
               <TouchableOpacity
                 onPress={() =>
-                  this.openLink('https://folomi.fr/api/helpBattery.php')
+                  this.openLink('https://www.lafouleeblanche.com/wp-content/uploads/2020/12/Reglages-bateries-telephones.pdf')
                 }>
                 <Text
                   style={{

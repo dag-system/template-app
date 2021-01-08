@@ -1,31 +1,29 @@
 // ApiUtils.js
-import AsyncStorage from '@react-native-community/async-storage';
 
 const ISDEBUG = false;
 const ISDEMO = false;
 
-const VersionNumber = "0.0.1";
+const VersionNumber = '1.0.4';
+const VersionNumberInt = 1;
 
 var ApiUtils = {
-
-  ISDEBUG()
-  {
+  ISDEBUG() {
     return ISDEBUG;
   },
-  ISDEMO()
-  {
+  ISDEMO() {
     return ISDEBUG;
   },
-  getBackgroundColor()
-  {
+  getBackgroundColor() {
     return '#3266aa';
   },
-  VersionNumber()
-  {
+  VersionNumber() {
     return VersionNumber;
   },
+  VersionNumberInt() {
+    return VersionNumberInt;
+  },
 
-  checkStatus: function (response) {
+  checkStatus: function(response) {
     if (response.ok) {
       return response;
     } else {
@@ -36,69 +34,55 @@ var ApiUtils = {
   },
 
   getPhotoUrl(idStation, photo) {
-    var url = ApiUtils.getUrl() + 'fichiers/interets/' + idStation + '/' + photo;
+    var url =
+      ApiUtils.getUrl() + 'fichiers/interets/' + idStation + '/' + photo;
     return url;
   },
 
   getColor() {
-    return ApiUtils.getBackgroundColor()
+    return ApiUtils.getBackgroundColor();
   },
 
-   getAPIUrl() {
-    if (ISDEBUG) {
-      return "https://www.reperret.fr/api/foulee.php";
-    } else if (ISDEMO) {
-      return "https://www.folomidemo.fr/api/foulee.php";
-    }
-    else {
-      return "https://www.folomi.fr/api/foulee.php";
-    }
-  }
+  getAPIUrl() {
+    return 'https://www.folomi.fr/api/fouleev2.php';
+  },
 
-  , 
   getAPIAuth() {
     if (ISDEBUG) {
-      return "aiovbZRUOGTzbrvZRUGB,??452";
+      return 'aiovbZRUOGTzbrvZRUGB,??452';
     } else {
-      return "aiovbZRUOGTzbrvZRUGB,??452";
+      return 'aiovbZRUOGTzbrvZRUGB,??452';
     }
+  },
 
-  }
-
-  , 
   getShareUrl() {
     if (ISDEBUG) {
-      return "http://reperret.fr/live/";
+      return 'http://reperret.fr/live/';
     } else if (ISDEMO) {
-      return "http://www.folomidemo.fr/live/";
+      return 'http://www.folomidemo.fr/live/';
     } else {
-      return "http://folomi.fr/live/";
+      return 'http://folomi.fr/live/';
     }
-
   },
 
   getGpxUrl(gpxName) {
     if (ISDEBUG) {
-      return "http://reperret.fr/fichiers/gpxLive/"+gpxName+'.gpx';
+      return 'http://reperret.fr/fichiers/gpxLive/' + gpxName + '.gpx';
     } else if (ISDEMO) {
-      return "http://www.folomidemo.fr/fichiers/gpxLive/"+gpxName+'.gpx';
+      return 'http://www.folomidemo.fr/fichiers/gpxLive/' + gpxName + '.gpx';
     } else {
-      return "https://www.folomi.fr/fichiers/gpxLive/"+gpxName+'.gpx';
+      return 'https://www.folomi.fr/fichiers/gpxLive/' + gpxName + '.gpx';
     }
+  },
 
-  }
-
-
-  , 
   getUrl() {
     if (ISDEBUG) {
-      return "http://reperret.fr/";
+      return 'http://reperret.fr/';
     } else if (ISDEMO) {
-      return "http://www.folomidemo.fr/";
+      return 'http://www.folomidemo.fr/';
     } else {
-      return "http://folomi.fr/";
+      return 'http://folomi.fr/';
     }
-
   },
 
   validateEmail(email) {
@@ -111,48 +95,50 @@ var ApiUtils = {
     var hour = date.getHours();
 
     if (hour <= 11) {
-      return "Activité matinale";
+      return 'Activité matinale';
     }
     if (hour > 11 && hour < 19) {
       return "Activité de l'après-midi";
     }
 
     if (hour >= 19) {
-      return "Activité du soir";
+      return 'Activité du soir';
     }
   },
 
-  logError: function (methodName, message) {
-
+  logError: function(methodName, message) {
     // alert(message)
     let formData = new FormData();
     formData.append('method', 'debug');
     formData.append('auth', ApiUtils.getAPIAuth());
 
-
-    var finalMessage = '----DATE---: ' + ' ' + new Date().toDateString() + ' ' + new Date().toTimeString() + '----METHOD---: ' + methodName + '---MESSAGE---:  ' + message;
+    var finalMessage =
+      '----DATE---: ' +
+      ' ' +
+      new Date().toDateString() +
+      ' ' +
+      new Date().toTimeString() +
+      '----METHOD---: ' +
+      methodName +
+      '---MESSAGE---:  ' +
+      message;
 
     formData.append('message', finalMessage);
     formData.append('type', 0);
     //fetch followCode API
     fetch(ApiUtils.getAPIUrl(), {
       method: 'POST',
-      headers: {
-
-      },
-      body: formData
+      headers: {},
+      body: formData,
     })
       .then(ApiUtils.checkStatus)
       .catch(e => e);
   },
 
-  logStats: function (message) {
-
+  logStats: function(message) {
     let formData = new FormData();
     formData.append('method', 'debug');
     formData.append('auth', ApiUtils.getAPIAuth());
-
-
 
     formData.append('message', message);
     formData.append('type', 1);
@@ -160,14 +146,11 @@ var ApiUtils = {
     //fetch followCode API
     fetch(ApiUtils.getAPIUrl(), {
       method: 'POST',
-      headers: {
-
-      },
-      body: formData
+      headers: {},
+      body: formData,
     })
       .then(ApiUtils.checkStatus)
       .catch(e => e);
-  }
-
+  },
 };
-export { ApiUtils as default };
+export {ApiUtils as default};

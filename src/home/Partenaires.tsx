@@ -159,7 +159,7 @@ class Partenaires extends Component {
                   marginTop: 40,
                   marginBottom: 40,
                 }}>
-                <Isere height={'80%'} style={{marginTop: 10}} />
+                <Isere height={'90%'} style={{marginTop: 10}} />
               </View>
               <View
                 style={{
