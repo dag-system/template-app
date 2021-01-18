@@ -130,11 +130,11 @@ android {
     }
 
     defaultConfig {
-            applicationId "com.dag.folomi.app"
+            applicationId "com.fouleeblanche.app"
             minSdkVersion rootProject.ext.minSdkVersion
             targetSdkVersion rootProject.ext.targetSdkVersion
-            versionCode 502
-            versionName "5.0.2"
+            versionCode 514
+            versionName "1.0.8"
     }
     splits {
         abi {

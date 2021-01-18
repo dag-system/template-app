@@ -14,6 +14,7 @@ import {
 import MapView from 'react-native-maps';
 import { connect } from 'react-redux'
 import ApiUtils from '../ApiUtils';
+import Logo from '../assets/logo_header.png';
 const mapStateToProps = (state) => {
   return {
     userData: state.userData,

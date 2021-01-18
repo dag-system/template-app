@@ -22,6 +22,8 @@
 	<string>????</string>
 	<key>CFBundleVersion</key>
 	<string>$(CURRENT_PROJECT_VERSION)</string>
+	<key>LSApplicationCategoryType</key>
+	<string></string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSAppTransportSecurity</key>
@@ -41,6 +43,11 @@
 	<string>Utilisé pour enregistrer votre parcours et votre vitesse lors d'un entrainement personnel même si votre téléphone est verrouillé</string>
 	<key>NSLocationAlwaysUsageDescription</key>
 	<string>Utilisé pour enregistrer votre parcours et votre vitesse lors d'un entrainement personnel même si votre téléphone est verrouillé</string>
+	<key>NSLocationTemporaryUsageDescriptionDictionary</key>
+	<dict>
+		<key>Delivery</key>
+		<string>Utilisé pour enregistrer votre parcours avec une meilleure précision</string>
+	</dict>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>Utilisé pour enregistrer votre parcours et votre vitesse lors d'un entrainement personnel même si votre téléphone est verrouillé</string>
 	<key>NSMotionUsageDescription</key>

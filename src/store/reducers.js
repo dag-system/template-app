@@ -22,19 +22,76 @@ const initialState = {
   currentLiveFromSegment: null,
   currentLiveFromSegmentId: null,
   currentMapStyle: Platform.OS == 'android' ? 'terrain' : 'hybrid',
+  folocodes: [], //{folocode : , nom, prenom ?}
+  isOkPopupGps: false,
+  isOkPopupBAttery: false,
+  isOkPopupBAttery2 : false,
+  userClubs : [],
+  
+};
+
+const initialMockState = {
+  userData: {
+    idUtilisateur: 7000,
+  },
+  sports: [],
+  lives: [{idLive: 1, libelleLive: 'test'}],
+  clubs: [],
+  isRecording: false,
+  currentLive: {
+    idLive: 3,
+  },
+  dates: [],
+  markers: [],
+  coordinates: [],
+  showsUserLocation: false,
+  isMoving: false,
+  isStarted: false,
+  odometer: 0,
+  odometerInitialValue: null,
+  isFirstPoint: null,
+  pointsInterets: [],
+  polylines: [],
+  nomStation: null,
+  descriptionStation: null,
+  currentPosition: null,
+  currentLiveFromSegment: null,
+  currentLiveFromSegmentId: null,
+  currentMapStyle: Platform.OS == 'android' ? 'terrain' : 'hybrid',
+  folocodes: [],
+  isOkPopupGps: false,
+  isOkPopupBAttery: false,
 };
 
 const reducer = (state = initialState, action) => {
   switch (action.type) {
     case 'LOGIN': {
+      let newFolocode = {
+        folocode: action.data.folocodeUtilisateur,
+        prenom: action.data.prenomUtilisateur,
+        nom: action.data.nomUtilisateur
+      };
+      if(state.folocodes == null)
+      {
+        state.folocodes = [];
+      }
+      let folocodes = JSON.parse(JSON.stringify(state.folocodes));
+      if(folocodes.filter(f=> f.folocode == newFolocode.folocode).length == 0)
+      {
+        folocodes.push(newFolocode);
+      }
+   
       let nextState = {
         ...state,
+        folocodes:folocodes,
         userData: action.data,
       };
+      console.log(nextState.folocodes);
       return nextState || state;
     }
     case 'LOGOUT': {
       let nextState = initialState;
+      nextState.folocodes = state.folocodes;
       return nextState || state;
     }
     case 'GET_LIVES': {
@@ -43,12 +100,43 @@ const reducer = (state = initialState, action) => {
         lives: action.data,
       };
       return nextState || state;
-    }
-
+    }``
     case 'GET_CLUBS': {
       let nextState = {
         ...state,
         clubs: action.data,
+      };
+      return nextState || state;
+    }
+
+    case 'ADD_FOLOCODE': {
+      let nextState = {
+        ...state,
+        folocodes: [...state.folocodes, action.data],
+      };
+      return nextState || state;
+    }
+
+    case 'VIEW_POPUPAIDE': {
+      let nextState = {
+        ...state,
+        isOkPopupBAttery: true,
+      };
+      return nextState || state;
+    }
+
+    case 'VIEW_POPUPGPS': {
+      let nextState = {
+        ...state,
+        isOkPopupGps: true,
+      };
+      return nextState || state;
+    }
+
+    case 'VIEW_POPUPBATTERY': {
+      let nextState = {
+        ...state,
+        isOkPopupBAttery2: true,
       };
       return nextState || state;
     }
@@ -102,8 +190,10 @@ const reducer = (state = initialState, action) => {
         ...state,
         userData: {
           ...state.userData,
-          acceptChallengeUtilisateur : action.data
-        } 
+          acceptChallengeUtilisateur: action.data.acceptChallengeUtilisateur,
+          acceptChallengeNameUtilisateur:
+            action.data.acceptChallengeNameUtilisateur,
+        },
       };
       // alert(JSON.stringify(action.data));
 
@@ -116,6 +206,14 @@ const reducer = (state = initialState, action) => {
         isRecording: action.data,
       };
 
+      return nextState || state;
+    }
+
+    case 'GET_USER_CLUBS' : {
+      let nextState = {
+        ...state,
+        userClubs: action.data,
+      };
       return nextState || state;
     }
 
@@ -198,7 +296,6 @@ const reducer = (state = initialState, action) => {
     }
 
     case 'UPDATE_CURRENT_POSITION': {
-
       let nextState = {
         ...state,
         currentPosition: action.data,
@@ -257,7 +354,7 @@ const reducer = (state = initialState, action) => {
         ...state,
         polylines: traces,
       };
-      // console.log(nextState.polylines)
+      console.log(trace.positionsTrace.length)
       return nextState || state;
     }
     case 'CURRENT_LIVE_FOR_SEGMENT': {

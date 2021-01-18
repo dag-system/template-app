@@ -103,7 +103,7 @@ class WebViewJetCode extends Component {
       <View style={{flex : 1}}>
         {this.props.uri != null && !this.state.isError ? (
           <AutoHeightWebView
-            userAgent="visito"
+            userAgent="folomi"
             style={{ marginTop: 40, minHeight: 500,  width: '100%' }}
             startInLoadingState={true}
             injectedJavaScript={myScript}

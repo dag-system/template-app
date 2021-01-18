@@ -15,6 +15,7 @@ import {
   Image,
   Platform,
   ImageBackground,
+  TouchableOpacity,
 } from 'react-native';
 import Swipeout from 'react-native-swipeout';
 import RNPickerSelect from 'react-native-picker-select';
@@ -22,8 +23,10 @@ import {isPointInPolygon} from 'geolib';
 import ApiUtils from '../ApiUtils';
 import ErrorMessage from '../home/ErrorMessage';
 import {ReactNativeModal as ModalSmall} from 'react-native-modal';
-import AddInterest from '../home/AddInterest';
 import RNFetchBlob from 'rn-fetch-blob';
+import {buildGPX, GarminBuilder} from 'gpx-builder';
+const {Point} = GarminBuilder.MODELS;
+
 // Import native-base UI components
 import {
   Container,
@@ -39,6 +42,9 @@ import {
   Root,
   Spinner,
   Picker,
+  Left,
+  Right,
+  Content,
 } from 'native-base';
 // import Geolocation from 'react-native-geolocation-service';
 import Geolocation from '@react-native-community/geolocation';
@@ -63,8 +69,15 @@ import BackgroundGeolocation from '../react-native-background-geolocation';
 // react-native-maps
 import MapView, {Polyline, Marker} from 'react-native-maps';
 import DocumentPicker from 'react-native-document-picker';
-const LATITUDE_DELTA = 0.00922;
-const LONGITUDE_DELTA = 0.00421;
+import GlobalStyles from '../styles';
+import {Sponsors} from '../home/Sponsors';
+import {Dimensions} from 'react-native';
+import BatteryModal from '../home/BatteryModal';
+
+// const LATITUDE_DELTA = 0.00922;
+// const LONGITUDE_DELTA = 0.00421;
+const LATITUDE_DELTA = 0.16022;
+const LONGITUDE_DELTA = 0.01221;
 const haversine = require('haversine');
 
 var interval = null;
@@ -93,6 +106,7 @@ const mapStateToProps = state => {
     descriptionStation: state.descriptionStation,
     nomStation: state.nomStation,
     currentMapStyle: state.currentMapStyle,
+    isOkPopupGps: state.isOkPopupGps,
   };
 };
 
@@ -114,7 +128,9 @@ class SimpleMap extends Component {
       modalVisible: false,
       modal2Visible: false,
       modal3Visible: false,
+      ismodalBatteryOpen: false,
       acceptChallengeUtilisateur: false,
+      acceptChallengeNameUtilisateur: false,
       modalAddInterestVisible: false,
       libelleLiveIsModified: false,
       setLocationToCenter: true,
@@ -160,6 +176,7 @@ class SimpleMap extends Component {
         photoInteret: '',
       },
       currentPolyline: null,
+      isGpsNotOk: true,
     };
     // const didBlurSubscription = this.props.navigation.addListener(
     //   'willFocus',
@@ -203,8 +220,6 @@ class SimpleMap extends Component {
   }
 
   componentWillUnmount() {
-    console.log('willunmount');
-    alert('ok');
     BackgroundGeolocation.removeListeners();
   }
 
@@ -230,7 +245,6 @@ class SimpleMap extends Component {
       .then(ApiUtils.checkStatus)
       .then(response => response.json())
       .then(responseJson => {
-        console.log(responseJson);
         if (
           responseJson.codeErreur == 'SUCCESS' ||
           responseJson.codeErreur == 'USER_EXISTS'
@@ -330,7 +344,16 @@ class SimpleMap extends Component {
       // BackgroundGeolocation.getLocations().then((result) => {
       //   console.log("resu : " + JSON.stringify(result));
       // })
+    } else {
+      if (this.props.isOkPopupGps) {
+        this.getFirstLocation();
+      }
     }
+
+    this.setState({
+      acceptChallengeNameUtilisateur:
+        this.props.userData.acceptChallengeNameUtilisateur == 1,
+    });
 
     this.setState({
       acceptChallengeUtilisateur:
@@ -351,72 +374,88 @@ class SimpleMap extends Component {
     Geolocation.setRNConfiguration({authorizationLevel: 'always'});
 
     BackHandler.addEventListener('hardwareBackPress', this.handleBackButton);
+
     //  BackgroundGeolocation.on('activitychange', this.onActivityChange.bind(this));
     //BackgroundGeolocation.on('providerchange', this.onProviderChange.bind(this));
     // BackgroundGeolocation.on('powersavechange', this.onPowerSaveChange.bind(this));
     //   AppState.addEventListener('change', this._handleAppStateChange);
     // this.getSports();
-
     var idLive = this.props.currentLive?.idLive;
+  
+    let config = {
+      distanceFilter: 10,
+      url: ApiUtils.getAPIUrl(),
+      httpRootProperty: '.',
+      params: {
+        method: 'createPositions2',
+        idLive: idLive,
+        auth: ApiUtils.getAPIAuth(),
+        idUtilisateur: this.props.userData.idUtilisateur,
+      },
+      extras: {
+        method: 'createPositions2',
+        idLive: idLive,
+        auth: ApiUtils.getAPIAuth(),
+        idUtilisateur: this.props.userData.idUtilisateur,
+      },
+      notification: {
+        sticky: true,
+        title: 'Foulée Blanche',
+        text: 'Suivi de votre position en cours',
+        channelImportance: BackgroundGeolocation.NOTIFICATION_PRIORITY_LOW,
+      },
+      enableHeadless: true,
+      locationAuthorizationRequest: 'Always',
+      backgroundPermissionRationale: {
+        title:
+          'Authoriser {applicationName} a accèder à votre position en arrière plan',
+        message:
+          "Pour enregistrer votre activiité même quand l'application est en arrière plan, merci d'autoriser {backgroundPermissionOptionLabel}",
+        positiveAction: 'Autoriser {backgroundPermissionOptionLabel}',
+        negativeAction: 'Annuler',
+      },
+      autoSync: true,
+      autoSyncThreshold: 5,
+      batchSync: true,
+      preventSuspend: false,
+      stopOnTerminate: false, //TODO TO DO
+      startOnBoot: true,
+      foregroundService: true,
+      disableElasticity: true,
+      debug: false,
+      disableStopDetection : true,
+      disableMotionActivityUpdates : true,
+      stationaryRadius: 5,
+      maxDaysToPersist: 4,
+      heartbeatInterval: 20,
+      stopTimeout : Platform.OS == 'ios'?  60  : 5,
+      desiredAccuracy:
+        Platform.OS == 'ios '
+          ? BackgroundGeolocation.DESIRED_ACCURACY_NAVIGATION
+          : BackgroundGeolocation.DESIRED_ACCURACY_HIGH,
+      desiredOdometerAccuracy: 10, //If you only want to calculate odometer from GPS locations, you could set desiredOdometerAccuracy: 10. This will prevent odometer updates when a device is moving around indoors, in a shopping mall, for example.
+      logLevel: BackgroundGeolocation.LOG_LEVEL_OFF,
+    };
 
-    BackgroundGeolocation.ready(
-      {
-        distanceFilter: 10,
-        url: ApiUtils.getAPIUrl(),
-        httpRootProperty: '.',
-        params: {
-          method: 'createPosition',
-          idLive: idLive,
-          auth: ApiUtils.getAPIAuth(),
-        },
-        extras: {
-          method: 'createPosition',
-          idLive: idLive,
-          auth: ApiUtils.getAPIAuth(),
-        },
-        notification: {
-          sticky: true,
-          title: 'Folomi',
-          text: 'Suivi de votre position en cours',
-          channelImportance: BackgroundGeolocation.NOTIFICATION_PRIORITY_LOW,
-        },
-        enableHeadless: true,
-        locationAuthorizationRequest: 'Always',
-        backgroundPermissionRationale: {
-          title:
-            'Authoriser {applicationName} a accèder à votre position en arrière plan',
-          message:
-            "Pour enregistrer votre activiité même quand l'application est en arrière plan, merci d'autoriser {backgroundPermissionOptionLabel}",
-          positiveAction: 'Autoriser {backgroundPermissionOptionLabel}',
-          negativeAction: 'Annuler',
-        },
-        autoSync: true,
-        autoSyncThreshold: 5,
-        batchSync: true,
-        preventSuspend: true,
-        stopOnTerminate: false, //TODO TO DO
-        startOnBoot: true,
-        foregroundService: true,
-        debug: false,
-        desiredAccuracy: BackgroundGeolocation.DESIRED_ACCURACY_HIGH,
-        desiredOdometerAccuracy: 10, //If you only want to calculate odometer from GPS locations, you could set desiredOdometerAccuracy: 10. This will prevent odometer updates when a device is moving around indoors, in a shopping mall, for example.
-        logLevel: BackgroundGeolocation.LOG_LEVEL_OFF,
-      },
-      state => {
-        this.setState({
-          enabled: state.enabled,
-          isMoving: state.isMoving,
-          showsUserLocation: false,
-          comments: '',
-          selectedSport: -1,
-          libelleLive: ApiUtils.getLibelleLive(),
-          nomPersonne: '',
-          prenomPersonne: '',
-          telPersonne: '',
-          mailPersonne: '',
-        });
-      },
-    );
+
+
+    
+    BackgroundGeolocation.reset(config);
+
+    BackgroundGeolocation.ready(config, state => {
+      this.setState({
+        enabled: state.enabled,
+        isMoving: state.isMoving,
+        showsUserLocation: false,
+        comments: '',
+        selectedSport: -1,
+        libelleLive: ApiUtils.getLibelleLive(),
+        nomPersonne: '',
+        prenomPersonne: '',
+        telPersonne: '',
+        mailPersonne: '',
+      });
+    });
 
     // .then(() => {
 
@@ -426,8 +465,62 @@ class SimpleMap extends Component {
       loc => this.onLocation(loc),
       this.onLocationError.bind(this),
     );
+
+    BackgroundGeolocation.onProviderChange(async event => {
+      if (
+        event.accuracyAuthorization ==
+        BackgroundGeolocation.ACCURACY_AUTHORIZATION_REDUCED
+      ) {
+        // Supply "Purpose" key from Info.plist as 1st argument.
+        try {
+          let accuracyAuthorization = await BackgroundGeolocation.requestTemporaryFullAccuracy(
+            'Delivery',
+          );
+          if (
+            accuracyAuthorization ==
+            BackgroundGeolocation.ACCURACY_AUTHORIZATION_FULL
+          ) {
+            console.log(
+              '[requestTemporaryFullAccuracy] GRANTED: ',
+              accuracyAuthorization,
+            );
+            this.getFirstLocation();
+          } else {
+            console.log(
+              '[requestTemporaryFullAccuracy] DENIED: ',
+              accuracyAuthorization,
+            );
+          }
+        } catch (error) {
+          console.warn(
+            '[requestTemporaryFullAccuracy] FAILED TO SHOW DIALOG: ',
+            error,
+          );
+        }
+      }
+    });
+
+    BackgroundGeolocation.onHeartbeat(event => {
+      console.log('[onHeartbeat] ', event);
+
+      // You could request a new location if you wish.
+      BackgroundGeolocation.getCurrentPosition({
+        samples: 1,
+        persist: true,
+      }).then(location => {
+        console.log('[getCurrentPosition] ', location);
+      });
+    });
+
     BackgroundGeolocation.on('motionchange', this.onMotionChange.bind(this));
     BackgroundGeolocation.onHttp(httpEvent => {
+      ApiUtils.logError(
+        'LOG simpleMap createPosition2 onHTTP -- status : ' +
+          httpEvent.status +
+          ' live : ' +
+          this.props.currentLive.idLive,
+        '  ---   json reçu :' + httpEvent.responseText,
+      );
       try {
         if (httpEvent.responseText != null && httpEvent.responseText != '') {
           var result = JSON.parse(httpEvent.responseText);
@@ -526,11 +619,16 @@ class SimpleMap extends Component {
         }
       } catch (e) {
         ApiUtils.logError(
-          'simpleMap createPosition onHTTP --  ',
+          'ERROR simpleMap createPosition onHTTP --  ' +
+            httpEvent.status +
+            ' live : ' +
+            this.props.currentLive.idLive,
           e.message + '  ---   json reçu :' + httpEvent.responseText,
         );
       }
     });
+
+    this.syncPositions();
   }
 
   handleBackButton() {
@@ -542,7 +640,7 @@ class SimpleMap extends Component {
       this.refs.map
         .getMapBoundaries()
         .then(data => {
-          var isInside = isPointInPolygon(newCoordinate, [
+          var isInside = isPointInPolygon(newCoordinate.coords, [
             {
               latitude: data.northEast.latitude,
               longitude: data.southWest.longitude,
@@ -578,21 +676,47 @@ class SimpleMap extends Component {
   }
 
   getFirstLocation() {
-    Geolocation.requestAuthorization();
     Geolocation.setRNConfiguration({authorizationLevel: 'always'});
+    // Geolocation.requestAuthorization();
 
     Geolocation.getCurrentPosition(
       position => {
+        console.log('first position', position);
         this.setCenter(position);
+        if (position.coords.accuracy != 0 && position.coords.accuracy < 400) {
+          this.setState({isGpsNotOk: false});
+        } else {
+          this.getFirstLocation();
+        }
 
         this.setState({currentPosition: position});
       },
       error => {
+        console.log('error first position');
         ApiUtils.logError('getFirstPosition', JSON.stringify(error));
         // See error code charts below.
       },
-      {enableHighAccuracy: true, timeout: 15000, maximumAge: 10000},
+      {enableHighAccuracy: true, timeout: 1200, maximumAge: 1000},
     );
+
+    // Geolocation.watchPosition(
+    //   position => {
+    //     console.log("watch position", position);
+    //     this.setCenter(position);
+    //     if (position.coords.accuracy != 0 && position.coords.accuracy <400) {
+    //       this.setState({isGpsNotOk: false});
+
+    //     }
+
+    //     this.setState({currentPosition: position});
+    //   },
+    //   error => {
+    //     console.log("error");
+    //     ApiUtils.logError('getFirstPosition', JSON.stringify(error));
+    //     // See error code charts below.
+    //   },
+    //   {enableHighAccuracy: true, timeout: 15000, maximumAge: 10000},
+    // );
   }
 
   /**
@@ -601,6 +725,10 @@ class SimpleMap extends Component {
 
   onLocation(location) {
     this.addMarker(location);
+
+    if (location.coords.accuracy != 0 && location.coords.accuracy < 300) {
+      this.setState({isGpsNotOk: false});
+    }
 
     if (!location.sample) {
       var odometerCurrent = location.odometer;
@@ -678,11 +806,7 @@ class SimpleMap extends Component {
   }
 
   async calcDistance(location, oldLatLong, newLatLng) {
-    console.log('olaltLong : ', oldLatLong);
-    console.log('newLatLng : ', newLatLng);
     var dist = haversine(oldLatLong, newLatLng);
-
-    console.log('odometer : ' + dist);
 
     var odometerDataNew = {
       odometerInitialValue: this.props.odometerInitialValue,
@@ -716,11 +840,29 @@ class SimpleMap extends Component {
   }
 
   onLocationError(error) {
-    ApiUtils.logError('Error', 'ErrorCode : ' + error);
+    console.log(error);
+    ApiUtils.logError(
+      'Location Error' +
+        'ErrorCode : ' +
+        error +
+        ' idLive : ' +
+        this.props.currentLive.idLive +
+        ' ' +
+        Platform.OS,
+      '',
+    );
     if (error == 0) {
       // alert('Nous ne trouvons pas votre position');
     }
   }
+
+  openBatteryModal = () => {
+    this.setState({ismodalBatteryOpen: true});
+  };
+
+  closeModalBattery = () => {
+    this.setState({ismodalBatteryOpen: false});
+  };
   /**
    * @event motionchange
    */
@@ -755,6 +897,8 @@ class SimpleMap extends Component {
 
   onToggleEnabled(isMoving, isRecording) {
     if (isMoving) {
+      clearInterval(this.interval);
+      this.interval = setInterval(() => this.setState({time: Date.now()}), 800);
       BackgroundGeolocation.start(
         state => {
           // NOTE:  We tell react-native-maps to show location only AFTER BackgroundGeolocation
@@ -771,7 +915,15 @@ class SimpleMap extends Component {
         },
       );
     } else {
-      BackgroundGeolocation.stop();
+      if(isRecording)
+      {   
+        BackgroundGeolocation.changePace(false);
+
+      }else{
+        BackgroundGeolocation.stop();
+      }
+   
+
       clearInterval(this.interval);
     }
   }
@@ -820,6 +972,7 @@ class SimpleMap extends Component {
     var coordinate = {
       latitude: location.coords.latitude,
       longitude: location.coords.longitude,
+      timestamp: location.timestamp,
     };
 
     await this.needTopUpdatePosition(location);
@@ -1049,17 +1202,67 @@ class SimpleMap extends Component {
   }
 
   onTimerPause() {
-    this.onTimerStartPause();
+    if (this.props.isMoving) {
+      Alert.alert(
+        'Mettre en pause',
+        'Etes vous sûr de mettre en pause ?',
+        [
+          {
+            text: 'Annuler',
+            onPress: () => console.log('Cancel Pressed'),
+            style: 'cancel',
+          },
+          {text: 'Mettre en pause', onPress: () => this.onTimerStartPause()},
+        ],
+        {cancelable: false},
+      );
+    } else {
+      Alert.alert(
+        'Reprendre',
+        "êtes vous sûr de reprendre l'activité ?",
+        [
+          {
+            text: 'Annuler',
+            onPress: () => console.log('Cancel Pressed'),
+            style: 'cancel',
+          },
+          {text: 'Reprendre', onPress: () => this.onTimerStartPause()},
+        ],
+        {cancelable: false},
+      );
+    }
+
+    // this.onTimerStartPause();
   }
 
   onStop() {
+    Alert.alert(
+      "Arrêter l'activité",
+      "Etes vous sûr d'arrêter ?",
+      [
+        {
+          text: 'Annuler',
+          onPress: () => console.log('Cancel Pressed'),
+          style: 'cancel',
+        },
+        {text: 'Arrêter', onPress: () => this.onStopOk()},
+      ],
+      {cancelable: false},
+    );
+  }
+  onStopOk() {
     if (this.props.isMoving) {
       this.onTimerStartPause();
     }
+    this.syncPositions();
     //  else {
     //   this.onToggleEnabled(false, true)
     // }
+
     this.toggleModal3(true);
+
+    this.createGpx();
+    this.sendAllCoordinates();
   }
 
   onClickInviteUser() {
@@ -1128,12 +1331,6 @@ class SimpleMap extends Component {
       const res = await DocumentPicker.pick({
         // type: 'application/gpx+xml',
       });
-      console.log(
-        res.uri,
-        res.type, // mime type
-        res.name,
-        res.size,
-      );
 
       var uri = res.uri;
       var filePath = uri;
@@ -1235,7 +1432,6 @@ class SimpleMap extends Component {
           duration: 3000,
           position: 'bottom',
         });
-        console.log(e);
       });
   }
 
@@ -1338,7 +1534,26 @@ class SimpleMap extends Component {
     }
   }
 
+  syncPositions() {
+    try {
+      BackgroundGeolocation.sync(records => {
+        console.log('[sync] success: ', records);
+        ApiUtils.logError(
+          'sync at end idUtilisateur: ' + this.props.userData.idUtilisateur,
+          JSON.stringify(records),
+        );
+      });
+    } catch (e) {
+      console.log('[sync] error: ', e);
+      ApiUtils.logError(
+        'ERROR sync at end idUtilisateur: ' + this.props.userData.idUtilisateur,
+      );
+    }
+  }
+
   onSendRequestStop() {
+    this.syncPositions();
+
     this.setState(
       {spinner: true, spinnerText: 'Enregistrement en cours...'},
       () => {
@@ -1351,7 +1566,6 @@ class SimpleMap extends Component {
         formData.append('libelleLive', this.state.libelleLive);
         formData.append('idSport', this.state.selectedSport);
         var acceptChallengeUtilisateur = 0;
-        console.log(this.state.acceptChallengeUtilisateur);
         if (
           this.state.acceptChallengeUtilisateur ||
           this.state.acceptChallengeUtilisateur == 1 ||
@@ -1359,13 +1573,25 @@ class SimpleMap extends Component {
         ) {
           acceptChallengeUtilisateur = 1;
         }
-        console.log(acceptChallengeUtilisateur);
 
         formData.append(
           'acceptChallengeUtilisateur',
           acceptChallengeUtilisateur,
         );
 
+        var acceptChallengeNameUtilisateur = 0;
+        if (
+          this.state.acceptChallengeNameUtilisateur ||
+          this.state.acceptChallengeNameUtilisateur == 1 ||
+          this.state.acceptChallengeNameUtilisateur == 'true'
+        ) {
+          acceptChallengeNameUtilisateur = 1;
+        }
+
+        formData.append(
+          'acceptChallengeNameUtilisateur',
+          acceptChallengeNameUtilisateur,
+        );
         fetch(ApiUtils.getAPIUrl(), {
           method: 'POST',
           headers: {
@@ -1385,9 +1611,13 @@ class SimpleMap extends Component {
 
               var action = {
                 type: 'UPDATE_ACCEPT_CHALLENGE',
-                data: acceptChallengeUtilisateur,
+                data: {
+                  acceptChallengeUtilisateur: acceptChallengeUtilisateur,
+                  acceptChallengeNameUtilisateur: acceptChallengeNameUtilisateur,
+                },
               };
               this.props.dispatch(action);
+
               // .then(
               //   this.props.navigation.navigate('LiveSummary')
               // );
@@ -1396,14 +1626,27 @@ class SimpleMap extends Component {
             }
           })
           .catch(e => {
-            alert('Un erreur est intervenue. Veuillez réessayer');
-            this.setState({spinner: false, spinnerText: ''});
-            ApiUtils.logError(
-              'simpleMap onSendRequestStop',
-              JSON.stringify(e) + ' ' + e.message,
-            );
-          })
-          .then();
+            this.setState({spinner: false});
+            console.log(e);
+            ApiUtils.logError('create live', JSON.stringify(e.message));
+            // alert('Une erreur est survenue : ' + JSON.stringify(e.message));
+
+            if (
+              e.message == 'Timeout' ||
+              e.message == 'Network request failed'
+            ) {
+              this.setState({noConnection: true});
+
+              Toast.show({
+                text:
+                  "Vous n'avez pas de connection internet, merci de réessayer",
+                buttonText: 'Ok',
+                type: 'danger',
+                position: 'bottom',
+                duration: 5000,
+              });
+            }
+          });
       },
     );
   }
@@ -1426,6 +1669,139 @@ class SimpleMap extends Component {
     } else {
       this.goBackOk();
     }
+  }
+
+  async createGpx() {
+    try {
+      const gpxData = new GarminBuilder();
+      let points = [];
+
+      this.props.coordinates.forEach(c => {
+        var point = new Point(c.latitude, c.longitude, {
+          time: new Date(c.timestamp),
+        });
+        points.push(point);
+      });
+
+      gpxData.setSegmentPoints(points);
+      var gpxString = buildGPX(gpxData.toObject());
+      await this.sendGeneratedGPX(gpxString);
+    } catch (e) {
+      ApiUtils.logError(
+        'createGPX',
+        'idUser: ' +
+          this.props.userData.idUtilisateur +
+          ' message: ' +
+          JSON.stringify(e),
+      );
+      console.log(e);
+    }
+  }
+
+  async sendGeneratedGPX(gpx) {
+    let formData = new FormData();
+    formData.append('method', 'sendGeneratedGpx');
+    formData.append('auth', ApiUtils.getAPIAuth());
+    formData.append('idUtilisateur', this.props.userData.idUtilisateur);
+    formData.append('gpxContent', gpx);
+    formData.append('idLive', this.props.currentLive.idLive);
+    //fetch followCode API
+    fetch(ApiUtils.getAPIUrl(), {
+      method: 'POST',
+      headers: {
+        // Accept: 'application/jsjhon',
+        // 'Content-Type': 'application/json',
+      },
+      body: formData,
+    })
+      .then(ApiUtils.checkStatus)
+      .then(response => response.json())
+      .then(responseJson => {
+        if (responseJson.codeErreur == 'SUCCESS') {
+          console.log('sendGeneratedGPX ok');
+        } else {
+          // alert('erreur : ' + responseJson.message);
+        }
+      })
+      .catch(e => {
+        // alert('erreur : ' + e.message);
+        ApiUtils.logError(
+          'send generated gpx',
+          'idUser: ' +
+            this.props.userData.idUtilisateur +
+            ' message: ' +
+            JSON.stringify(e),
+        );
+      });
+  }
+
+  async sendAllCoordinates() {
+    let formData = new FormData();
+    formData.append('method', 'sendAllCoordinates');
+    formData.append('auth', ApiUtils.getAPIAuth());
+    formData.append('idUtilisateur', this.props.userData.idUtilisateur);
+    formData.append('coordinates', JSON.stringify(this.props.coordinates));
+    formData.append('idLive', this.props.currentLive.idLive);
+
+    fetch(ApiUtils.getAPIUrl(), {
+      method: 'POST',
+      headers: {
+        // Accept: 'application/jsjhon',
+        // 'Content-Type': 'application/json',
+      },
+      body: formData,
+    })
+      .then(ApiUtils.checkStatus)
+      .then(response => response.json())
+      .then(responseJson => {
+        if (responseJson.codeErreur == 'SUCCESS') {
+          console.log('ok');
+        }
+      })
+      .catch(e => {
+        // alert('erreur : ' + e.message);
+        ApiUtils.logError(
+          'send all coordinates gpx',
+          'idUser: ' +
+            this.props.userData.idUtilisateur +
+            ' message: ' +
+            JSON.stringify(e),
+        );
+      });
+  }
+
+  createGpxFile(data) {
+    const fs = RNFetchBlob.fs;
+    let dirs = RNFetchBlob.fs.dirs;
+
+    let path = dirs.DocumentDir + '/' + this.props.currentLive.idLive + '.gpx';
+
+    try {
+      fs.writeFile(path, data, 'utf8')
+        .catch(e => console.log(e))
+        .then(r => {
+          this.readGpxLocalFile();
+          console.log(r);
+        });
+    } catch (e) {
+      console.log(e);
+      ApiUtils.logError(
+        'create generated gpx',
+        'idUser: ' +
+          this.props.userData.idUtilisateur +
+          ' message: ' +
+          JSON.stringify(e),
+      );
+    }
+  }
+  readGpxLocalFile() {
+    const fs = RNFetchBlob.fs;
+    let dirs = RNFetchBlob.fs.dirs;
+    let path = dirs.DocumentDir + '/' + this.props.currentLive.idLive + '.gpx';
+
+    RNFetchBlob.fs.readFile(path, 'utf8').then(data => {
+      console.log(data);
+    });
   }
 
   goBackOk() {
@@ -1617,10 +1993,15 @@ class SimpleMap extends Component {
   }
 
   onValueSportChange(value) {
-    console.log(value);
     this.setState({
       selectedSport: value,
     });
+  }
+
+  onAcceptGps() {
+    this.getFirstLocation();
+    var action = {type: 'VIEW_POPUPGPS', data: null};
+    this.props.dispatch(action);
   }
 
   getInvites() {
@@ -1680,7 +2061,7 @@ class SimpleMap extends Component {
                   justifyContent: 'flex-start',
                   paddingRight: 0,
                 }}>
-                <Button
+                <TouchableOpacity
                   style={styles.goBackButton}
                   onPress={() => this.goBack()}>
                   <Icon
@@ -1688,22 +2069,26 @@ class SimpleMap extends Component {
                     name="chevron-left"
                     type="FontAwesome5"
                   />
-                </Button>
-                <Button
-                  style={{backgroundColor: 'transparent', elevation: 0}}
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={{
+                    backgroundColor: 'transparent',
+                    elevation: 0,
+                    justifyContent: 'center',
+                  }}
                   onPress={() => this.goBack()}>
-                  <View>
+                  <View style={[GlobalStyles.row]}>
                     <Text style={{color: 'black'}}>
                       {this.props.userData.nomUtilisateur}
                     </Text>
-                    <Text style={{color: 'black'}}>
+                    <Text style={{color: 'black', marginLeft: 5}}>
                       {this.props.userData.prenomUtilisateur}
                     </Text>
                   </View>
-                </Button>
+                </TouchableOpacity>
               </View>
               <View style={{flexDirection: 'row', justifyContent: 'flex-end'}}>
-                <Button
+                {/* <TouchableOpacity
                   style={styles.headerButton}
                   info
                   onPress={() => this.onClickAddGpx()}>
@@ -1713,13 +2098,10 @@ class SimpleMap extends Component {
                     style={styles.headerButtonLogo}
                     type="FontAwesome5"
                   />
-                </Button>
-                {/* <Button style={styles.headerButton} info onPress={() => this.onClickInviteUser()}>
-                  <Icon active name="user-plus" style={styles.headerButtonLogo} type="FontAwesome5" /></Button> */}
+                </TouchableOpacity> */}
                 {this.props.currentPosition ? (
-                  <Button
-                    style={styles.headerButton}
-                    info
+                  <TouchableOpacity
+                    style={[styles.headerButton, {marginLeft: 10}]}
                     onPress={() => this.onClickShare()}>
                     <Icon
                       active
@@ -1727,16 +2109,8 @@ class SimpleMap extends Component {
                       style={styles.headerButtonLogo}
                       type="FontAwesome5"
                     />
-                  </Button>
+                  </TouchableOpacity>
                 ) : null}
-                {/* {this.props.currentPosition ?
-                  <Button style={[styles.headerButton, { marginLeft: 12 }]} info onPress={() => this.toggleModalAddInterest(true)}>
-
-                    <Image active
-                      source={require('../assets/map-marker-plus.png')}
-
-                    />
-                  </Button> : null} */}
               </View>
             </View>
           </Body>
@@ -1744,9 +2118,11 @@ class SimpleMap extends Component {
 
         <View style={styles.statBanner}>
           <Text style={styles.timeText}>{this.getCurrentTime()}</Text>
+          <Text>|</Text>
           <Text style={styles.timeText}>{this.getSpeed()} km/h</Text>
+          <Text>|</Text>
           <Text style={styles.timeText}>
-            {this.props.odometer.toFixed(2)} km
+            {this.props.odometer?.toFixed(2)} km
           </Text>
         </View>
 
@@ -1769,7 +2145,7 @@ class SimpleMap extends Component {
             backgroundColor: 'white',
             zIndex: 5,
             position: 'absolute',
-            top: Platform.OS == 'android' ? 153 : 203,
+            top: Platform.OS == 'android' ? 153 : 185,
             right: 100,
           }}>
           {Platform.OS == 'ios' ? (
@@ -1798,7 +2174,7 @@ class SimpleMap extends Component {
               backgroundColor: 'white',
               zIndex: 5,
               position: 'absolute',
-              top: Platform.OS == 'android' ? 153 : 203,
+              top: Platform.OS == 'android' ? 153 : 185,
               left: 20,
             }}>
             <Icon
@@ -1810,7 +2186,100 @@ class SimpleMap extends Component {
           </Button>
         ) : null}
 
+   
+        {this.state.isGpsNotOk ? (
+          <View 
+          style={{
+            justifyContent: 'center',
+            display: 'flex',
+            flexDirection: 'row',
+            zIndex: 5,
+             width : '100%',
+            position : 'absolute',
+            top: Platform.OS == 'android' ? 210 : 235,
+            marginLeft : 'auto'
+          }}
+          onPress={() => this.openBatteryModal.bind(this)}>
+     
+            <View
+              style={[
+                {
+                  backgroundColor: '#FE3C03',
+                  width: '70%',
+                  marginLeft : 'auto',
+                  marginRight : 'auto',
+                  paddingVertical: 20,
+                  paddingHorizontal: 15,
+                  borderRadius: 30,
+                  zIndex: 99,
+                },
+              ]}
+              onPress={() => this.openBatteryModal()}>
+              <View>
+                <Text
+                  style={[
+                    styles.liveNameText,
+                    {color: 'white', textTransform: 'uppercase'},
+                  ]}>
+                  En attente de l’acquisition du signal GPS, ne partez pas.
+                </Text>
+                <Text
+                  style={{color: 'white', textAlign: 'center', marginTop: 10}}>
+                  Si ce message ne disparait pas : verifier votre paramètres
+                  d'économie d'energie, de localisation etc...
+                </Text>
+                <TouchableOpacity
+                  onPress={() => this.openBatteryModal()}
+                  style={{zIndex: 200}}>
+                  <Text
+                    style={{
+                      color: 'white',
+                      textAlign: 'center',
+                      marginTop: 10,
+                      textDecorationLine: 'underline',
+                    }}>
+                    En savoir plus
+                  </Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          </View>
+        ) : null}
+
+        {!this.state.isGpsNotOk && !this.props.isRecording ? (
+          <TouchableOpacity
+            style={{
+              justifyContent: 'center',
+              display: 'flex',
+              flexDirection: 'row',
+              zIndex: 99,
+            }}>
+            <View
+              style={[
+                {
+                  zIndex: 12,
+                  backgroundColor: '#39F800',
+                  position: 'absolute',
+                  top: 100,
+                  width: '70%',
+                  paddingVertical: 30,
+                  paddingHorizontal: 15,
+                  borderRadius: 30,
+                },
+              ]}>
+              <Text
+                style={[
+                  styles.liveNameText,
+                  {color: 'black', textTransform: 'uppercase'},
+                ]}>
+                Position GPS captée, c’est parti ! Démarrez votre activité
+              </Text>
+            </View>
+          </TouchableOpacity>
+        ) : null}
+
         <Root>
+          
           <MapView
             ref="map"
             mapType={this.props.currentMapStyle}
@@ -1822,6 +2291,12 @@ class SimpleMap extends Component {
             showsPointsOfInterest={false}
             showsScale={false}
             showsTraffic={false}
+            initialRegion={{
+              latitude: 45.1667, // 44.843884,
+              longitude: 5.55,
+              latitudeDelta: LATITUDE_DELTA,
+              longitudeDelta: LONGITUDE_DELTA,
+            }}
             toolbarEnabled={false}>
             <Polyline
               key="polyline"
@@ -1877,24 +2352,22 @@ class SimpleMap extends Component {
               </MapView.Marker>))
             } */}
 
-            {/* {this.props.pointsInterets != null ? this.props.pointsInterets.map((marker) => (
-              <Marker
-                onPress={() => this.onClickInterestPoint(marker)}
-                // onCalloutPress={() => this.onClickInterestPoint(marker)}
-                key={marker.id}
-                coordinate={marker.coordinates}
-                tracksViewChanges={false}
-
-              >
-                <ImageBackground
-                  style={{ height: 25, width: 20 }}
-                  source={MarkerInteret}
-                >
-                  <Text style={{ width: 25, height: 25 }}></Text>
-                </ImageBackground>
-                
-              </Marker>)) : null
-            } */}
+            {this.props.pointsInterets != null
+              ? this.props.pointsInterets.map(marker => (
+                  <Marker
+                    onPress={() => this.onClickInterestPoint(marker)}
+                    // onCalloutPress={() => this.onClickInterestPoint(marker)}
+                    key={marker.id}
+                    coordinate={marker.coordinates}
+                    tracksViewChanges={false}>
+                    <ImageBackground
+                      style={{height: 25, width: 20}}
+                      source={MarkerInteret}>
+                      <Text style={{width: 25, height: 25}} />
+                    </ImageBackground>
+                  </Marker>
+                ))
+              : null}
           </MapView>
 
           {this.props.currentMapStyle == 'standard' ||
@@ -2328,37 +2801,35 @@ class SimpleMap extends Component {
           onRequestClose={() => {
             this.toggleModal3(!this.state.modal3Visible);
           }}>
-          {this.state.modal3Visible ? (
+          {/* {this.state.modal3Visible ? ( */}
+          <Root>
             <View style={styles.modal}>
               <Header style={styles.headerModal}>
-                <Body>
-                  <View
-                    style={{
-                      flexDirection: 'row',
-                      justifyContent: 'space-between',
-                      width: '100%',
-                      paddingRight: 0,
-                      paddingLeft: 0,
+                <Left>
+                  <Button
+                    style={styles.drawerButton}
+                    onPress={() => {
+                      this.toggleModal3(!this.state.modal3Visible);
                     }}>
-                    <Button
-                      style={styles.drawerButton}
-                      onPress={() => {
-                        this.toggleModal3(!this.state.modal3Visible);
-                      }}>
-                      <Icon
-                        style={styles.saveText}
-                        name="chevron-left"
-                        type="FontAwesome5"
-                      />
-                    </Button>
-                  </View>
+                    <Icon
+                      style={styles.saveText}
+                      name="chevron-left"
+                      type="FontAwesome5"
+                    />
+                  </Button>
+                </Left>
+                <Body style={{justifyContent: 'center', flex: 1}}>
+                  <Text style={{fontWeight: 'bold'}}>
+                    Enregistrez votre activité
+                  </Text>
                 </Body>
+                <Right syle={{flex: 0}} />
               </Header>
 
-              <ScrollView contentContainerStyle={styles.loginButtonSection}>
+              <ScrollView scrollEnabled={true}>
                 <View style={styles.loginButtonSection}>
                   <TextInput
-                    style={styles.inputCode}
+                    style={[styles.inputCode, {fontWeight: 'bold'}]}
                     clearButtonMode="always"
                     placeholder="Titre"
                     value={this.state.libelleLive}
@@ -2374,14 +2845,16 @@ class SimpleMap extends Component {
                   <View style={styles.picker}>
                     <Picker
                       mode="dropdown"
-                      accessibilityLabel={'choisirSport'}
-                      iosHeader={'Choisir le sport'}
-                      iosIcon={<Icon name="arrow-down" />}
+                      accessibilityLabel={'Choisissez le type de glisse'}
+                      iosHeader={'Choisissez le type de glisse'}
+                      iosIcon={<Icon name="chevron-down" type="FontAwesome5" />}
                       style={{marginTop: 0}}
                       selectedValue={this.state.selectedSport}
                       onValueChange={this.onValueSportChange.bind(this)}
-                      placeholder={"Choisissez le type d'activité"}
-                      placeholderStyle={{color: ApiUtils.getBackgroundColor()}}
+                      placeholder={'Choisissez le type de glisse'}
+                      placeholderStyle={{
+                        color: ApiUtils.getBackgroundColor(),
+                      }}
                       placeholderIconColor={ApiUtils.getBackgroundColor()}
                       textStyle={{color: ApiUtils.getBackgroundColor()}}
                       itemStyle={{
@@ -2397,26 +2870,12 @@ class SimpleMap extends Component {
                         borderBottomWidth: 1,
                       }}>
                       <Picker.Item
-                        label="Choisissez le type d'activité"
+                        label="Choisissez le type de glisse"
                         value="-1"
                       />
-                      <Picker.Item label={'CLASSSIQUE'} value="14" />
+                      <Picker.Item label={'CLASSIQUE'} value="14" />
                       <Picker.Item label={'SKATING'} value="15" />
                     </Picker>
-                    {/* <RNPickerSelect
-                       placeholder={{
-                         label: "Choisissez le type d'activité...",
-                         value: -1,
-                       }}
-                       items={this.props.sports}
-                       onValueChange={(value) => {
-                         this.setState({
-                           selectedSport: value,
-                         });
-                       }}
-                       style={{ ...pickerSelectStyles }}
-                       value={this.state.selectedSport}
-                     /> */}
 
                     {this.state.selectedSport == -1 ? (
                       <Text
@@ -2425,8 +2884,9 @@ class SimpleMap extends Component {
                           color: 'red',
                           fontSize: 14,
                           paddingLeft: 5,
+                          fontStyle: 'italic',
                         }}>
-                        Le type d'activité doit être renseigné
+                        Le type de glisse doit être renseigné
                       </Text>
                     ) : null}
 
@@ -2440,9 +2900,17 @@ class SimpleMap extends Component {
                         marginTop: 20,
                         paddingTop: 0,
                       }}>
-                      <Text>Commentaire : </Text>
+                      <Text
+                        style={{
+                          fontWeight: 'bold',
+                          paddingBottom: 8,
+                          borderBottomWidth: 1,
+                          borderBottomColor: '#DDDDDD',
+                        }}>
+                        Commentaire :
+                      </Text>
                       <TextInput
-                        style={{marginTop: 0}}
+                        style={{marginTop: 0, paddingBottom: 10}}
                         multiline={true}
                         numberOfLines={4}
                         onChangeText={text => this.setState({comments: text})}
@@ -2450,6 +2918,36 @@ class SimpleMap extends Component {
                         placeholder="Commentaire"
                       />
                     </View>
+
+                    <View
+                      style={{
+                        marginTop: 30,
+                        width: '80%',
+                        display: 'flex',
+                        flexDirection: 'row',
+                        justifyContent: 'space-between',
+                      }}>
+                      <Switch
+                        tyle={{paddingTop: 20}}
+                        onValueChange={text => {
+                          this.setState({acceptChallengeUtilisateur: text});
+                        }}
+                        value={this.state.acceptChallengeUtilisateur}
+                      />
+                      <TouchableOpacity
+                        onPress={text => {
+                          this.setState({
+                            acceptChallengeUtilisateur: !this.state
+                              .acceptChallengeUtilisateur,
+                          });
+                        }}>
+                        <Text style={{marginLeft: 10}}>
+                          J'accepte de participer aux challenges de la foulée
+                          blanche 2021
+                        </Text>
+                      </TouchableOpacity>
+                    </View>
+
                     <View
                       style={{
                         marginTop: 20,
@@ -2461,15 +2959,24 @@ class SimpleMap extends Component {
                       <Switch
                         tyle={{paddingTop: 20}}
                         onValueChange={text => {
-                          console.log(text);
-                          this.setState({acceptChallengeUtilisateur: text});
+                          this.setState({
+                            acceptChallengeNameUtilisateur: text,
+                          });
                         }}
-                        value={this.state.acceptChallengeUtilisateur}
+                        value={this.state.acceptChallengeNameUtilisateur}
                       />
-                      <Text style={{marginLeft: 10}}>
-                        J'accepte que mon nom apparaisse dans le classement des
-                        spéciales
-                      </Text>
+
+                      <TouchableOpacity
+                        onPress={text => {
+                          this.setState({
+                            acceptChallengeNameUtilisateur: !this.state
+                              .acceptChallengeNameUtilisateur,
+                          });
+                        }}>
+                        <Text style={{marginLeft: 10}}>
+                          J'accepte que mon nom apparaisse dans le classement
+                        </Text>
+                      </TouchableOpacity>
                     </View>
                   </View>
 
@@ -2491,33 +2998,56 @@ class SimpleMap extends Component {
                     <Button
                       style={{
                         marginTop: 10,
+                        paddingHorizontal: 50,
+                        elevation: 0,
                         alignSelf: 'center',
-                        backgroundColor: this.isErrorFormStop()
-                          ? 'grey'
+                        borderColor: this.isErrorFormStop()
+                          ? 'black'
                           : ApiUtils.getBackgroundColor(),
-                        borderRadius: 30,
+                        borderWidth: 1,
+                        backgroundColor: this.isErrorFormStop()
+                          ? 'transparent'
+                          : ApiUtils.getBackgroundColor(),
                       }}
                       onPress={() => this.onClickValidateStop()}
                       disabled={this.isErrorFormStop()}>
-                      <Text style={{}}>ENREGISTRER</Text>
+                      <Text
+                        style={{
+                          color: this.isErrorFormStop() ? 'black' : 'white',
+                        }}>
+                        ENREGISTRER
+                      </Text>
                     </Button>
                   )}
 
                   <View style={{textAlign: 'center', marginTop: -5}}>
                     <Text
-                      full
                       style={styles.ignoreActivityLink}
                       onPress={() => this.ignoreActivity()}>
                       Ignorer l'activité
                     </Text>
                   </View>
+
+                  <View style={{marginBottom: 300}} />
                 </View>
               </ScrollView>
+              <View
+                style={{
+                  marginBottom: 0,
+                  position: 'absolute',
+                  bottom: Platform.OS == 'ios' ? 80 : 50,
+                  zIndex: 12,
+                  width: '100%',
+                  backgroundColor: 'white',
+                }}>
+                <Sponsors />
+              </View>
             </View>
-          ) : null}
+          </Root>
+          {/* ) : null} */}
         </Modal>
         {/******** modal4 : Upload interest point  *****************/}
-        <Modal
+        {/* <Modal
           animationType={'none'}
           transparent={false}
           visible={this.state.modalAddInterestVisible}
@@ -2530,7 +3060,54 @@ class SimpleMap extends Component {
             onclose={this.closeModalAddInterest}
             onclosesuccess={this.closeModalAddInterestSuccess}
           />
+        </Modal> */}
+
+        {/******** modal : Battery modal *****************/}
+        <Modal
+          animationType={'none'}
+          transparent={false}
+          visible={this.state.ismodalBatteryOpen}
+          onRequestClose={() => {
+            this.closeModalBattery();
+          }}>
+          <BatteryModal
+            noHeader={true}
+            onMap={true}
+            coord={this.props.currentPosition}
+            idlive={this.props.currentLive?.idLive}
+            onclose={this.closeModalBattery}
+          />
         </Modal>
+
+        {/******** modal4 : Alert gps   *****************/}
+        <ModalSmall
+          animationType={'none'}
+          transparent={false}
+          isVisible={!this.props.isOkPopupGps}>
+          <View style={{backgroundColor: 'white', padding: 20}}>
+            <Text
+              style={{
+                textAlign: 'center',
+                fontWeight: 'bold',
+                marginTop: 0,
+                marginBottom: 20,
+              }}>
+              Accès à votre position GPS en arrière plan
+            </Text>
+            <Text style={{textAlign: 'justify'}}>
+              L'application a besoin d'accèder à votre position en arrière plan
+              pour pouvoir enregistrer la totalité de votre activité. Nous
+              enregistrons votre position GPS même quand l'application est
+              arretée ou en arrière plan.
+            </Text>
+            <TouchableOpacity
+              onPress={() => this.onAcceptGps()}
+              style={{justifyContent: 'flex-end'}}
+              style={{marginTop: 30}}>
+              <Text style={{textAlign: 'right'}}>Ok</Text>
+            </TouchableOpacity>
+          </View>
+        </ModalSmall>
 
         {/******** modal5 : Traces list  *****************/}
         <ModalSmall
@@ -2667,7 +3244,10 @@ class SimpleMap extends Component {
                             }}>
                             <View>
                               <IconElement
-                                style={{alignSelf: 'center', color: 'black'}}
+                                style={{
+                                  alignSelf: 'center',
+                                  color: 'black',
+                                }}
                                 name="search-plus"
                                 type="font-awesome"
                               />
@@ -2829,35 +3409,59 @@ class SimpleMap extends Component {
           </ScrollView>
         </ModalSmall>
 
-        <Footer style={styles.footer}>
-          <Body style={styles.footerBody}>
+        <Footer style={[styles.footer]}>
+          <View style={{flex: 1}}>
             {!this.props.isRecording ? (
-              <Button full success={true} onPress={this.onstart.bind(this)}>
-                <Text style={styles.buttonText}>DEMARRER</Text>
+              <Button
+                full
+                style={{
+                  backgroundColor: '#39F800',
+                  width: '100%',
+                  height: '100%',
+                }}
+                onPress={this.onstart.bind(this)}>
+                <Text style={[styles.buttonText, {color: 'black'}]}>
+                  DEMARRER
+                </Text>
               </Button>
             ) : (
               <View
                 style={{
+                  height: '100%',
                   flexDirection: 'row',
                   justifyContent: 'flex-start',
-                  width: '100%',
+                  width: Dimensions.get('screen').width,
                   paddingRight: 0,
                   paddingLeft: 0,
+                  paddingBottom: 0,
                 }}>
                 <Button
                   full
-                  success={true}
+                  style={{
+                    backgroundColor: '#C7C7C9',
+                    width: '50%',
+                    height: '100%',
+                  }}
                   onPress={this.onTimerPause.bind(this)}>
-                  <Text style={styles.buttonText}>
+                  <Text style={[styles.buttonText, {color: 'black'}]}>
                     {this.props.isMoving ? 'PAUSE' : 'RELANCER'}
                   </Text>
                 </Button>
-                <Button full danger={true} onPress={this.onStop.bind(this)}>
-                  <Text style={styles.buttonText}>STOP</Text>
+                <Button
+                  full
+                  onPress={this.onStop.bind(this)}
+                  style={{
+                    backgroundColor: '#FE3C03',
+                    width: '50%',
+                    height: '100%',
+                  }}>
+                  <Text style={[styles.buttonText, {color: 'white'}]}>
+                    STOP
+                  </Text>
                 </Button>
               </View>
             )}
-          </Body>
+          </View>
         </Footer>
       </Container>
     );
@@ -2883,16 +3487,16 @@ var styles = StyleSheet.create({
     elevation: 0,
   },
   header: {
-    backgroundColor: ApiUtils.getBackgroundColor(),
+    backgroundColor: 'white',
     paddingLeft: 10,
     paddingTop: 10,
     paddingBottom: 10,
     // height: 80
   },
   headerModal: {
-    backgroundColor: ApiUtils.getBackgroundColor(),
+    backgroundColor: 'white',
     paddingLeft: 10,
-    paddingTop: 20,
+    paddingTop: 0,
     paddingBottom: 5,
     // height: 50
   },
@@ -2911,15 +3515,18 @@ var styles = StyleSheet.create({
   },
 
   headerButton: {
-    backgroundColor: ApiUtils.getBackgroundColor(),
+    backgroundColor: 'transparent',
     color: 'black',
     elevation: 0,
+    justifyContent: 'center',
   },
   headerButtonLogo: {
     color: 'black',
   },
   statBanner: {
     flexDirection: 'row',
+    borderTopColor: '#D5D5D5',
+    borderTopWidth: 1,
     justifyContent: 'space-around',
     width: '100%',
     backgroundColor: 'white',
@@ -2934,7 +3541,9 @@ var styles = StyleSheet.create({
     padding: 10,
   },
   liveNameBanner: {
-    backgroundColor: 'black',
+    backgroundColor: 'white',
+    borderTopColor: '#D5D5D5',
+    borderTopWidth: 1,
     justifyContent: 'center',
     width: '100%',
     height: 30,
@@ -2943,18 +3552,25 @@ var styles = StyleSheet.create({
     color: 'white',
   },
   liveNameText: {
-    color: 'white',
+    color: 'black',
     textAlign: 'center',
+    fontWeight: 'bold',
   },
   footer: {
-    backgroundColor: ApiUtils.getBackgroundColor(),
+    backgroundColor: 'transparent',
     paddingLeft: 0,
     paddingRight: 0,
-    height: 56,
+    paddingBottom: 0,
+    marginBottom: -5,
+    width: Dimensions.get('screen').width,
+    height: 60,
   },
   footerBody: {
-    justifyContent: 'center',
+    // justifyContent: 'center',
+    display: 'flex',
+    flexDirection: 'column',
     flex: 1,
+    width: Dimensions.get('screen').width,
   },
   icon: {
     color: '#fff',
@@ -3006,7 +3622,7 @@ var styles = StyleSheet.create({
     textAlign: 'center',
   },
   inputCode: {
-    borderBottomColor: 'black',
+    borderBottomColor: '#DDDDDD',
     borderBottomWidth: 1,
     paddingTop: 10,
     paddingBottom: 10,
@@ -3019,6 +3635,7 @@ var styles = StyleSheet.create({
   errorMessage: {
     marginLeft: 10,
     marginTop: 10,
+    fontStyle: 'italic',
   },
   saveButton: {
     backgroundColor: 'transparent',
@@ -3056,7 +3673,8 @@ var styles = StyleSheet.create({
     padding: 10,
   },
   ignoreActivityLink: {
-    marginTop: 60,
+    marginTop: 10,
+    marginBottom: 20,
     alignSelf: 'center',
     fontSize: 14,
     textDecorationLine: 'underline',
@@ -3075,8 +3693,8 @@ var styles = StyleSheet.create({
   map: {
     flex: 1,
     borderColor: 'black',
-    borderWidth: 2,
-    zIndex: -1,
+    borderWidth: 0,
+    zIndex: 1,
   },
   status: {
     fontSize: 12,
