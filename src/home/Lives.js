@@ -29,6 +29,7 @@ import Swipeout from 'react-native-swipeout';
 // import { Icon } from 'react-native-elements';
 import ApiUtils from '../ApiUtils';
 import Logo from '../assets/logo_header.png';
+import Autrans from '../assets/autrans.svg';
 import LogoHome from '../assets/logo.png';
 import Sidebar from './SideBar';
 import AsyncStorage from '@react-native-community/async-storage';
@@ -40,7 +41,7 @@ import Help from './Help';
 import BatteryModal from './BatteryModal';
 
 import {Sponsors} from './Sponsors';
-import Autrans from '../assets/autrans.svg';
+
 import {PermissionsAndroid} from 'react-native';
 import DocumentPicker from 'react-native-document-picker';
 import UploadGpx from './UploadGpx';
@@ -66,7 +67,6 @@ class Lives extends Component {
 
     this.state = {
       spinner: false,
-
       isOpenModalHelp: false,
       //   username: navigation.state.params.username,
       // url: TRACKER_HOST + navigation.state.params.username,
@@ -228,24 +228,7 @@ class Lives extends Component {
       .then(this.setState({isLoading: false}));
   }
 
-  checkPermissions() {
-    if (Platform.OS == 'android') {
-      try {
-        PermissionsAndroid.request(
-          'android.permission.READ_EXTERNAL_STORAGE',
-        ).then(res => {
-          console.warn(res);
-          if (res == 'granted') {
-          } else {
-            // alert('error')
-            this.requestStoragePermission();
-          }
-        });
-      } catch (error) {
-        console.warn('location set error:', error);
-      }
-    }
-  }
+
 
   requestStoragePermission = async () => {
     try {
@@ -277,39 +260,12 @@ class Lives extends Component {
     this.setState({uploadGpxVisible: false});
   };
 
-  async onClickCreateLiveNew() {
-    this.checkPermissions();
-
-    // Pick a single file
-    try {
-      const res = await DocumentPicker.pick({
-        // type: 'application/gpx+xml',
-      });
-      console.log(
-        res.uri,
-        res.type, // mime type
-        res.name,
-        res.size,
-      );
-
-      var uri = res.uri;
-      var filePath = uri;
-
-      if (res.name.includes('.gpx')) {
-        // this.openGpxModal();
-        setTimeout(() => this.sendFile(res), 100);
-      } else {
-        alert("Le fichier n'est pas un fichier gpx");
-      }
-    } catch (err) {
-      // alert(err)
-      if (DocumentPicker.isCancel(err)) {
-        // User cancelled the picker, exit any dialogs or menus and move on
-      } else {
-        throw err;
-      }
-    }
+  finishUploadGpx = () =>
+  {
+    this.closeGpxModal();
+    this.onClickNavigate('LiveSummary')
   }
+
 
   normalize(path) {
     if (Platform.OS === 'ios' || Platform.OS === 'android') {
@@ -324,73 +280,7 @@ class Lives extends Component {
     return path;
   }
 
-  async sendFile(fileToUpload) {
-    // var path = this.normalize(filePath);
-    var _this = this;
-    this.openGpxModal();
 
-    // const file = {
-    //   uri  :path ,             // e.g. 'file:///path/to/file/image123.jpg'
-    //   name : 'test',            // e.g. 'image123.jpg',
-    //   type : 'gpx'             // e.g. 'image/jpg'
-    // }
-
-    let formData = new FormData();
-    // body.append('file', file)
-    formData.append('file_attachment', fileToUpload);
-
-    formData.append('method', 'createLive');
-    formData.append('auth', ApiUtils.getAPIAuth());
-    formData.append('idUtilisateur', this.props.userData.idUtilisateur);
-    formData.append('idSport', 14);
-    formaData.append('idVersion', ApiUtils.VersionNumber());
-
-    // console.log(fileToUpload);
-
-    // fetch('https://folomi.fr/api/uploadgpx.php', {
-    //   method: 'POST',
-    //   body : body,
-    //   headers: {
-    //     'Content-Type': 'multipart/form-data; ',
-    //   },
-    // })
-
-    try {
-      let res = await fetch('https://www.folomi.fr/api/uploadgpx.php', {
-        method: 'post',
-        body: formData,
-        headers: {
-          'Content-Type': 'multipart/form-data; ',
-        },
-      });
-
-      let responseJson = await res.json();
-      console.log(responseJson);
-      if (responseJson.status == 1) {
-        var idLive = responseJson.idLive;
-        var live = {
-          idLive: idLive,
-        };
-        var action = {type: 'SAVE_CURRENT_LIVE', data: live};
-
-        this.props.dispatch(action);
-        this.closeGpxModal();
-
-        this.onClickNavigate('LiveSummary');
-      } else {
-        this.closeGpxModal();
-        console.log(responseJson);
-      }
-    } catch (e) {
-      this.closeGpxModal();
-    }
-
-    // .then(ApiUtils.checkStatus)
-    // .then(response=> {
-    //   console.log(response)
-    // })
-    // .catch(e => console.log(e))
-  }
 
   onClickCreateLive() {
     this.setState({spinner: true});
@@ -790,7 +680,6 @@ class Lives extends Component {
             pointsInterets: finalinterestArray,
           };
 
-          console.log('pointsInterets', finalinterestArray);
 
           var action = {type: 'UPDATE_STATION_DATA', data: station};
           this.props.dispatch(action);
@@ -1035,6 +924,7 @@ class Lives extends Component {
                                       {this.getLiveStatusLibelle(item.etatLive)}
                                     </Text>
                                   ) : (
+                                    item.isImportedFromGpx != 1 ? (
                                     <View style={[GlobalStyles.row]}>
                                       <Text
                                         style={{
@@ -1048,6 +938,13 @@ class Lives extends Component {
                                           fontWeight: 'bold',
                                         }}>
                                         {this.getStatsTimeInfo(item.statsLive)}
+                                      </Text>
+                                    </View>) : <View style={[GlobalStyles.row]}>
+                                    <Text
+                                        style={{
+                                          fontWeight: 'bold',
+                                        }}>
+                                        Fichier Gpx importé
                                       </Text>
                                     </View>
                                   )}
@@ -1118,7 +1015,7 @@ class Lives extends Component {
               )}
             </TouchableHighlight>
 
-            {/* <TouchableHighlight
+            <TouchableHighlight
               underlayColor="rgba(255,255,255,1,0.6)"
               disabled={this.state.spinner}
               style={[
@@ -1130,7 +1027,7 @@ class Lives extends Component {
                   textAlign: 'center',
                 },
               ]}
-              onPress={() => this.onClickCreateLiveNew()}>
+              onPress={() => this.openGpxModal()}>
               {
                 <Icon
                   active
@@ -1139,7 +1036,7 @@ class Lives extends Component {
                   style={[styles.plusButtonLogo, {textAlign: 'center'}]}
                 />
               }
-            </TouchableHighlight> */}
+            </TouchableHighlight>
 
             <Sponsors />
 
@@ -1172,7 +1069,7 @@ class Lives extends Component {
             <Modal
               visible={this.state.uploadGpxVisible}
               onRequestClose={() => this.closeGpxModal()}>
-              <UploadGpx onclose={this.closeGpxModal} />
+              <UploadGpx onclose={this.closeGpxModal} finish={() => this.finishUploadGpx()} />
             </Modal>
           </Container>
         </Drawer>

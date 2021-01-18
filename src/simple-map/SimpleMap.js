@@ -72,6 +72,7 @@ import DocumentPicker from 'react-native-document-picker';
 import GlobalStyles from '../styles';
 import {Sponsors} from '../home/Sponsors';
 import {Dimensions} from 'react-native';
+import BatteryModal from '../home/BatteryModal';
 
 // const LATITUDE_DELTA = 0.00922;
 // const LONGITUDE_DELTA = 0.00421;
@@ -127,6 +128,7 @@ class SimpleMap extends Component {
       modalVisible: false,
       modal2Visible: false,
       modal3Visible: false,
+      ismodalBatteryOpen: false,
       acceptChallengeUtilisateur: false,
       acceptChallengeNameUtilisateur: false,
       modalAddInterestVisible: false,
@@ -372,31 +374,15 @@ class SimpleMap extends Component {
     Geolocation.setRNConfiguration({authorizationLevel: 'always'});
 
     BackHandler.addEventListener('hardwareBackPress', this.handleBackButton);
+
     //  BackgroundGeolocation.on('activitychange', this.onActivityChange.bind(this));
     //BackgroundGeolocation.on('providerchange', this.onProviderChange.bind(this));
     // BackgroundGeolocation.on('powersavechange', this.onPowerSaveChange.bind(this));
     //   AppState.addEventListener('change', this._handleAppStateChange);
     // this.getSports();
-
     var idLive = this.props.currentLive?.idLive;
-
-    BackgroundGeolocation.onProviderChange(async (event) => {
-      if (event.accuracyAuthorization == BackgroundGeolocation.ACCURACY_AUTHORIZATION_REDUCED) {
-        // Supply "Purpose" key from Info.plist as 1st argument.
-        try {
-          let accuracyAuthorization = await BackgroundGeolocation.requestTemporaryFullAccuracy("Delivery");
-          if (accuracyAuthorization == BackgroundGeolocation.ACCURACY_AUTHORIZATION_FULL) {
-            console.log('[requestTemporaryFullAccuracy] GRANTED: ', accuracyAuthorization);
-          } else {
-            console.log('[requestTemporaryFullAccuracy] DENIED: ', accuracyAuthorization);
-          }
-        } catch(error) {
-          console.warn("[requestTemporaryFullAccuracy] FAILED TO SHOW DIALOG: ", error);
-        };
-      }
-    });
-
-    BackgroundGeolocation.reset({
+  
+    let config = {
       distanceFilter: 10,
       url: ApiUtils.getAPIUrl(),
       httpRootProperty: '.',
@@ -429,92 +415,47 @@ class SimpleMap extends Component {
         negativeAction: 'Annuler',
       },
       autoSync: true,
-      autoSyncThreshold: 2,
+      autoSyncThreshold: 5,
       batchSync: true,
-      preventSuspend: true,
+      preventSuspend: false,
       stopOnTerminate: false, //TODO TO DO
       startOnBoot: true,
       foregroundService: true,
       disableElasticity: true,
       debug: false,
+      disableStopDetection : true,
+      disableMotionActivityUpdates : true,
       stationaryRadius: 5,
       maxDaysToPersist: 4,
-      heartbeatInterval: 60,
+      heartbeatInterval: 20,
+      stopTimeout : Platform.OS == 'ios'?  60  : 5,
       desiredAccuracy:
         Platform.OS == 'ios '
           ? BackgroundGeolocation.DESIRED_ACCURACY_NAVIGATION
           : BackgroundGeolocation.DESIRED_ACCURACY_HIGH,
       desiredOdometerAccuracy: 10, //If you only want to calculate odometer from GPS locations, you could set desiredOdometerAccuracy: 10. This will prevent odometer updates when a device is moving around indoors, in a shopping mall, for example.
       logLevel: BackgroundGeolocation.LOG_LEVEL_OFF,
-    });
+    };
 
-    BackgroundGeolocation.ready(
-      {
-        distanceFilter: 10,
-        url: ApiUtils.getAPIUrl(),
-        httpRootProperty: '.',
-        params: {
-          method: 'createPositions2',
-          idLive: idLive,
-          auth: ApiUtils.getAPIAuth(),
-          idUtilisateur: this.props.userData.idUtilisateur,
-        },
-        extras: {
-          method: 'createPositions2',
-          idLive: idLive,
-          auth: ApiUtils.getAPIAuth(),
-          idUtilisateur: this.props.userData.idUtilisateur,
-        },
-        notification: {
-          sticky: true,
-          title: 'Foulée Blanche',
-          text: 'Suivi de votre position en cours',
-          channelImportance: BackgroundGeolocation.NOTIFICATION_PRIORITY_LOW,
-        },
-        enableHeadless: true,
-        locationAuthorizationRequest: 'Always',
-        backgroundPermissionRationale: {
-          title:
-            'Authoriser {applicationName} a accèder à votre position en arrière plan',
-          message:
-            "Pour enregistrer votre activiité même quand l'application est en arrière plan, merci d'autoriser {backgroundPermissionOptionLabel}",
-          positiveAction: 'Autoriser {backgroundPermissionOptionLabel}',
-          negativeAction: 'Annuler',
-        },
-        autoSync: true,
-        autoSyncThreshold: 2,
-        batchSync: true,
-        preventSuspend: true,
-        stopOnTerminate: false, //TODO TO DO
-        startOnBoot: true,
-        foregroundService: true,
-        disableElasticity: true,
-        debug: false,
-        stationaryRadius: 5,
-        maxDaysToPersist: 4,
-        heartbeatInterval: 20,
-        desiredAccuracy:
-          Platform.OS == 'ios '
-            ? BackgroundGeolocation.DESIRED_ACCURACY_NAVIGATION
-            : BackgroundGeolocation.DESIRED_ACCURACY_HIGH,
-        desiredOdometerAccuracy: 10, //If you only want to calculate odometer from GPS locations, you could set desiredOdometerAccuracy: 10. This will prevent odometer updates when a device is moving around indoors, in a shopping mall, for example.
-        logLevel: BackgroundGeolocation.LOG_LEVEL_OFF,
-      },
-      state => {
-        this.setState({
-          enabled: state.enabled,
-          isMoving: state.isMoving,
-          showsUserLocation: false,
-          comments: '',
-          selectedSport: -1,
-          libelleLive: ApiUtils.getLibelleLive(),
-          nomPersonne: '',
-          prenomPersonne: '',
-          telPersonne: '',
-          mailPersonne: '',
-        });
-      },
-    );
+
+
+    
+    BackgroundGeolocation.reset(config);
+
+    BackgroundGeolocation.ready(config, state => {
+      this.setState({
+        enabled: state.enabled,
+        isMoving: state.isMoving,
+        showsUserLocation: false,
+        comments: '',
+        selectedSport: -1,
+        libelleLive: ApiUtils.getLibelleLive(),
+        nomPersonne: '',
+        prenomPersonne: '',
+        telPersonne: '',
+        mailPersonne: '',
+      });
+    });
 
     // .then(() => {
 
@@ -524,6 +465,40 @@ class SimpleMap extends Component {
       loc => this.onLocation(loc),
       this.onLocationError.bind(this),
     );
+
+    BackgroundGeolocation.onProviderChange(async event => {
+      if (
+        event.accuracyAuthorization ==
+        BackgroundGeolocation.ACCURACY_AUTHORIZATION_REDUCED
+      ) {
+        // Supply "Purpose" key from Info.plist as 1st argument.
+        try {
+          let accuracyAuthorization = await BackgroundGeolocation.requestTemporaryFullAccuracy(
+            'Delivery',
+          );
+          if (
+            accuracyAuthorization ==
+            BackgroundGeolocation.ACCURACY_AUTHORIZATION_FULL
+          ) {
+            console.log(
+              '[requestTemporaryFullAccuracy] GRANTED: ',
+              accuracyAuthorization,
+            );
+            this.getFirstLocation();
+          } else {
+            console.log(
+              '[requestTemporaryFullAccuracy] DENIED: ',
+              accuracyAuthorization,
+            );
+          }
+        } catch (error) {
+          console.warn(
+            '[requestTemporaryFullAccuracy] FAILED TO SHOW DIALOG: ',
+            error,
+          );
+        }
+      }
+    });
 
     BackgroundGeolocation.onHeartbeat(event => {
       console.log('[onHeartbeat] ', event);
@@ -706,18 +681,42 @@ class SimpleMap extends Component {
 
     Geolocation.getCurrentPosition(
       position => {
+        console.log('first position', position);
         this.setCenter(position);
-        if (position.accuracy != 0) {
+        if (position.coords.accuracy != 0 && position.coords.accuracy < 400) {
           this.setState({isGpsNotOk: false});
+        } else {
+          this.getFirstLocation();
         }
+
         this.setState({currentPosition: position});
       },
       error => {
+        console.log('error first position');
         ApiUtils.logError('getFirstPosition', JSON.stringify(error));
         // See error code charts below.
       },
-      {enableHighAccuracy: true, timeout: 15000, maximumAge: 10000},
+      {enableHighAccuracy: true, timeout: 1200, maximumAge: 1000},
     );
+
+    // Geolocation.watchPosition(
+    //   position => {
+    //     console.log("watch position", position);
+    //     this.setCenter(position);
+    //     if (position.coords.accuracy != 0 && position.coords.accuracy <400) {
+    //       this.setState({isGpsNotOk: false});
+
+    //     }
+
+    //     this.setState({currentPosition: position});
+    //   },
+    //   error => {
+    //     console.log("error");
+    //     ApiUtils.logError('getFirstPosition', JSON.stringify(error));
+    //     // See error code charts below.
+    //   },
+    //   {enableHighAccuracy: true, timeout: 15000, maximumAge: 10000},
+    // );
   }
 
   /**
@@ -727,7 +726,7 @@ class SimpleMap extends Component {
   onLocation(location) {
     this.addMarker(location);
 
-    if (location.coords.accuracy != 0) {
+    if (location.coords.accuracy != 0 && location.coords.accuracy < 300) {
       this.setState({isGpsNotOk: false});
     }
 
@@ -841,15 +840,29 @@ class SimpleMap extends Component {
   }
 
   onLocationError(error) {
-    console.log(error)
+    console.log(error);
     ApiUtils.logError(
-      'Location Error'+ 'ErrorCode : ' +error + ' idLive : ' + this.props.currentLive.idLive + ' ' +Platform.OS,
-      ''
+      'Location Error' +
+        'ErrorCode : ' +
+        error +
+        ' idLive : ' +
+        this.props.currentLive.idLive +
+        ' ' +
+        Platform.OS,
+      '',
     );
     if (error == 0) {
       // alert('Nous ne trouvons pas votre position');
     }
   }
+
+  openBatteryModal = () => {
+    this.setState({ismodalBatteryOpen: true});
+  };
+
+  closeModalBattery = () => {
+    this.setState({ismodalBatteryOpen: false});
+  };
   /**
    * @event motionchange
    */
@@ -902,7 +915,15 @@ class SimpleMap extends Component {
         },
       );
     } else {
-      BackgroundGeolocation.stop();
+      if(isRecording)
+      {   
+        BackgroundGeolocation.changePace(false);
+
+      }else{
+        BackgroundGeolocation.stop();
+      }
+   
+
       clearInterval(this.interval);
     }
   }
@@ -1513,23 +1534,24 @@ class SimpleMap extends Component {
     }
   }
 
-  syncPositions()
-  {
-    try{
+  syncPositions() {
+    try {
       BackgroundGeolocation.sync(records => {
         console.log('[sync] success: ', records);
-        ApiUtils.logError('sync at end idUtilisateur: '+this.props.userData.idUtilisateur, JSON.stringify(records));
-      })
-    }
-    catch(e)
-    {
-      console.log('[sync] error: ',e);
-      ApiUtils.logError('ERROR sync at end idUtilisateur: '+this.props.userData.idUtilisateur);
+        ApiUtils.logError(
+          'sync at end idUtilisateur: ' + this.props.userData.idUtilisateur,
+          JSON.stringify(records),
+        );
+      });
+    } catch (e) {
+      console.log('[sync] error: ', e);
+      ApiUtils.logError(
+        'ERROR sync at end idUtilisateur: ' + this.props.userData.idUtilisateur,
+      );
     }
   }
 
   onSendRequestStop() {
-  
     this.syncPositions();
 
     this.setState(
@@ -1720,7 +1742,7 @@ class SimpleMap extends Component {
     formData.append('idUtilisateur', this.props.userData.idUtilisateur);
     formData.append('coordinates', JSON.stringify(this.props.coordinates));
     formData.append('idLive', this.props.currentLive.idLive);
-    //fetch followCode API
+
     fetch(ApiUtils.getAPIUrl(), {
       method: 'POST',
       headers: {
@@ -1734,7 +1756,7 @@ class SimpleMap extends Component {
       .then(responseJson => {
         if (responseJson.codeErreur == 'SUCCESS') {
           console.log('ok');
-        } 
+        }
       })
       .catch(e => {
         // alert('erreur : ' + e.message);
@@ -2114,46 +2136,6 @@ class SimpleMap extends Component {
           </Text>
         </View>
 
-        {this.state.isGpsNotOk ? (
-          <View style={{justifyContent :'center', display : 'flex', flexDirection : 'row'}}>
-
-        
-          <View
-            style={[
-              
-              {zIndex: 12, backgroundColor: ApiUtils.getBackgroundColor(), position : 'absolute', top : 100, width: '70%', padding : 10, borderRadius : 30},
-            ]}>
-            <Text
-              style={[
-                styles.liveNameText,
-                {color: 'white', textTransform: 'uppercase'},
-              ]}>
-             En attente de l’acquisition du signal GPS, ne partez pas.
-            </Text>
-          </View>
-          </View>
-        ) : null}
-
-{(!this.state.isGpsNotOk  && !this.props.isRecording) ? (
-          <View style={{justifyContent :'center', display : 'flex', flexDirection : 'row'}}>
-
-        
-          <View
-            style={[
-              
-              {zIndex: 12, backgroundColor: ApiUtils.getBackgroundColor(), position : 'absolute', top : 100, width: '70%', padding : 10, paddingHorizontal : 15, borderRadius : 30},
-            ]}>
-            <Text
-              style={[
-                styles.liveNameText,
-                {color: 'white', textTransform: 'uppercase'},
-              ]}>
-              Position GPS captée, c’est parti ! Démarrez votre activité 
-            </Text>
-          </View>
-          </View>
-        ) : null}
-
         <Button
           onPress={() => this.onClickGetCurrentPosition()}
           style={{
@@ -2163,14 +2145,7 @@ class SimpleMap extends Component {
             backgroundColor: 'white',
             zIndex: 5,
             position: 'absolute',
-            top:
-              Platform.OS == 'android'
-                ? this.state.isGpsNotOk
-                  ? 173
-                  : 153
-                : this.state.isGpsNotOk
-                ? 205
-                : 185,
+            top: Platform.OS == 'android' ? 153 : 185,
             right: 100,
           }}>
           {Platform.OS == 'ios' ? (
@@ -2211,7 +2186,100 @@ class SimpleMap extends Component {
           </Button>
         ) : null}
 
+   
+        {this.state.isGpsNotOk ? (
+          <View 
+          style={{
+            justifyContent: 'center',
+            display: 'flex',
+            flexDirection: 'row',
+            zIndex: 5,
+             width : '100%',
+            position : 'absolute',
+            top: Platform.OS == 'android' ? 210 : 235,
+            marginLeft : 'auto'
+          }}
+          onPress={() => this.openBatteryModal.bind(this)}>
+     
+            <View
+              style={[
+                {
+                  backgroundColor: '#FE3C03',
+                  width: '70%',
+                  marginLeft : 'auto',
+                  marginRight : 'auto',
+                  paddingVertical: 20,
+                  paddingHorizontal: 15,
+                  borderRadius: 30,
+                  zIndex: 99,
+                },
+              ]}
+              onPress={() => this.openBatteryModal()}>
+              <View>
+                <Text
+                  style={[
+                    styles.liveNameText,
+                    {color: 'white', textTransform: 'uppercase'},
+                  ]}>
+                  En attente de l’acquisition du signal GPS, ne partez pas.
+                </Text>
+                <Text
+                  style={{color: 'white', textAlign: 'center', marginTop: 10}}>
+                  Si ce message ne disparait pas : verifier votre paramètres
+                  d'économie d'energie, de localisation etc...
+                </Text>
+                <TouchableOpacity
+                  onPress={() => this.openBatteryModal()}
+                  style={{zIndex: 200}}>
+                  <Text
+                    style={{
+                      color: 'white',
+                      textAlign: 'center',
+                      marginTop: 10,
+                      textDecorationLine: 'underline',
+                    }}>
+                    En savoir plus
+                  </Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          </View>
+        ) : null}
+
+        {!this.state.isGpsNotOk && !this.props.isRecording ? (
+          <TouchableOpacity
+            style={{
+              justifyContent: 'center',
+              display: 'flex',
+              flexDirection: 'row',
+              zIndex: 99,
+            }}>
+            <View
+              style={[
+                {
+                  zIndex: 12,
+                  backgroundColor: '#39F800',
+                  position: 'absolute',
+                  top: 100,
+                  width: '70%',
+                  paddingVertical: 30,
+                  paddingHorizontal: 15,
+                  borderRadius: 30,
+                },
+              ]}>
+              <Text
+                style={[
+                  styles.liveNameText,
+                  {color: 'black', textTransform: 'uppercase'},
+                ]}>
+                Position GPS captée, c’est parti ! Démarrez votre activité
+              </Text>
+            </View>
+          </TouchableOpacity>
+        ) : null}
+
         <Root>
+          
           <MapView
             ref="map"
             mapType={this.props.currentMapStyle}
@@ -2808,20 +2876,6 @@ class SimpleMap extends Component {
                       <Picker.Item label={'CLASSIQUE'} value="14" />
                       <Picker.Item label={'SKATING'} value="15" />
                     </Picker>
-                    {/* <RNPickerSelect
-                       placeholder={{
-                         label: "Choisissez le type d'activité...",
-                         value: -1,
-                       }}
-                       items={this.props.sports}
-                       onValueChange={(value) => {
-                         this.setState({
-                           selectedSport: value,
-                         });
-                       }}
-                       style={{ ...pickerSelectStyles }}
-                       value={this.state.selectedSport}
-                     /> */}
 
                     {this.state.selectedSport == -1 ? (
                       <Text
@@ -2983,6 +3037,7 @@ class SimpleMap extends Component {
                   position: 'absolute',
                   bottom: Platform.OS == 'ios' ? 80 : 50,
                   zIndex: 12,
+                  width: '100%',
                   backgroundColor: 'white',
                 }}>
                 <Sponsors />
@@ -3006,6 +3061,23 @@ class SimpleMap extends Component {
             onclosesuccess={this.closeModalAddInterestSuccess}
           />
         </Modal> */}
+
+        {/******** modal : Battery modal *****************/}
+        <Modal
+          animationType={'none'}
+          transparent={false}
+          visible={this.state.ismodalBatteryOpen}
+          onRequestClose={() => {
+            this.closeModalBattery();
+          }}>
+          <BatteryModal
+            noHeader={true}
+            onMap={true}
+            coord={this.props.currentPosition}
+            idlive={this.props.currentLive?.idLive}
+            onclose={this.closeModalBattery}
+          />
+        </Modal>
 
         {/******** modal4 : Alert gps   *****************/}
         <ModalSmall
@@ -3622,7 +3694,7 @@ var styles = StyleSheet.create({
     flex: 1,
     borderColor: 'black',
     borderWidth: 0,
-    zIndex: -1,
+    zIndex: 1,
   },
   status: {
     fontSize: 12,

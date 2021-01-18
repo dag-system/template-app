@@ -156,6 +156,80 @@ export default class Sidebar extends Component {
 
           <TouchableHighlight
             underlayColor="rgba(255,255,255,1,0.6)"
+            onPress={() => this.onClickNavigate('Classement')}
+            style={{
+              width: '100%',
+              backgroundColor:
+                this.props.selected == 'Classement'
+                  ? '#E9E9E9'
+                  : 'transparent',
+            }}>
+            <View
+              style={{
+                display: 'flex',
+                flexDirection: 'row',
+                justifyContent: 'flex-start',
+                padding: 10,
+              }}>
+               <Icon
+                name="trophy"
+                type="FontAwesome5"
+                style={[styles.icon, {color:  this.props.selected == 'Classement' ? 'black' : 'white'}]}
+              />
+              <Text
+                style={[
+                  styles.menuText,
+                  {
+                    color:
+                      this.props.selected == 'Classement' ? 'black' : 'white',
+                  },
+                ]}>
+               Classement
+              </Text>
+            </View>
+          </TouchableHighlight>
+
+          <TouchableHighlight
+            underlayColor="rgba(255,255,255,1,0.6)"
+            onPress={() => this.onClickNavigate('Replay')}
+            style={{
+              width: '100%',
+              backgroundColor:
+                this.props.selected == 'Replay'
+                  ? '#E9E9E9'
+                  : 'transparent',
+            }}>
+            <View
+              style={{
+                display: 'flex',
+                flexDirection: 'row',
+                justifyContent: 'flex-start',
+                flexWrap :'wrap',
+                padding: 10,
+              }}>
+               <Icon
+                name="chart-line"
+                type="FontAwesome5"
+                style={[styles.icon, {color:  this.props.selected == 'Replay' ? 'black' : 'white'}]}
+              />
+              <Text
+                style={[
+                  styles.menuText,
+                  {
+                    color:
+                      this.props.selected == 'Replay' ? 'black' : 'white',
+                  },
+                ]}>
+               Comparateur
+              </Text>
+            
+            </View>
+         
+          </TouchableHighlight>
+
+
+          <TouchableHighlight
+            underlayColor="rgba(255,255,255,1,0.6)"
             onPress={() => this.onClickNavigate('Help')}
             style={{
               width: '100%',
@@ -305,14 +379,15 @@ const styles = StyleSheet.create({
   },
   menuText: {
     marginLeft: 30,
+    maxWidth : '100%'
   },
   versionInfo: {
     fontSize: 11,
     marginBottom: 4,
   },
   icon: {
-    width: 24,
-    height: 24,
+    width: 30,
+    height: 30,
     fontSize: 24,
   },
 });

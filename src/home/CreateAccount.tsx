@@ -139,9 +139,10 @@ class CreateAccount extends ValidationComponent {
     if (this.state.acceptChallengeUnss) {
       clubs.push({club: this.state.unss, type: 'Unss'});
     }
+    formData.append('clubUtilisateur', JSON.stringify(clubs));
+
 
     formData.append('emailUtilisateur', this.state.emailUtilisateur);
-    formData.append('clubUtilisateur', JSON.stringify(clubs));
 
     formData.append('telUtilisateur', this.state.telUtilisateur);
     formData.append('adresseUtilisateur', this.state.adresseUtilisateur);
@@ -445,59 +446,7 @@ class CreateAccount extends ValidationComponent {
                   />
                 </Item>
 
-                {/* <Item stackedLabel style={{marginBottom: 5}}>
-                  <Label>Club</Label>
-                  <Input
-                    returnKeyType="next"
-                    clearButtonMode="always"
-                    value={this.state.clubUtilisateur}
-                    onChangeText={value =>
-                      this.setState({clubUtilisateur: value})
-                    }
-                  />
-                </Item> */}
-
-                {/* <Item stackedLabel style={{marginBottom: 5}}>
-                  <Label>Mot de passe *</Label>
-                  <Input
-                    ref="newPassword"
-                    returnKeyType="next"
-                    secureTextEntry={true}
-                    clearButtonMode="always"
-                    value={this.state.newPassword}
-                    onChangeText={newPassword => this.setState({newPassword})}
-                  />
-                </Item>
-
-                {this.isFieldInError('newPassword') &&
-                  this.getErrorsInField('newPassword').map(errorMessage => (
-                    <Text style={styles.error}>{errorMessage}</Text>
-                  ))} */}
-
-                {/* <Item stackedLabel style={{marginBottom: 5}}>
-                  <Label>Confirmation du mot de passe *</Label>
-                  <Input
-                    ref="newPasswordConfirmation"
-                    returnKeyType="next"
-                    secureTextEntry={true}
-                    clearButtonMode="always"
-                    value={this.state.newPasswordConfirmation}
-                    onChangeText={newPasswordConfirmation =>
-                      this.setState({newPasswordConfirmation})
-                    }
-                  />
-                </Item> */}
-
-                {/* {this.isFieldInError('newPasswordConfirmation') &&
-                  this.getErrorsInField('newPasswordConfirmation').map(
-                    errorMessage => (
-                      <Text style={styles.error}>{errorMessage}</Text>
-                    ),
-                  )} */}
-
-                {/* {this.state.newPassword != '' && this.state.newPasswordConfirmation != this.state.newPassword ? 
-            <ErrorMessage value={''} message="Les mots de passe ne correspondent pas" /> : null} */}
-
+            
                 <Text
                   style={{textAlign: 'left', marginTop: 20, paddingLeft: 20}}>
                   Informations Complementaires

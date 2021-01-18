@@ -113,12 +113,9 @@ class LiveSummary extends Component {
         this.setState({libelleSport: libelleSport});
 
         if (responseJson.IsImportedFromGpx == 1) {
-          console.log(responseJson.gpxLive);
-          let gpxLive =
-            'https://www.folomi.fr/fichiers/gpxLive/' +
-            responseJson.gpxLive +
-            '.gpx';
-          this.readFile(gpxLive, responseJson.gpxLive);
+          this.getGpxPoint(responseJson.gpxLive);
+
+          // this.readFile(gpxLive, responseJson.gpxLive);
         } else {
           this.saveCoordinates(
             responseJson.positions.tracks[0].trkseg[0].points,
@@ -147,6 +144,80 @@ class LiveSummary extends Component {
       });
   }
 
+  getGpxPoint(gpxName) {
+    this.setState({isDownloaded1: false});
+
+    this.setState({isloading: true});
+    let formData = new FormData();
+    formData.append('method', 'getGpxDataFromGpxName');
+    formData.append('auth', ApiUtils.getAPIAuth());
+    formData.append('gpxName', gpxName);
+
+    //fetch followCode API
+    fetch(ApiUtils.getAPIUrl(), {
+      method: 'POST',
+      headers: {
+        // Accept: 'application/json',
+        // 'Content-Type': 'application/json',
+      },
+      body: formData,
+    })
+      .then(ApiUtils.checkStatus)
+      .then(response => response.json())
+      .then(responseJson => {
+        let data = Object.values(responseJson);
+        console.log(data);
+        this.setState({isloading: false});
+
+        let dataMap = this.getCoordinatesForMap(data);
+        this.setState({coordinates: dataMap}, () => this.centerMapOnGpx(dataMap));
+
+        this.setState({isDownloaded1: true});
+        this.centerMapOnGpx(dataMap);
+
+        // var finalTrace = {
+        //   // positionsTrace: positionArray,
+        //   couleurTrace: ApiUtils.getColor(),
+        //   nomTrace: tr.getName(),
+        //   isActive: true,
+        //   sportTrace: 'inconnu',
+        // };
+      })
+
+      .catch(e => {
+        this.setState({isloading: false});
+        // ApiUtils.logError('create live', JSON.stringify(e.message));
+        // alert('Une erreur est survenue : ' + JSON.stringify(e.message));
+        console.log(e);
+        if (e.message == 'Timeout' || e.message == 'Network request failed') {
+          this.setState({noConnection: true});
+
+          Toast.show({
+            text: "Vous n'avez pas de connection internet, merci de réessayer",
+            buttonText: 'Ok',
+            type: 'danger',
+            position: 'bottom',
+            duration: 5000,
+          });
+        }
+      });
+  }
+
+  getCoordinatesForMap(positions) {
+    var coordinates = [];
+    positions.forEach(element => {
+      element = Object.values(element);
+
+      var coordinate = {
+        latitude: parseFloat(element[0]),
+        longitude: parseFloat(element[1]),
+      };
+      coordinates.push(coordinate);
+    });
+
+    return coordinates;
+  }
+
   onDownloadFileok(url, name) {
     let dirs = RNFetchBlob.fs.dirs;
     let path = dirs.DownloadDir + '/' + 'folomi' + '/' + name + '.gpx';
@@ -168,32 +239,38 @@ class LiveSummary extends Component {
     let dirs = RNFetchBlob.fs.dirs;
     let path = dirs.DownloadDir + '/' + 'folomi' + '/' + gpxFile + '.gpx';
 
-    console.log(filePath);
+    if (Platform.OS != 'android') {
+      try {
+        RNFetchBlob.config({
+          path: path,
+        })
+          .fetch('GET', encodeURI(filePath))
+          .then(res => {
+            try {
+              let status = res.info().status;
+              console.log(res);
+              console.log(status);
 
-    RNFetchBlob.config({
-      path: path,
-    })
-      .fetch('GET', encodeURI(filePath))
-      .then(res => {
-        try {
-          let status = res.info().status;
-          console.log(res);
-          console.log(status);
-
-          this.readGpxFile(res.path());
-        } catch (e) {
-          console.log(e);
-          Toast.show({
-            text: 'Une erreur est survenue. Merci de réessayer',
-            buttonText: 'Ok',
-            type: 'danger',
-            duration: 3000,
-            position: 'bottom',
-          });
-          // alert(e)
-        }
-      })
-      .catch(e => alert(e));
+              if (status == 200) {
+                this.readGpxFile(res.path());
+              }
+            } catch (e) {
+              console.log(e);
+              Toast.show({
+                text: 'Une erreur est survenue. Merci de réessayer',
+                buttonText: 'Ok',
+                type: 'danger',
+                duration: 3000,
+                position: 'bottom',
+              });
+              // alert(e)
+            }
+          })
+          .catch(e => alert(e));
+      } catch (e) {
+        console.log(e);
+      }
+    }
   }
 
   readGpxFile(filePath) {
@@ -251,6 +328,7 @@ class LiveSummary extends Component {
             });
           });
         } catch (e) {
+          console.log(e);
           Toast.show({
             text: 'Une erreur est survenue. Merci de réessayer',
             buttonText: 'Ok',
@@ -262,6 +340,7 @@ class LiveSummary extends Component {
         }
       })
       .catch(e => {
+        console.log(e);
         Toast.show({
           text: 'Une erreur est survenue. Merci de réessayer',
           buttonText: 'Ok',
@@ -562,6 +641,13 @@ class LiveSummary extends Component {
     this.selectPolyline(polyline);
   }
 
+  centerMapOnGpx(positions) {
+    this.refs.map.fitToCoordinates(positions, {
+      edgePadding: {top: 10, right: 10, bottom: 10, left: 10},
+      animated: true,
+    });
+  }
+
   saveCurrentMapStyle(style) {
     var action = {type: 'UPDATE_MAP_STYLE', data: style};
     this.props.dispatch(action);
@@ -664,51 +750,56 @@ class LiveSummary extends Component {
           </Header>
           <Content style={styles.body} scrollEnabled={true}>
             <ScrollView contentContainerStyle={styles.loginButtonSection}>
-
-            {this.state.statsLive == null && !this.state.isloading ? (
-                    <View>
-                      <Text style={{textAlign: 'center'}} />
-                      <TouchableOpacity
-                        onPress={() =>
-                          this.loadLive(this.props.currentLive.idLive)
-                        }>
-                        <Text
-                          style={{
-                            textAlign: 'center',
-                          }}>
-                          Votre challenge Foulée Blanche est en cours de calcul.
-                        </Text>
-                      </TouchableOpacity>
-                      <TouchableOpacity
-                        onPress={() =>
-                          this.loadLive(this.props.currentLive.idLive)
-                        }>
-                        <Text
-                          style={{
-                            textAlign: 'center',
-                            textDecorationLine: 'underline',
-                            marginTop: 10,
-                          }}>
-                          Cliquez ici plus tard pour recevoir un résumé de votre
-                          Challenge Foulée Blanche
-                        </Text>
-                      </TouchableOpacity>
-                      <TouchableOpacity
-                        onPress={() =>
-                          Linking.openURL(
-                            'https://www.lafouleeblanche.com/resultats-2021/',
-                          )
-                        }>
-                        <Text style={{textAlign : 'center', marginTop :10}}>
-                          (Résultats plus complets sur
-                        
-                      
-                        </Text>
-                        <Text style={{textAlign : 'center', textDecorationLine : 'underline'}}> https://www.lafouleeblanche.com/resultats-2021/)</Text>
-                       
-                      </TouchableOpacity>
-                    </View>
-                  ) :null}
+              {this.state.statsLive == null &&
+              this.state.live.IsImportedFromGpx == 0 &&
+              !this.state.isloading ? (
+                <View>
+                  <Text style={{textAlign: 'center'}} />
+                  <TouchableOpacity
+                    onPress={() =>
+                      this.loadLive(this.props.currentLive.idLive)
+                    }>
+                    <Text
+                      style={{
+                        textAlign: 'center',
+                      }}>
+                      Votre challenge Foulée Blanche est en cours de calcul.
+                    </Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    onPress={() =>
+                      this.loadLive(this.props.currentLive.idLive)
+                    }>
+                    <Text
+                      style={{
+                        textAlign: 'center',
+                        textDecorationLine: 'underline',
+                        marginTop: 10,
+                      }}>
+                      Cliquez ici plus tard pour recevoir un résumé de votre
+                      Challenge Foulée Blanche
+                    </Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    onPress={() =>
+                      Linking.openURL(
+                        'https://www.lafouleeblanche.com/resultats-2021/',
+                      )
+                    }>
+                    <Text style={{textAlign: 'center', marginTop: 10}}>
+                      (Résultats plus complets sur
+                    </Text>
+                    <Text
+                      style={{
+                        textAlign: 'center',
+                        textDecorationLine: 'underline',
+                      }}>
+                      {' '}
+                      https://www.lafouleeblanche.com/resultats-2021/)
+                    </Text>
+                  </TouchableOpacity>
+                </View>
+              ) : null}
 
               {this.isMapFullSize ? null : (
                 <View>
@@ -743,19 +834,24 @@ class LiveSummary extends Component {
                             'https://www.lafouleeblanche.com/resultats-2021/',
                           )
                         }>
-                      <Text style={{textAlign : 'center', marginTop :10}}>
+                        <Text style={{textAlign: 'center', marginTop: 10}}>
                           (Résultats plus complets sur
-                        
-                      
                         </Text>
-                        <Text style={{textAlign : 'center', textDecorationLine : 'underline'}}> https://www.lafouleeblanche.com/resultats-2021/)</Text>
+                        <Text
+                          style={{
+                            textAlign: 'center',
+                            textDecorationLine: 'underline',
+                          }}>
+                          {' '}
+                          https://www.lafouleeblanche.com/resultats-2021/)
+                        </Text>
                       </TouchableOpacity>
                     </View>
                   ) : null}
 
-{this.state.isMapFullSize ? null : 
-                  this.state.live.segmentEfforts != null &&
-                  this.state.live.segmentEfforts.length > 0 ? (
+                  {this.state.isMapFullSize ? null : this.state.live
+                      .segmentEfforts != null &&
+                    this.state.live.segmentEfforts.length > 0 ? (
                     <View style={{width: '100%'}}>
                       <Text
                         style={{
@@ -1122,9 +1218,9 @@ class LiveSummary extends Component {
                     {this.state.libelleSport}
                   </Text>
 
-                  {this.state.statsLive == null && !this.state.isloading ? (
-                  null
-                  ) : this.state.live.IsImportedFromGpx == 0 ? (
+                  {this.state.statsLive == null &&
+                  !this.state.isloading ? null : this.state.live
+                      .IsImportedFromGpx == 0 ? (
                     <View>
                       <View
                         style={{

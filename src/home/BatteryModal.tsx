@@ -28,7 +28,7 @@ import moment from 'moment';
 import Logo from '../assets/logo_header.png';
 import GlobalStyles from '../styles';
 import Autrans from '../assets/autrans.svg';
-import IosReglages from '../assets/iosReglages.jpg';
+import IosReglages from '../assets/iosReglages.png';
 import Ios2 from '../assets/ios2.png';
 import {Sponsors} from './Sponsors';
 import BackgroundGeolocation, {
@@ -194,6 +194,10 @@ class BatteryModal extends Component {
     });
   }
 
+  onClose = () => {
+      this.props.onclose && this.props.onclose();
+  }
+
   alet() {
     BackgroundGeolocation.deviceSettings
       .showPowerManager()
@@ -252,6 +256,24 @@ class BatteryModal extends Component {
               </Header>
             )}
 
+            {this.props.onMap ? (
+              <Header style={styles.header}>
+                <Left style={{flex: 1}}>
+                  <TouchableOpacity
+                    style={styles.drawerButton}
+                    onPress={() => this.onClose()}>
+                    <Icon
+                      style={styles.saveText}
+                      name="chevron-left"
+                        type="FontAwesome5"
+                    />
+                  </TouchableOpacity>
+                </Left>
+                <Body style={{flex: 0}} />
+                <Right style={{flex: 1}} />
+              </Header>
+            ) : null}
+
             <Content style={{padding: 10, paddingTop: 20}} scrollEnabled={true}>
               <View style={[GlobalStyles.row, {justifyContent: 'center'}]}>
                 <Image resizeMode="contain" source={Logo} style={styles.logo} />
@@ -275,6 +297,17 @@ class BatteryModal extends Component {
                 }}>
                 Important avant de skier
               </Text>
+
+              <Icon
+                type="FontAwesome5"
+                name="exclamation-triangle"
+                style={{
+                  textAlign: 'center',
+                  marginTop: 20,
+                  marginBottom: 20,
+                  fontSize: 40,
+                }}
+              />
 
               <Text style={{marginTop: 10}}>
                 Avant de partir, assurez-vous d’avoir bien paramétré votre
@@ -322,7 +355,7 @@ class BatteryModal extends Component {
               {Platform.OS == 'android' ? (
                 <View>
                   <Text style={{fontWeight: 'bold', marginTop: 10}}>
-                    HUAWEI/Honor (Mate 20, P8 lite 2017, P10, …)
+                    HUAWEI (Mate 20, P8 lite 2017, P10, …)
                   </Text>
                   <Text style={{marginTop: 10}} />
                   <Text> 1. Aller dans "Réglages"</Text>
@@ -398,15 +431,16 @@ class BatteryModal extends Component {
                   <Text>5. Désactivé l’appli « Foulée Blanche »</Text>
 
                   <Text style={{fontWeight: 'bold', marginTop: 10}}>
-                    {' '}
                     HONOR (8, 9, 10, …)
                   </Text>
                   <Text>1. Aller dans “Réglages”</Text>
                   <Text>2. Cliquer sur “Batterie”</Text>
                   <Text>
-                    3. Cliquer sur “Nettoyage de l'écran verrouillage”
+                    3. Cliquer sur “Lancement d'application”
                   </Text>
-                  <Text>4. Désactiver l’appli « Foulée Blanche »</Text>
+                  <Text>4. Chercher "la foulée blanche"</Text>
+                  <Text>5. Désélectionner la checkbox</Text>
+                  <Text>5. Sélectionner les 3 champs qui vont s'afficher en popup</Text>
 
                   <Text style={{fontWeight: 'bold', marginTop: 10}}>
                     {' '}
@@ -486,14 +520,18 @@ class BatteryModal extends Component {
                   <Text>4. Redémarrez l'application</Text>
 
                   <Image
-                    style={{marginTop: 20, marginLeft:'auto',marginRight:'auto'}}
+                    style={{
+                      marginTop: 20,
+                      marginLeft: 'auto',
+                      marginRight: 'auto',
+                    }}
                     source={IosReglages}
                     width={(Dimensions.get('screen').width * 70) / 100}
                     resizeMode="contain"
                   />
 
-<Text style={{fontWeight: 'bold', marginTop: 10}}>
-VOUS UTILISEZ IOS 13 (OU UNE VERSION PLUS ANCIENNE) ?
+                  <Text style={{fontWeight: 'bold', marginTop: 10}}>
+                    VOUS UTILISEZ IOS 13 (OU UNE VERSION PLUS ANCIENNE) ?
                   </Text>
 
                   <Text style={{fontWeight: 'bold', marginTop: 10}}>
@@ -503,12 +541,17 @@ VOUS UTILISEZ IOS 13 (OU UNE VERSION PLUS ANCIENNE) ?
                   <Text>1. Ouvrez les paramètres de votre téléphone</Text>
                   <Text>2. Accédez à "La foulée blanche {'>'} Position"</Text>
                   <Text>
-                    3. Sélectionnez “Lorsque l’app est active” (voir capture d'écran ci-dessous)
+                    3. Sélectionnez “Lorsque l’app est active” (voir capture
+                    d'écran ci-dessous)
                   </Text>
                   <Text>4. Redémarrez l'application</Text>
 
                   <Image
-                    style={{marginTop: 0, marginLeft:'auto',marginRight:'auto'}}
+                    style={{
+                      marginTop: 10,
+                      marginLeft: 'auto',
+                      marginRight: 'auto',
+                    }}
                     source={Ios2}
                     width={(Dimensions.get('screen').width * 90) / 100}
                     resizeMode="contain"
@@ -523,7 +566,7 @@ VOUS UTILISEZ IOS 13 (OU UNE VERSION PLUS ANCIENNE) ?
               <Text style={{textAlign: 'center', marginTop: 10}}>
                 Bon ski !
               </Text>
-              {this.props.noHeader ? (
+              {this.props.noHeader && !this.props.onMap ? (
                 <TouchableOpacity
                   onPress={() => this.onPopupOk()}
                   style={{

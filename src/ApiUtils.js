@@ -3,8 +3,8 @@
 const ISDEBUG = false;
 const ISDEMO = false;
 
-const VersionNumber = '1.0.4';
-const VersionNumberInt = 1;
+const VersionNumber = '1.0.8';
+const VersionNumberInt = 6;
 
 var ApiUtils = {
   ISDEBUG() {
@@ -23,10 +23,28 @@ var ApiUtils = {
     return VersionNumberInt;
   },
 
+  red() {
+    return '#E10D17';
+  },
+
+  orange() {
+    return '#FEAA00';
+  },
+
+  green()
+  {
+    return '#39F800';
+  },
+
   checkStatus: function(response) {
+    // console.log(response)
     if (response.ok) {
       return response;
     } else {
+      response.text().then(function(text) {
+        console.log(text);
+      });
+
       let error = new Error(response.statusText);
       error.response = response;
       throw error;
@@ -66,13 +84,7 @@ var ApiUtils = {
   },
 
   getGpxUrl(gpxName) {
-    if (ISDEBUG) {
-      return 'http://reperret.fr/fichiers/gpxLive/' + gpxName + '.gpx';
-    } else if (ISDEMO) {
-      return 'http://www.folomidemo.fr/fichiers/gpxLive/' + gpxName + '.gpx';
-    } else {
-      return 'https://www.folomi.fr/fichiers/gpxLive/' + gpxName + '.gpx';
-    }
+    return 'https://www.folomi.fr/fichiers/gpxLive/' + gpxName + '.gpx';
   },
 
   getUrl() {

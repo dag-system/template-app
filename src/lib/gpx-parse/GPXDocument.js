@@ -41,10 +41,6 @@ export default class GPXDocument {
 
     // let tracks = this.parsedGPX.find('/ns:gpx/ns:trk', GPXDocument.GPX_NS);
 
-    console.log('here ')
-    console.log(tracks)
-    console.log('end ')
-
 
     if (tracks === undefined)
       throw new Error('Unable read tracks');

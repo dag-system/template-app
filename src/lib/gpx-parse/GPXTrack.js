@@ -136,6 +136,7 @@ export default class GPXTrack {
     let points = this._loadPoints(segment);
     let coordList = points.map(this._coordinateDataFromTrackPoint);
     let latLongList = points.map(this._coordinateLatLong);
+    let latLongTimeList = points.map(this._coordinateLatLongTime);
     let firstPoint = points.length > 0 ? coordList[0] : undefined;
 
     let distAcc = {
@@ -162,6 +163,7 @@ export default class GPXTrack {
     return {
       points: coordList,
       latLongList: latLongList,
+      latLongTimeList : latLongTimeList,
       totalDistance: distAcc.totalDistance,
       totalElevationGain: eleAcc.totalElevationGain,
       totalElevationLoss: eleAcc.totalElevationLoss
@@ -257,9 +259,11 @@ export default class GPXTrack {
 
     let lat = parseFloat(trkpt.getAttribute('lat'));
     let lon = parseFloat(trkpt.getAttribute('lon'));
+    // let time = parseFloat(trkpt.getAttribute('lon'));
     let alt = 0.0;
 
     var altNode = trkpt.getElementsByTagName('ele');
+      var timeNode = trkpt.getElementsByTagName('time');
 
     if (altNode !== undefined && altNode.length !== 0) {
       let tmp = parseFloat(altNode[0].textContent);
@@ -270,7 +274,39 @@ export default class GPXTrack {
 
     return {
       latitude: lat,
-      longitude: lon
+      longitude: lon,
+    };
+
+    // return lon, lat, alt];
+  }
+
+  _coordinateLatLongTime(trkpt) {
+
+    let lat = parseFloat(trkpt.getAttribute('lat'));
+    let lon = parseFloat(trkpt.getAttribute('lon'));
+    // let time = parseFloat(trkpt.getAttribute('lon'));
+    let alt = 0.0;
+
+    var altNode = trkpt.getElementsByTagName('ele');
+      var timeNode = trkpt.getElementsByTagName('time');
+
+    if (altNode !== undefined && altNode.length !== 0) {
+      let tmp = parseFloat(altNode[0].textContent);
+      if (!isNaN(tmp)) {
+        alt = tmp;
+      }
+    }
+
+    if (timeNode !== undefined && timeNode.length !== 0) {
+
+        time = timeNode[0].textContent;
+      
+    }
+
+    return {
+      latitude: lat,
+      longitude: lon,
+      time : time
     };
 
     // return lon, lat, alt];

@@ -26,6 +26,7 @@ import {
   Picker,
   Toast,
   Root,
+  Body,
 } from 'native-base';
 import * as Animated from 'react-native-animatable';
 import md5 from 'md5';
@@ -35,9 +36,9 @@ import {connect} from 'react-redux';
 import ApiUtils from '../ApiUtils';
 // import Logo from '../assets/logoHome.svg';
 import Logo from '../assets/logoHome.svg';
+import LogoHeader from '../assets/logo_header.png';
 import skieur from '../assets/skieur.png';
 import Titre from '../assets/titre.svg';
-
 
 import Autrans from '../assets/autrans.svg';
 import Date from '../assets/date.svg';
@@ -68,6 +69,7 @@ class Home extends Component {
       isLoading: false,
       isModalJetcodeVisible: false,
       selectedFolocode: -1,
+      isVisibleModalLogin: false,
     };
 
     this._unsubscribe = this.props.navigation.addListener('focus', payload => {
@@ -209,12 +211,13 @@ class Home extends Component {
           console.log(e);
           ApiUtils.logError('login', JSON.stringify(e.message));
           // alert('Une erreur est survenue : ' + JSON.stringify(e.message));
-  
+
           if (e.message == 'Timeout' || e.message == 'Network request failed') {
             this.setState({noConnection: true});
-  
+
             Toast.show({
-              text: "Vous n'avez pas de connection internet, merci de réessayer",
+              text:
+                "Vous n'avez pas de connection internet, merci de réessayer",
               buttonText: 'Ok',
               type: 'danger',
               position: 'bottom',
@@ -237,6 +240,14 @@ class Home extends Component {
   oncloseModal() {
     this.setState({isModalJetcodeVisible: false});
   }
+
+  openModalLogin() {
+    this.setState({isVisibleModalLogin: true});
+  }
+
+  oncloseModalLogin = () => {
+    this.setState({isVisibleModalLogin: false});
+  };
 
   forgotPassword() {
     this.onClickNavigate('ForgotPassword');
@@ -404,270 +415,337 @@ class Home extends Component {
 
     return (
       <Root>
-      <Container style={{backgroundColor: ApiUtils.getBackgroundColor()}}>
-        <SafeAreaView
-          style={{backgroundColor: ApiUtils.getBackgroundColor()}}
-        />
+        <Container style={{backgroundColor: ApiUtils.getBackgroundColor()}}>
+          <SafeAreaView
+            style={{backgroundColor: ApiUtils.getBackgroundColor()}}
+          />
 
-        <Content style={[styles.body]} scrollEnabled={true}>
-          <KeyboardAvoidingView style={styles.loginButtonSection}>
-            <View
-              style={{
-                zIndex: 10,
-                alignItems: 'center',
-                backgroundColor: ApiUtils.getBackgroundColor(),
-              }}>
-              <ImageBackground
-                source={skieur}
-                style={{width: '100%', minHeight: 10}}>
-                <TouchableHighlight
-                  underlayColor="transparent"
-                  onPress={() => this.pressLogo()}
-                  style={styles.logo}>
-                  <Animated.View
-                    ref={ref => {
-                      this.logo = ref;
-                    }}
-                    style={[GlobalStyles.row, {justifyContent: 'center'}]}
-                    animation="bounceInDown"
-                    delay={300}>
-                    <Date
-                      width={'30%'}
-                      height={50}
-                      style={{alignSelf: 'center', marginRight: 10}}
-                    />
-                    <Logo
-                      width={'70%'}
-                      height={120}
+          <Content style={[styles.body]} scrollEnabled={true}>
+            <KeyboardAvoidingView style={styles.loginButtonSection}>
+              <View
+                style={{
+                  zIndex: 10,
+                  alignItems: 'center',
+                  backgroundColor: ApiUtils.getBackgroundColor(),
+                }}>
+                <ImageBackground
+                  source={skieur}
+                  style={{width: '100%', minHeight: 10}}>
+                  <TouchableHighlight
+                    underlayColor="transparent"
+                    onPress={() => this.pressLogo()}
+                    style={styles.logo}>
+                    <Animated.View
+                      ref={ref => {
+                        this.logo = ref;
+                      }}
+                      style={[GlobalStyles.row, {justifyContent: 'center'}]}
+                      animation="bounceInDown"
+                      delay={300}>
+                      <Date
+                        width={'30%'}
+                        height={50}
+                        style={{alignSelf: 'center', marginRight: 10}}
+                      />
+                      <Logo
+                        width={'70%'}
+                        height={120}
+                        style={{alignSelf: 'center'}}
+                      />
+                      <Autrans
+                        width={'30%'}
+                        height={70}
+                        style={{alignSelf: 'center', opacity: 1}}
+                      />
+                    </Animated.View>
+                  </TouchableHighlight>
+                  <Animated.View animation="bounceInLeft" delay={200} style={{marginTop : 0}}>
+                    <Titre
+                      width={'55%'}
+                      height={140}
                       style={{alignSelf: 'center'}}
                     />
-                    <Autrans
-                      width={'30%'}
-                      height={70}
-                      style={{alignSelf: 'center', opacity: 1}}
-                    />
                   </Animated.View>
-                </TouchableHighlight>
-                <Animated.View   animation="bounceInLeft"
-                    delay={200}>
-               <Titre
-                  width={'55%'}
-                  height={140}
-                  style={{alignSelf: 'center'}}
-                />
-          </Animated.View>
 
-           
-                <View
-                  style={{
-                    flexDirection: 'row',
-                    justifyContent: 'space-evenly',
-                    width: '100%',
-                    marginTop: 20,
-                  }}>
-                  <TouchableOpacity
-                    style={[
-                      GlobalStyles.button,
-                      {
-                        marginTop: 10,
-                        borderColor: 'white',
-                        opacity: 1,
-                        width: '80%',
-                        borderColor: 'white',
-                        padding: 10,
-                      },
-                    ]}
-                    onPress={() => this.createAccountOld()}>
-                    <Text
-                      style={{
-                        textAlign: 'center',
-                        fontWeight: 'bold',
-                        color: 'white',
-                        textTransform: 'uppercase',
-                      }}>
-                      Créer un compte
-                    </Text>
-                  </TouchableOpacity>
-                </View>
-                <View
-                  style={{
-                    flexDirection: 'row',
-                    justifyContent: 'space-evenly',
-                    width: '100%',
-                    marginTop: 2,
-                  }}>
-                  <TouchableOpacity
-                    style={[{
-                        marginTop: 10,
-                        borderColor: 'white',
-                        opacity: 1,
-                        width: '80%',
-                        borderColor: 'white',
-                        padding: 2,
-                      },
-                    ]}
-                    onPress={() => this.forgotPassword()}>
-                    <Text
-                      style={{
-                        textAlign: 'center',
-                        textDecorationLine : 'underline',
-                        color: 'white',
-                        textTransform: 'uppercase',
-                      }}>
-                     Foulée code oublié ?
-                    </Text>
-                  </TouchableOpacity>
-                </View>
-
-              </ImageBackground>
-            </View>
-          </KeyboardAvoidingView>
-
-          <KeyboardAvoidingView style={styles.followCodeLoginSection}>
-            <Text style={{fontWeight: 'bold', textTransform: 'uppercase'}}>
-              Vous avez déjà un compte ?
-            </Text>
-            <Text style={{marginTop: 10}}>
-              Entrez votre Foulée code pour vous connecter
-            </Text>
-            <TextInput
-              style={styles.inputCode}
-              placeholder="Foulée code"
-              placeholderTextColor="black"
-              value={this.state.followCode}
-              onChangeText={followCode =>
-                this.setState({followCode: followCode})
-              }
-              clearButtonMode="always"
-            />
-
-            {this.props.folocodes?.length > 0 ? (
-              <View style={{flex: 1}}>
-                <Text style={{textAlign: 'center'}}>ou </Text>
-                <Picker
-                  style={{width: 300}}
-                  mode="dropdown"
-                  accessibilityLabel={'Choisir le Foulée Code'}
-                  iosHeader={'Choisir le Foulée Code'}
-                  iosIcon={<Icon name="chevron-down" type="FontAwesome5" />}
-                  selectedValue={this.state.selectedFolocode}
-                  onValueChange={this.onValueFolocodeChange.bind(this)}
-                  placeholder={'Choisissez le Foulée Code'}
-                  placeholderStyle={{
-                    color: ApiUtils.getBackgroundColor(),
-                  }}
-                  placeholderIconColor={ApiUtils.getBackgroundColor()}
-                  textStyle={{color: ApiUtils.getBackgroundColor()}}
-                  itemStyle={{
-                    color: ApiUtils.getBackgroundColor(),
-                    marginLeft: 0,
-                    paddingLeft: 10,
-                    borderBottomColor: ApiUtils.getBackgroundColor(),
-                    borderBottomWidth: 1,
-                  }}
-                  itemTextStyle={{
-                    color: ApiUtils.getBackgroundColor(),
-                    borderBottomColor: ApiUtils.getBackgroundColor(),
-                    borderBottomWidth: 1,
-                  }}>
-                  <Picker.Item label="Choisissez le Foulée Code" value={-1} />
-                  {this.props.folocodes.map(folocode => {
-                    return (
-                      <Picker.Item
-                        label={
-                          folocode.folocode +
-                          ' ' +
-                          folocode.prenom +
-                          ' ' +
-                          folocode.nom
-                        }
-                        value={folocode.folocode}
-                      />
-                    );
-                  })}
-                </Picker>
+                  <View
+                    style={{
+                      flexDirection: 'row',
+                      justifyContent: 'space-evenly',
+                      width: '100%',
+                      marginTop: 20,
+                    }}>
+                    <TouchableOpacity
+                      style={[
+                        GlobalStyles.button,
+                        {
+                          marginTop: 0,
+                          borderColor: 'white',
+                          opacity: 1,
+                          width: '80%',
+                          borderColor: 'white',
+                          padding: 10,
+                        },
+                      ]}
+                      onPress={() => this.createAccountOld()}>
+                      <Text
+                        style={{
+                          textAlign: 'center',
+                          fontWeight: 'bold',
+                          color: 'white',
+                          textTransform: 'uppercase',
+                        }}>
+                        Créer un compte
+                      </Text>
+                    </TouchableOpacity>
+                  </View>
+                  <View
+                    style={{
+                      flexDirection: 'row',
+                      justifyContent: 'space-evenly',
+                      width: '100%',
+                      marginTop: 20,
+                    }}>
+                    <TouchableOpacity
+                      style={[
+                        GlobalStyles.button,
+                        {
+                          marginTop: 10,
+                          borderColor: 'white',
+                          opacity: 1,
+                          width: '80%',
+                          borderColor: 'white',
+                          padding: 10,
+                          backgroundColor : 'white'
+                        },
+                      ]}
+                      onPress={() => this.openModalLogin()}>
+                      <Text
+                        style={{
+                          textAlign: 'center',
+                          fontWeight: 'bold',
+                          color: ApiUtils.getBackgroundColor(),
+                          textTransform: 'uppercase',
+                        }}>
+                        J'ai déjà un compte
+                      </Text>
+                    </TouchableOpacity>
+                  </View>
+                  <View
+                    style={{
+                      flexDirection: 'row',
+                      justifyContent: 'space-evenly',
+                      width: '100%',
+                      marginTop: 2,
+                    }}>
+                    <TouchableOpacity
+                      style={[
+                        {
+                          marginTop: 10,
+                          borderColor: 'white',
+                          opacity: 1,
+                          width: '80%',
+                          borderColor: 'white',
+                          padding: 2,
+                        },
+                      ]}
+                      onPress={() => this.forgotPassword()}>
+                      <Text
+                        style={{
+                          textAlign: 'center',
+                          textDecorationLine: 'underline',
+                          color: 'white',
+                          textTransform: 'uppercase',
+                        }}>
+                        J'ai oublié mon foulée code ?
+                      </Text>
+                    </TouchableOpacity>
+                  </View>
+                </ImageBackground>
               </View>
-            ) : null}
+            </KeyboardAvoidingView>
 
-            <View
-              style={{
-                flexDirection: 'row',
-                justifyContent: 'center',
-                alignSelf: 'center',
-              }}>
-              <TouchableOpacity
-                full
-                style={[
-                  GlobalStyles.button,
-                  {
-                    width: '80%',
-                    elevation: 0,
-                    borderColor:
-                      this.state.followCode == '' &&
-                      this.state.selectedFolocode == -1
-                        ? 'black'
-                        : ApiUtils.getBackgroundColor(),
-                    borderWidth: 1,
-                    padding: 10,
-                  },
+            <Modal
+              visible={this.state.isVisibleModalLogin}
+              onRequestClose={() => this.oncloseModalLogin()}>
+              <Header style={styles.header}>
+                <Left>
+                  <Button
+                    style={styles.drawerButton}
+                    onPress={() => this.oncloseModalLogin()}>
+                    <Icon
+                      style={styles.saveText}
+                      name="chevron-left"
+                      type="FontAwesome5"
+                    />
+                  </Button>
+                </Left>
+                <Body style={{flex: 0}} />
+                <Right style={{flex: 1}}>
+                  <Image
+                    resizeMode="contain"
+                    source={LogoHeader}
+                    style={styles.logoHeader}
+                  />
+                </Right>
+              </Header>
 
-                  this.state.followCode == '' &&
-                  this.state.selectedFolocode == -1
-                    ? {backgroundColor: 'transparent'}
-                    : {backgroundColor: ApiUtils.getBackgroundColor()},
-                ]}
-                onPress={() => this.onClickSendFollowCode()}
-                disabled={
-                  this.state.followCode == '' &&
-                  this.state.selectedFolocode == -1
-                }>
+              <KeyboardAvoidingView style={styles.followCodeLoginSection}>
                 <Text
                   style={{
                     fontWeight: 'bold',
+                    textTransform: 'uppercase',
                     textAlign: 'center',
-                    color:
+                    marginTop : 30,
+                    color: ApiUtils.getBackgroundColor(),
+                  }}>
+                  Vous avez déjà un compte ?
+                </Text>
+
+                {this.props.folocodes?.length > 0 ? (
+                  <View style={{flex: 1}}>
+                    <Picker
+                      style={{width: 300}}
+                      mode="dropdown"
+                      accessibilityLabel={'Choisir le Foulée Code'}
+                      iosHeader={'Choisir le Foulée Code'}
+                      iosIcon={<Icon name="chevron-down" type="FontAwesome5" />}
+                      selectedValue={this.state.selectedFolocode}
+                      onValueChange={this.onValueFolocodeChange.bind(this)}
+                      placeholder={'Choisissez le Foulée Code'}
+                      placeholderStyle={{
+                        color: ApiUtils.getBackgroundColor(),
+                      }}
+                      placeholderIconColor={ApiUtils.getBackgroundColor()}
+                      textStyle={{color: ApiUtils.getBackgroundColor()}}
+                      itemStyle={{
+                        color: ApiUtils.getBackgroundColor(),
+                        marginLeft: 0,
+                        paddingLeft: 10,
+                        borderBottomColor: ApiUtils.getBackgroundColor(),
+                        borderBottomWidth: 1,
+                      }}
+                      itemTextStyle={{
+                        color: ApiUtils.getBackgroundColor(),
+                        borderBottomColor: ApiUtils.getBackgroundColor(),
+                        borderBottomWidth: 1,
+                      }}>
+                      <Picker.Item
+                        label="Choisissez le Foulée Code"
+                        value={-1}
+                      />
+                      {this.props.folocodes.map(folocode => {
+                        return (
+                          <Picker.Item
+                            label={
+                              folocode.folocode +
+                              ' ' +
+                              folocode.prenom +
+                              ' ' +
+                              folocode.nom
+                            }
+                            value={folocode.folocode}
+                          />
+                        );
+                      })}
+                    </Picker>
+                  </View>
+                ) : null}
+
+                {this.props.folocodes?.length > 0 ? (
+                  <Text style={{textAlign: 'center'}}>ou </Text>
+                ) : null}
+
+                <TextInput
+                  style={styles.inputCode}
+                  placeholder="Entrez votre Foulée code"
+                  placeholderTextColor="black"
+                  value={this.state.followCode}
+                  onChangeText={followCode =>
+                    this.setState({followCode: followCode})
+                  }
+                  clearButtonMode="always"
+                />
+
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    justifyContent: 'center',
+                    alignSelf: 'center',
+                  }}>
+                  <TouchableOpacity
+                    full
+                    style={[
+                      GlobalStyles.button,
+                      {
+                        width: '80%',
+                        elevation: 0,
+                        borderColor:
+                          this.state.followCode == '' &&
+                          this.state.selectedFolocode == -1
+                            ? 'black'
+                            : ApiUtils.getBackgroundColor(),
+                        borderWidth: 1,
+                        padding: 10,
+                      },
+
                       this.state.followCode == '' &&
                       this.state.selectedFolocode == -1
-                        ? 'black'
-                        : 'white',
-                  }}>
-                  CONNEXION
-                </Text>
-              </TouchableOpacity>
-            </View>
+                        ? {backgroundColor: 'transparent'}
+                        : {backgroundColor: ApiUtils.getBackgroundColor()},
+                    ]}
+                    onPress={() => this.onClickSendFollowCode()}
+                    disabled={
+                      this.state.followCode == '' &&
+                      this.state.selectedFolocode == -1
+                    }>
+                    <Text
+                      style={{
+                        fontWeight: 'bold',
+                        textAlign: 'center',
+                        color:
+                          this.state.followCode == '' &&
+                          this.state.selectedFolocode == -1
+                            ? 'black'
+                            : 'white',
+                      }}>
+                      CONNEXION
+                    </Text>
+                  </TouchableOpacity>
+                </View>
 
-            <View style={{marginBottom: 0}} />
-          </KeyboardAvoidingView>
+                <View style={{marginBottom: 0}} />
+              </KeyboardAvoidingView>
+              <Sponsors />
+            </Modal>
 
-          <Modal
-            visible={this.state.isModalJetcodeVisible}
-            onRequestClose={() => this.oncloseModal()}>
-            <Header style={styles.header}>
-              <Left>
-                <Button
-                  style={styles.drawerButton}
-                  onPress={() => this.oncloseModal()}>
-                  <Icon
-                    style={styles.saveText}
-                    name="chevron-left"
-                    type="FontAwesome5"
-                  />
-                </Button>
-              </Left>
-              <Right />
-            </Header>
-            <WebviewJetCode uri={'https://google.com'} />
-          </Modal>
-        </Content>
-        <View style={{backgroundColor: 'white'}}>
-          <Animated.View   animation="bounceInUp"
-                    delay={200}>
-            <Sponsors />
-          </Animated.View>
-        </View>
+            <Modal
+              visible={this.state.isModalJetcodeVisible}
+              onRequestClose={() => this.oncloseModal()}>
+              <Header style={styles.header}>
+                <Left>
+                  <Button
+                    style={styles.drawerButton}
+                    onPress={() => this.oncloseModal()}>
+                    <Icon
+                      style={styles.saveText}
+                      name="chevron-left"
+                      type="FontAwesome5"
+                    />
+                  </Button>
+                </Left>
+                <Right />
+              </Header>
+              <WebviewJetCode uri={'https://google.com'} />
+            </Modal>
+          </Content>
+          <View style={{backgroundColor: 'white'}}>
+            <Animated.View animation="bounceInUp" delay={200}>
+              <Sponsors />
+            </Animated.View>
+          </View>
 
-        {/* <SafeAreaView style={{flex: 0, backgroundColor: '#DADADA'}} /> */}
-      </Container>
+          {/* <SafeAreaView style={{flex: 0, backgroundColor: '#DADADA'}} /> */}
+        </Container>
       </Root>
     );
   }
@@ -675,8 +753,9 @@ class Home extends Component {
 
 const styles = StyleSheet.create({
   header: {
-    //Ò  backgroundColor: ApiUtils.getBackgroundColor()
-    backgroundColor: '#DADADA',
+    backgroundColor: 'white',
+    // backgroundColor: ApiUtils.getBackgroundColor(),
+    width: '100%',
   },
   title: {
     color: '#000',
@@ -699,7 +778,8 @@ const styles = StyleSheet.create({
     // marginLeft: 25,
     // marginRight: 25,
     marginTop: Platform.OS == 'ios' ? 20 : 25,
-    marginBottom: 20,
+    marginTop: 20,
+    marginBottom: 30,
   },
   loginButtonSection: {
     width: '100%',
@@ -749,7 +829,23 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     alignSelf: 'center',
   },
+  drawerButton: {
+    backgroundColor: 'transparent',
+    width: 120,
+    marginTop: 0,
+    paddingTop: 10,
+    shadowOffset: {height: 0, width: 0},
+    shadowOpacity: 0,
+    elevation: 0,
+    paddingLeft: 0,
+  },
 
+  saveText: {
+    color: 'black',
+    paddingLeft: 0,
+    marginLeft: 5,
+    marginRight: -5,
+  },
   buttonok: {
     marginBottom: 10,
     width: '80%',
@@ -772,6 +868,11 @@ const styles = StyleSheet.create({
   icon: {
     width: 24,
     height: 24,
+  },
+  logoHeader: {
+    width: '100%',
+    height: 50,
+    alignSelf: 'center',
   },
 });
 

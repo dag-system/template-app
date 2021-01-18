@@ -25,7 +25,9 @@ const initialState = {
   folocodes: [], //{folocode : , nom, prenom ?}
   isOkPopupGps: false,
   isOkPopupBAttery: false,
-  isOkPopupBAttery2 : false
+  isOkPopupBAttery2 : false,
+  userClubs : [],
+  
 };
 
 const initialMockState = {
@@ -98,8 +100,7 @@ const reducer = (state = initialState, action) => {
         lives: action.data,
       };
       return nextState || state;
-    }
-
+    }``
     case 'GET_CLUBS': {
       let nextState = {
         ...state,
@@ -205,6 +206,14 @@ const reducer = (state = initialState, action) => {
         isRecording: action.data,
       };
 
+      return nextState || state;
+    }
+
+    case 'GET_USER_CLUBS' : {
+      let nextState = {
+        ...state,
+        userClubs: action.data,
+      };
       return nextState || state;
     }
 

@@ -532,6 +532,7 @@ class SegmentSummary extends Component {
 
               </View>
             </View>
+            <View style={{marginBottom : 200}}></View>
           </ScrollView>
 
         </View>

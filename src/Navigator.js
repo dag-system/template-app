@@ -37,6 +37,8 @@ import GetFolocode from './home/GetFolocode';
 import SegmentSummary from './home/SegmentSummary';
 import Help from './home/Help';
 import Partenaires from './home/Partenaires';
+import Classement from './home/Classement';
+import Replay from './home/Replay';
 
 // import CreateAccountForFolocode from './home/CreateAccountForFolocode';
 
@@ -75,7 +77,12 @@ export default class Navigator extends Component {
           options={{
             animationEnabled: false,
           }}>
+
+
           <Stack.Screen name="Home" component={Home} headerMode="none" />
+
+          < Stack.Screen name="Replay" component={Replay} headerMode="none" />
+
 
           <Stack.Screen
             name="SimpleMap"
@@ -105,6 +112,15 @@ export default class Navigator extends Component {
           <Stack.Screen
             name="Partenaires"
             component={Partenaires}
+            headerMode="none"
+            options={{
+              animationEnabled: false,
+            }}
+          />
+
+          <Stack.Screen
+            name="Classement"
+            component={Classement}
             headerMode="none"
             options={{
               animationEnabled: false,
