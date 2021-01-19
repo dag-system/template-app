@@ -423,6 +423,7 @@ class SimpleMap extends Component {
       foregroundService: true,
       disableElasticity: true,
       debug: false,
+      logLevel: BackgroundGeolocation.LOG_LEVEL_VERBOSE,
       disableStopDetection : true,
       disableMotionActivityUpdates : true,
       stationaryRadius: 5,
@@ -434,7 +435,7 @@ class SimpleMap extends Component {
           ? BackgroundGeolocation.DESIRED_ACCURACY_NAVIGATION
           : BackgroundGeolocation.DESIRED_ACCURACY_HIGH,
       desiredOdometerAccuracy: 10, //If you only want to calculate odometer from GPS locations, you could set desiredOdometerAccuracy: 10. This will prevent odometer updates when a device is moving around indoors, in a shopping mall, for example.
-      logLevel: BackgroundGeolocation.LOG_LEVEL_OFF,
+   
     };
 
 
@@ -2043,6 +2044,12 @@ class SimpleMap extends Component {
     drawerLabel: () => null,
   };
 
+  onGetLogs = () => {
+    BackgroundGeolocation.logger.getLog(function(log) {
+      console.log(log);
+    });
+  }
+
   render() {
     return (
       <Container style={styles.container}>
@@ -2088,6 +2095,18 @@ class SimpleMap extends Component {
                 </TouchableOpacity>
               </View>
               <View style={{flexDirection: 'row', justifyContent: 'flex-end'}}>
+
+                       <TouchableOpacity
+                  style={styles.headerButton}
+                  info
+                  onPress={() => this.onGetLogs()}>
+                  <Icon
+                    active
+                    name="folder-open"
+                    style={styles.headerButtonLogo}
+                    type="FontAwesome5"
+                  />
+                </TouchableOpacity>
                 {/* <TouchableOpacity
                   style={styles.headerButton}
                   info

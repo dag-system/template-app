@@ -37,7 +37,7 @@ var ApiUtils = {
   },
 
   checkStatus: function(response) {
-    // console.log(response)
+  
     if (response.ok) {
       return response;
     } else {
@@ -62,6 +62,7 @@ var ApiUtils = {
   },
 
   getAPIUrl() {
+    // return 'http://folomi.snowdag.com/api/fouleev2.php';
     return 'https://www.folomi.fr/api/fouleev2.php';
   },
 

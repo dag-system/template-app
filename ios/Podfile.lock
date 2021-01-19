@@ -324,12 +324,18 @@ PODS:
     - React
   - RNScreens (2.13.0):
     - React-Core
+  - RNSentry (2.1.0):
+    - React-Core
+    - Sentry (= 6.0.9)
   - RNShare (4.0.4):
     - React-Core
   - RNSVG (12.1.0):
     - React
   - RNVectorIcons (7.1.0):
     - React
+  - Sentry (6.0.9):
+    - Sentry/Core (= 6.0.9)
+  - Sentry/Core (6.0.9)
   - Yoga (1.14.0)
   - YogaKit (1.18.1):
     - Yoga (~> 1.14)
@@ -395,6 +401,7 @@ DEPENDENCIES:
   - RNGestureHandler (from `../node_modules/react-native-gesture-handler`)
   - RNReanimated (from `../node_modules/react-native-reanimated`)
   - RNScreens (from `../node_modules/react-native-screens`)
+  - "RNSentry (from `../node_modules/@sentry/react-native`)"
   - RNShare (from `../node_modules/react-native-share`)
   - RNSVG (from `../node_modules/react-native-svg`)
   - RNVectorIcons (from `../node_modules/react-native-vector-icons`)
@@ -414,6 +421,7 @@ SPEC REPOS:
     - Flipper-RSocket
     - FlipperKit
     - OpenSSL-Universal
+    - Sentry
     - YogaKit
 
 EXTERNAL SOURCES:
@@ -493,6 +501,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-reanimated"
   RNScreens:
     :path: "../node_modules/react-native-screens"
+  RNSentry:
+    :path: "../node_modules/@sentry/react-native"
   RNShare:
     :path: "../node_modules/react-native-share"
   RNSVG:
@@ -553,9 +563,11 @@ SPEC CHECKSUMS:
   RNGestureHandler: 7a5833d0f788dbd107fbb913e09aa0c1ff333c39
   RNReanimated: dd8c286ab5dd4ba36d3a7fef8bff7e08711b5476
   RNScreens: 13f23e5498fb4aa749d19a5eda7f8792fbb9d01f
+  RNSentry: 51972e3fe50e2fb38ae459af8c87d61f63f364db
   RNShare: af2aeae0587bf3e40e5268f1ef96aa162f1a6ac9
   RNSVG: ce9d996113475209013317e48b05c21ee988d42e
   RNVectorIcons: bc69e6a278b14842063605de32bec61f0b251a59
+  Sentry: 388c9dc093b2fd3a264466a5c5b21e25959610a9
   Yoga: 3ebccbdd559724312790e7742142d062476b698e
   YogaKit: f782866e155069a2cca2517aafea43200b01fd5a
 

@@ -171,6 +171,7 @@ class Lives extends Component {
         this.setState({isLoading: false});
       })
       .catch(e => {
+        console.log(e)
         this.setState({isLoading: false});
         ApiUtils.logError('getLives', e.message);
       })
@@ -330,6 +331,7 @@ class Lives extends Component {
         }
       })
       .catch(e => {
+        console.log(e)
         this.setState({spinner: false});
         ApiUtils.logError('create live', JSON.stringify(e.message));
         if (e.message == 'Timeout' || e.message == 'Network request failed') {
