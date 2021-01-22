@@ -46,7 +46,11 @@ export default class Sidebar extends Component {
 
   onClickNavigate(routeName) {
     // this.props.drawer.close()
-    this.props.drawer._root.close();
+    if(this.props.drawer !=null && this.props.drawer._root !=null ) 
+    {
+      this.props.drawer._root.close();
+    }
+
     this.props.navigation.navigate(routeName);
   }
 

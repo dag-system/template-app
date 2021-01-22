@@ -25,9 +25,8 @@ const initialState = {
   folocodes: [], //{folocode : , nom, prenom ?}
   isOkPopupGps: false,
   isOkPopupBAttery: false,
-  isOkPopupBAttery2 : false,
-  userClubs : [],
-  
+  isOkPopupBAttery2: false,
+  userClubs: [],
 };
 
 const initialMockState = {
@@ -69,21 +68,21 @@ const reducer = (state = initialState, action) => {
       let newFolocode = {
         folocode: action.data.folocodeUtilisateur,
         prenom: action.data.prenomUtilisateur,
-        nom: action.data.nomUtilisateur
+        nom: action.data.nomUtilisateur,
       };
-      if(state.folocodes == null)
-      {
+      if (state.folocodes == null) {
         state.folocodes = [];
       }
       let folocodes = JSON.parse(JSON.stringify(state.folocodes));
-      if(folocodes.filter(f=> f.folocode == newFolocode.folocode).length == 0)
-      {
+      if (
+        folocodes.filter(f => f.folocode == newFolocode.folocode).length == 0
+      ) {
         folocodes.push(newFolocode);
       }
-   
+
       let nextState = {
         ...state,
-        folocodes:folocodes,
+        folocodes: folocodes,
         userData: action.data,
       };
       console.log(nextState.folocodes);
@@ -94,13 +93,15 @@ const reducer = (state = initialState, action) => {
       nextState.folocodes = state.folocodes;
       return nextState || state;
     }
-    case 'GET_LIVES': {
-      let nextState = {
-        ...state,
-        lives: action.data,
-      };
-      return nextState || state;
-    }``
+    case 'GET_LIVES':
+      {
+        let nextState = {
+          ...state,
+          lives: action.data,
+        };
+        return nextState || state;
+      }
+      ``;
     case 'GET_CLUBS': {
       let nextState = {
         ...state,
@@ -209,7 +210,7 @@ const reducer = (state = initialState, action) => {
       return nextState || state;
     }
 
-    case 'GET_USER_CLUBS' : {
+    case 'GET_USER_CLUBS': {
       let nextState = {
         ...state,
         userClubs: action.data,
@@ -245,9 +246,27 @@ const reducer = (state = initialState, action) => {
       return nextState || state;
     }
     case 'ADD_COORDINATE': {
+      let nbDuplicate = state.coordinates.filter(
+        c => c.uuuid == action.data.uuid,
+      ).length;
+      if (nbDuplicate > 0) {
+        return state;
+      } else {
+        let nextState = {
+          ...state,
+          coordinates: [...state.coordinates, action.data],
+        };
+        return nextState || state;
+      }
+    }
+    case 'IGNORE_LIVE': {
+      let lives = JSON.parse(JSON.stringify(state.lives));
+
+      lives = lives.filter(l => l.idLive != action.data);
+
       let nextState = {
         ...state,
-        coordinates: [...state.coordinates, action.data],
+        lives: lives,
       };
 
       return nextState || state;
@@ -354,7 +373,7 @@ const reducer = (state = initialState, action) => {
         ...state,
         polylines: traces,
       };
-      console.log(trace.positionsTrace.length)
+      console.log(trace.positionsTrace.length);
       return nextState || state;
     }
     case 'CURRENT_LIVE_FOR_SEGMENT': {

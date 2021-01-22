@@ -558,6 +558,7 @@ class BatteryModal extends Component {
                   />
                 </View>
               )}
+              
               {this.props.noHeader ? (
                 <Text style={{textAlign: 'center', marginTop: 10}}>
                   Vous retrouverez ces informations dans le menu d'aide

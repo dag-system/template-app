@@ -39,7 +39,7 @@ import GlobalStyles from '../styles';
 import {Modal} from 'react-native';
 import Help from './Help';
 import BatteryModal from './BatteryModal';
-
+import * as Sentry from "@sentry/react";
 import {Sponsors} from './Sponsors';
 
 import {PermissionsAndroid} from 'react-native';
@@ -107,7 +107,11 @@ class Lives extends Component {
     await this.getNewVersion();
     await this.getLives(this.props.userData.idUtilisateur);
 
+    Sentry.setUser({ id: this.props.userData.idUtilisateur });
+
+
     await this.getinformationStation();
+
   }
 
   onRefresh() {
@@ -660,10 +664,10 @@ class Lives extends Component {
                     extraData.hasDescription[0].shortDescription != null &&
                     extraData.hasDescription[0].shortDescription.length > 1
                   ) {
-                    finalData.description =
+                    finalInterest.description =
                       extraData.hasDescription[0].shortDescription[1];
                   } else {
-                    finalData.description =
+                    finalInterest.description =
                       extraData.hasDescription[0].shortDescription[0];
                   }
                 }
@@ -812,7 +816,6 @@ class Lives extends Component {
                       this.state.deletingIds.filter(d => d == item.idLive)
                         .length > 0 ? (
                         <TouchableOpacity
-                          underlayColor="rgba(255,255,255,1,0.6)"
                           onPress={this.viewLive.bind(this, item)}>
                           <View style={[styles.rowContainer]}>
                             <View style={styles.line}>
@@ -1002,7 +1005,6 @@ class Lives extends Component {
                   color={'white'}
                   style={{
                     alignSelf: 'center',
-                    color: 'white',
                     height: 20,
                     width: 20,
                   }}
@@ -1026,7 +1028,6 @@ class Lives extends Component {
                   zIndex: 12,
                   left: 10,
                   justifyContent: 'center',
-                  textAlign: 'center',
                 },
               ]}
               onPress={() => this.openGpxModal()}>
@@ -1187,12 +1188,6 @@ const styles = StyleSheet.create({
     // marginLeft: -3,
     alignSelf: 'center',
     zIndex: 10,
-  },
-  container: {
-    // flex: 1,
-    //  justifyContent: 'center',
-    //   alignItems: 'center',
-    backgroundColor: ApiUtils.getBackgroundColor(),
   },
   footer: {
     backgroundColor: 'transparent',

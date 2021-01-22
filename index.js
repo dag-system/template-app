@@ -21,7 +21,7 @@ Sentry.init({
 
 AppRegistry.registerComponent(appName, () => App);
 
-console.disableYellowBox = true;
+console.disableYellowBox = false;
 
 // Define a simple "HeadlessTask" with an async function.
 // This function will receive all events from the BackgroundGeolocation plugin

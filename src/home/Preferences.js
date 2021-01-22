@@ -27,14 +27,18 @@ import {
   Radio,
   Left,
   Right,
+  Picker,
+  Icon,
 } from 'native-base';
-import {Icon} from 'react-native-elements';
+import GlobalStyles from '../styles';
 import md5 from 'md5';
 import ApiUtils from '../ApiUtils';
 import ErrorMessage from './ErrorMessage';
 import {connect} from 'react-redux';
 import Sidebar from './SideBar';
 import moment from 'moment';
+import {Platform} from 'react-native';
+import {Dimensions} from 'react-native';
 
 const mapStateToProps = state => {
   return {
@@ -66,6 +70,68 @@ class Preferences extends Component {
       clubEntreprise: '',
       clubFamille: '',
       unss: '',
+      days: [
+        '01',
+        '02',
+        '03',
+        '04',
+        '05',
+        '06',
+        '07',
+        '08',
+        '09',
+        '10',
+        '11',
+        '12',
+        '13',
+        '14',
+        '15',
+        '16',
+        '17',
+        '18',
+        '19',
+        '20',
+        '21',
+        '22',
+        '23',
+        '24',
+        '25',
+        '26',
+        '27',
+        '28',
+        '29',
+        '30',
+        '31',
+      ],
+      months: [
+        'Janvier',
+        'Fevrier',
+        'Mars',
+        'Avril',
+        'Mai',
+        'Juin',
+        'Juillet',
+        'Août',
+        'Septembre',
+        'Octobre',
+        'Novembre',
+        'Décembre',
+      ],
+      monthsString: [
+        '01',
+        '02',
+        '03',
+        '04',
+        '05',
+        '06',
+        '07',
+        '08',
+        '09',
+        '10',
+        '11',
+        '12',
+      ],
+      years: [],
     };
   }
 
@@ -78,6 +144,12 @@ class Preferences extends Component {
     // setTimeout(() => this.setState({ userdata: { ...this.state.userdata, ddnUtilisateur: this.state.userdata.ddnUtilisateur) }} ), 100)
   }
   didMount() {
+    let years = [];
+    for (let i = 2021; i > 1930; i--) {
+      years.push(i);
+    }
+    this.setState({years: years},() => this.fillDate());
+
     this.getInformations();
     this.setState({userdata: this.props.userData});
     if (this.props.userData.clubUtilisateur == 'NULL') {
@@ -90,12 +162,7 @@ class Preferences extends Component {
 
     this.setClubs(this.props.userClubs);
 
-    if (this.props.userData.ddnUtilisateur != '0000-00-00') {
-      this.setState({showDefaultDdn: true});
-      // alert(this.props.userData.ddnUtilisateur)
-    } else {
-      this.setState({showDefaultDdn: false});
-    }
+  
 
     //this.getClubs();
   }
@@ -115,6 +182,25 @@ class Preferences extends Component {
           this.setState({clubUniversite: c.nom});
         }
       });
+    }
+  }
+
+  fillDate()
+  {
+    if (this.props.userData.ddnUtilisateur != '0000-00-00') {
+      this.setState({showDefaultDdn: true});
+
+      var day = moment(this.props.userData.ddnUtilisateur).format('DD');
+      this.onValueDayddn(day);
+
+      var month = moment(this.props.userData.ddnUtilisateur).format('MM');
+      this.onValueMonthddn(month);
+
+      var year = moment(this.props.userData.ddnUtilisateur).format('YYYY');
+
+      this.onValueYearddn(year);
+    } else {
+      this.setState({showDefaultDdn: false});
     }
   }
 
@@ -268,7 +354,6 @@ class Preferences extends Component {
 
           this.setClubs(clubs);
         } else {
-          alert(responseJson.message);
           this.setState({isLoading: false});
         }
       })
@@ -445,6 +530,19 @@ class Preferences extends Component {
       });
   }
 
+  onValueDayddn(value) {
+    this.setState({dayDdn: value});
+  }
+
+  onValueMonthddn(value) {
+    this.setState({monthDdn: value});
+  }
+
+  onValueYearddn(value) {
+    this.setState({yearDdn: value});
+  
+  }
+
   hasClub(type) {
     if (this.props.userClubs != null) {
       let values = this.props.userClubs.filter(c => c.typeClub == type);
@@ -483,8 +581,8 @@ class Preferences extends Component {
                   onPress={() => this.onDrawer()}>
                   <Icon
                     style={styles.saveText}
-                    name="bars"
-                    type="font-awesome"
+                    name="chevron-left"
+                    type="FontAwesome5"
                   />
                 </Button>
               </Left>
@@ -567,6 +665,8 @@ class Preferences extends Component {
                   <Input
                     returnKeyType="next"
                     clearButtonMode="always"
+                    textContentType="emailAddress"
+                    keyboardType="email-address"
                     value={this.state.userdata.emailUtilisateur}
                     onChangeText={phoneNumber =>
                       this.setState({
@@ -676,45 +776,165 @@ class Preferences extends Component {
                   </TouchableOpacity>
                 </View>
 
-                <Text style={styles.label}>Date de naissance</Text>
-                {this.state.userdata != null && !this.state.showDefaultDdn ? (
-                  <DatePicker
-                    style={{marginLeft: 20}}
-                    date={new Date(this.state.userdata.ddnUtilisateur)}
-                    defaultDate={
-                      this.state.showDefaultDdn
-                        ? new Date(this.props.userData.ddnUtilisateur)
-                        : null
-                    }
-                    //  placeHolderText="Choisir une date de naissance"
-                    //  placeHolderTextStyle={{ marginLeft: 30, fontSize: 14, color: "#d3d3d3", fontStyle: 'italic' }}
-                    // format="YYYY-MM-DD"
-                    // locale={"fr"}
-                    confirmBtnText="Valider"
-                    cancelBtnText="Annuler"
-                    customStyles={{
-                      dateIcon: {
-                        position: 'absolute',
-                        left: 0,
-                        top: 4,
-                        marginLeft: 15,
-                      },
-                      dateInput: {
-                        marginLeft: 100,
-                      },
-                      // ... You can check the source to find the other keys.
-                    }}
-                    onDateChange={date => {
-                      //  alert(date)
-                      this.setState({
-                        userdata: {
-                          ...this.state.userdata,
-                          ddnUtilisateur: date,
-                        },
-                      });
-                    }}
-                  />
-                ) : null}
+                {Platform.OS == 'ios' ? (
+                  <View>
+                    <Item stackedLabel style={{marginBottom: 5}}>
+                      <Label>Date de naissance</Label>
+                      <Label style={{fontSize: 12}}>
+                        Important pour les classements par catégorie
+                      </Label>
+                      <View style={[GlobalStyles.row]}>
+                        <Picker
+                          style={{
+                            width: Dimensions.get('screen').width / 3 - 10,
+                          }}
+                          mode="dropdown"
+                          accessibilityLabel={'Jour'}
+                          iosHeader={'Jour'}
+                          iosIcon={
+                            <Icon name="chevron-down" type="FontAwesome5" />
+                          }
+                          selectedValue={this.state.dayDdn}
+                          onValueChange={value => this.onValueDayddn(value)}
+                          placeholder={'Jour'}
+                          placeholderStyle={{
+                            color: ApiUtils.getBackgroundColor(),
+                          }}
+                          placeholderIconColor={ApiUtils.getBackgroundColor()}
+                          textStyle={{color: ApiUtils.getBackgroundColor()}}
+                          itemStyle={{
+                            color: ApiUtils.getBackgroundColor(),
+                            marginLeft: 0,
+                            paddingLeft: 10,
+                            borderBottomColor: ApiUtils.getBackgroundColor(),
+                            borderBottomWidth: 1,
+                          }}
+                          itemTextStyle={{
+                            color: ApiUtils.getBackgroundColor(),
+                            borderBottomColor: ApiUtils.getBackgroundColor(),
+                            borderBottomWidth: 1,
+                          }}>
+                          {this.state.days.map(d => {
+                            return <Picker.Item label={d} value={d} />;
+                          })}
+                        </Picker>
+                        <Picker
+                          style={{
+                            width: Dimensions.get('screen').width / 3 - 10,
+                          }}
+                          mode="dropdown"
+                          accessibilityLabel={'Mois'}
+                          iosHeader={'Mois'}
+                          iosIcon={
+                            <Icon name="chevron-down" type="FontAwesome5" />
+                          }
+                          selectedValue={this.state.monthDdn}
+                          onValueChange={value => this.onValueMonthddn(value)}
+                          placeholder={'Mois'}
+                          placeholderStyle={{
+                            color: ApiUtils.getBackgroundColor(),
+                          }}
+                          placeholderIconColor={ApiUtils.getBackgroundColor()}
+                          textStyle={{color: ApiUtils.getBackgroundColor()}}
+                          itemStyle={{
+                            color: ApiUtils.getBackgroundColor(),
+                            marginLeft: 0,
+                            paddingLeft: 10,
+                            borderBottomColor: ApiUtils.getBackgroundColor(),
+                            borderBottomWidth: 1,
+                          }}
+                          itemTextStyle={{
+                            color: ApiUtils.getBackgroundColor(),
+                            borderBottomColor: ApiUtils.getBackgroundColor(),
+                            borderBottomWidth: 1,
+                          }}>
+                          {this.state.monthsString.map((month, index) => {
+                            return <Picker.Item label={month} value={month} />;
+                          })}
+                        </Picker>
+
+                        <Picker
+                          style={{
+                            width: Dimensions.get('screen').width / 3 - 10,
+                          }}
+                          mode="dropdown"
+                          accessibilityLabel={''}
+                          iosHeader={'Année'}
+                          iosIcon={
+                            <Icon name="chevron-down" type="FontAwesome5" />
+                          }
+                          selectedValue={this.state.yearDdn}
+                          onValueChange={value => this.onValueYearddn(value)}
+                          placeholder={'Année'}
+                          placeholderStyle={{
+                            color: ApiUtils.getBackgroundColor(),
+                          }}
+                          placeholderIconColor={ApiUtils.getBackgroundColor()}
+                          textStyle={{color: ApiUtils.getBackgroundColor()}}
+                          itemStyle={{
+                            color: ApiUtils.getBackgroundColor(),
+                            marginLeft: 0,
+                            paddingLeft: 10,
+                            borderBottomColor: ApiUtils.getBackgroundColor(),
+                            borderBottomWidth: 1,
+                          }}
+                          itemTextStyle={{
+                            color: ApiUtils.getBackgroundColor(),
+                            borderBottomColor: ApiUtils.getBackgroundColor(),
+                            borderBottomWidth: 1,
+                          }}>
+                          {this.state.years.map(year => {
+                            return <Picker.Item label={year} value={year.toString()} />;
+                          })}
+                        </Picker>
+                      </View>
+                    </Item>
+                  </View>
+                ) : (
+                  <View>
+                    <Text style={styles.label}>Date de naissance</Text>
+                    {this.state.userdata != null &&
+                    !this.state.showDefaultDdn ? (
+                      <DatePicker
+                        style={{marginLeft: 20}}
+                        date={new Date(this.state.userdata.ddnUtilisateur)}
+                        defaultDate={
+                          this.state.showDefaultDdn
+                            ? new Date(this.props.userData.ddnUtilisateur)
+                            : null
+                        }
+                        //  placeHolderText="Choisir une date de naissance"
+                        //  placeHolderTextStyle={{ marginLeft: 30, fontSize: 14, color: "#d3d3d3", fontStyle: 'italic' }}
+                        // format="YYYY-MM-DD"
+                        // locale={"fr"}
+                        confirmBtnText="Valider"
+                        cancelBtnText="Annuler"
+                        customStyles={{
+                          dateIcon: {
+                            position: 'absolute',
+                            left: 0,
+                            top: 4,
+                            marginLeft: 15,
+                          },
+                          dateInput: {
+                            marginLeft: 100,
+                          },
+                          // ... You can check the source to find the other keys.
+                        }}
+                        onDateChange={date => {
+                          //  alert(date)
+                          this.setState({
+                            userdata: {
+                              ...this.state.userdata,
+                              ddnUtilisateur: date,
+                            },
+                          });
+                        }}
+                      />
+                    ) : null}
+                    )
+                  </View>
+                )}
 
                 {this.state.userdata != null && this.state.showDefaultDdn ? (
                   <DatePicker

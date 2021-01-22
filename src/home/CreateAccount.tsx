@@ -27,6 +27,7 @@ import {
   Left,
   Right,
   Root,
+  Picker,
 } from 'native-base';
 import md5 from 'md5';
 import ApiUtils from '../ApiUtils';
@@ -39,6 +40,8 @@ import defaultMessages from './defaultMessages';
 import {connect} from 'react-redux';
 import {KeyboardAvoidingView} from 'react-native';
 import GlobalStyles from '../styles';
+import {Platform} from 'react-native';
+import {Dimensions} from 'react-native';
 const mapStateToProps = state => {
   return {
     userData: state,
@@ -72,10 +75,78 @@ class CreateAccount extends ValidationComponent {
       clubFamille: '',
       clubUniversite: '',
       unss: '',
+      days: [
+        '01',
+        '02',
+        '03',
+        '04',
+        '05',
+        '06',
+        '07',
+        '08',
+        '09',
+        '10',
+        '11',
+        '12',
+        '13',
+        '14',
+        '15',
+        '16',
+        '17',
+        '18',
+        '19',
+        '20',
+        '21',
+        '22',
+        '23',
+        '24',
+        '25',
+        '26',
+        '27',
+        '28',
+        '29',
+        '30',
+        '31',
+      ],
+      months: [
+        'Janvier',
+        'Fevrier',
+        'Mars',
+        'Avril',
+        'Mai',
+        'Juin',
+        'Juillet',
+        'Août',
+        'Septembre',
+        'Octobre',
+        'Novembre',
+        'Décembre',
+      ],
+      monthsString: [
+        '01',
+        '02',
+        '03',
+        '04',
+        '05',
+        '06',
+        '07',
+        '08',
+        '09',
+        '10',
+        '11',
+        '12',
+      ],
+      years: [],
     };
   }
 
-  componentDidMount() {}
+  componentDidMount() {
+    let years = [];
+    for (let i = 2021; i > 1930; i--) {
+      years.push(i);
+    }
+    this.setState({years: years});
+  }
 
   ongoHome() {
     this.props.navigation.navigate('Home');
@@ -104,7 +175,7 @@ class CreateAccount extends ValidationComponent {
   }
 
   onSendRequest() {
-    this.setState({isLoading : true});
+    this.setState({isLoading: true});
     let formData = new FormData();
     formData.append('method', 'createUtilisateur');
     formData.append('auth', ApiUtils.getAPIAuth());
@@ -113,9 +184,20 @@ class CreateAccount extends ValidationComponent {
     formData.append('nomUtilisateur', this.state.nomUtilisateur);
     formData.append('prenomUtilisateur', this.state.prenomUtilisateur);
 
-    var finalDate = moment(this.state.ddnUtilisateur).format('YYYY-MM-DD');
     // alert(finalDate)
-    formData.append('ddnUtilisateur', finalDate);
+    if (Platform.OS == 'ios') {
+      formData.append(
+        'ddnUtilisateur',
+        this.state.yearDdn +
+          '-' +
+          this.state.monthDdn +
+          '-' +
+          this.state.dayDdn,
+      );
+    } else {
+      var finalDate = moment(this.state.ddnUtilisateur).format('YYYY-MM-DD');
+      formData.append('ddnUtilisateur', finalDate);
+    }
 
     // formData.append('ddnUtilisateur', this.state.ddnUtilisateur);
 
@@ -140,7 +222,6 @@ class CreateAccount extends ValidationComponent {
       clubs.push({club: this.state.unss, type: 'Unss'});
     }
     formData.append('clubUtilisateur', JSON.stringify(clubs));
-
 
     formData.append('emailUtilisateur', this.state.emailUtilisateur);
 
@@ -169,7 +250,7 @@ class CreateAccount extends ValidationComponent {
       .then(ApiUtils.checkStatus)
       .then(response => response.json())
       .then(responseJson => {
-        this.setState({isLoading : false});
+        this.setState({isLoading: false});
         if (responseJson.codeErreur == 'SUCCESS') {
           var action = {type: 'LOGIN', data: responseJson};
           this.props.dispatch(action);
@@ -185,7 +266,7 @@ class CreateAccount extends ValidationComponent {
         }
       })
       .catch(e => {
-        this.setState({isLoading : false});
+        this.setState({isLoading: false});
         console.log(e);
         ApiUtils.logError('create account', JSON.stringify(e.message));
         // alert('Une erreur est survenue : ' + JSON.stringify(e.message));
@@ -210,6 +291,18 @@ class CreateAccount extends ValidationComponent {
 
   onClickNavigate(routeName) {
     this.props.navigation.navigate(routeName);
+  }
+
+  onValueDayddn(value) {
+    this.setState({dayDdn: value});
+  }
+
+  onValueMonthddn(value) {
+    this.setState({monthDdn: value});
+  }
+
+  onValueYearddn(value) {
+    this.setState({yearDdn: value});
   }
 
   render() {
@@ -239,9 +332,10 @@ class CreateAccount extends ValidationComponent {
                 <Item stackedLabel style={{marginBottom: 5}}>
                   <Label>Nom *</Label>
                   <Input
-                     autoCapitalize="characters"
+                    //  autoCapitalize="characters"
                     ref="nomUtilisateur"
                     returnKeyType="next"
+                    textContentType="familyName"
                     clearButtonMode="always"
                     value={this.state.nomUtilisateur}
                     onChangeText={value =>
@@ -259,9 +353,10 @@ class CreateAccount extends ValidationComponent {
                 <Item stackedLabel style={{marginBottom: 5}}>
                   <Label>Prénom *</Label>
                   <Input
-                   autoCapitalize="characters"
+                    //  autoCapitalize="characters"
                     ref="prenomUtilisateur"
                     returnKeyType="next"
+                    textContentType="name"
                     clearButtonMode="always"
                     value={this.state.prenomUtilisateur}
                     onChangeText={value =>
@@ -280,9 +375,11 @@ class CreateAccount extends ValidationComponent {
                   <Label>Email *</Label>
                   <Input
                     ref="emailUtilisateur"
-                    autoCompleteType='email'
+                    autoCompleteType="email"
                     returnKeyType="next"
-                    autoCapitalize="characters"
+                    textContentType="emailAddress"
+                    keyboardType="email-address"
+                    // autoCapitalize="characters"
                     clearButtonMode="always"
                     value={this.state.emailUtilisateur}
                     onChangeText={value =>
@@ -366,53 +463,166 @@ class CreateAccount extends ValidationComponent {
                   </TouchableOpacity>
                 </View>
 
-                <Text style={styles.label}>Date de naissance</Text>
-                <Text style={{paddingHorizontal : 10, fontSize :12, fontStyle : 'italic'}}>Important pour les classements par catégorie</Text>
-                {this.state != null && !this.state.showDefaultDdn ? (
-                  <DatePicker
-                    // style={{marginLeft: 20}}
-                    date={new Date(this.state.ddnUtilisateur)}
-                    defaultDate={
-                      this.state.showDefaultDdn
-                        ? new Date(this.props.userData.ddnUtilisateur)
-                        : null
-                    }
-                    placeHolderText="Choisir une date de naissance"
-                    placeHolderTextStyle={{
-                      marginLeft: 30,
-                      fontSize: 17,
-                      color: '#d3d3d3',
-                      fontStyle: 'italic',
-                    }}
-                    // format="YYYY-MM-DD"
-                    // locale={"fr"}
-                    confirmBtnText="Valider"
-                    cancelBtnText="Annuler"
-                    customStyles={{
-                      dateIcon: {
-                        position: 'absolute',
-                        left: 0,
-                        top: 4,
-                        marginLeft: 15,
-                      },
-                      dateInput: {
-                        marginLeft: 100,
-                      },
-                      // ... You can check the source to find the other keys.
-                    }}
-                    onDateChange={date => {
-                      //  alert(date)
-                      this.setState({ddnUtilisateur: date});
-                    }}
-                  />
-                ) : null}
+                {Platform.OS == 'ios' ? (
+                  <Item stackedLabel style={{marginBottom: 5}}>
+                    <Label>Date de naissance</Label>
+                    <Label style={{fontSize: 12}}>
+                      Important pour les classements par catégorie
+                    </Label>
+                    <View style={[GlobalStyles.row]}>
+                      <Picker
+                        style={{width: Dimensions.get('screen').width / 3 - 10}}
+                        mode="dropdown"
+                        accessibilityLabel={'Jour'}
+                        iosHeader={'Jour'}
+                        iosIcon={
+                          <Icon name="chevron-down" type="FontAwesome5" />
+                        }
+                        selectedValue={this.state.dayDdn}
+                        onValueChange={value => this.onValueDayddn(value)}
+                        placeholder={'Jour'}
+                        placeholderStyle={{
+                          color: ApiUtils.getBackgroundColor(),
+                        }}
+                        placeholderIconColor={ApiUtils.getBackgroundColor()}
+                        textStyle={{color: ApiUtils.getBackgroundColor()}}
+                        itemStyle={{
+                          color: ApiUtils.getBackgroundColor(),
+                          marginLeft: 0,
+                          paddingLeft: 10,
+                          borderBottomColor: ApiUtils.getBackgroundColor(),
+                          borderBottomWidth: 1,
+                        }}
+                        itemTextStyle={{
+                          color: ApiUtils.getBackgroundColor(),
+                          borderBottomColor: ApiUtils.getBackgroundColor(),
+                          borderBottomWidth: 1,
+                        }}>
+                        {this.state.days.map(d => {
+                          return <Picker.Item label={d} value={d} />;
+                        })}
+                      </Picker>
+                      <Picker
+                        style={{width: Dimensions.get('screen').width / 3 - 10}}
+                        mode="dropdown"
+                        accessibilityLabel={'Mois'}
+                        iosHeader={'Mois'}
+                        iosIcon={
+                          <Icon name="chevron-down" type="FontAwesome5" />
+                        }
+                        selectedValue={this.state.monthDdn}
+                        onValueChange={value => this.onValueMonthddn(value)}
+                        placeholder={'Mois'}
+                        placeholderStyle={{
+                          color: ApiUtils.getBackgroundColor(),
+                        }}
+                        placeholderIconColor={ApiUtils.getBackgroundColor()}
+                        textStyle={{color: ApiUtils.getBackgroundColor()}}
+                        itemStyle={{
+                          color: ApiUtils.getBackgroundColor(),
+                          marginLeft: 0,
+                          paddingLeft: 10,
+                          borderBottomColor: ApiUtils.getBackgroundColor(),
+                          borderBottomWidth: 1,
+                        }}
+                        itemTextStyle={{
+                          color: ApiUtils.getBackgroundColor(),
+                          borderBottomColor: ApiUtils.getBackgroundColor(),
+                          borderBottomWidth: 1,
+                        }}>
+                        {this.state.monthsString.map((month, index) => {
+                          return <Picker.Item label={month} value={month} />;
+                        })}
+                      </Picker>
+
+                      <Picker
+                        style={{width: Dimensions.get('screen').width / 3 - 10}}
+                        mode="dropdown"
+                        accessibilityLabel={''}
+                        iosHeader={'Année'}
+                        iosIcon={
+                          <Icon name="chevron-down" type="FontAwesome5" />
+                        }
+                        selectedValue={this.state.yearDdn}
+                        onValueChange={value => this.onValueYearddn(value)}
+                        placeholder={'Année'}
+                        placeholderStyle={{
+                          color: ApiUtils.getBackgroundColor(),
+                        }}
+                        placeholderIconColor={ApiUtils.getBackgroundColor()}
+                        textStyle={{color: ApiUtils.getBackgroundColor()}}
+                        itemStyle={{
+                          color: ApiUtils.getBackgroundColor(),
+                          marginLeft: 0,
+                          paddingLeft: 10,
+                          borderBottomColor: ApiUtils.getBackgroundColor(),
+                          borderBottomWidth: 1,
+                        }}
+                        itemTextStyle={{
+                          color: ApiUtils.getBackgroundColor(),
+                          borderBottomColor: ApiUtils.getBackgroundColor(),
+                          borderBottomWidth: 1,
+                        }}>
+                        {this.state.years.map(year => {
+                          return <Picker.Item label={year} value={year} />;
+                        })}
+                      </Picker>
+                    </View>
+                  </Item>
+                ) : (
+                  <View>
+                    <Text style={styles.label}>Date de naissance</Text>
+                    <Text
+                      style={{
+                        paddingHorizontal: 10,
+                        fontSize: 12,
+                        fontStyle: 'italic',
+                      }}>
+                      Important pour les classements par catégorie
+                    </Text>
+
+                    {this.state != null && !this.state.showDefaultDdn ? (
+                      <DatePicker
+                        date={new Date(this.state.ddnUtilisateur)}
+                        defaultDate={
+                          this.state.showDefaultDdn
+                            ? new Date(this.props.userData.ddnUtilisateur)
+                            : null
+                        }
+                        placeHolderText="Choisir une date de naissance"
+                        placeHolderTextStyle={{
+                          marginLeft: 30,
+                          fontSize: 17,
+                          color: '#d3d3d3',
+                          fontStyle: 'italic',
+                        }}
+                        confirmBtnText="Valider"
+                        cancelBtnText="Annuler"
+                        customStyles={{
+                          dateIcon: {
+                            position: 'absolute',
+                            left: 0,
+                            top: 4,
+                            marginLeft: 15,
+                          },
+                          dateInput: {
+                            marginLeft: 100,
+                          },
+                        }}
+                        onDateChange={date => {
+                          this.setState({ddnUtilisateur: date});
+                        }}
+                      />
+                    ) : null}
+                  </View>
+                )}
 
                 <Item stackedLabel style={{marginBottom: 5}}>
                   <Label>Adresse</Label>
                   <Input
-                   autoCapitalize="characters"
                     returnKeyType="next"
                     clearButtonMode="always"
+                    textContentType="fullStreetAddress"
                     value={this.state.adresseUtilisateur}
                     onChangeText={value =>
                       this.setState({adresseUtilisateur: value})
@@ -423,9 +633,9 @@ class CreateAccount extends ValidationComponent {
                 <Item stackedLabel style={{marginBottom: 5}}>
                   <Label>Code Postal</Label>
                   <Input
-                   autoCapitalize="characters"
                     returnKeyType="next"
                     clearButtonMode="always"
+                    textContentType="postalCode"
                     value={this.state.cpUtilisateur}
                     onChangeText={value =>
                       this.setState({cpUtilisateur: value})
@@ -436,8 +646,9 @@ class CreateAccount extends ValidationComponent {
                 <Item stackedLabel style={{marginBottom: 5}}>
                   <Label>Ville</Label>
                   <Input
-                   autoCapitalize="characters"
+                    autoCapitalize="characters"
                     returnKeyType="next"
+                    textContentType="addressCity"
                     clearButtonMode="always"
                     value={this.state.villeUtilisateur}
                     onChangeText={value =>
@@ -446,7 +657,6 @@ class CreateAccount extends ValidationComponent {
                   />
                 </Item>
 
-            
                 <Text
                   style={{textAlign: 'left', marginTop: 20, paddingLeft: 20}}>
                   Informations Complementaires
@@ -485,7 +695,7 @@ class CreateAccount extends ValidationComponent {
                   <Item stackedLabel style={{marginBottom: 5, marginTop: 10}}>
                     <Label>Nom de mon équipe entreprise</Label>
                     <Input
-                     autoCapitalize="characters"
+                      autoCapitalize="characters"
                       returnKeyType="next"
                       clearButtonMode="always"
                       value={this.state.clubEntreprise}
@@ -529,7 +739,7 @@ class CreateAccount extends ValidationComponent {
                   <Item stackedLabel style={{marginBottom: 5, marginTop: 10}}>
                     <Label>Nom de mon équipe Famille/Ami</Label>
                     <Input
-                     autoCapitalize="characters"
+                      autoCapitalize="characters"
                       returnKeyType="next"
                       clearButtonMode="always"
                       value={this.state.clubFamille}
@@ -573,7 +783,7 @@ class CreateAccount extends ValidationComponent {
                   <Item stackedLabel style={{marginBottom: 5, marginTop: 10}}>
                     <Label>Nom de mon équipe Université</Label>
                     <Input
-                     autoCapitalize="characters"
+                      autoCapitalize="characters"
                       returnKeyType="next"
                       clearButtonMode="always"
                       value={this.state.clubUniversite}
@@ -603,32 +813,27 @@ class CreateAccount extends ValidationComponent {
                   <TouchableOpacity
                     onPress={() =>
                       this.setState({
-                        acceptChallengeUnss: !this.state
-                          .acceptChallengeUnss,
+                        acceptChallengeUnss: !this.state.acceptChallengeUnss,
                       })
                     }>
                     <Text style={{marginLeft: 10}}>
-                    je participe à la foulée des jeunes
+                      je participe à la foulée des jeunes
                     </Text>
                   </TouchableOpacity>
                 </View>
-
 
                 {this.state.acceptChallengeUnss ? (
                   <Item stackedLabel style={{marginBottom: 5, marginTop: 10}}>
                     <Label>AS UNSS</Label>
                     <Input
-                     autoCapitalize="characters"
+                      autoCapitalize="characters"
                       returnKeyType="next"
                       clearButtonMode="always"
                       value={this.state.unss}
-                      onChangeText={value =>
-                        this.setState({unss: value})
-                      }
+                      onChangeText={value => this.setState({unss: value})}
                     />
                   </Item>
                 ) : null}
-
               </Form>
 
               <View

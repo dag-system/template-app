@@ -57,6 +57,7 @@ class ForgotPassword extends ValidationComponent {
   }
 
   onClickValidate() {
+    // this.emailInput?.blur();
     var isValid = this.validate({
       emailUtilisateur: {email: true, required: true},
     });
@@ -242,7 +243,13 @@ class ForgotPassword extends ValidationComponent {
             <Item stackedLabel style={{marginBottom: 5, marginTop: 20}}>
               <Label>Email *</Label>
               <Input
-                ref="emailUtilisateur"
+           
+           
+           ref="emailInput"
+              // ref={(c) => {
+              //   this.emailInput = c;
+              // }}
+
                 returnKeyType="next"
                 clearButtonMode="always"
                 value={this.state.emailUtilisateur}

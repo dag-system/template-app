@@ -4,6 +4,7 @@ import {
   Image,
   TouchableOpacity,
   View,
+  Dimensions,
   Linking,
   Platform,
 } from 'react-native';
@@ -29,6 +30,9 @@ import Logo from '../assets/logo_header.png';
 import GlobalStyles from '../styles';
 import Autrans from '../assets/autrans.svg';
 import {Sponsors} from './Sponsors';
+import IosReglages from '../assets/iosReglages.png';
+import Ios2 from '../assets/ios2.png';
+
 const mapStateToProps = state => {
   return {
     userData: state.userData,
@@ -65,25 +69,7 @@ class Help extends Component {
 
     // setTimeout(() => this.setState({ userdata: { ...this.state.userdata, ddnUtilisateur: this.state.userdata.ddnUtilisateur) }} ), 100)
   }
-  didMount() {
-    this.setState({userdata: this.props.userData});
-    if (this.props.userData.clubUtilisateur == 'NULL') {
-      this.props.userData.clubUtilisateur = '';
-    }
-
-    if (this.props.userData.villeUtilisateur == 'NULL') {
-      this.props.userData.villeUtilisateur = '';
-    }
-
-    if (this.props.userData.ddnUtilisateur != '0000-00-00') {
-      this.setState({showDefaultDdn: true});
-      // alert(this.props.userData.ddnUtilisateur)
-    } else {
-      this.setState({showDefaultDdn: false});
-    }
-
-    this.getClubs();
-  }
+  didMount() {}
 
   closeDrawer = () => {
     this.drawer._root.close();
@@ -127,191 +113,10 @@ class Help extends Component {
       .then(() => this.setState({isLoading: false}));
   }
 
-  isErrorForm() {
-    var isError = false;
-    var withPassword = false;
-    if (this.state.userdata.nomUtilisateur == '') {
-      isError = true;
-    }
-
-    if (this.state.userdata.prenomUtilisateur == '') {
-      isError = true;
-    }
-
-    if (this.state.userdata.emailUtilisateur == '') {
-      isError = true;
-    }
-
-    if (!this.validateEmail(this.state.userdata.emailUtilisateur)) {
-      isError = true;
-    }
-
-    // if (this.state.userdata.telUtilisateur == '') {
-    //   isError = true;
-    // }
-
-    // if (this.state.userdata.adresseUtilisateur == '') {
-    //   isError = true;
-    // }
-
-    // if (this.state.userdata.cpUtilisateur == '') {
-    //   isError = true;
-    // }
-
-    // if (this.state.userdata.villeUtilisateur == '') {
-    //   isError = true;
-    // }
-
-    if (!!this.state.newPassword && this.state.newPassword != '') {
-      if (this.state.newPasswordConfirmation != this.state.newPassword) {
-        isError = true;
-      } else {
-        withPassword = true;
-      }
-    }
-
-    return isError;
-  }
-
-  onClickValidate() {
-    var isError = this.isErrorForm();
-    var withPassword = false;
-
-    if (!!this.state.newPassword && this.state.newPassword != '') {
-      if (this.state.newPasswordConfirmation != this.state.newPassword) {
-        isError = true;
-      } else {
-        withPassword = true;
-      }
-    }
-
-    if (!isError) {
-      this.onSendRequest(withPassword);
-    }
-  }
-
-  validateEmail(email) {
-    var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-    return re.test(email);
-  }
-
   onPopupOk() {
     console.log('ok');
     var action = {type: 'VIEW_POPUPAIDE', data: null};
     this.props.dispatch(action);
-  }
-
-  getInitialState() {
-    if (this.state.userdata.sexeUtilisateur == 'H') {
-      return 0;
-    } else if (this.state.userdata.sexeUtilisateur == 'F') {
-      return 1;
-    } else {
-      return '';
-    }
-  }
-
-  onSendRequest(withPassword) {
-    this.setState({isLoading: true});
-    let formData = new FormData();
-    formData.append('method', 'updateUtilisateur');
-    formData.append('auth', ApiUtils.getAPIAuth());
-    formData.append('idUtilisateur', this.state.userdata.idUtilisateur);
-
-    formData.append('nomUtilisateur', this.state.userdata.nomUtilisateur);
-    formData.append('prenomUtilisateur', this.state.userdata.prenomUtilisateur);
-    formData.append('emailUtilisateur', this.state.userdata.emailUtilisateur);
-
-    formData.append('telUtilisateur', this.state.userdata.telUtilisateur);
-
-    var finalDate = moment(this.state.userdata.ddnUtilisateur).format(
-      'YYYY-MM-DD',
-    );
-    // alert(finalDate)
-    formData.append('ddnUtilisateur', finalDate);
-    formData.append('sexeUtilisateur', this.state.userdata.sexeUtilisateur);
-
-    formData.append(
-      'adresseUtilisateur',
-      this.state.userdata.adresseUtilisateur,
-    );
-    formData.append('cpUtilisateur', this.state.userdata.cpUtilisateur);
-    formData.append('villeUtilisateur', this.state.userdata.villeUtilisateur);
-    formData.append('paysUtilisateur', this.state.userdata.paysUtilisateur);
-
-    formData.append('clubUtilisateur', this.state.userdata.clubUtilisateur);
-
-    var acceptChallengeUtilisateur = 0;
-    if (
-      this.state.userdata.acceptChallengeUtilisateur ||
-      this.state.userdata.acceptChallengeUtilisateur
-    ) {
-      acceptChallengeUtilisateur = 1;
-    }
-
-    formData.append('acceptChallengeUtilisateur', acceptChallengeUtilisateur);
-
-    var acceptChallengeNameUtilisateur = 0;
-    if (
-      this.state.userdata.acceptChallengeNameUtilisateur ||
-      this.state.userdata.acceptChallengeNameUtilisateur
-    ) {
-      acceptChallengeNameUtilisateur = 1;
-    }
-
-    formData.append(
-      'acceptChallengeNameUtilisateur',
-      acceptChallengeNameUtilisateur,
-    );
-
-    if (withPassword) {
-      formData.append('passUtilisateur', md5(this.state.newPassword));
-    }
-
-    fetch(ApiUtils.getAPIUrl(), {
-      method: 'POST',
-      headers: {},
-      body: formData,
-    })
-      .then(ApiUtils.checkStatus)
-      .then(response => response.json())
-      .then(responseJson => {
-        if (responseJson.codeErreur == 'SUCCESS') {
-          this.setState({isLoading: false});
-
-          var action = {type: 'LOGIN', data: responseJson};
-          this.props.dispatch(action);
-
-          Toast.show({
-            text: 'Les données sont bien sauvegardées !',
-            buttonText: '',
-            duration: 1500,
-            type: 'success',
-            position: 'top',
-          });
-        } else {
-          Toast.show({
-            text: responseJson.message,
-            buttonText: '',
-            duration: 1500,
-            type: 'danger',
-            position: 'top',
-          });
-        }
-        this.setState({isLoading: false});
-      })
-      .catch(e => {
-        Toast.show({
-          text: e.message,
-          buttonText: '',
-          duration: 1500,
-          type: 'danger',
-          position: 'top',
-        });
-        this.setState({isLoading: false});
-        ApiUtils.logError('Preferences onSendRequest', e.message);
-      })
-      .then();
   }
 
   openLink(url) {
@@ -474,27 +279,27 @@ class Help extends Component {
                 1 - Enregistrer vos activités
               </Text>
               <Text style={{marginTop: 5}}>
-              -  Pour enregistrer une nouvelle activité cliquez sur le bouton « +
-                »
+                - Pour enregistrer une nouvelle activité cliquez sur le bouton «
+                + »
               </Text>
               <Text style={{marginTop: 5}}>
-              -  Dès que vous êtes prêt cliquez sur « démarrer » puis lancez-vous
-                sur nos parcours.
+                - Dès que vous êtes prêt cliquez sur « démarrer » puis
+                lancez-vous sur nos parcours.
               </Text>
               <Text style={{marginTop: 5}}>
-              - Réalisez votre activité, l’application enregistrera votre
+                - Réalisez votre activité, l’application enregistrera votre
                 activité et calculera vos performances sur nos différents
                 parcours.
               </Text>
               <Text style={{marginTop: 5}}>
-              - A votre arrivée cliquez sur « stop ».
+                - A votre arrivée cliquez sur « stop ».
               </Text>
               <Text style={{marginTop: 5}}>
-              - Déclarez dans quel style vous avez réalisé le parcours,
+                - Déclarez dans quel style vous avez réalisé le parcours,
                 classique ou skating, merci de votre honnêteté.
               </Text>
               <Text style={{marginTop: 5}}>
-              - Cliquez sur « enregistrer » votre parcours
+                - Cliquez sur « enregistrer » votre parcours
               </Text>
               <Text style={{marginTop: 5}}>
                 Retrouvez les classements sur notre site, mis à jour chaque soir
@@ -513,7 +318,9 @@ class Help extends Component {
                   https://www.lafouleeblanche.com/
                 </Text>
               </TouchableOpacity>
-              <Text style={{marginTop: 10, fontWeight: 'bold'}}>2 - Paramétrez votre téléphone</Text>
+              <Text style={{marginTop: 10, fontWeight: 'bold'}}>
+                2 - Paramétrez votre téléphone
+              </Text>
               <Text style={{marginTop: 10}}>
                 Avant de partir, assurez-vous d’avoir bien paramétré votre
                 téléphone pour avoir le meilleur enregistrement de votre
@@ -521,7 +328,9 @@ class Help extends Component {
               </Text>
               <TouchableOpacity
                 onPress={() =>
-                  this.openLink('https://www.lafouleeblanche.com/wp-content/uploads/2020/12/Reglages-bateries-telephones.pdf')
+                  this.openLink(
+                    'https://www.lafouleeblanche.com/wp-content/uploads/2020/12/Reglages-bateries-telephones.pdf',
+                  )
                 }>
                 <Text
                   style={{
@@ -533,7 +342,9 @@ class Help extends Component {
                 </Text>
               </TouchableOpacity>
 
-              <Text style={{marginTop: 10, fontWeight: 'bold'}}>3 – Pour un fonctionnement optimal</Text>
+              <Text style={{marginTop: 10, fontWeight: 'bold'}}>
+                3 – Pour un fonctionnement optimal
+              </Text>
               <Text style={{marginTop: 10}}>
                 Pour être sûr d’avoir un bon enregistrement de vos performances
                 :
@@ -542,47 +353,318 @@ class Help extends Component {
                 - Mettre en route la fonction GPS lors de l’utilisation
               </Text>
               <Text style={{marginTop: 10}}>
-                 - Désactivez sur le téléphone les fonctionnalités d’économie de
+                - Désactivez sur le téléphone les fonctionnalités d’économie de
                 batterie
               </Text>
               <Text style={{marginTop: 10}}>
-              - Lancer l’activité dans une zone couverte par le réseau (au
+                - Lancer l’activité dans une zone couverte par le réseau (au
                 départ de Gève)
               </Text>
               <Text style={{marginTop: 10}}>
-              - Faire strictement le parcours du départ à l’arrivée, ne pas
+                - Faire strictement le parcours du départ à l’arrivée, ne pas
                 changer de parcours.
               </Text>
               <Text style={{marginTop: 10}}>
-              - Ne pas arrêter l’activité sans avoir franchi la ligne d’arrivée
-                de quelques mètres.
+                - Ne pas arrêter l’activité sans avoir franchi la ligne
+                d’arrivée de quelques mètres.
               </Text>
               <Text>
-              - Enregistrer son activité lorsque nous sommes couverts par le
+                - Enregistrer son activité lorsque nous sommes couverts par le
                 réseau afin que le classement soit mis à jour automatiquement
               </Text>
-              {/* <View style={[GlobalStyles.row, {flexWrap: 'wrap'}]}>
-                <Text style={{width: '80%'}}>
-                  Pour enregistrer une nouvelle activité cliquez sur le bouton :
-                </Text>
-                <View
-                  style={{
-                    backgroundColor: ApiUtils.getBackgroundColor(),
-                    height: 60,
-                    width: 60,
-                    borderRadius: 30,
-                    padding: 15,
-                    marginTop: -15,
-                  }}>
+
+              {!this.props.noHeader ? (
+                <View>
+                  <Text
+                    style={{
+                      textAlign: 'center',
+                      fontWeight: 'bold',
+                      color: ApiUtils.getBackgroundColor(),
+                      textDecorationLine: 'underline',
+                      marginTop: 30,
+                    }}>
+                    Important avant de skier
+                  </Text>
+
                   <Icon
-                    active
-                    name="plus"
-                    type="AntDesign"
-                    style={styles.plusButtonLogo}
+                    type="FontAwesome5"
+                    name="exclamation-triangle"
+                    style={{
+                      textAlign: 'center',
+                      marginTop: 20,
+                      marginBottom: 20,
+                      fontSize: 40,
+                    }}
                   />
+
+                  <Text style={{marginTop: 10}}>
+                    Avant de partir, assurez-vous d’avoir bien paramétré votre
+                    téléphone pour avoir le meilleur enregistrement de votre
+                    activité :
+                  </Text>
+
+                  <Text style={{marginTop: 10}}>
+                    Les applications qui utilisent des systèmes de messagerie,
+                    type mails par exemple ont un besoin minime en ressources.
+                    Ce n’est pas le cas de notre application qui pour
+                    fonctionner efficacement a besoin de ressources.
+                  </Text>
+                  <Text style={{marginTop: 10}}>
+                    Qui dit “ressources”, dit “batterie” ! Et vous l’aurez
+                    compris, l’utilisation de la batterie de votre téléphone est
+                    fonction des données transmises par l’application que l’on
+                    utilise.
+                  </Text>
+                  <Text style={{marginTop: 10}}>
+                    Selon certaines marques ou modèles, les systèmes d’économie
+                    de batterie ferment intempestivement soit l’application,
+                    soit certaines options comme le GPS. De ce fait,
+                    l'application "plante", se met en pause automatiquement et
+                    votre tracé (parcours) est inexact ou inexistant dans votre
+                    résumé.
+                  </Text>
+
+                  <Text
+                    style={{
+                      textAlign: 'center',
+                      fontWeight: 'bold',
+                      color: ApiUtils.getBackgroundColor(),
+                      textDecorationLine: 'underline',
+                      marginTop: 30,
+                    }}>
+                    Alors, comment faire ?
+                  </Text>
+
+                  <Text style={{marginTop: 10}}>
+                    Il suffit donc de désactiver l’économiseur de batterie pour
+                    profiter au maximum de votre application. Voici la liste des
+                    modèles les plus touchés et les procédures pour chacun
+                    d’entre eux. Allez ! C’est à vous !
+                  </Text>
+
+                  {Platform.OS == 'android' ? (
+                    <View>
+                      <Text style={{fontWeight: 'bold', marginTop: 10}}>
+                        HUAWEI (Mate 20, P8 lite 2017, P10, …)
+                      </Text>
+                      <Text style={{marginTop: 10}} />
+                      <Text> 1. Aller dans "Réglages"</Text>
+                      <Text> 2. Cliquer sur "Batterie"</Text>
+                      <Text> 3. Cliquer sur "Lancement d'application"</Text>
+                      <Text>
+                        {' '}
+                        4. Rechercher et désactiver l’appli « Foulée Blanche »{' '}
+                      </Text>
+                      <Text>
+                        5. Cliquer sur OK en vérifiant que tout soit activé
+                      </Text>
+
+                      <Text style={{fontWeight: 'bold', marginTop: 10}}>
+                        SAMSUNG (Galaxy S8 et inférieur : Galaxy A5, Galaxy S7,
+                        Galaxy J5, ...)
+                      </Text>
+                      <Text style={{marginTop: 10}} />
+                      <Text> 1. Aller dans "Paramètres"</Text>
+                      <Text> 2. Cliquer sur "Maintenance de l'appareil"</Text>
+                      <Text> 3. Cliquer sur "Batterie"</Text>
+                      <Text> 5. Cliquer sur "Ajouter des applications"</Text>
+                      <Text>6.Sélectionner l’appli « Foulée Blanche »</Text>
+                      <Text>Cliquer sur "Terminé"</Text>
+
+                      <Text style={{fontWeight: 'bold', marginTop: 10}}>
+                        SAMSUNG (Galaxy S8 et inférieur : Galaxy A5, Galaxy S7,
+                        Galaxy J5, ...)
+                      </Text>
+                      <Text style={{marginTop: 10}} />
+                      <Text> 1. Aller dans "Paramètres"</Text>
+                      <Text> 2. Cliquer sur "Maintenance de l'appareil"</Text>
+                      <Text> 3. Cliquer sur "Batterie"</Text>
+                      <Text> 5. Cliquer sur "Ajouter des applications"</Text>
+                      <Text>6.Sélectionner l’appli « Foulée Blanche »</Text>
+                      <Text>Cliquer sur "Terminé"</Text>
+
+                      <Text style={{fontWeight: 'bold', marginTop: 10}}>
+                        SAMSUNG (Galaxy S10, Galaxy S9, …){' '}
+                      </Text>
+                      <Text>1. Aller dans "Paramètres" </Text>
+                      <Text>2. Cliquer sur "Maintenance de l'appareil" </Text>
+                      <Text>3. Cliquer sur "Batterie" </Text>
+                      <Text>
+                        4. Cliquer sur les 3 petits points en haut à droite{' '}
+                      </Text>
+                      <Text>5. Cliquer sur "Paramètres" </Text>
+                      <Text>
+                        6. Désactiver "Mise en veille applis inutilisées"{' '}
+                      </Text>
+                      <Text>
+                        7. Désactiver "Désactiver auto. applis inutilis."{' '}
+                      </Text>
+                      <Text>8. Cliquer sur "Applications en veille" </Text>
+                      <Text>
+                        9. Vérifier que l'application l’appli « Foulée Blanche »
+                        ne soit pas dans la liste, sinon supprimer-là à l'aide
+                        de la corbeille en haut à droite{' '}
+                      </Text>
+
+                      <Text style={{fontWeight: 'bold', marginTop: 10}}>
+                        {' '}
+                        SAMSUNG ( Galaxy A3)
+                      </Text>
+                      <Text>
+                        Par défaut, sur ce modèle, l’économiseur de batterie est
+                        désactivé. Sinon, voici la procédure !
+                      </Text>
+                      <Text>1. Aller dans “Paramètres”</Text>
+                      <Text>2. Cliquer sur “Batterie”</Text>
+                      <Text>3. Cliquer sur “Détails”</Text>
+                      <Text>4. Cliquer sur l’appli « Foulée Blanche »</Text>
+                      <Text>5. Désactivé l’appli « Foulée Blanche »</Text>
+
+                      <Text style={{fontWeight: 'bold', marginTop: 10}}>
+                        HONOR (8, 9, 10, …)
+                      </Text>
+                      <Text>1. Aller dans “Réglages”</Text>
+                      <Text>2. Cliquer sur “Batterie”</Text>
+                      <Text>3. Cliquer sur “Lancement d'application”</Text>
+                      <Text>4. Chercher "la foulée blanche"</Text>
+                      <Text>5. Désélectionner la checkbox</Text>
+                      <Text>
+                        5. Sélectionner les 3 champs qui vont s'afficher en
+                        popup
+                      </Text>
+
+                      <Text style={{fontWeight: 'bold', marginTop: 10}}>
+                        {' '}
+                        XIAOMI (Redmi note 7 et plus …)
+                      </Text>
+                      <Text>1. Aller dans "Paramètres"</Text>
+                      <Text>2. Cliquer sur "Gérer les applications"</Text>
+                      <Text>
+                        3. Rechercher et cliquer sur l’appli « Foulée Blanche »
+                      </Text>
+                      <Text>4. Activer "Démarrage automatique"</Text>
+                      <Text>5. Une fenêtre s'ouvre, cliquer sur "OK"</Text>
+                      <Text>
+                        6. Cliquer ensuite sur "Économiseur de batterie"
+                      </Text>
+                      <Text>7. Sélectionner "Pas de restriction"</Text>
+
+                      <Text style={{fontWeight: 'bold', marginTop: 10}}>
+                        {' '}
+                        ASUS (Zenfone 5 …)
+                      </Text>
+                      <Text>
+                        1. Aller dans l'application "Gestionnaire mobile"
+                      </Text>
+                      <Text>2. Cliquer sur "PowerMaster"</Text>
+                      <Text>
+                        3. Cliquer sur les 3 petits points en haut à droite
+                      </Text>
+                      <Text>4. Cliquer sur "Réglages"</Text>
+                      <Text>
+                        5. Désactiver la case "Refuser automatiquement le
+                        démarrage"
+                      </Text>
+                      <Text>6. Désactiver "Nettoyage suspendu"</Text>
+                      <Text>
+                        7. Retourner sur la page précédente (Réglages)
+                      </Text>
+                      <Text>8. Cliquer sur "Gestionnaire de démarrage"</Text>
+                      <Text>9. Activer l’appli « Foulée Blanche »</Text>
+                      <Text>10. Cliquer sur "Autoriser"</Text>
+
+                      <Text style={{fontWeight: 'bold', marginTop: 10}}>
+                        WIKO (Ufeel)
+                      </Text>
+                      <Text>1. Aller dans l'application "Phone Assist"</Text>
+                      <Text>2. Cliquer sur "Eco. de batterie"</Text>
+                      <Text>3. Cliquer sur "Mode éco"</Text>
+                      <Text>
+                        4. Désactiver "Activer automatiquement le mode éco"
+                      </Text>
+                      <Text>5. Revenir en arrière (Eco. de batterie)</Text>
+                      <Text>6. Cliquer sur "Paramètres avancés & astuces"</Text>
+                      <Text>
+                        7. Cliquer sur l'icône réglage en haut à droite
+                      </Text>
+                      <Text>
+                        8. Cliquer sur "White-list des apps en arrière-plan"
+                      </Text>
+                      <Text>9. Activer l’appli « Foulée Blanche » </Text>
+
+                      <Text style={{fontWeight: 'bold', marginTop: 10}}>
+                        ONEPLUS (6 et plus...)
+                      </Text>
+                      <Text>1. Aller dans "Paramètres"</Text>
+                      <Text>2. Cliquer sur "Batterie"</Text>
+                      <Text>3. Cliquer sur "Optimisation de la batterie"</Text>
+                      <Text>4. Sélectionner l’appli « Foulée Blanche »</Text>
+                      <Text>5. Sélectionner "Ne pas optimiser"</Text>
+                    </View>
+                  ) : (
+                    <View>
+                      <Text style={{fontWeight: 'bold', marginTop: 10}}>
+                        VOUS UTILISEZ IOS14 (OU UNE VERSION PLUS RÉCENTE) ?
+                      </Text>
+
+                      <Text style={{fontWeight: 'bold', marginTop: 10}}>
+                        Voici la procédure pour modifier les paramètres de
+                        localisation :
+                      </Text>
+                      <Text>1. Ouvrez les paramètres de votre téléphone</Text>
+                      <Text>
+                        2. Accédez à "La foulée blanche {'>'} Position"
+                      </Text>
+                      <Text>
+                        3. Sélectionnez “Lorsque l’app est active” et réglez
+                        “Position exacte” sur ON (voir capture d'écran
+                        ci-dessous)
+                      </Text>
+                      <Text>4. Redémarrez l'application</Text>
+
+                      <Image
+                        style={{
+                          marginTop: 20,
+                          marginLeft: 'auto',
+                          marginRight: 'auto',
+                        }}
+                        source={IosReglages}
+                        width={(Dimensions.get('screen').width * 70) / 100}
+                        resizeMode="contain"
+                      />
+
+                      <Text style={{fontWeight: 'bold', marginTop: 10}}>
+                        VOUS UTILISEZ IOS 13 (OU UNE VERSION PLUS ANCIENNE) ?
+                      </Text>
+
+                      <Text style={{fontWeight: 'bold', marginTop: 10}}>
+                        Voici la procédure pour modifier les paramètres de
+                        localisation :
+                      </Text>
+                      <Text>1. Ouvrez les paramètres de votre téléphone</Text>
+                      <Text>
+                        2. Accédez à "La foulée blanche {'>'} Position"
+                      </Text>
+                      <Text>
+                        3. Sélectionnez “Lorsque l’app est active” (voir capture
+                        d'écran ci-dessous)
+                      </Text>
+                      <Text>4. Redémarrez l'application</Text>
+
+                      <Image
+                        style={{
+                          marginTop: 10,
+                          marginLeft: 'auto',
+                          marginRight: 'auto',
+                        }}
+                        source={Ios2}
+                        width={(Dimensions.get('screen').width * 90) / 100}
+                        resizeMode="contain"
+                      />
+                    </View>
+                  )}
                 </View>
-              </View> */}
-      
+              ) : null}
 
               {this.props.noHeader ? (
                 <Text style={{textAlign: 'center', marginTop: 10}}>

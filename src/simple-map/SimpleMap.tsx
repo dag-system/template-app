@@ -26,7 +26,8 @@ import {ReactNativeModal as ModalSmall} from 'react-native-modal';
 import RNFetchBlob from 'rn-fetch-blob';
 import {buildGPX, GarminBuilder} from 'gpx-builder';
 const {Point} = GarminBuilder.MODELS;
-
+import {check,request, PERMISSIONS, RESULTS} from 'react-native-permissions';
+import * as Sentry from '@sentry/react-native';
 // Import native-base UI components
 import {
   Container,
@@ -73,11 +74,12 @@ import GlobalStyles from '../styles';
 import {Sponsors} from '../home/Sponsors';
 import {Dimensions} from 'react-native';
 import BatteryModal from '../home/BatteryModal';
+import DefaultProps from '../models/DefaultProps';
 
-// const LATITUDE_DELTA = 0.00922;
-// const LONGITUDE_DELTA = 0.00421;
-const LATITUDE_DELTA = 0.16022;
-const LONGITUDE_DELTA = 0.01221;
+const LATITUDE_DELTA = 0.00922;
+const LONGITUDE_DELTA = 0.00421;
+// const LATITUDE_DELTA = 0.16022;
+// const LONGITUDE_DELTA = 0.01221;
 const haversine = require('haversine');
 
 var interval = null;
@@ -110,41 +112,97 @@ const mapStateToProps = state => {
   };
 };
 
-class SimpleMap extends Component {
-  constructor(props) {
+interface Props extends DefaultProps  {
+  userData: any,
+  isRecording: boolean,
+  lives:  any[],
+  sports:  any[],
+  currentLive: any,
+  currentPosition: any,
+  coordinates:  any[],
+  markers:  any[],
+  dates: any[],
+  isMoving: boolean,
+
+  // showsUserLocation: false,
+  // isMoving: false,
+  // recording: false,
+  // isStarted: false,
+  odometer: number,
+  isFirstPoint: boolean,
+  pointsInterets: any[],
+  polylines: any[],
+  odometerInitialValue: number,
+  descriptionStation: string,
+  nomStation: string,
+  currentMapStyle: string,
+  isOkPopupGps: boolean,
+}
+
+interface State {
+  modalVisible: boolean,
+  modal2Visible: boolean,
+  modal3Visible: boolean,
+  ismodalBatteryOpen: boolean,
+  acceptChallengeUtilisateur: boolean,
+  acceptChallengeNameUtilisateur: boolean,
+  libelleLiveIsModified: boolean,
+  live: {
+    invites: any[],
+    libelleLive : string
+  },
+  selectedSport: -1,
+  comments: string,
+  sports: [],
+  fabActive : boolean,
+  invites: [],
+  rowID: 0,
+  nomPersonne: string,
+  prenomPersonne: string,
+  telPersonne: string,
+  mailPersonne: string,
+  // MapView
+  isModalTraceVisible: boolean,
+  isModalInterestVisible: boolean,
+  spinner: boolean,
+  currentInteret: {
+    idInteret : string,
+    idStation : string,
+    libelleInteret: string,
+    descriptionInteret : string,
+    telephoneInteret: string,
+    lienInteret: string,
+    photoInteret: string,
+  },
+  isSyncOk : boolean,
+  currentPolyline: any,
+  isGpsNotOk: boolean,
+  time : number,
+  libelleLive : string
+  
+}
+
+
+class SimpleMap extends Component<Props,State> {
+  interval: number;
+  private _unsubscribe2: any;
+  _unsubscribe: any;
+  constructor(props : any) {
     super(props);
 
     this.state = {
-      enabled: false,
-      isMoving: false,
-      recording: false,
-      isStarted: false,
-      motionActivity: {activity: 'unknown', confidence: 100},
-      odometer: 0,
-      totalPositiveAltitude: 0,
-      totalNegativeAltitude: 0,
-      lastAltitude: 0,
-      currentSpeed: '-',
       modalVisible: false,
       modal2Visible: false,
       modal3Visible: false,
       ismodalBatteryOpen: false,
       acceptChallengeUtilisateur: false,
       acceptChallengeNameUtilisateur: false,
-      modalAddInterestVisible: false,
       libelleLiveIsModified: false,
-      setLocationToCenter: true,
-      odometerInitialValue: 0,
-      // username: props.navigation.state.params.username,
-      userdata: {
-        nomUtilisateur: '',
-        prenomUtilisateur: '',
-        folocodeUtilisateur: '',
-        acceptChallengeUtilisateur: false,
-      },
       live: {
         invites: [],
+        libelleLive : ''
       },
+      libelleLive : '',
       selectedSport: -1,
       comments: '',
       sports: [],
@@ -154,29 +212,23 @@ class SimpleMap extends Component {
       prenomPersonne: '',
       telPersonne: '',
       mailPersonne: '',
-      // MapView
-      polylines: [],
-      nomStation: '',
-      descriptionStation: '',
-      coordinates2: [],
-      markers: [],
-      coordinates: [],
+      fabActive : false,
       isModalTraceVisible: false,
       isModalInterestVisible: false,
-      showsUserLocation: true,
-      pointsInterets: [],
-      timer: 0,
       spinner: false,
-      spinnerText: '',
-      timerString: '00:00:00',
       currentInteret: {
+        descriptionInteret : '',
+        idInteret : '',
+        idStation : '',
         libelleInteret: '',
         telephoneInteret: '',
         lienInteret: '',
         photoInteret: '',
       },
+      isSyncOk : false,
       currentPolyline: null,
       isGpsNotOk: true,
+      time : 0
     };
     // const didBlurSubscription = this.props.navigation.addListener(
     //   'willFocus',
@@ -199,17 +251,6 @@ class SimpleMap extends Component {
     });
   }
 
-  // Buttons
-  swipeoutBtns = [
-    {
-      text: 'Supprimer',
-      backgroundColor: 'red',
-      underlayColor: 'rgba(0, 0, 0, 1, 0.6)',
-      onPress: () => {
-        this.deleteInvite();
-      },
-    },
-  ];
 
   addPersonne(personne) {
     var newInvites = this.props.currentLive.invites;
@@ -219,9 +260,7 @@ class SimpleMap extends Component {
     this.props.dispatch(action);
   }
 
-  componentWillUnmount() {
-    BackgroundGeolocation.removeListeners();
-  }
+
 
   onClickCreateInvite() {
     let formData = new FormData();
@@ -284,55 +323,15 @@ class SimpleMap extends Component {
       ();
   }
 
-  deleteInvite() {
-    var folocodePersonne = this.state.rowID;
-    let formData = new FormData();
-    formData.append('method', 'deletePersonne');
-    formData.append('auth', ApiUtils.getAPIAuth());
-    formData.append('idLive', this.props.currentLive.idLive);
-    formData.append('idUtilisateur', folocodePersonne);
-    //fetch followCode API
-    fetch(ApiUtils.getAPIUrl(), {
-      method: 'POST',
-      headers: {
-        // Accept: 'application/jsjhon',
-        // 'Content-Type': 'application/json',
-      },
-      body: formData,
-    })
-      .then(ApiUtils.checkStatus)
-      .then(response => response.json())
-      .then(responseJson => {
-        //save values in cache
-
-        if (responseJson.codeErreur == 'DELETE_PERSONNE_SUCCESS') {
-          //SaveData
-
-          var finalInvites = this.props.currentLive.invites.filter(function(
-            personne,
-          ) {
-            return personne.idUtilisateur != folocodePersonne;
-          });
-
-          var action = {type: 'UPDATE_INVITES', data: finalInvites};
-          this.props.dispatch(action);
-
-          // this.setState({
-          //   invites: this.state.invites.filter(function (personne) {
-          //     return personne.idUtilisateur != folocodePersonne
-          //   })
-          // });
-        } else {
-          alert('erreur : ' + responseJson.message);
-        }
-      })
-      .catch(e => ApiUtils.logError('simpleMap deleteInvite', e.message))
-      .then();
+ 
+  componentDidMount()
+  {
+    setTimeout(() => this.componentDidMountOk(), 300)
   }
 
-  componentDidMount() {
+  componentDidMountOk() {
     if (this.props.currentLive == null) {
-      this.onDisconnect();
+      this.onDisconnect(false);
       this.props.navigation.navigate('Lives');
     }
 
@@ -345,9 +344,9 @@ class SimpleMap extends Component {
       //   console.log("resu : " + JSON.stringify(result));
       // })
     } else {
-      if (this.props.isOkPopupGps) {
+      // if (this.props.isOkPopupGps) {
         this.getFirstLocation();
-      }
+      // }
     }
 
     this.setState({
@@ -360,6 +359,8 @@ class SimpleMap extends Component {
         this.props.userData.acceptChallengeUtilisateur == 1,
     });
 
+    this.requestMotionPermission();
+
     // this.setState({ acceptChallengeUtilisateur: this.props.userData.acceptChallengeUtilisateur });
     clearInterval(this.interval);
     this.interval = setInterval(() => this.setState({time: Date.now()}), 800);
@@ -371,21 +372,19 @@ class SimpleMap extends Component {
     this.calcDistanceFromAllCoordinates(this.props.coordinates);
 
     // Geolocation.requestAuthorization();
-    Geolocation.setRNConfiguration({authorizationLevel: 'always'});
+    Geolocation.setRNConfiguration({authorizationLevel: 'always', skipPermissionRequests : false});
 
     BackHandler.addEventListener('hardwareBackPress', this.handleBackButton);
 
-    //  BackgroundGeolocation.on('activitychange', this.onActivityChange.bind(this));
-    //BackgroundGeolocation.on('providerchange', this.onProviderChange.bind(this));
-    // BackgroundGeolocation.on('powersavechange', this.onPowerSaveChange.bind(this));
-    //   AppState.addEventListener('change', this._handleAppStateChange);
-    // this.getSports();
+   
     var idLive = this.props.currentLive?.idLive;
   
     let config = {
+      debug : false,
       distanceFilter: 10,
       url: ApiUtils.getAPIUrl(),
       httpRootProperty: '.',
+      httpTimeout: 300000,
       params: {
         method: 'createPositions2',
         idLive: idLive,
@@ -417,12 +416,13 @@ class SimpleMap extends Component {
       autoSync: true,
       autoSyncThreshold: 5,
       batchSync: true,
-      preventSuspend: false,
+      preventSuspend: true,
+      maxRecordsToPersist : -1,
       stopOnTerminate: false, //TODO TO DO
       startOnBoot: true,
+      reset : true,
       foregroundService: true,
       disableElasticity: true,
-      debug: false,
       logLevel: BackgroundGeolocation.LOG_LEVEL_VERBOSE,
       disableStopDetection : true,
       disableMotionActivityUpdates : true,
@@ -431,32 +431,45 @@ class SimpleMap extends Component {
       heartbeatInterval: 20,
       stopTimeout : Platform.OS == 'ios'?  60  : 5,
       desiredAccuracy:
-        Platform.OS == 'ios '
+        Platform.OS == 'ios'
           ? BackgroundGeolocation.DESIRED_ACCURACY_NAVIGATION
           : BackgroundGeolocation.DESIRED_ACCURACY_HIGH,
-      desiredOdometerAccuracy: 10, //If you only want to calculate odometer from GPS locations, you could set desiredOdometerAccuracy: 10. This will prevent odometer updates when a device is moving around indoors, in a shopping mall, for example.
+      desiredOdometerAccuracy: 10, 
+      //If you only want to calculate odometer from GPS locations, you could set desiredOdometerAccuracy: 10. This will prevent odometer updates when a device is moving around indoors, in a shopping mall, for example.
    
     };
-
-
-
     
-    BackgroundGeolocation.reset(config);
+    BackgroundGeolocation.reset(config, success => { 
+      console.log("reset success");
+    }, fail =>{
+      console.log("reset fail");
+    });
 
     BackgroundGeolocation.ready(config, state => {
       this.setState({
-        enabled: state.enabled,
-        isMoving: state.isMoving,
-        showsUserLocation: false,
-        comments: '',
-        selectedSport: -1,
-        libelleLive: ApiUtils.getLibelleLive(),
-        nomPersonne: '',
-        prenomPersonne: '',
-        telPersonne: '',
-        mailPersonne: '',
-      });
+        libelleLive: ApiUtils.getLibelleLive()
+      })
+      // this.setState({
+      //   enabled: state.enabled,
+      //   isMoving: state.isMoving,
+      //   showsUserLocation: false,
+      //   comments: '',
+      //   selectedSport: -1,
+      //   libelleLive: ApiUtils.getLibelleLive(),
+      //   nomPersonne: '',
+      //   prenomPersonne: '',
+      //   telPersonne: '',
+      //   mailPersonne: '',
+      // });
+     BackgroundGeolocation.start();
+
+     BackgroundGeolocation.setConfig(config).then((state) => {
+      console.log("[setConfig] success: ", state);
+    })
+
     });
+
+    
 
     // .then(() => {
 
@@ -466,6 +479,18 @@ class SimpleMap extends Component {
       loc => this.onLocation(loc),
       this.onLocationError.bind(this),
     );
+
+    BackgroundGeolocation.onAuthorization(authorizationEvent => {
+      if (authorizationEvent.success) {
+        Sentry.captureMessage("[authorization] SUCCESS: ");
+        
+                console.log("[authorization] SUCCESS: ", authorizationEvent.response);
+      }
+            else {
+              Sentry.captureMessage("[authorization] FAILURE: " + JSON.stringify(authorizationEvent.error));
+                console.log("[authorization] FAILURE: ", authorizationEvent.error);
+            }
+    });
 
     BackgroundGeolocation.onProviderChange(async event => {
       if (
@@ -487,12 +512,14 @@ class SimpleMap extends Component {
             );
             this.getFirstLocation();
           } else {
+            Sentry.captureMessage("[requestTemporaryFullAccuracy] DENIED: ");
             console.log(
               '[requestTemporaryFullAccuracy] DENIED: ',
               accuracyAuthorization,
             );
           }
         } catch (error) {
+          Sentry.captureMessage("[requestTemporaryFullAccuracy] FAILED TO SHOW DIALOG: ");
           console.warn(
             '[requestTemporaryFullAccuracy] FAILED TO SHOW DIALOG: ',
             error,
@@ -506,15 +533,16 @@ class SimpleMap extends Component {
 
       // You could request a new location if you wish.
       BackgroundGeolocation.getCurrentPosition({
-        samples: 1,
+        samples: 3,
         persist: true,
       }).then(location => {
+        Sentry.captureMessage("heartbeat event "+ JSON.stringify(location));
         console.log('[getCurrentPosition] ', location);
       });
     });
 
-    BackgroundGeolocation.on('motionchange', this.onMotionChange.bind(this));
     BackgroundGeolocation.onHttp(httpEvent => {
+      Sentry.captureMessage("onHttp event idLive :"+   this.props.currentLive.idLive + JSON.stringify(httpEvent));
       ApiUtils.logError(
         'LOG simpleMap createPosition2 onHTTP -- status : ' +
           httpEvent.status +
@@ -523,101 +551,7 @@ class SimpleMap extends Component {
         '  ---   json reçu :' + httpEvent.responseText,
       );
       try {
-        if (httpEvent.responseText != null && httpEvent.responseText != '') {
-          var result = JSON.parse(httpEvent.responseText);
-
-          if (result.codeErreur == 'SUCCESS') {
-            if (
-              result.tracesStation != null &&
-              result.tracesStation.length != 0
-            ) {
-              this.setState({nomStation: result.nomStation});
-
-              this.setState({descriptionStation: result.descriptionStation});
-              var tracesArray = Object.values(result.tracesStation);
-
-              var finalTraceArray = []; // new Object(this.props.polylines);
-              if ((tracesArray != null) & (tracesArray.length != 0)) {
-                tracesArray.forEach(trace => {
-                  var finalTrace = trace;
-
-                  var positionArray = Object.values(trace.positionsTrace);
-                  trace.positionsTrace = positionArray;
-
-                  var finalTrace = {
-                    positionsTrace: positionArray,
-                    couleurTrace: trace.couleurTrace,
-                    nomTrace: trace.nomTrace,
-                    isActive: true,
-                    sportTrace: trace.sportTrace,
-                    distanceTrace: trace.distanceTrace,
-                    dplusTrace: trace.dplusTrace,
-                  };
-                  finalTraceArray.push(finalTrace);
-                });
-              }
-
-              this.setState({polylines: finalTraceArray});
-
-              var station = {
-                nomStation: result.nomStation,
-                descriptionStation: result.descriptionStation,
-                polylines: finalTraceArray,
-                // pointsInterets: finalinterestArray
-              };
-
-              var action = {type: 'UPDATE_STATION_DATA', data: station};
-              this.props.dispatch(action);
-            }
-
-            // if (result.pointsInterets != null && result.pointsInterets.length != 0) {
-
-            //   var finalinterestArray = [];
-            //   var interestArray = Object.values(result.pointsInterets);
-            //   var count = 0;
-            //   interestArray.forEach(interest => {
-            //     var coordinate = {
-            //       latitude: parseFloat(interest.latitudeInteret),
-            //       longitude: parseFloat(interest.longitudeInteret)
-            //     }
-
-            //     var finalInterest = {
-            //       id: "interest" + count,
-            //       idInteret: interest.idInteret,
-            //       idStation: interest.idStation,
-            //       coordinates: coordinate,
-            //       libelleInteret: interest.libelleInteret,
-            //       couleurTrace: interest.couleurTrace,
-            //       descriptionInteret: interest.descriptionInteret,
-            //       telephoneInteret: interest.telephoneInteret,
-            //       lienInteret: interest.lienInteret,
-            //       photoInteret: interest.photoInteret,
-            //     };
-
-            //     if (finalInterest.descriptionInteret == null && interest.externalData != null) {
-
-            //       var extraData = JSON.parse(interest.externalData);
-            //       if (extraData.hasDescription.length > 0 && extraData.hasDescription[0] != null) {
-            //         if (extraData.hasDescription[0].shortDescription != null && extraData.hasDescription[0].shortDescription.length > 1) {
-            //           finalData.description = extraData.hasDescription[0].shortDescription[1];
-            //         } else {
-            //           finalData.description = extraData.hasDescription[0].shortDescription[0];
-            //         }
-
-            //       }
-            //     }
-            //     if (interest.actifInteret == "1") {
-            //       finalinterestArray.push(finalInterest);
-            //       count++;
-            //     }
-
-            //   });
-            //   this.setState({ pointsInterets: finalinterestArray });
-            // }
-          } else {
-            // this.setState({ polylines: [] });
-          }
-        }
+      
       } catch (e) {
         ApiUtils.logError(
           'ERROR simpleMap createPosition onHTTP --  ' +
@@ -628,8 +562,6 @@ class SimpleMap extends Component {
         );
       }
     });
-
-    this.syncPositions();
   }
 
   handleBackButton() {
@@ -659,8 +591,6 @@ class SimpleMap extends Component {
           }
         })
         .catch(error => {
-          alert('error');
-          console.warn(JSON.stringify(error));
         });
     }
   }
@@ -669,6 +599,8 @@ class SimpleMap extends Component {
     this._unsubscribe();
     clearInterval(this.interval);
     BackHandler.removeEventListener('hardwareBackPress', this.handleBackButton);
+
+    BackgroundGeolocation.removeListeners();
   }
 
   async saveRecordingState(isrecording) {
@@ -676,8 +608,51 @@ class SimpleMap extends Component {
     this.props.dispatch(action);
   }
 
+  requestMotionPermission()
+  {
+    check(PERMISSIONS.IOS.MOTION)
+  .then((result) => {
+    switch (result) {
+      case RESULTS.UNAVAILABLE:
+        console.log('This feature is not available (on this device / in this context)');
+        break;
+      case RESULTS.DENIED:
+        this.askMotionPermission();
+        console.log('The permission has not been requested / is denied but requestable');
+        break;
+      case RESULTS.LIMITED:
+        console.log('The permission is limited: some actions are possible');
+        break;
+      case RESULTS.GRANTED:
+        console.log('The permission is granted');
+        break;
+      case RESULTS.BLOCKED:
+        console.log('The permission is denied and not requestable anymore');
+        break;
+        default : 
+
+    }
+  })
+  .catch((error) => {
+
+  });
+  }
+
+
+  askMotionPermission()
+  {
+    request(PERMISSIONS.IOS.MOTION).then((result) => {
+      if(result ==RESULTS.DENIED)
+      {
+        Alert.alert("Permission refusée", "Vous devez accepter cette permission pour avoir un bon enregistrement de votre parcours");
+        Sentry.captureMessage("Motion Permission refusée");
+      }
+    });
+  }
+  
+
   getFirstLocation() {
-    Geolocation.setRNConfiguration({authorizationLevel: 'always'});
+    Geolocation.setRNConfiguration({authorizationLevel: 'always', skipPermissionRequests : false});
     // Geolocation.requestAuthorization();
 
     Geolocation.getCurrentPosition(
@@ -725,85 +700,18 @@ class SimpleMap extends Component {
    */
 
   onLocation(location) {
-    this.addMarker(location);
+    if(this.props.isMoving)
+    {
+      this.addMarker(location);
 
-    if (location.coords.accuracy != 0 && location.coords.accuracy < 300) {
-      this.setState({isGpsNotOk: false});
+      if (location.coords.accuracy != 0 && location.coords.accuracy < 300) {
+        this.setState({isGpsNotOk: false});
+      }
+  
+
     }
-
-    if (!location.sample) {
-      var odometerCurrent = location.odometer;
-
-      // var coordinate = {
-      //   latitude: location.coords.latitude,
-      //   longitude: location.coords.longitude
-      // };
-
-      // latitude: location.coords.latitude,
-      // longitude: location.coords.longitude,
-
-      // var speed = location.coords.speed;
-
-      // if (speed != -1) {
-      //   var speedKmH = (speed * 3.6).toFixed(1);
-      //   this.setState({ currentSpeed: speedKmH });
-      // } else {
-      //   this.setState({ currentSpeed: '-' });
-      // }
-
-      // this.generateLotOfMarkers(10000);
-
-      // console.log('odomter : ' + location.odometer + '   odomtert initial  : ' + this.props.odometerInitialValue)
-      // if (this.props.isFirstPoint) {
-
-      //   this.setCenter(location);
-
-      //   var odometerData = {
-      //     odometerInitialValue: odometerCurrent,
-      //     isFirstPoint: false,
-      //     odometer: 0,
-      //     currentPosition: location
-      //   };
-
-      //   var action = { type: 'UPDATE_ODOMETER', data: odometerData }
-      //   this.props.dispatch(action);
-
-      //   // this.setState({ odometerInitialValue: odometerCurrent, isFirstPoint: false });
-      //   // this.setState({
-      //   //   odometer: (odometerCurrent - odometerCurrent).toFixed(2)
-      //   // });
-      // } else {
-      //   console.log('la',location.odometer)
-
-      //   var odometerDataNew = {
-      //     odometerInitialValue: this.props.odometerInitialValue,
-      //     isFirstPoint: false,
-      //     odometer: location.odometer,
-      //     currentPosition: location
-      //   };
-
-      //   var action2 = { type: 'UPDATE_ODOMETER', data: odometerDataNew }
-      //   this.props.dispatch(action2);
-
-      //   // this.setState({
-      //   //   odometer: ((location.odometer - this.props.odometerInitialValue) / 1000).toFixed(2)
-      //   // });
-      // }
-
-      // alert(location.odometer);
-
-      // var altitudeDiff = location.altitude - this.state.lastAltitude;
-
-      // if (altitudeDiff > 0) {
-      //   this.setState({ totalPositiveAltitude: (this.state.totalPositiveAltitude + altitudeDiff) });
-      // } else {
-      //   this.setState({ totalNegativeAltitude: (this.state.totalPositiveAltitude - altitudeDiff) });
-      // }
-
-      // this.setState({ lastAltitude: (location.altitude) });
-    }
-
     this.setState({currentPosition: location});
+   
   }
 
   async calcDistance(location, oldLatLong, newLatLng) {
@@ -842,6 +750,7 @@ class SimpleMap extends Component {
 
   onLocationError(error) {
     console.log(error);
+    Sentry.captureMessage('location Error', JSON.stringify(error));
     ApiUtils.logError(
       'Location Error' +
         'ErrorCode : ' +
@@ -864,37 +773,6 @@ class SimpleMap extends Component {
   closeModalBattery = () => {
     this.setState({ismodalBatteryOpen: false});
   };
-  /**
-   * @event motionchange
-   */
-  onMotionChange(event) {
-    //console.log('[event] motionchange: ', event.isMoving, event.location);
-    this.setState({
-      isMoving: event.isMoving,
-    });
-    let location = event.location;
-  }
-  /**
-   * @event activitychange
-   */
-  onActivityChange(event) {
-    //console.log('[event] activitychange: ', event);
-    this.setState({
-      motionActivity: event,
-    });
-  }
-  /**
-   * @event providerchange
-   */
-  onProviderChange(event) {
-    // console.log('[event] providerchange', event);
-  }
-  /**
-   * @event powersavechange
-   */
-  onPowerSaveChange(isPowerSaveMode) {
-    //console.log('[event] powersavechange', isPowerSaveMode);
-  }
 
   onToggleEnabled(isMoving, isRecording) {
     if (isMoving) {
@@ -971,6 +849,7 @@ class SimpleMap extends Component {
     };
 
     var coordinate = {
+      uuid : location.uuid,
       latitude: location.coords.latitude,
       longitude: location.coords.longitude,
       timestamp: location.timestamp,
@@ -984,43 +863,16 @@ class SimpleMap extends Component {
       this.calcDistance(location, lastPos, newPost);
     }
 
-    var action = {type: 'ADD_MARKER', data: marker};
-    this.props.dispatch(action);
+    var actionMarker = {type: 'ADD_MARKER', data: marker};
+    this.props.dispatch(actionMarker);
 
     var action = {type: 'ADD_COORDINATE', data: coordinate};
     this.props.dispatch(action);
 
-    var action = {type: 'UPDATE_CURRENT_POSITION', data: location};
-    this.props.dispatch(action);
+    var actionCurrentPosition = {type: 'UPDATE_CURRENT_POSITION', data: location};
+    this.props.dispatch(actionCurrentPosition);
   }
 
-  generateLotOfMarkers(numbers) {
-    let markerst = [];
-    let coordinates = [];
-
-    for (let i = 1; i < numbers; i++) {
-      let test = Math.random();
-      let lat = 44.935 + i / 100;
-      let long = 4.89 + i / 100;
-      let coordinatet = {
-        latitude: lat,
-        longitude: long,
-      };
-      let marker = {
-        key: test * 1000,
-        // title: location.timestamp,
-        // heading: location.coords.heading,
-        coordinate: coordinatet,
-      };
-
-      markerst.push(marker);
-    }
-
-    this.setState({
-      markers: markerst,
-      // coordinates: [...this.state.coordinates, coordinates]
-    });
-  }
 
   setCenter(location) {
     if (!this.refs.map) {
@@ -1089,8 +941,8 @@ class SimpleMap extends Component {
 
     let isMoving = !this.props.isMoving;
 
-    var action = {type: 'IS_MOVING', data: isMoving};
-    this.props.dispatch(action);
+    var actionIsMoving = {type: 'IS_MOVING', data: isMoving};
+    this.props.dispatch(actionIsMoving);
 
     this.onToggleEnabled(isMoving, this.props.isRecording);
   }
@@ -1255,6 +1107,7 @@ class SimpleMap extends Component {
     if (this.props.isMoving) {
       this.onTimerStartPause();
     }
+    this.sendBgLocations();
     this.syncPositions();
     //  else {
     //   this.onToggleEnabled(false, true)
@@ -1311,7 +1164,6 @@ class SimpleMap extends Component {
         PermissionsAndroid.request(
           'android.permission.READ_EXTERNAL_STORAGE',
         ).then(res => {
-          console.warn(res);
           if (res == 'granted') {
           } else {
             // alert('error')
@@ -1324,32 +1176,6 @@ class SimpleMap extends Component {
     }
   }
 
-  async onClickAddGpx() {
-    this.checkPermissions();
-
-    // Pick a single file
-    try {
-      const res = await DocumentPicker.pick({
-        // type: 'application/gpx+xml',
-      });
-
-      var uri = res.uri;
-      var filePath = uri;
-
-      if (res.name.includes('.gpx')) {
-        setTimeout(() => this.readFile(filePath), 100);
-      } else {
-        alert("Le fichier n'est pas un fichier gpx");
-      }
-    } catch (err) {
-      // alert(err)
-      if (DocumentPicker.isCancel(err)) {
-        // User cancelled the picker, exit any dialogs or menus and move on
-      } else {
-        throw err;
-      }
-    }
-  }
 
   centerMapOnTrace(polyline) {
     if (polyline.positionsTrace.length != 0) {
@@ -1362,83 +1188,15 @@ class SimpleMap extends Component {
     this.selectPolyline(polyline);
   }
 
-  readFile(filePath) {
-    var path = this.normalize(filePath);
-    var _this = this;
-
-    RNFetchBlob.fs
-      .readFile(path, 'utf8')
-      .then(data => {
-        // alert('ok')
-        // console.log(data);
-        // handle the data ..
-
-        try {
-          var test = new GPXDocument(data);
-
-          test.getTracks().then(t => {
-            t.forEach(tr => {
-              var finalTrace = {
-                // positionsTrace: positionArray,
-                couleurTrace: ApiUtils.getColor(),
-                nomTrace: tr.getName(),
-                isActive: true,
-                sportTrace: 'inconnu',
-              };
-
-              tr.loadAllSegmentInfo().then(resu => {
-                // console.log(resu);
-                finalTrace.distanceTrace = (
-                  resu[0].totalDistance / 1000
-                ).toFixed(1);
-                finalTrace.dplusTrace = resu[0].totalElevationGain.toFixed(0);
-
-                // var positionArray = tr.transformGpxPointToLatLong(resu[0].points);
-                finalTrace.positionsTrace = resu[0].latLongList;
-
-                var action = {type: 'ADD_TRACE', data: finalTrace};
-                _this.props.dispatch(action);
-
-                _this.centerMapOnTrace(finalTrace);
-
-                Toast.show({
-                  text: 'Le fichier gpx a bien été importé',
-                  buttonText: 'Ok',
-                  type: 'success',
-                  duration: 3000,
-                  position: 'bottom',
-                });
-                // polylines.push(finalTrace);
-              });
-
-              // this.setState({ polylines: polylines })
-            });
-          });
-        } catch (e) {
-          Toast.show({
-            text: 'Une erreur est survenue. Merci de réessayer',
-            buttonText: 'Ok',
-            type: 'danger',
-            duration: 3000,
-            position: 'bottom',
-          });
-          // alert(e)
-        }
-      })
-      .catch(e => {
-        Toast.show({
-          text: 'Une erreur est survenue. Merci de réessayer',
-          buttonText: 'Ok',
-          type: 'danger',
-          duration: 3000,
-          position: 'bottom',
-        });
-      });
-  }
-
   onstart() {
-    this.saveRecordingState(true);
-    this.onTimerStartPause();
+    BackgroundGeolocation.destroyLocations(s => {
+      this.saveRecordingState(true);
+      this.onTimerStartPause();
+    },f => {
+      this.saveRecordingState(true);
+      this.onTimerStartPause();
+    });
+
     // this.setState({ isStarted: true })
   }
 
@@ -1469,26 +1227,6 @@ class SimpleMap extends Component {
   toggleModal3(visible) {
     return this.setState({modal3Visible: visible});
   }
-
-  toggleModalAddInterest(visible) {
-    return this.setState({modalAddInterestVisible: visible});
-  }
-
-  closeModalAddInterestSuccess = () => {
-    this.setState({modalAddInterestVisible: false}, () => {
-      Toast.show({
-        text: "Le point d'interêt a bien été ajouté",
-        buttonText: 'Ok',
-        duration: 3000,
-        type: 'success',
-        position: 'bottom',
-      });
-    });
-  };
-
-  closeModalAddInterest = () => {
-    return this.setState({modalAddInterestVisible: false});
-  };
 
   isErrorForm() {
     var isError = false;
@@ -1521,30 +1259,58 @@ class SimpleMap extends Component {
   }
 
   onClickValidateStop() {
+
+    
+    this.syncPositions();
+
     var isError = false;
-    if (this.state.live.libelleLive == '') {
+    if (this.state.libelleLive == '') {
       isError = true;
     }
 
     if (this.state.selectedSport == -1) {
       isError = true;
     }
+    console.log('is error' , isError)
 
     if (!isError) {
       this.onSendRequestStop();
     }
   }
 
+  async sendBgLocations()
+  {
+  
+
+    BackgroundGeolocation.getLocations(records => {
+      console.log('[getLocations] success: ', records);
+
+      Sentry.captureMessage("getLocations ok");
+    },error => {
+      console.log("erreur sync" ,JSON.stringify(error));
+    });
+
+
+  }
+
   syncPositions() {
+    
     try {
       BackgroundGeolocation.sync(records => {
         console.log('[sync] success: ', records);
+        this.setState({isSyncOk : true}) ;
+        Sentry.captureMessage("sync ok");
         ApiUtils.logError(
           'sync at end idUtilisateur: ' + this.props.userData.idUtilisateur,
           JSON.stringify(records),
         );
+      },error => {
+        console.log("erreur sync" ,JSON.stringify(error));
       });
     } catch (e) {
+
+      // this.setState({isSyncOk : false}) ;
+      Sentry.captureMessage("sync ko");
       console.log('[sync] error: ', e);
       ApiUtils.logError(
         'ERROR sync at end idUtilisateur: ' + this.props.userData.idUtilisateur,
@@ -1553,10 +1319,10 @@ class SimpleMap extends Component {
   }
 
   onSendRequestStop() {
-    this.syncPositions();
+    // this.syncPositions();
 
     this.setState(
-      {spinner: true, spinnerText: 'Enregistrement en cours...'},
+      {spinner: true},
       () => {
         let formData = new FormData();
         formData.append('method', 'updateLive');
@@ -1568,9 +1334,7 @@ class SimpleMap extends Component {
         formData.append('idSport', this.state.selectedSport);
         var acceptChallengeUtilisateur = 0;
         if (
-          this.state.acceptChallengeUtilisateur ||
-          this.state.acceptChallengeUtilisateur == 1 ||
-          this.state.acceptChallengeUtilisateur == 'true'
+          this.state.acceptChallengeUtilisateur 
         ) {
           acceptChallengeUtilisateur = 1;
         }
@@ -1582,9 +1346,7 @@ class SimpleMap extends Component {
 
         var acceptChallengeNameUtilisateur = 0;
         if (
-          this.state.acceptChallengeNameUtilisateur ||
-          this.state.acceptChallengeNameUtilisateur == 1 ||
-          this.state.acceptChallengeNameUtilisateur == 'true'
+          this.state.acceptChallengeNameUtilisateur 
         ) {
           acceptChallengeNameUtilisateur = 1;
         }
@@ -1605,7 +1367,7 @@ class SimpleMap extends Component {
           .then(response => response.json())
           .then(responseJson => {
             if (responseJson.codeErreur == 'SUCCESS') {
-              this.setState({spinner: false, spinnerText: ''});
+              this.setState({spinner: false});
 
               this.toggleModal3(false);
               this.onDisconnect(true);
@@ -1636,7 +1398,6 @@ class SimpleMap extends Component {
               e.message == 'Timeout' ||
               e.message == 'Network request failed'
             ) {
-              this.setState({noConnection: true});
 
               Toast.show({
                 text:
@@ -1771,39 +1532,6 @@ class SimpleMap extends Component {
       });
   }
 
-  createGpxFile(data) {
-    const fs = RNFetchBlob.fs;
-    let dirs = RNFetchBlob.fs.dirs;
-
-    let path = dirs.DocumentDir + '/' + this.props.currentLive.idLive + '.gpx';
-
-    try {
-      fs.writeFile(path, data, 'utf8')
-        .catch(e => console.log(e))
-        .then(r => {
-          this.readGpxLocalFile();
-          console.log(r);
-        });
-    } catch (e) {
-      console.log(e);
-      ApiUtils.logError(
-        'create generated gpx',
-        'idUser: ' +
-          this.props.userData.idUtilisateur +
-          ' message: ' +
-          JSON.stringify(e),
-      );
-    }
-  }
-  readGpxLocalFile() {
-    const fs = RNFetchBlob.fs;
-    let dirs = RNFetchBlob.fs.dirs;
-    let path = dirs.DocumentDir + '/' + this.props.currentLive.idLive + '.gpx';
-
-    RNFetchBlob.fs.readFile(path, 'utf8').then(data => {
-      console.log(data);
-    });
-  }
 
   goBackOk() {
     this.onDisconnect(false);
@@ -1845,6 +1573,10 @@ class SimpleMap extends Component {
       .then(response => response.json())
       .then(responseJson => {
         if (responseJson.codeErreur == 'SUCCESS') {
+
+          var action = {type: 'IGNORE_LIVE', data: this.props.currentLive.idLive};
+          this.props.dispatch(action);
+
           this.onDisconnect(false);
           this.toggleModal3(false);
           this.props.navigation.navigate('Lives');
@@ -1933,7 +1665,7 @@ class SimpleMap extends Component {
 
   onClickInterestPhone(phoneNumber, idInteret) {
     ApiUtils.logStats(
-      '',
+      
       idInteret + ';' + this.props.userData.idUtilisateur + ';phone',
     );
     Linking.canOpenURL(`tel:${phoneNumber}`).then(supported => {
@@ -1951,7 +1683,6 @@ class SimpleMap extends Component {
 
   onClickUrlInterest(url, idInteret) {
     ApiUtils.logStats(
-      '',
       idInteret + ';' + this.props.userData.idUtilisateur + ';web',
     );
     Linking.canOpenURL(url).then(supported => {
@@ -2098,7 +1829,6 @@ class SimpleMap extends Component {
 
                        <TouchableOpacity
                   style={styles.headerButton}
-                  info
                   onPress={() => this.onGetLogs()}>
                   <Icon
                     active
@@ -2107,17 +1837,6 @@ class SimpleMap extends Component {
                     type="FontAwesome5"
                   />
                 </TouchableOpacity>
-                {/* <TouchableOpacity
-                  style={styles.headerButton}
-                  info
-                  onPress={() => this.onClickAddGpx()}>
-                  <Icon
-                    active
-                    name="folder-open"
-                    style={styles.headerButtonLogo}
-                    type="FontAwesome5"
-                  />
-                </TouchableOpacity> */}
                 {this.props.currentPosition ? (
                   <TouchableOpacity
                     style={[styles.headerButton, {marginLeft: 10}]}
@@ -2145,10 +1864,6 @@ class SimpleMap extends Component {
           </Text>
         </View>
 
-        {/* <View style={styles.statBanner2}>
-          <Text style={styles.timeText}>Vitesse instantanée : {this.state.currentSpeed} km/h</Text>
-        </View> */}
-
         <View style={styles.liveNameBanner}>
           <Text style={styles.liveNameText}>
             {this.props.currentLive?.libelleLive}
@@ -2164,7 +1879,7 @@ class SimpleMap extends Component {
             backgroundColor: 'white',
             zIndex: 5,
             position: 'absolute',
-            top: Platform.OS == 'android' ? 153 : 185,
+            top: Platform.OS == 'android' ? 153 : 205,
             right: 100,
           }}>
           {Platform.OS == 'ios' ? (
@@ -2193,7 +1908,7 @@ class SimpleMap extends Component {
               backgroundColor: 'white',
               zIndex: 5,
               position: 'absolute',
-              top: Platform.OS == 'android' ? 153 : 185,
+              top: Platform.OS == 'android' ? 153 : 205,
               left: 20,
             }}>
             <Icon
@@ -2217,8 +1932,7 @@ class SimpleMap extends Component {
             position : 'absolute',
             top: Platform.OS == 'android' ? 210 : 235,
             marginLeft : 'auto'
-          }}
-          onPress={() => this.openBatteryModal.bind(this)}>
+          }}>
      
             <View
               style={[
@@ -2232,8 +1946,7 @@ class SimpleMap extends Component {
                   borderRadius: 30,
                   zIndex: 99,
                 },
-              ]}
-              onPress={() => this.openBatteryModal()}>
+              ]}>
               <View>
                 <Text
                   style={[
@@ -2297,8 +2010,12 @@ class SimpleMap extends Component {
           </TouchableOpacity>
         ) : null}
 
+
+
         <Root>
-          
+       
+         
+    
           <MapView
             ref="map"
             mapType={this.props.currentMapStyle}
@@ -2323,7 +2040,6 @@ class SimpleMap extends Component {
               geodesic={true}
               strokeColor="rgba(0,0,0, 1)"
               strokeWidth={6}
-              tracksViewChanges={false}
               zIndex={0}
             />
 
@@ -2351,7 +2067,6 @@ class SimpleMap extends Component {
                       onPress={() => this.selectPolyline(polyline)}
                       coordinates={polyline.positionsTrace}
                       tappable={true}
-                      tracksViewChanges={false}
                       zIndex={0}
                       geodesic={true}
                       strokeColor={polyline.couleurTrace}
@@ -2389,6 +2104,7 @@ class SimpleMap extends Component {
               : null}
           </MapView>
 
+  
           {this.props.currentMapStyle == 'standard' ||
           this.props.currentMapStyle == 'hybrid' ||
           this.props.currentMapStyle == 'terrain' ? (
@@ -2396,14 +2112,14 @@ class SimpleMap extends Component {
               active={this.state.fabActive}
               direction="down"
               containerStyle={{}}
-              style={{backgroundColor: '#5067FF'}}
+              style={{backgroundColor: '#5067FF', zIndex : 100}}
               position="topRight"
               onPress={() => this.setState({fabActive: !this.state.fabActive})}>
               <Icon name={this.getFabDefaultLogo()} type="FontAwesome5" />
 
               {this.props.currentMapStyle != 'standard' ? (
                 <Button
-                  style={{backgroundColor: '#34A34F'}}
+                  style={{backgroundColor: '#34A34F', zIndex : 100}}
                   onPress={() =>
                     this.setState({fabActive: false}, () =>
                       this.saveCurrentMapStyle('standard'),
@@ -2415,7 +2131,7 @@ class SimpleMap extends Component {
 
               {this.props.currentMapStyle != 'hybrid' ? (
                 <Button
-                  style={{backgroundColor: '#34A34F'}}
+                style={{backgroundColor: '#34A34F', zIndex : 100}}
                   onPress={() =>
                     this.setState({fabActive: false}, () =>
                       this.saveCurrentMapStyle('hybrid'),
@@ -2428,7 +2144,7 @@ class SimpleMap extends Component {
               {Platform.OS == 'android' &&
               this.props.currentMapStyle != 'terrain' ? (
                 <Button
-                  style={{backgroundColor: '#34A34F'}}
+                style={{backgroundColor: '#34A34F', zIndex : 100}}
                   onPress={() =>
                     this.setState({fabActive: false}, () =>
                       this.saveCurrentMapStyle('terrain'),
@@ -2481,7 +2197,6 @@ class SimpleMap extends Component {
                 <View>
                   <IconElement
                     style={{alignSelf: 'center'}}
-                    active
                     name="times-circle"
                     type="font-awesome"
                   />
@@ -2533,17 +2248,13 @@ class SimpleMap extends Component {
                 }}>
                 {!this.state.currentPolyline.isActive ? (
                   <IconElement
-                    active
                     name="eye-slash"
                     type="font-awesome"
-                    style={styles.toggleRaceLogo}
                   />
                 ) : (
                   <IconElement
-                    active
                     name="eye"
                     type="font-awesome"
-                    style={styles.toggleRaceLogo}
                   />
                 )}
               </Button>
@@ -2574,243 +2285,11 @@ class SimpleMap extends Component {
               </View>
             </View>
           ) : null}
+
+    
         </Root>
 
-        {/******** modal1 Invités *****************/}
-        <Modal
-          animationType={'none'}
-          transparent={false}
-          visible={this.state.modalVisible}
-          onRequestClose={() => {
-            this.toggleModal(false);
-            this.toggleModal2(false);
-          }}>
-          <Root>
-            <View style={styles.modal}>
-              <Header style={styles.headerModal}>
-                <Body>
-                  <View
-                    style={{
-                      flexDirection: 'row',
-                      width: '100%',
-                      paddingRight: 0,
-                      paddingLeft: 0,
-                      marginLeft: 0,
-                    }}>
-                    <Button
-                      style={styles.drawerButton}
-                      onPress={() =>
-                        this.toggleModal(!this.state.modalVisible)
-                      }>
-                      <Icon
-                        style={styles.saveText}
-                        name="chevron-left"
-                        type="FontAwesome5"
-                      />
-                      <Text style={styles.saveText}>Précedent</Text>
-                    </Button>
-                  </View>
-                </Body>
-              </Header>
-              <View>
-                {this.getInvites().length == 0 ? (
-                  <Text
-                    style={{
-                      height: '85%',
-                      width: '100%',
-                      paddingTop: 40,
-                      paddingLeft: 20,
-                    }}>
-                    Vous n'avez pas encore d'invités
-                  </Text>
-                ) : (
-                  <FlatList
-                    style={{height: '85%', width: '100%'}}
-                    data={this.getInvites()}
-                    renderItem={({item}) => (
-                      <Swipeout
-                        right={this.swipeoutBtns}
-                        autoClose={true}
-                        backgroundColor="transparent"
-                        rowID={item.idUtilisateur}
-                        onOpen={(sectionID, rowID) => {
-                          this.setState({
-                            sectionID,
-                            rowID,
-                          });
-                        }}>
-                        <TouchableHighlight
-                          underlayColor="rgba(255,255,255,1,0.6)"
-                          // underlayColor='rgba(192,192,192,1,0.6)'
-                          // onPress={this.viewLive.bind(this, item)}
-                        >
-                          <View>
-                            <View style={styles.rowContainer}>
-                              <View style={styles.line}>
-                                <Text
-                                  style={{width: '40%', fontWeight: 'bold'}}
-                                  numberOfLines={1}
-                                  ellipsizeMode="tail">
-                                  {' '}
-                                  {item.nomUtilisateur} {item.prenomUtilisateur}
-                                </Text>
-                                <Text style={{width: 180}}>
-                                  {' '}
-                                  Folocode : {item.folocodeUtilisateur}{' '}
-                                </Text>
-                              </View>
-                            </View>
-                          </View>
-                        </TouchableHighlight>
-                      </Swipeout>
-                    )}
-                    keyExtractor={(item, index) => index.toString()}
-                  />
-                )}
-              </View>
-
-              <Button
-                style={styles.buttonok}
-                small
-                info
-                onPress={() => {
-                  this.toggleModal2(!this.state.modal2Visible);
-                  this.toggleModal(!this.state.modalVisible);
-                }}>
-                <IconElement
-                  active
-                  name="add"
-                  type="EvilIcons"
-                  style={styles.plusButtonLogo}
-                />
-              </Button>
-            </View>
-          </Root>
-        </Modal>
-
-        {/******** modal2 Créer un invité *****************/}
-        <Modal
-          animationType={'none'}
-          transparent={false}
-          visible={this.state.modal2Visible}
-          onRequestClose={() => {
-            // this.toggleModal2(!this.state.modal2Visibles);
-
-            this.toggleModal2(false);
-            this.toggleModal(true);
-          }}>
-          <View style={styles.modal}>
-            <Header style={styles.headerModal}>
-              <Body>
-                <View
-                  style={{
-                    flexDirection: 'row',
-                    justifyContent: 'space-between',
-                    width: '100%',
-                    paddingRight: 0,
-                    paddingLeft: 0,
-                  }}>
-                  <Button
-                    style={styles.drawerButton}
-                    onPress={() => {
-                      this.toggleModal2(!this.state.modal2Visible);
-                      this.toggleModal(!this.state.modalVisible);
-                    }}>
-                    <Icon
-                      style={styles.saveText}
-                      name="chevron-left"
-                      type="FontAwesome5"
-                    />
-                  </Button>
-                  <Button
-                    style={styles.saveButton}
-                    onPress={() => this.onClickCreateInvite()}
-                    disabled={this.isErrorForm()}>
-                    <Text style={styles.saveText}>ENREGISTRER</Text>
-                  </Button>
-                </View>
-              </Body>
-            </Header>
-
-            <View style={styles.personneForm}>
-              <TextInput
-                style={styles.inputCode}
-                clearButtonMode="always"
-                placeholder="Nom *"
-                value={this.state.nomPersonne}
-                onChangeText={phoneNumber =>
-                  this.setState({nomPersonne: phoneNumber})
-                }
-              />
-              <ErrorMessage
-                style={styles.errorMessage}
-                value={this.state.nomPersonne}
-                message="Le nom doit être renseignée"
-              />
-
-              <TextInput
-                style={styles.inputCode}
-                clearButtonMode="always"
-                placeholder="Prénom *"
-                value={this.state.prenomPersonne}
-                onChangeText={phoneNumber =>
-                  this.setState({prenomPersonne: phoneNumber})
-                }
-              />
-              <ErrorMessage
-                style={styles.errorMessage}
-                value={this.state.prenomPersonne}
-                message="Le prénom doit être renseigné"
-              />
-
-              <TextInput
-                style={styles.inputCode}
-                clearButtonMode="always"
-                placeholder="Téléphone"
-                value={this.state.telPersonne}
-                onChangeText={phoneNumber =>
-                  this.setState({telPersonne: phoneNumber})
-                }
-              />
-
-              <TextInput
-                style={styles.inputCode}
-                clearButtonMode="always"
-                placeholder="Email"
-                value={this.state.mailPersonne}
-                onChangeText={phoneNumber =>
-                  this.setState({mailPersonne: phoneNumber})
-                }
-              />
-
-              {this.state.mailPersonne == '' && this.state.telPersonne == '' ? (
-                <ErrorMessage
-                  style={styles.errorMessage}
-                  value={''}
-                  message="Le numéro de téléphone ou l'adresse mail doit être renseigné"
-                />
-              ) : null}
-
-              {this.state.mailPersonne != '' &&
-              !ApiUtils.validateEmail(this.state.mailPersonne) ? (
-                <ErrorMessage
-                  value={''}
-                  message="L'adresse email n'est pas valide"
-                />
-              ) : null}
-
-              <View style={styles.infoIcon}>
-                <IconElement active name="info-circle" type="font-awesome" />
-
-                <Text style={styles.textInfo}>
-                  Si vous renseignez le numéro de mobile et/ou l'adresse email,
-                  un sms et/ou un email sera envoyé à l'utilisateur lui
-                  indiquant la marche à suivre pour rejoindre votre live.{' '}
-                </Text>
-              </View>
-            </View>
-          </View>
-        </Modal>
+        
 
         {/******** modal3 : finish LIVE *****************/}
         <Modal
@@ -2842,11 +2321,11 @@ class SimpleMap extends Component {
                     Enregistrez votre activité
                   </Text>
                 </Body>
-                <Right syle={{flex: 0}} />
+                <Right style={{flex: 0}} />
               </Header>
 
               <ScrollView scrollEnabled={true}>
-                <View style={styles.loginButtonSection}>
+                <View >
                   <TextInput
                     style={[styles.inputCode, {fontWeight: 'bold'}]}
                     clearButtonMode="always"
@@ -2911,7 +2390,6 @@ class SimpleMap extends Component {
 
                     <View
                       style={{
-                        backgroundColor: this.state.text,
                         borderBottomColor: '#000000',
                         borderBottomWidth: 1,
                         // height: 120,
@@ -2947,7 +2425,7 @@ class SimpleMap extends Component {
                         justifyContent: 'space-between',
                       }}>
                       <Switch
-                        tyle={{paddingTop: 20}}
+                        style={{paddingTop: 20}}
                         onValueChange={text => {
                           this.setState({acceptChallengeUtilisateur: text});
                         }}
@@ -2976,7 +2454,7 @@ class SimpleMap extends Component {
                         justifyContent: 'space-between',
                       }}>
                       <Switch
-                        tyle={{paddingTop: 20}}
+                        style={{paddingTop: 20}}
                         onValueChange={text => {
                           this.setState({
                             acceptChallengeNameUtilisateur: text,
@@ -3002,13 +2480,11 @@ class SimpleMap extends Component {
                   {this.state.spinner ? (
                     <View
                       style={{
-                        textAlign: 'center',
                         marginTop: 15,
                         width: '100%',
                       }}>
                       <Spinner color="black" />
                       <Text
-                        full
                         style={{textAlign: 'center', alignSelf: 'center'}}>
                         Enregistrement en cours
                       </Text>
@@ -3039,7 +2515,7 @@ class SimpleMap extends Component {
                     </Button>
                   )}
 
-                  <View style={{textAlign: 'center', marginTop: -5}}>
+                  <View style={{ marginTop: -5}}>
                     <Text
                       style={styles.ignoreActivityLink}
                       onPress={() => this.ignoreActivity()}>
@@ -3065,21 +2541,6 @@ class SimpleMap extends Component {
           </Root>
           {/* ) : null} */}
         </Modal>
-        {/******** modal4 : Upload interest point  *****************/}
-        {/* <Modal
-          animationType={'none'}
-          transparent={false}
-          visible={this.state.modalAddInterestVisible}
-          onRequestClose={() => {
-            this.closeModalAddInterest();
-          }}>
-          <AddInterest
-            coord={this.props.currentPosition}
-            idlive={this.props.currentLive?.idLive}
-            onclose={this.closeModalAddInterest}
-            onclosesuccess={this.closeModalAddInterestSuccess}
-          />
-        </Modal> */}
 
         {/******** modal : Battery modal *****************/}
         <Modal
@@ -3100,8 +2561,6 @@ class SimpleMap extends Component {
 
         {/******** modal4 : Alert gps   *****************/}
         <ModalSmall
-          animationType={'none'}
-          transparent={false}
           isVisible={!this.props.isOkPopupGps}>
           <View style={{backgroundColor: 'white', padding: 20}}>
             <Text
@@ -3121,8 +2580,8 @@ class SimpleMap extends Component {
             </Text>
             <TouchableOpacity
               onPress={() => this.onAcceptGps()}
-              style={{justifyContent: 'flex-end'}}
-              style={{marginTop: 30}}>
+              style={{justifyContent: 'flex-end',marginTop: 30}}
+              >
               <Text style={{textAlign: 'right'}}>Ok</Text>
             </TouchableOpacity>
           </View>
@@ -3156,7 +2615,7 @@ class SimpleMap extends Component {
               onPress={() => {
                 this.closeTraceModal();
               }}>
-              <IconElement active name="times-circle" type="font-awesome" />
+              <IconElement name="times-circle" type="font-awesome" />
             </Button>
           </View>
           <ScrollView
@@ -3233,17 +2692,15 @@ class SimpleMap extends Component {
                             }}>
                             {!item.isActive ? (
                               <IconElement
-                                active
+                                
                                 name="eye-slash"
                                 type="font-awesome"
-                                style={styles.toggleRaceLogo}
                               />
                             ) : (
                               <IconElement
-                                active
+                                
                                 name="eye"
                                 type="font-awesome"
-                                style={styles.toggleRaceLogo}
                               />
                             )}
                           </Button>
@@ -3290,9 +2747,9 @@ class SimpleMap extends Component {
 
         <ModalSmall
           style={{marginTop: 22, paddingTop: 22, borderRadius: 10}}
-          visible={this.state.isModalInterestVisible}
           isVisible={this.state.isModalInterestVisible}
           onSwipeComplete={() => this.setState({isModalInterestVisible: false})}
+        
           onRequestClose={() => {
             this.setState({isModalInterestVisible: false});
           }}>
@@ -3314,10 +2771,8 @@ class SimpleMap extends Component {
                 this.closeInterestModal();
               }}>
               <IconElement
-                active
                 name="times-circle"
                 type="font-awesome"
-                style={styles.toggleRaceLogo}
               />
             </Button>
           </View>

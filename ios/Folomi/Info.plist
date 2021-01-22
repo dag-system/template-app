@@ -40,16 +40,16 @@
 		</dict>
 	</dict>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-	<string>Utilisé pour enregistrer votre parcours et votre vitesse lors d'un entrainement personnel même si votre téléphone est verrouillé</string>
+	<string>Utilisé pour enregistrer votre parcours et votre vitesse même si votre téléphone est verrouillé</string>
 	<key>NSLocationAlwaysUsageDescription</key>
-	<string>Utilisé pour enregistrer votre parcours et votre vitesse lors d'un entrainement personnel même si votre téléphone est verrouillé</string>
+	<string>Utilisé pour enregistrer votre parcours et votre vitesse même si votre téléphone est verrouillé</string>
 	<key>NSLocationTemporaryUsageDescriptionDictionary</key>
 	<dict>
 		<key>Delivery</key>
 		<string>Utilisé pour enregistrer votre parcours avec une meilleure précision</string>
 	</dict>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>Utilisé pour enregistrer votre parcours et votre vitesse lors d'un entrainement personnel même si votre téléphone est verrouillé</string>
+	<string>Utilisé pour enregistrer votre parcours et votre vitesse même si votre téléphone est verrouillé</string>
 	<key>NSMotionUsageDescription</key>
 	<string>Utilisé pour une avoir une meilleure precision concernant votre course </string>
 	<key>NSPhotoLibraryUsageDescription</key>
@@ -75,6 +75,11 @@
 		<string>rubicon-icon-font.ttf</string>
 		<string>SimpleLineIcons.ttf</string>
 		<string>Zocial.ttf</string>
+	</array>
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>fetch</string>
+		<string>location</string>
 	</array>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>

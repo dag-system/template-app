@@ -3,8 +3,8 @@
 const ISDEBUG = false;
 const ISDEMO = false;
 
-const VersionNumber = '1.0.8';
-const VersionNumberInt = 6;
+const VersionNumber = '1.0.11';
+const VersionNumberInt = 9;
 
 var ApiUtils = {
   ISDEBUG() {
