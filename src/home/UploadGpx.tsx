@@ -186,7 +186,8 @@ class UploadGpx extends Component {
       var uri = res.uri;
       var filePath = uri;
 
-      if (res.name.includes('.gpx')) {
+
+      if (res.name.toLowerCase().includes('.gpx')) {
         setTimeout(() => this.setState({file: res}), 100);
       } else {
         Toast.show({
@@ -647,6 +648,7 @@ const styles = StyleSheet.create({
     marginTop: 5,
     fontSize: 16,
   },
+ 
   errorMessage: {
     marginLeft: 10,
     marginTop: 10,

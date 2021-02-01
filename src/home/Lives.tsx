@@ -8,6 +8,7 @@ import {
   RefreshControl,
   ActivityIndicator,
   TouchableOpacity,
+  ScrollView,
 } from 'react-native';
 import {
   Container,
@@ -24,6 +25,8 @@ import {
   Root,
   Fab,
   Button,
+  Spinner,
+  Picker,
 } from 'native-base';
 import Swipeout from 'react-native-swipeout';
 // import { Icon } from 'react-native-elements';
@@ -39,15 +42,12 @@ import GlobalStyles from '../styles';
 import {Modal} from 'react-native';
 import Help from './Help';
 import BatteryModal from './BatteryModal';
-import * as Sentry from "@sentry/react";
+import * as Sentry from '@sentry/react';
 import {Sponsors} from './Sponsors';
-
-import {PermissionsAndroid} from 'react-native';
-import DocumentPicker from 'react-native-document-picker';
 import UploadGpx from './UploadGpx';
 import {Platform} from 'react-native';
-import { Linking } from 'react-native';
-import { Alert } from 'react-native';
+import {Linking} from 'react-native';
+import {Alert} from 'react-native';
 const mapStateToProps = state => {
   return {
     userData: state.userData,
@@ -85,6 +85,8 @@ class Lives extends Component {
       isRecording: true,
       isLoadingDeleting: false,
       uploadGpxVisible: false,
+      modalChooseSportVisible: false,
+      selectedSport: -1,
     };
 
     this._unsubscribe = this.props.navigation.addListener('focus', () => {
@@ -107,11 +109,9 @@ class Lives extends Component {
     await this.getNewVersion();
     await this.getLives(this.props.userData.idUtilisateur);
 
-    Sentry.setUser({ id: this.props.userData.idUtilisateur });
-
+    Sentry.setUser({id: this.props.userData.idUtilisateur});
 
     await this.getinformationStation();
-
   }
 
   onRefresh() {
@@ -169,13 +169,14 @@ class Lives extends Component {
       .then(ApiUtils.checkStatus)
       .then(response => response.json())
       .then(responseJson => {
+        console.log(responseJson);
         var action = {type: 'GET_LIVES', data: responseJson};
         this.props.dispatch(action);
 
         this.setState({isLoading: false});
       })
       .catch(e => {
-        console.log(e)
+        console.log(e);
         this.setState({isLoading: false});
         ApiUtils.logError('getLives', e.message);
       })
@@ -198,65 +199,6 @@ class Lives extends Component {
     }
   }
 
-  getSports() {
-    let formData = new FormData();
-    formData.append('method', 'getSports');
-    formData.append('auth', ApiUtils.getAPIAuth());
-
-    //fetch followCode API
-    return fetch(ApiUtils.getAPIUrl(), {
-      method: 'POST',
-      headers: {},
-      body: formData,
-    })
-      .then(ApiUtils.checkStatus)
-      .then(response => response.json())
-      .then(responseJson => {
-        var result = [];
-        for (var i in responseJson) {
-          result.push(responseJson[i]);
-        }
-        // var selectableSports = [];
-        // result.forEach(function (element, index) {
-        //   var newSelectableSport = {
-        //     value: index,
-        //     label: element
-        //   };
-        //   selectableSports.push(newSelectableSport);
-        // });
-
-        var action = {type: 'GET_SPORTS', data: result};
-
-        this.props.dispatch(action);
-      })
-      .catch(e => ApiUtils.logError('Lives getSports', e.message))
-      .then(this.setState({isLoading: false}));
-  }
-
-
-
-  requestStoragePermission = async () => {
-    try {
-      const granted = await PermissionsAndroid.request(
-        'android.permission.READ_EXTERNAL_STORAGE',
-        {
-          title: 'Accèder à vos fichiers',
-          message: '',
-          buttonNeutral: 'Plus tard',
-          buttonNegative: 'Annuler',
-          buttonPositive: 'OK',
-        },
-      );
-      if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-        console.warn('You can use the camera');
-      } else {
-        // console.log("location permission denied");
-      }
-    } catch (err) {
-      // console.warn(err);
-    }
-  };
-
   openGpxModal = () => {
     this.setState({uploadGpxVisible: true});
   };
@@ -265,35 +207,29 @@ class Lives extends Component {
     this.setState({uploadGpxVisible: false});
   };
 
-  finishUploadGpx = () =>
-  {
+  finishUploadGpx = () => {
     this.closeGpxModal();
-    this.onClickNavigate('LiveSummary')
-  }
-
-
-  normalize(path) {
-    if (Platform.OS === 'ios' || Platform.OS === 'android') {
-      const filePrefix = 'file://';
-      if (path.startsWith(filePrefix)) {
-        path = path.substring(filePrefix.length);
-        try {
-          path = decodeURI(path);
-        } catch (e) {}
-      }
-    }
-    return path;
-  }
-
-
+    this.onClickNavigate('LiveSummary');
+  };
 
   onClickCreateLive() {
-    this.setState({spinner: true});
+    console.log(this.props.lives)
+    if (this.props.lives.filter(l => l.etatLive == 0).length > 0) {
+      let currentLive = this.props.lives.filter(l => l.etatLive == 0)[0];
+      this.viewLive(currentLive);
+    } else {
+      this.setState({modalChooseSportVisible: true});
+    }
+  }
+
+  onClickCreateLiveOk() {
+    this.setState({spinner: true, modalChooseSportVisible: false});
     let formData = new FormData();
     formData.append('method', 'createLive');
     formData.append('auth', ApiUtils.getAPIAuth());
     formData.append('idUtilisateur', this.props.userData.idUtilisateur);
     formData.append('idversion', ApiUtils.VersionNumberInt());
+    formData.append('idSport', this.state.selectedSport);
     formData.append('os', Platform.OS);
     var libelleLive = this.getLibelleLive();
 
@@ -321,6 +257,7 @@ class Lives extends Component {
             codeLive: responseJson.codeLive,
             libelleLive: responseJson.libelleLive,
             dateCreationLive: responseJson.dateCreationLive,
+            idSport: this.state.selectedSport,
             invites: [],
             statsInfos: {},
             etatLive: 0,
@@ -335,7 +272,7 @@ class Lives extends Component {
         }
       })
       .catch(e => {
-        console.log(e)
+        console.log(e);
         this.setState({spinner: false});
         ApiUtils.logError('create live', JSON.stringify(e.message));
         if (e.message == 'Timeout' || e.message == 'Network request failed') {
@@ -386,6 +323,35 @@ class Lives extends Component {
     }
   }
 
+
+  onPressDeleteLive = (item) => {
+  
+    Alert.alert(
+      "Supprimer l'activité",
+      "Etes-vous sûr de supprimer l'activité ?",
+      [
+        {
+          text: 'Annuler',
+          style: 'cancel',
+        },
+        {text: 'Supprimer', onPress: () => this.deleteLiveLongPressOk(item.idLive)},
+      ],
+      {cancelable: false},
+    );
+  };
+
+  deleteLiveLongPressOk(idLive)
+  {
+    var deletingIds = this.state.deletingIds;
+    if (deletingIds.filter(d => d == idLive).length == 0) {
+      deletingIds.push(idLive);
+    }
+    this.setState(
+      {isLoading: true, isLoadingDeleting: true, deletingIds: deletingIds},
+      () => this.deleteLiveOk(idLive),
+    );
+  }
+
   deleteLive() {
     var idLive = this.state.rowID;
     var deletingIds = this.state.deletingIds;
@@ -394,12 +360,11 @@ class Lives extends Component {
     }
     this.setState(
       {isLoading: true, isLoadingDeleting: true, deletingIds: deletingIds},
-      () => this.deleteLiveOk(),
+      () => this.deleteLiveOk(this.state.rowID),
     );
   }
 
-  deleteLiveOk() {
-    var idLive = this.state.rowID;
+  deleteLiveOk(idLive) {
     let formData = new FormData();
     formData.append('method', 'deleteLive');
     formData.append('auth', ApiUtils.getAPIAuth());
@@ -556,18 +521,17 @@ class Lives extends Component {
         if (responseJson == 'ok') {
         } else {
           Alert.alert(
-            "Nouvelle version disponible",
+            'Nouvelle version disponible',
             "Une nouvelle version de l'application est disponible",
             [
               {
                 text: 'Annuler',
                 style: 'cancel',
               },
-              {text: 'Télécharger', onPress: () => this.openStorePage() },
+              {text: 'Télécharger', onPress: () => this.openStorePage()},
             ],
             {cancelable: false},
           );
-
         }
       });
   }
@@ -686,7 +650,6 @@ class Lives extends Component {
             pointsInterets: finalinterestArray,
           };
 
-
           var action = {type: 'UPDATE_STATION_DATA', data: station};
           this.props.dispatch(action);
         }
@@ -726,6 +689,16 @@ class Lives extends Component {
     }
   }
 
+  onValueSportChange = value => {
+    this.setState({selectedSport: value});
+  };
+
+  toggleModalChooseSport = () => {
+    this.setState({
+      modalChooseSportVisible: !this.state.modalChooseSportVisible,
+    });
+  };
+
   static navigationOptions = {
     drawerLabel: 'Mes activités',
     drawerIcon: ({tintColor}) => (
@@ -734,6 +707,10 @@ class Lives extends Component {
         style={[styles.icon, {tintColor: tintColor}]}
       />
     ),
+  };
+
+  isErrorFormCreate = () => {
+    return this.state.selectedSport == -1;
   };
 
   render() {
@@ -839,7 +816,7 @@ class Lives extends Component {
                                   justifyContent: 'flex-start',
                                   width: '60%',
                                 }}>
-                                {item.etatLive > 1 ? (
+                                {/* {item.etatLive > ? ( */}
                                   <Text style={{width: 200}}>
                                     <Text
                                       style={{
@@ -849,7 +826,7 @@ class Lives extends Component {
                                       {this.getSport(item.idSport)}
                                     </Text>
                                   </Text>
-                                ) : null}
+                                {/* ) : null} */}
                               </View>
                             </View>
                             <Text
@@ -872,7 +849,9 @@ class Lives extends Component {
                               rowID,
                             });
                           }}>
-                          <TouchableOpacity
+                           <TouchableOpacity
+                        delayLongPress={500}
+                        onLongPress={this.onPressDeleteLive.bind(this, item)}
                             onPress={this.viewLive.bind(this, item)}>
                             <View>
                               <View style={styles.rowContainer}>
@@ -919,7 +898,7 @@ class Lives extends Component {
                                       </View>
                                     ) : null}
                                   </View>
-                                  {item.etatLive <= 1 ? (
+                                  {item.etatLive <= 1 && item.etatLive >= 0 ? (
                                     <Text
                                       style={{
                                         color: this.getStatusColor(
@@ -928,8 +907,7 @@ class Lives extends Component {
                                       }}>
                                       {this.getLiveStatusLibelle(item.etatLive)}
                                     </Text>
-                                  ) : (
-                                    item.isImportedFromGpx != 1 ? (
+                                  ) : item.isImportedFromGpx != 1 ? (
                                     <View style={[GlobalStyles.row]}>
                                       <Text
                                         style={{
@@ -944,8 +922,10 @@ class Lives extends Component {
                                         }}>
                                         {this.getStatsTimeInfo(item.statsLive)}
                                       </Text>
-                                    </View>) : <View style={[GlobalStyles.row]}>
-                                    <Text
+                                    </View>
+                                  ) : (
+                                    <View style={[GlobalStyles.row]}>
+                                      <Text
                                         style={{
                                           fontWeight: 'bold',
                                         }}>
@@ -961,7 +941,7 @@ class Lives extends Component {
                                       justifyContent: 'flex-start',
                                       width: '60%',
                                     }}>
-                                    {item.etatLive > 1 ? (
+                                    {/* {item.etatLive > 1 ? ( */}
                                       <View>
                                         <Text style={{width: 200}}>
                                           <Text
@@ -973,7 +953,7 @@ class Lives extends Component {
                                           </Text>
                                         </Text>
                                       </View>
-                                    ) : null}
+                                    {/* ) : null} */}
                                   </View>
                                 </View>
                                 <Text
@@ -1072,7 +1052,150 @@ class Lives extends Component {
             <Modal
               visible={this.state.uploadGpxVisible}
               onRequestClose={() => this.closeGpxModal()}>
-              <UploadGpx onclose={this.closeGpxModal} finish={() => this.finishUploadGpx()} />
+              <UploadGpx
+                onclose={this.closeGpxModal}
+                finish={() => this.finishUploadGpx()}
+              />
+            </Modal>
+            {/******** modal : choose sport for new LIVE *****************/}
+            <Modal
+              animationType={'none'}
+              transparent={false}
+              visible={this.state.modalChooseSportVisible}
+              onRequestClose={() => {
+                this.toggleModalChooseSport(
+                  !this.state.modalChooseSportVisible,
+                );
+              }}>
+              {/* {this.state.modal3Visible ? ( */}
+              <Root>
+                <View style={styles.modal}>
+                  <Header style={styles.headerModal}>
+                    <Left>
+                      <Button
+                        style={styles.drawerButton}
+                        onPress={() => {
+                          this.toggleModalChooseSport(
+                            !this.state.modalChooseSportVisible,
+                          );
+                        }}>
+                        <Icon
+                          style={styles.saveText}
+                          name="chevron-left"
+                          type="FontAwesome5"
+                        />
+                      </Button>
+                    </Left>
+                    <Body style={{justifyContent: 'center', flex: 1}}>
+                      <Text style={{fontWeight: 'bold'}}>
+                        Démarrer une activité
+                      </Text>
+                    </Body>
+                    <Right style={{flex: 1}} />
+                  </Header>
+
+                  <ScrollView scrollEnabled={true}>
+                    <View>
+                      <View style={styles.picker}>
+                        <Picker
+                          mode="dropdown"
+                          accessibilityLabel={'Choisissez le type de glisse'}
+                          iosHeader={'Choisissez le type de glisse'}
+                          iosIcon={
+                            <Icon name="chevron-down" type="FontAwesome5" />
+                          }
+                          style={{marginTop: 0}}
+                          selectedValue={this.state.selectedSport}
+                          onValueChange={this.onValueSportChange.bind(this)}
+                          placeholder={'Choisissez le type de glisse'}
+                          placeholderStyle={{
+                            color: ApiUtils.getBackgroundColor(),
+                          }}
+                          placeholderIconColor={ApiUtils.getBackgroundColor()}
+                          textStyle={{color: ApiUtils.getBackgroundColor()}}
+                          itemStyle={{
+                            color: ApiUtils.getBackgroundColor(),
+                            marginLeft: 0,
+                            paddingLeft: 10,
+                            borderBottomColor: ApiUtils.getBackgroundColor(),
+                            borderBottomWidth: 1,
+                          }}
+                          itemTextStyle={{
+                            color: ApiUtils.getBackgroundColor(),
+                            borderBottomColor: ApiUtils.getBackgroundColor(),
+                            borderBottomWidth: 1,
+                          }}>
+                          <Picker.Item
+                            label="Choisissez le type de glisse"
+                            value="-1"
+                          />
+                          <Picker.Item label={'CLASSIQUE'} value="14" />
+                          <Picker.Item label={'SKATING'} value="15" />
+                        </Picker>
+
+                        {this.state.selectedSport == -1 ? (
+                          <Text
+                            style={{
+                              marginTop: 10,
+                              color: 'red',
+                              fontSize: 14,
+                              paddingLeft: 5,
+                              fontStyle: 'italic',
+                            }}>
+                            Le type de glisse doit être renseigné
+                          </Text>
+                        ) : null}
+                      </View>
+
+                      <Button
+                        style={{
+                          marginTop: 10,
+                          paddingHorizontal: 50,
+                          elevation: 0,
+                          alignSelf: 'center',
+                          borderColor: this.isErrorFormCreate()
+                            ? 'black'
+                            : ApiUtils.getBackgroundColor(),
+                          borderWidth: 1,
+                          backgroundColor: this.isErrorFormCreate()
+                            ? 'transparent'
+                            : ApiUtils.getBackgroundColor(),
+                        }}
+                        onPress={() => this.onClickCreateLiveOk()}
+                        disabled={this.isErrorFormCreate()}>
+                        <Text
+                          style={{
+                            color: this.isErrorFormCreate() ? 'black' : 'white',
+                          }}>
+                          C'est parti
+                        </Text>
+                      </Button>
+
+                      <View style={{marginTop: -5}}>
+                        <Text
+                          style={styles.ignoreActivityLink}
+                          onPress={() => this.toggleModalChooseSport()}>
+                          Annuler
+                        </Text>
+                      </View>
+
+                      <View style={{marginBottom: 300}} />
+                    </View>
+                  </ScrollView>
+                  <View
+                    style={{
+                      marginBottom: 0,
+                      position: 'absolute',
+                      bottom: Platform.OS == 'ios' ? 80 : 50,
+                      zIndex: 12,
+                      width: '100%',
+                      backgroundColor: 'white',
+                    }}
+                  />
+                </View>
+              </Root>
+              <Sponsors />
+              {/* ) : null} */}
             </Modal>
           </Container>
         </Drawer>
@@ -1099,7 +1222,7 @@ const styles = StyleSheet.create({
     paddingTop: 0,
   },
   drawerButton: {
-    // backgroundColor: 'transparent',
+    backgroundColor: 'transparent',
     // width: '10%',
     // marginTop: 0,
     // paddingTop: 0,
@@ -1192,6 +1315,21 @@ const styles = StyleSheet.create({
   footer: {
     backgroundColor: 'transparent',
     height: 215,
+  },
+  headerModal: {
+    backgroundColor: 'white',
+    paddingLeft: 10,
+    paddingTop: 0,
+    paddingBottom: 5,
+    // height: 50
+  },
+  ignoreActivityLink: {
+    marginTop: 10,
+    marginBottom: 20,
+    alignSelf: 'center',
+    textAlign: 'center',
+    fontSize: 14,
+    textDecorationLine: 'underline',
   },
   userInfo: {
     padding: 10,

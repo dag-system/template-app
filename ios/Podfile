@@ -92,6 +92,7 @@ target 'Folomi' do
   pod 'ReactCommon/turbomodule/core', :path => "../node_modules/react-native/ReactCommon"
   pod 'Yoga', :path => '../node_modules/react-native/ReactCommon/yoga', :modular_headers => true
   pod 'Permission-Motion', :path => "#{permissions_path}/Motion/Permission-Motion.podspec"
+  pod 'Permission-MediaLibrary', :path => "#{permissions_path}/MediaLibrary/Permission-MediaLibrary.podspec"
 
   pod 'DoubleConversion', :podspec => '../node_modules/react-native/third-party-podspecs/DoubleConversion.podspec'
   pod 'glog', :podspec => '../node_modules/react-native/third-party-podspecs/glog.podspec'

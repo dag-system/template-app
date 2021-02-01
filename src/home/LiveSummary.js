@@ -41,6 +41,7 @@ import {ReactNativeModal as ModalSmall} from 'react-native-modal';
 import {Icon as IconElement} from 'react-native-elements';
 import {FlatList} from 'react-native';
 import GPXDocument from '../lib/gpx-parse/GPXDocument';
+import {check,request, PERMISSIONS, RESULTS} from 'react-native-permissions';
 
 const mapStateToProps = state => {
   return {
@@ -219,6 +220,7 @@ class LiveSummary extends Component {
   }
 
   onDownloadFileok(url, name) {
+    console.log('la')
     let dirs = RNFetchBlob.fs.dirs;
     let path = dirs.DownloadDir + '/' + 'folomi' + '/' + name + '.gpx';
 
@@ -538,11 +540,11 @@ class LiveSummary extends Component {
   }
 
   downloadFile(url, name) {
-    if (Platform.OS == 'android') {
+    // if (Platform.OS == 'android') {
       this.checkPermissions(url, name);
-    } else {
-      this.onDownloadFileok(url, name);
-    }
+    // } else {
+    //   this.onDownloadFileok(url, name);
+    // }
   }
 
   onDownloadFileok(url, name) {
@@ -577,8 +579,54 @@ class LiveSummary extends Component {
       } catch (error) {
         console.warn('location set error:', error);
       }
+    }else{
+      this.requestMediaLibraryPermission(url, name)
     }
   }
+
+  requestMediaLibraryPermission(url, name)
+  {
+    check(PERMISSIONS.IOS.MEDIA_LIBRARY)
+  .then((result) => {
+    console.log(result);
+    switch (result) {
+     
+      case RESULTS.UNAVAILABLE:
+        this.onDownloadFileok(url, name);
+        break;
+      case RESULTS.DENIED:
+        this.askMediaLibraryPermission();
+        break;
+      case RESULTS.LIMITED:
+        break;
+      case RESULTS.GRANTED:
+        this.onDownloadFileok(url, name);
+        break;
+      case RESULTS.BLOCKED:
+        break;
+        default : 
+
+    }
+  })
+  .catch((error) => {
+
+  });
+  }
+
+
+  askMediaLibraryPermission(url,name)
+  {
+    request(PERMISSIONS.IOS.MEDIA_LIBRARY).then((result) => {
+      if(result ==RESULTS.DENIED)
+      {
+        Alert.alert("Permission refusée", "Vous devez accepter cette permission pour pouvoir télécharger le gpx");
+        Sentry.captureMessage("MEDIA_LIBRARY Permission refusée");
+      }else{
+        this.onDownloadFileok(url, name);
+      }
+    });
+  }
+
 
   requestStoragePermission = async (url, name) => {
     try {

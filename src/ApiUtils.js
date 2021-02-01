@@ -3,8 +3,8 @@
 const ISDEBUG = false;
 const ISDEMO = false;
 
-const VersionNumber = '1.0.11';
-const VersionNumberInt = 9;
+const VersionNumber = '1.0.14';
+const VersionNumberInt = 12;
 
 var ApiUtils = {
   ISDEBUG() {
@@ -63,7 +63,7 @@ var ApiUtils = {
 
   getAPIUrl() {
     // return 'http://folomi.snowdag.com/api/fouleev2.php';
-    return 'https://www.folomi.fr/api/fouleev2.php';
+    return 'https://www.folomi.fr/api/fouleev3.php';
   },
 
   getAPIAuth() {
@@ -121,49 +121,49 @@ var ApiUtils = {
 
   logError: function(methodName, message) {
     // alert(message)
-    let formData = new FormData();
-    formData.append('method', 'debug');
-    formData.append('auth', ApiUtils.getAPIAuth());
+    // let formData = new FormData();
+    // formData.append('method', 'debug');
+    // formData.append('auth', ApiUtils.getAPIAuth());
 
-    var finalMessage =
-      '----DATE---: ' +
-      ' ' +
-      new Date().toDateString() +
-      ' ' +
-      new Date().toTimeString() +
-      '----METHOD---: ' +
-      methodName +
-      '---MESSAGE---:  ' +
-      message;
+    // var finalMessage =
+    //   '----DATE---: ' +
+    //   ' ' +
+    //   new Date().toDateString() +
+    //   ' ' +
+    //   new Date().toTimeString() +
+    //   '----METHOD---: ' +
+    //   methodName +
+    //   '---MESSAGE---:  ' +
+    //   message;
 
-    formData.append('message', finalMessage);
-    formData.append('type', 0);
-    //fetch followCode API
-    fetch(ApiUtils.getAPIUrl(), {
-      method: 'POST',
-      headers: {},
-      body: formData,
-    })
-      .then(ApiUtils.checkStatus)
-      .catch(e => e);
+    // formData.append('message', finalMessage);
+    // formData.append('type', 0);
+    // //fetch followCode API
+    // fetch(ApiUtils.getAPIUrl(), {
+    //   method: 'POST',
+    //   headers: {},
+    //   body: formData,
+    // })
+    //   .then(ApiUtils.checkStatus)
+    //   .catch(e => e);
   },
 
   logStats: function(message) {
-    let formData = new FormData();
-    formData.append('method', 'debug');
-    formData.append('auth', ApiUtils.getAPIAuth());
+    // let formData = new FormData();
+    // formData.append('method', 'debug');
+    // formData.append('auth', ApiUtils.getAPIAuth());
 
-    formData.append('message', message);
-    formData.append('type', 1);
+    // formData.append('message', message);
+    // formData.append('type', 1);
 
-    //fetch followCode API
-    fetch(ApiUtils.getAPIUrl(), {
-      method: 'POST',
-      headers: {},
-      body: formData,
-    })
-      .then(ApiUtils.checkStatus)
-      .catch(e => e);
+    // //fetch followCode API
+    // fetch(ApiUtils.getAPIUrl(), {
+    //   method: 'POST',
+    //   headers: {},
+    //   body: formData,
+    // })
+    //   .then(ApiUtils.checkStatus)
+    //   .catch(e => e);
   },
 };
 export {ApiUtils as default};

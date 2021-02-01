@@ -932,7 +932,6 @@ class Preferences extends Component {
                         }}
                       />
                     ) : null}
-                    )
                   </View>
                 )}
 

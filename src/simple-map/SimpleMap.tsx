@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, {Component, PureComponent} from 'react';
 import {
   Linking,
   StyleSheet,
@@ -17,8 +17,6 @@ import {
   ImageBackground,
   TouchableOpacity,
 } from 'react-native';
-import Swipeout from 'react-native-swipeout';
-import RNPickerSelect from 'react-native-picker-select';
 import {isPointInPolygon} from 'geolib';
 import ApiUtils from '../ApiUtils';
 import ErrorMessage from '../home/ErrorMessage';
@@ -75,6 +73,7 @@ import {Sponsors} from '../home/Sponsors';
 import {Dimensions} from 'react-native';
 import BatteryModal from '../home/BatteryModal';
 import DefaultProps from '../models/DefaultProps';
+import Timer from './Timer';
 
 const LATITUDE_DELTA = 0.00922;
 const LONGITUDE_DELTA = 0.00421;
@@ -178,17 +177,22 @@ interface State {
   currentPolyline: any,
   isGpsNotOk: boolean,
   time : number,
-  libelleLive : string
+  libelleLive : string,
+  coordinates : any[]
   
 }
 
 
-class SimpleMap extends Component<Props,State> {
+class SimpleMap extends PureComponent<Props,State> {
   interval: number;
   private _unsubscribe2: any;
   _unsubscribe: any;
+  intervalPoints: number;
   constructor(props : any) {
     super(props);
+
+    this.onAcceptGps = this.onAcceptGps.bind(this);
+    this.onStop = this.onStop.bind(this);
 
     this.state = {
       modalVisible: false,
@@ -205,6 +209,7 @@ class SimpleMap extends Component<Props,State> {
       libelleLive : '',
       selectedSport: -1,
       comments: '',
+      coordinates : [],
       sports: [],
       invites: [],
       rowID: 0,
@@ -230,17 +235,6 @@ class SimpleMap extends Component<Props,State> {
       isGpsNotOk: true,
       time : 0
     };
-    // const didBlurSubscription = this.props.navigation.addListener(
-    //   'willFocus',
-    //   payload => {
-    //     this.componentDidMount();
-    //   }
-    // );
-
-    // const blurListener = this.props.navigation.addListener('willBlur', () => {
-    //   // console.log('unmount');
-    //   this.componentWillUnmount();
-    // });
 
     this._unsubscribe = this.props.navigation.addListener('focus', payload => {
       this.componentDidMount();
@@ -260,7 +254,42 @@ class SimpleMap extends Component<Props,State> {
     this.props.dispatch(action);
   }
 
+  getCoordinates = () => {
+      this.setState({coordinates : this.props.coordinates});
+      clearTimeout(this.intervalPoints);
+      this.intervalPoints =  setTimeout(() => this.getCoordinates(), 15000);
+  }
 
+  saveCurrentMapStyle() {
+    let nextStyle = 'standard';
+
+    if (Platform.OS == 'android') {
+      if (this.props.currentMapStyle == 'standard') {
+        nextStyle = 'terrain';
+      } else if (this.props.currentMapStyle == 'terrain') {
+        nextStyle = 'hybrid';
+      } else if (this.props.currentMapStyle == 'hybrid') {
+        nextStyle = 'standard';
+      } else {
+        nextStyle = 'standard';
+      }
+    }
+
+    if (Platform.OS == 'ios') {
+      if (this.props.currentMapStyle == 'standard') {
+        nextStyle = 'hybrid';
+      } else if (this.props.currentMapStyle == 'hybrid') {
+        nextStyle = 'standard';
+      } else {
+        nextStyle = 'standard';
+      }
+    }
+
+    var action = { type: 'UPDATE_MAP_STYLE', data: nextStyle };
+    this.props.dispatch(action);
+  }
+
+  
 
   onClickCreateInvite() {
     let formData = new FormData();
@@ -330,14 +359,21 @@ class SimpleMap extends Component<Props,State> {
   }
 
   componentDidMountOk() {
+
     if (this.props.currentLive == null) {
       this.onDisconnect(false);
       this.props.navigation.navigate('Lives');
+      
     }
+    if(this.state.selectedSport ==- 1)
+    {
+        this.setState({selectedSport : this.props.currentLive.idSport})
+    }
+   
 
-    this._unsubscribe2 = this.props.navigation.addListener('blur', () => {
-      this.componentWillUnmount();
-    });
+    // this._unsubscribe2 = this.props.navigation.addListener('blur', () => {
+    //   this.componentWillUnmount();
+    // });
 
     if (this.props.isRecording) {
       // BackgroundGeolocation.getLocations().then((result) => {
@@ -362,8 +398,11 @@ class SimpleMap extends Component<Props,State> {
     this.requestMotionPermission();
 
     // this.setState({ acceptChallengeUtilisateur: this.props.userData.acceptChallengeUtilisateur });
-    clearInterval(this.interval);
-    this.interval = setInterval(() => this.setState({time: Date.now()}), 800);
+    // clearInterval(this.interval);
+    // this.interval = setInterval(() => this.setState({time: Date.now()}), 15000);
+
+    clearTimeout(this.intervalPoints);
+    this.intervalPoints = setTimeout(() => this.getCoordinates(), 15000);
     // this.setState({ acceptChallengeUtilisateur: this.props.userData.acceptChallengeUtilisateur });
 
     // this._unsubscribe = this.props.navigation.addListener('focus', () => {
@@ -435,14 +474,11 @@ class SimpleMap extends Component<Props,State> {
           ? BackgroundGeolocation.DESIRED_ACCURACY_NAVIGATION
           : BackgroundGeolocation.DESIRED_ACCURACY_HIGH,
       desiredOdometerAccuracy: 10, 
-      //If you only want to calculate odometer from GPS locations, you could set desiredOdometerAccuracy: 10. This will prevent odometer updates when a device is moving around indoors, in a shopping mall, for example.
    
     };
     
     BackgroundGeolocation.reset(config, success => { 
-      console.log("reset success");
     }, fail =>{
-      console.log("reset fail");
     });
 
     BackgroundGeolocation.ready(config, state => {
@@ -464,7 +500,6 @@ class SimpleMap extends Component<Props,State> {
      BackgroundGeolocation.start();
 
      BackgroundGeolocation.setConfig(config).then((state) => {
-      console.log("[setConfig] success: ", state);
     })
 
     });
@@ -484,11 +519,9 @@ class SimpleMap extends Component<Props,State> {
       if (authorizationEvent.success) {
         Sentry.captureMessage("[authorization] SUCCESS: ");
         
-                console.log("[authorization] SUCCESS: ", authorizationEvent.response);
       }
             else {
               Sentry.captureMessage("[authorization] FAILURE: " + JSON.stringify(authorizationEvent.error));
-                console.log("[authorization] FAILURE: ", authorizationEvent.error);
             }
     });
 
@@ -506,17 +539,9 @@ class SimpleMap extends Component<Props,State> {
             accuracyAuthorization ==
             BackgroundGeolocation.ACCURACY_AUTHORIZATION_FULL
           ) {
-            console.log(
-              '[requestTemporaryFullAccuracy] GRANTED: ',
-              accuracyAuthorization,
-            );
             this.getFirstLocation();
           } else {
             Sentry.captureMessage("[requestTemporaryFullAccuracy] DENIED: ");
-            console.log(
-              '[requestTemporaryFullAccuracy] DENIED: ',
-              accuracyAuthorization,
-            );
           }
         } catch (error) {
           Sentry.captureMessage("[requestTemporaryFullAccuracy] FAILED TO SHOW DIALOG: ");
@@ -529,7 +554,6 @@ class SimpleMap extends Component<Props,State> {
     });
 
     BackgroundGeolocation.onHeartbeat(event => {
-      console.log('[onHeartbeat] ', event);
 
       // You could request a new location if you wish.
       BackgroundGeolocation.getCurrentPosition({
@@ -537,31 +561,11 @@ class SimpleMap extends Component<Props,State> {
         persist: true,
       }).then(location => {
         Sentry.captureMessage("heartbeat event "+ JSON.stringify(location));
-        console.log('[getCurrentPosition] ', location);
       });
     });
 
-    BackgroundGeolocation.onHttp(httpEvent => {
-      Sentry.captureMessage("onHttp event idLive :"+   this.props.currentLive.idLive + JSON.stringify(httpEvent));
-      ApiUtils.logError(
-        'LOG simpleMap createPosition2 onHTTP -- status : ' +
-          httpEvent.status +
-          ' live : ' +
-          this.props.currentLive.idLive,
-        '  ---   json reçu :' + httpEvent.responseText,
-      );
-      try {
-      
-      } catch (e) {
-        ApiUtils.logError(
-          'ERROR simpleMap createPosition onHTTP --  ' +
-            httpEvent.status +
-            ' live : ' +
-            this.props.currentLive.idLive,
-          e.message + '  ---   json reçu :' + httpEvent.responseText,
-        );
-      }
-    });
+    this.setState({coordinates : this.props.coordinates});
+    
   }
 
   handleBackButton() {
@@ -597,7 +601,9 @@ class SimpleMap extends Component<Props,State> {
 
   componentWillUnmount() {
     this._unsubscribe();
-    clearInterval(this.interval);
+    console.log('unmounted')
+  //  clearInterval(this.interval);
+    clearTimeout(this.intervalPoints);
     BackHandler.removeEventListener('hardwareBackPress', this.handleBackButton);
 
     BackgroundGeolocation.removeListeners();
@@ -614,20 +620,15 @@ class SimpleMap extends Component<Props,State> {
   .then((result) => {
     switch (result) {
       case RESULTS.UNAVAILABLE:
-        console.log('This feature is not available (on this device / in this context)');
         break;
       case RESULTS.DENIED:
         this.askMotionPermission();
-        console.log('The permission has not been requested / is denied but requestable');
         break;
       case RESULTS.LIMITED:
-        console.log('The permission is limited: some actions are possible');
         break;
       case RESULTS.GRANTED:
-        console.log('The permission is granted');
         break;
       case RESULTS.BLOCKED:
-        console.log('The permission is denied and not requestable anymore');
         break;
         default : 
 
@@ -657,18 +658,17 @@ class SimpleMap extends Component<Props,State> {
 
     Geolocation.getCurrentPosition(
       position => {
-        console.log('first position', position);
+        console.log('fisrtlocation :', position)
         this.setCenter(position);
-        if (position.coords.accuracy != 0 && position.coords.accuracy < 400) {
+        if (position.coords.speed != -1) {
           this.setState({isGpsNotOk: false});
         } else {
-          this.getFirstLocation();
+        //  this.getFirstLocation();
         }
 
-        this.setState({currentPosition: position});
+        // this.setState({currentPosition: position});
       },
       error => {
-        console.log('error first position');
         ApiUtils.logError('getFirstPosition', JSON.stringify(error));
         // See error code charts below.
       },
@@ -704,13 +704,16 @@ class SimpleMap extends Component<Props,State> {
     {
       this.addMarker(location);
 
-      if (location.coords.accuracy != 0 && location.coords.accuracy < 300) {
-        this.setState({isGpsNotOk: false});
+      if (location.coords.speed == -1 && !this.state.isGpsNotOk) {
+        this.setState({isGpsNotOk: true});
       }
   
-
     }
-    this.setState({currentPosition: location});
+
+    if (location.coords.speed != -1 && this.state.isGpsNotOk) {
+      this.setState({isGpsNotOk: false});
+    }
+    // this.setState({currentPosition: location});
    
   }
 
@@ -749,7 +752,6 @@ class SimpleMap extends Component<Props,State> {
   }
 
   onLocationError(error) {
-    console.log(error);
     Sentry.captureMessage('location Error', JSON.stringify(error));
     ApiUtils.logError(
       'Location Error' +
@@ -776,8 +778,8 @@ class SimpleMap extends Component<Props,State> {
 
   onToggleEnabled(isMoving, isRecording) {
     if (isMoving) {
-      clearInterval(this.interval);
-      this.interval = setInterval(() => this.setState({time: Date.now()}), 800);
+      // clearInterval(this.interval);
+      // this.interval = setInterval(() => this.setState({time: Date.now()}), 15000);
       BackgroundGeolocation.start(
         state => {
           // NOTE:  We tell react-native-maps to show location only AFTER BackgroundGeolocation
@@ -803,7 +805,7 @@ class SimpleMap extends Component<Props,State> {
       }
    
 
-      clearInterval(this.interval);
+    //  clearInterval(this.interval);
     }
   }
 
@@ -887,10 +889,6 @@ class SimpleMap extends Component<Props,State> {
     });
   }
 
-  saveCurrentMapStyle(style) {
-    var action = {type: 'UPDATE_MAP_STYLE', data: style};
-    this.props.dispatch(action);
-  }
 
   getFabDefaultLogo() {
     if (this.props.currentMapStyle == 'terrain') {
@@ -1054,6 +1052,7 @@ class SimpleMap extends Component<Props,State> {
     return hoursDisplay + ':' + minutesDisplay + ':' + secondsDisplay;
   }
 
+
   onTimerPause() {
     if (this.props.isMoving) {
       Alert.alert(
@@ -1062,7 +1061,6 @@ class SimpleMap extends Component<Props,State> {
         [
           {
             text: 'Annuler',
-            onPress: () => console.log('Cancel Pressed'),
             style: 'cancel',
           },
           {text: 'Mettre en pause', onPress: () => this.onTimerStartPause()},
@@ -1076,7 +1074,6 @@ class SimpleMap extends Component<Props,State> {
         [
           {
             text: 'Annuler',
-            onPress: () => console.log('Cancel Pressed'),
             style: 'cancel',
           },
           {text: 'Reprendre', onPress: () => this.onTimerStartPause()},
@@ -1088,14 +1085,15 @@ class SimpleMap extends Component<Props,State> {
     // this.onTimerStartPause();
   }
 
+
   onStop() {
+
     Alert.alert(
       "Arrêter l'activité",
       "Etes vous sûr d'arrêter ?",
       [
         {
           text: 'Annuler',
-          onPress: () => console.log('Cancel Pressed'),
           style: 'cancel',
         },
         {text: 'Arrêter', onPress: () => this.onStopOk()},
@@ -1151,7 +1149,6 @@ class SimpleMap extends Component<Props,State> {
       if (granted === PermissionsAndroid.RESULTS.GRANTED) {
         console.warn('You can use the camera');
       } else {
-        // console.log("location permission denied");
       }
     } catch (err) {
       // console.warn(err);
@@ -1271,7 +1268,6 @@ class SimpleMap extends Component<Props,State> {
     if (this.state.selectedSport == -1) {
       isError = true;
     }
-    console.log('is error' , isError)
 
     if (!isError) {
       this.onSendRequestStop();
@@ -1283,11 +1279,9 @@ class SimpleMap extends Component<Props,State> {
   
 
     BackgroundGeolocation.getLocations(records => {
-      console.log('[getLocations] success: ', records);
 
       Sentry.captureMessage("getLocations ok");
     },error => {
-      console.log("erreur sync" ,JSON.stringify(error));
     });
 
 
@@ -1297,7 +1291,6 @@ class SimpleMap extends Component<Props,State> {
     
     try {
       BackgroundGeolocation.sync(records => {
-        console.log('[sync] success: ', records);
         this.setState({isSyncOk : true}) ;
         Sentry.captureMessage("sync ok");
         ApiUtils.logError(
@@ -1305,13 +1298,11 @@ class SimpleMap extends Component<Props,State> {
           JSON.stringify(records),
         );
       },error => {
-        console.log("erreur sync" ,JSON.stringify(error));
       });
     } catch (e) {
 
       // this.setState({isSyncOk : false}) ;
       Sentry.captureMessage("sync ko");
-      console.log('[sync] error: ', e);
       ApiUtils.logError(
         'ERROR sync at end idUtilisateur: ' + this.props.userData.idUtilisateur,
       );
@@ -1390,7 +1381,6 @@ class SimpleMap extends Component<Props,State> {
           })
           .catch(e => {
             this.setState({spinner: false});
-            console.log(e);
             ApiUtils.logError('create live', JSON.stringify(e.message));
             // alert('Une erreur est survenue : ' + JSON.stringify(e.message));
 
@@ -1421,7 +1411,6 @@ class SimpleMap extends Component<Props,State> {
         [
           {
             text: 'Annuler',
-            onPress: () => console.log('Cancel Pressed'),
             style: 'cancel',
           },
           {text: 'Quitter', onPress: () => this.goBackOk()},
@@ -1456,7 +1445,6 @@ class SimpleMap extends Component<Props,State> {
           ' message: ' +
           JSON.stringify(e),
       );
-      console.log(e);
     }
   }
 
@@ -1480,7 +1468,6 @@ class SimpleMap extends Component<Props,State> {
       .then(response => response.json())
       .then(responseJson => {
         if (responseJson.codeErreur == 'SUCCESS') {
-          console.log('sendGeneratedGPX ok');
         } else {
           // alert('erreur : ' + responseJson.message);
         }
@@ -1517,7 +1504,6 @@ class SimpleMap extends Component<Props,State> {
       .then(response => response.json())
       .then(responseJson => {
         if (responseJson.codeErreur == 'SUCCESS') {
-          console.log('ok');
         }
       })
       .catch(e => {
@@ -1544,7 +1530,6 @@ class SimpleMap extends Component<Props,State> {
       [
         {
           text: 'Annuler',
-          onPress: () => console.log('Cancel Pressed'),
           style: 'cancel',
         },
         {text: 'Ignorer', onPress: () => this.onignoreOk()},
@@ -1558,7 +1543,6 @@ class SimpleMap extends Component<Props,State> {
     let formData = new FormData();
     formData.append('method', 'deleteLive');
     formData.append('auth', ApiUtils.getAPIAuth());
-    // console.log('currentPorps : ' + JSON.stringify(this.props.currentLive));
     formData.append('idLive', this.props.currentLive.idLive);
     //fetch followCode API
     fetch(ApiUtils.getAPIUrl(), {
@@ -1591,7 +1575,7 @@ class SimpleMap extends Component<Props,State> {
       })
       .catch(e => {
         this.setState({spinner: false});
-        alert(e);
+  
         ApiUtils.logError('simpleMap ignoreActivity', e.message);
       });
   }
@@ -1771,13 +1755,14 @@ class SimpleMap extends Component<Props,State> {
     // this.setState({ polyline: traces });
   }
 
+  
+
   static navigationOptions = {
     drawerLabel: () => null,
   };
 
   onGetLogs = () => {
     BackgroundGeolocation.logger.getLog(function(log) {
-      console.log(log);
     });
   }
 
@@ -1920,6 +1905,54 @@ class SimpleMap extends Component<Props,State> {
           </Button>
         ) : null}
 
+<TouchableOpacity
+              style={{
+                position: 'absolute',
+
+                // alignSelf: 'center',
+                // width: 70,
+                // heigth: 100,
+                padding: 10,
+                width: 60,
+                height: 60,
+                borderRadius: 300,
+                top: Platform.OS == 'android' ? 153 : 205,
+                zIndex : 100,
+                display: 'flex',
+                flexDirection: 'row',
+                justifyContent: 'center',
+                backgroundColor: '#5067FF',
+                right: 10,
+                shadowColor: '#000',
+                shadowOffset: {
+                  width: 0,
+                  height: 5,
+                },
+                shadowOpacity: 0.34,
+                shadowRadius: 6.27,
+
+                elevation: 10,
+              }}
+              onPress={() => this.saveCurrentMapStyle()}>
+              <View
+                style={{
+                  justifyContent: 'center',
+                  alignSelf: 'center',
+                  alignContent: 'center',
+                  // width: 40,
+                  // heigth: 100,
+                }}>
+                <Icon
+                  name={this.getFabDefaultLogo()}
+                  style={{ color: 'white', alignSelf: 'center', marginBottom: 3, fontSize: 23 }}
+                  color="white"
+                  type="FontAwesome5"
+                />
+                {/* <Text style={{textAlign : 'center', color : 'white'}}>{this.props.currentMapStyle}</Text> */}
+              </View>
+            </TouchableOpacity>
+
+
    
         {this.state.isGpsNotOk ? (
           <View 
@@ -2014,147 +2047,98 @@ class SimpleMap extends Component<Props,State> {
 
         <Root>
        
-         
+         {/* <Map   style={styles.map}></Map> */}
     
-          <MapView
-            ref="map"
-            mapType={this.props.currentMapStyle}
-            style={styles.map}
-            showsUserLocation={true}
-            followsUserLocation={false}
-            scrollEnabled={true}
-            showsMyLocationButton={false}
-            showsPointsOfInterest={false}
-            showsScale={false}
-            showsTraffic={false}
-            initialRegion={{
-              latitude: 45.1667, // 44.843884,
-              longitude: 5.55,
-              latitudeDelta: LATITUDE_DELTA,
-              longitudeDelta: LONGITUDE_DELTA,
-            }}
-            toolbarEnabled={false}>
-            <Polyline
-              key="polyline"
-              coordinates={this.props.coordinates}
-              geodesic={true}
-              strokeColor="rgba(0,0,0, 1)"
-              strokeWidth={6}
-              zIndex={0}
-            />
+        
+         <MapView
+        ref="map"
+        mapType={this.props.currentMapStyle}
+        style={styles.map}
+        showsUserLocation={true}
+        followsUserLocation={false}
+        scrollEnabled={true}
+        showsMyLocationButton={false}
+        showsPointsOfInterest={false}
+        showsScale={false}
+        showsTraffic={false}
+        initialRegion={{
+          latitude: 45.1667, // 44.843884,
+          longitude: 5.55,
+          latitudeDelta: LATITUDE_DELTA,
+          longitudeDelta: LONGITUDE_DELTA,
+        }}
+        toolbarEnabled={false}>
+        <Polyline
+          key="polyline"
+          coordinates={this.state.coordinates}
+          geodesic={true}
+          strokeColor="rgba(0,0,0, 1)"
+          strokeWidth={6}
+          zIndex={0}
+        />
 
-            {/* <MapView.Circle
-              key="circle"
-              center={{
-                latitude: 44.930582,
+        {/* <MapView.Circle
+          key="circle"
+          center={{
+            latitude: 44.930582,
 
-                longitude: 4.899076
-              }}
-              radius={1000}
-              geodesic={true}
-              strokeColor='rgba(0,0,0, 1)'
-              strokeWidth={2}
-              tracksViewChanges={false}
-              zIndex={0}
-            /> */}
+            longitude: 4.899076
+          }}
+          radius={1000}
+          geodesic={true}
+          strokeColor='rgba(0,0,0, 1)'
+          strokeWidth={2}
+          tracksViewChanges={false}
+          zIndex={0}
+        /> */}
 
-            {this.props.polylines != null
-              ? this.props.polylines
-                  .filter(pol => pol.isActive == true)
-                  .map((polyline, index) => (
-                    <Polyline
-                      key={polyline.nomTrace + index}
-                      onPress={() => this.selectPolyline(polyline)}
-                      coordinates={polyline.positionsTrace}
-                      tappable={true}
-                      zIndex={0}
-                      geodesic={true}
-                      strokeColor={polyline.couleurTrace}
-                      strokeWidth={5}
-                    />
-                  ))
-              : null}
-            {/* {this.props.markers.map((marker, index) => (
-              <MapView.Marker
-                key={index}
-                coordinate={marker.coordinate}
-                anchor={{ x: 0, y: 0 }}
-                tracksViewChanges={false}
-                // image={MarkerCircle}
-                title="">
-                <View style={[styles.markerIcon]}></View>
-              </MapView.Marker>))
-            } */}
+        {this.props.polylines != null
+          ? this.props.polylines
+              .filter(pol => pol.isActive == true)
+              .map((polyline, index) => (
+                <Polyline
+                  key={polyline.nomTrace + index}
+                  onPress={() => this.selectPolyline(polyline)}
+                  coordinates={polyline.positionsTrace}
+                  tappable={true}
+                  zIndex={0}
+                  geodesic={true}
+                  strokeColor={polyline.couleurTrace}
+                  strokeWidth={5}
+                />
+              ))
+          : null}
+        {/* {this.props.markers.map((marker, index) => (
+          <MapView.Marker
+            key={index}
+            coordinate={marker.coordinate}
+            anchor={{ x: 0, y: 0 }}
+            tracksViewChanges={false}
+            // image={MarkerCircle}
+            title="">
+            <View style={[styles.markerIcon]}></View>
+          </MapView.Marker>))
+        } */}
 
-            {this.props.pointsInterets != null
-              ? this.props.pointsInterets.map(marker => (
-                  <Marker
-                    onPress={() => this.onClickInterestPoint(marker)}
-                    // onCalloutPress={() => this.onClickInterestPoint(marker)}
-                    key={marker.id}
-                    coordinate={marker.coordinates}
-                    tracksViewChanges={false}>
-                    <ImageBackground
-                      style={{height: 25, width: 20}}
-                      source={MarkerInteret}>
-                      <Text style={{width: 25, height: 25}} />
-                    </ImageBackground>
-                  </Marker>
-                ))
-              : null}
-          </MapView>
+        {this.props.pointsInterets != null
+          ? this.props.pointsInterets.map(marker => (
+              <Marker
+                onPress={() => this.onClickInterestPoint(marker)}
+                // onCalloutPress={() => this.onClickInterestPoint(marker)}
+                key={marker.id}
+                coordinate={marker.coordinates}
+                tracksViewChanges={false}>
+                <ImageBackground
+                  style={{height: 25, width: 20}}
+                  source={MarkerInteret}>
+                  <Text style={{width: 25, height: 25}} />
+                </ImageBackground>
+              </Marker>
+            ))
+          : null}
+      </MapView>
 
-  
-          {this.props.currentMapStyle == 'standard' ||
-          this.props.currentMapStyle == 'hybrid' ||
-          this.props.currentMapStyle == 'terrain' ? (
-            <Fab
-              active={this.state.fabActive}
-              direction="down"
-              containerStyle={{}}
-              style={{backgroundColor: '#5067FF', zIndex : 100}}
-              position="topRight"
-              onPress={() => this.setState({fabActive: !this.state.fabActive})}>
-              <Icon name={this.getFabDefaultLogo()} type="FontAwesome5" />
 
-              {this.props.currentMapStyle != 'standard' ? (
-                <Button
-                  style={{backgroundColor: '#34A34F', zIndex : 100}}
-                  onPress={() =>
-                    this.setState({fabActive: false}, () =>
-                      this.saveCurrentMapStyle('standard'),
-                    )
-                  }>
-                  <Icon name="map" type="FontAwesome5" />
-                </Button>
-              ) : null}
-
-              {this.props.currentMapStyle != 'hybrid' ? (
-                <Button
-                style={{backgroundColor: '#34A34F', zIndex : 100}}
-                  onPress={() =>
-                    this.setState({fabActive: false}, () =>
-                      this.saveCurrentMapStyle('hybrid'),
-                    )
-                  }>
-                  <Icon name="satellite" type="FontAwesome5" />
-                </Button>
-              ) : null}
-
-              {Platform.OS == 'android' &&
-              this.props.currentMapStyle != 'terrain' ? (
-                <Button
-                style={{backgroundColor: '#34A34F', zIndex : 100}}
-                  onPress={() =>
-                    this.setState({fabActive: false}, () =>
-                      this.saveCurrentMapStyle('terrain'),
-                    )
-                  }>
-                  <Icon name="tree" type="FontAwesome5" />
-                </Button>
-              ) : null}
-            </Fab>
-          ) : null}
 
           {this.state.currentPolyline != null ? (
             <View
@@ -2579,7 +2563,7 @@ class SimpleMap extends Component<Props,State> {
               arretée ou en arrière plan.
             </Text>
             <TouchableOpacity
-              onPress={() => this.onAcceptGps()}
+              onPress={this.onAcceptGps}
               style={{justifyContent: 'flex-end',marginTop: 30}}
               >
               <Text style={{textAlign: 'right'}}>Ok</Text>
@@ -2923,7 +2907,7 @@ class SimpleMap extends Component<Props,State> {
                 </Button>
                 <Button
                   full
-                  onPress={this.onStop.bind(this)}
+                  onPress={this.onStop}
                   style={{
                     backgroundColor: '#FE3C03',
                     width: '50%',

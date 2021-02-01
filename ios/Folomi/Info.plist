@@ -39,6 +39,12 @@
 			</dict>
 		</dict>
 	</dict>
+	<key>NSAppleMusicUsageDescription</key>
+	<string>Utilisé pour télécharger votre gpx</string>
+	<key>NSDocumentsFolderUsageDescription</key>
+	<string>Utilisé pour télécharger votre gpx</string>
+	<key>NSDownloadsFolderUsageDescription</key>
+	<string>Utilisé pour télécharger votre gpx</string>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
 	<string>Utilisé pour enregistrer votre parcours et votre vitesse même si votre téléphone est verrouillé</string>
 	<key>NSLocationAlwaysUsageDescription</key>

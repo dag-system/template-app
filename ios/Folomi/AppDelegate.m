@@ -28,7 +28,7 @@ static void InitializeFlipper(UIApplication *application) {
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-
+ 
 /*#if DEBUG && TARGET_OS_SIMULATOR
   InitializeFlipper(application);
 #endif
