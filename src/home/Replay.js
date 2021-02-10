@@ -2,17 +2,11 @@ import React, {Component} from 'react';
 import {
   Platform,
   StyleSheet,
-  Linking,
   View,
   PermissionsAndroid,
   Image,
-  ActivityIndicator,
-  ScrollView,
-  Share as ShareRn,
-  TouchableHighlight,
   TouchableOpacity,
   Dimensions,
-  ImageBackground,
 } from 'react-native';
 import {
   Container,
@@ -33,26 +27,20 @@ import {
 } from 'native-base';
 import MapView, {Marker} from 'react-native-maps';
 import ApiUtils from '../ApiUtils';
-import AsyncStorage from '@react-native-community/async-storage';
 import {connect} from 'react-redux';
 import RNFetchBlob from 'rn-fetch-blob';
-import Share from 'react-native-share';
 import Logo from '../assets/logo_header.png';
 import GlobalStyles from '../styles';
 import {Sponsors} from './Sponsors';
 import Autrans from '../assets/autrans.svg';
 import {ReactNativeModal as ModalSmall} from 'react-native-modal';
 import {Icon as IconElement} from 'react-native-elements';
-import {FlatList} from 'react-native';
 import GPXDocument from '../lib/gpx-parse/GPXDocument';
-import MarkerInteret from '../assets/marker.png';
-import MarkerInteret2 from '../assets/profil.png';
 import moment from 'moment';
 import Slider from '@react-native-community/slider';
 import Sidebar from './SideBar';
 
-import { isPointInPolygon } from 'geolib';
-import Classement from './Classement';
+import {isPointInPolygon} from 'geolib';
 
 const haversine = require('haversine');
 const mapStateToProps = state => {
@@ -137,8 +125,6 @@ class Replay extends Component {
     formData.append('method', 'getPointPassage');
     formData.append('auth', ApiUtils.getAPIAuth());
     formData.append('idChallenge', idChallenge);
-
-    //fetch followCode API
     fetch(ApiUtils.getAPIUrl(), {
       method: 'POST',
       headers: {
@@ -208,7 +194,6 @@ class Replay extends Component {
       .then(response => response.json())
       .then(responseJson => {
         let data = Object.values(responseJson);
-        console.log(data);
         this.setState({isloading: false});
 
         if (index == 1) {
@@ -276,12 +261,16 @@ class Replay extends Component {
       .then(response => response.json())
       .then(responseJson => {
         this.setState({isloadingChallenge: false});
-        console.log(responseJson.classement);
         this.setState({classement: responseJson.classement});
-        if(responseJson.classement.filter(c => c.idUtilisateur == this.props.userData.idUtilisateur).length > 0)
-        {
-          let userGpx  =responseJson.classement.filter(c => c.idUtilisateur == this.props.userData.idUtilisateur )[0].gpxLive;
-          this.setState({gpx1Name : userGpx});
+        if (
+          responseJson.classement.filter(
+            c => c.idUtilisateur == this.props.userData.idUtilisateur,
+          ).length > 0
+        ) {
+          let userGpx = responseJson.classement.filter(
+            c => c.idUtilisateur == this.props.userData.idUtilisateur,
+          )[0].gpxLive;
+          this.setState({gpx1Name: userGpx});
         }
 
         // this.setState({isloading: false, pointPassages: result});
@@ -308,7 +297,6 @@ class Replay extends Component {
     let filePath = 'https://www.folomi.fr/fichiers/gpxLive/' + gpxFile + '.gpx';
 
     // var path = this.normalize(filePath);
-    var _this = this;
     let dirs = RNFetchBlob.fs.dirs;
     let path = dirs.DownloadDir + '/' + 'folomi' + '/' + gpxFile + '.gpx';
 
@@ -321,8 +309,6 @@ class Replay extends Component {
           .then(res => {
             try {
               let status = res.info().status;
-              console.log(res);
-              console.log(status);
 
               if (status == 200) {
                 this.readGpxFile(res.path(), index);
@@ -357,14 +343,13 @@ class Replay extends Component {
       };
 
       var isInside = isPointInPolygon(coordinate, [
-        { latitude:45.239345439246804, longitude: 5.487474486152105},
-       {latitude : 45.239345439246804 , longitude :5.603112382684815 },
-        { latitude: 45.16591923938339, longitude: 5.603112382684815 },
-        {latitude : 45.16591923938339, longitude : 5.487474486152105},
+        {latitude: 45.239345439246804, longitude: 5.487474486152105},
+        {latitude: 45.239345439246804, longitude: 5.603112382684815},
+        {latitude: 45.16591923938339, longitude: 5.603112382684815},
+        {latitude: 45.16591923938339, longitude: 5.487474486152105},
       ]);
 
-      if(isInside)
-      {
+      if (isInside) {
         coordinates.push(coordinate);
       }
     });
@@ -379,7 +364,6 @@ class Replay extends Component {
       element = Object.values(element);
       let time = element[2];
       time = Object.values(time);
-      console.log('time', time);
       var coordinate = {
         latitude: parseFloat(element[0]),
         longitude: parseFloat(element[1]),
@@ -387,18 +371,15 @@ class Replay extends Component {
       };
 
       var isInside = isPointInPolygon(coordinate, [
-        { latitude:45.239345439246804, longitude: 5.487474486152105},
-       {latitude : 45.239345439246804 , longitude :5.603112382684815 },
-        { latitude: 45.16591923938339, longitude: 5.603112382684815 },
-        {latitude : 45.16591923938339, longitude : 5.487474486152105},
+        {latitude: 45.239345439246804, longitude: 5.487474486152105},
+        {latitude: 45.239345439246804, longitude: 5.603112382684815},
+        {latitude: 45.16591923938339, longitude: 5.603112382684815},
+        {latitude: 45.16591923938339, longitude: 5.487474486152105},
       ]);
 
-      if(isInside)
-      {
+      if (isInside) {
         coordinates.push(coordinate);
       }
-
-      
     });
 
     return coordinates;
@@ -522,7 +503,6 @@ class Replay extends Component {
     let dirs = RNFetchBlob.fs.dirs;
     let path = dirs.DownloadDir + '/' + 'folomi' + '/' + name + '.gpx';
 
-    var _this = this;
     return RNFetchBlob.config({
       path: path,
     })
@@ -534,12 +514,12 @@ class Replay extends Component {
   realign() {}
 
   pause() {
-    this.setState({isPaused :true})
+    this.setState({isPaused: true});
     clearInterval(this.interval);
   }
 
   continue() {
-    this.setState({isPaused :false})
+    this.setState({isPaused: false});
     clearInterval(this.interval);
     this.interval = setInterval(() => this.onInterval(), speed);
   }
@@ -590,17 +570,6 @@ class Replay extends Component {
     this.props.dispatch(action);
   }
 
-  getFabDefaultLogo() {
-    if (this.props.currentMapStyle == 'terrain') {
-      return 'tree';
-    }
-
-    if (this.props.currentMapStyle == 'hybrid') {
-      return 'satellite';
-    }
-    return 'map';
-  }
-
   showMapFullSize() {
     this.setState({isMapFullSize: !this.state.isMapFullSize});
     this.centerMap();
@@ -625,7 +594,7 @@ class Replay extends Component {
 
   start() {
     this.interval = setInterval(() => this.onInterval(), speed);
-    this.setState({isStarted: true, isPaused : false});
+    this.setState({isStarted: true, isPaused: false});
   }
 
   stop() {
@@ -695,7 +664,6 @@ class Replay extends Component {
   getMarker(markers, time, startPoint) {
     let startDate = moment(startPoint.time);
     let marker = null;
-    let i = 0;
     for (let i = 0; i < markers.length; i++) {
       let m = markers[i];
       let currentTime = moment(m.time);
@@ -765,7 +733,6 @@ class Replay extends Component {
   }
 
   getClosestInterestPoint(startPoint, points, maxDistance) {
-    var h2 = new Date().getTime();
     var minDistance = Number.MAX_VALUE;
     var markerMin = null;
 
@@ -780,16 +747,21 @@ class Replay extends Component {
     });
 
     return markerMin;
-
-    this.setState({currentHighlightedInterest: markerMin});
-
-    var h3 = new Date().getTime();
-    var timeTaken = h3 - h2;
-    console.log('time ====', timeTaken);
   }
 
   ongoHome() {
     this.props.navigation.navigate('Home');
+  }
+
+  getFabDefaultLogo() {
+    if (this.props.currentMapStyle == 'terrain') {
+      return 'tree';
+    }
+
+    if (this.props.currentMapStyle == 'hybrid') {
+      return 'satellite';
+    }
+    return 'map';
   }
 
   render() {
@@ -889,15 +861,9 @@ class Replay extends Component {
                       borderBottomWidth: 1,
                     }}>
                     <Picker.Item label="Choisissez une épreuve" value="-1" />
-                    <Picker.Item label="5km village" value={44} />
-
-                    <Picker.Item label="5km geve" value={41} />
-
-                    <Picker.Item label="10 km" value={42} />
-
-                    <Picker.Item label="15 km " value={40} />
-
-                    <Picker.Item label="20 km " value={43} />
+                    <Picker.Item label="5km village" value={47} />
+                    <Picker.Item label="10 km" value={46} />
+                    <Picker.Item label="20 km " value={48} />
                   </Picker>
 
                   {!this.state.isloadingChallenge &&
@@ -1106,47 +1072,49 @@ class Replay extends Component {
                   ) : null}
 
                   {this.state.isStarted ? (
-                    <View style={[GlobalStyles.row,{justifyContent : 'center'}]}>
-                      {!this.state.isPaused ? 
-                      <Button
-                        style={{
-                          marginTop: 10,
-                          paddingHorizontal: 50,
-                          elevation: 0,
-                          alignSelf: 'center',
-                          borderColor: ApiUtils.orange(),
-                          borderWidth: 1,
-                          marginRight : 10,
-                          backgroundColor: ApiUtils.orange(),
-                        }}
-                        onPress={() => this.pause()}>
-                        <Text
+                    <View
+                      style={[GlobalStyles.row, {justifyContent: 'center'}]}>
+                      {!this.state.isPaused ? (
+                        <Button
                           style={{
-                            color: 'white',
-                          }}>
-                          Pause
-                        </Text>
-                      </Button> :    
-                      <Button
-                        style={{
-                          marginTop: 10,
-                          paddingHorizontal: 50,
-                          elevation: 0,
-                          alignSelf: 'center',
-                          borderColor: ApiUtils.green(),
-                          borderWidth: 1,
-                          marginRight : 10,
-                          backgroundColor: ApiUtils.green(),
-                        }}
-                        onPress={() => this.continue()}>
-                        <Text
+                            marginTop: 10,
+                            paddingHorizontal: 50,
+                            elevation: 0,
+                            alignSelf: 'center',
+                            borderColor: ApiUtils.orange(),
+                            borderWidth: 1,
+                            marginRight: 10,
+                            backgroundColor: ApiUtils.orange(),
+                          }}
+                          onPress={() => this.pause()}>
+                          <Text
+                            style={{
+                              color: 'white',
+                            }}>
+                            Pause
+                          </Text>
+                        </Button>
+                      ) : (
+                        <Button
                           style={{
-                            color: 'white',
-                          }}>
-                          Reprendre
-                        </Text>
-                      </Button>
-  }
+                            marginTop: 10,
+                            paddingHorizontal: 50,
+                            elevation: 0,
+                            alignSelf: 'center',
+                            borderColor: ApiUtils.green(),
+                            borderWidth: 1,
+                            marginRight: 10,
+                            backgroundColor: ApiUtils.green(),
+                          }}
+                          onPress={() => this.continue()}>
+                          <Text
+                            style={{
+                              color: 'white',
+                            }}>
+                            Reprendre
+                          </Text>
+                        </Button>
+                      )}
 
                       <Button
                         style={{
@@ -1172,8 +1140,13 @@ class Replay extends Component {
                   {this.state.isStarted ? (
                     <View style={{marginLeft: 12}}>
                       <View>
-                        <Text style={{marginTop: 10, textAlign: 'center', fontWeight : 'bold'}}>
-                          Vitesse 
+                        <Text
+                          style={{
+                            marginTop: 10,
+                            textAlign: 'center',
+                            fontWeight: 'bold',
+                          }}>
+                          Vitesse
                         </Text>
 
                         <Slider
@@ -1191,11 +1164,16 @@ class Replay extends Component {
                         </Text>
                       </View>
 
-                      <Text style={{marginTop: 10, textAlign: 'center', fontWeight : 'bold'}}>
-                          Durée 
-                        </Text>
+                      <Text
+                        style={{
+                          marginTop: 10,
+                          textAlign: 'center',
+                          fontWeight: 'bold',
+                        }}>
+                        Durée
+                      </Text>
 
-                      <Text style={{textAlign :'center'}}>
+                      <Text style={{textAlign: 'center'}}>
                         {moment('1900-01-01 00:00:00')
                           .add(this.state.startTimeSeconds, 'seconds')
                           .format('HH:mm:ss')}
@@ -1241,7 +1219,7 @@ class Replay extends Component {
                   {this.state.coordinates != null &&
                   this.state.coordinates.length > 0 ? (
                     <MapView.Polyline
-                      key="polyline"
+                      key="polyline1"
                       coordinates={this.state.coordinates}
                       geodesic={true}
                       strokeColor="orange"
@@ -1253,7 +1231,7 @@ class Replay extends Component {
                   {this.state.coordinates2 != null &&
                   this.state.coordinates2.length > 0 ? (
                     <MapView.Polyline
-                      key="polyline"
+                      key="polyline2"
                       coordinates={this.state.coordinates2}
                       geodesic={true}
                       strokeColor="yellow"

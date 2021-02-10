@@ -33,9 +33,7 @@ import Swipeout from 'react-native-swipeout';
 import ApiUtils from '../ApiUtils';
 import Logo from '../assets/logo_header.png';
 import Autrans from '../assets/autrans.svg';
-import LogoHome from '../assets/logo.png';
 import Sidebar from './SideBar';
-import AsyncStorage from '@react-native-community/async-storage';
 // import Geolocation from 'react-native-geolocation-service';
 import {connect} from 'react-redux';
 import GlobalStyles from '../styles';
@@ -48,6 +46,7 @@ import UploadGpx from './UploadGpx';
 import {Platform} from 'react-native';
 import {Linking} from 'react-native';
 import {Alert} from 'react-native';
+import DefaultProps from '../models/DefaultProps';
 const mapStateToProps = state => {
   return {
     userData: state.userData,
@@ -61,32 +60,56 @@ const mapStateToProps = state => {
   };
 };
 
-class Lives extends Component {
+interface Props extends DefaultProps {
+  userData: any;
+  isRecording: boolean;
+  lives: any[];
+  sports: any[];
+  currentLive: any;
+  isOkPopupGps: boolean;
+  isOkPopupBAttery: boolean;
+  isOkPopupBAttery2: boolean;
+}
+
+interface State {
+  spinner: boolean;
+  isOpenModalHelp: boolean;
+  deletingIds: number[];
+  isLoadingDeleting: boolean;
+  isLoading: boolean;
+
+  sectionID: any;
+  rowID: any;
+  uploadGpxVisible: boolean;
+  selectedSport: number;
+  modalChooseSportVisible: boolean;
+
+  lives: any[];
+  sports: any[];
+  refresh: boolean;
+}
+
+class Lives extends Component<Props, State> {
+  drawer: Drawer;
+  private _unsubscribe: any;
   constructor(props) {
     super(props);
 
     this.state = {
       spinner: false,
       isOpenModalHelp: false,
-      //   username: navigation.state.params.username,
-      // url: TRACKER_HOST + navigation.state.params.username,
-      userdata: {
-        nom: '',
-        prenom: '',
-        folocode: '',
-        urlResultats: '',
-        idUtilisateur: '',
-      },
       sports: [],
       deletingIds: [],
       rowID: 0,
       lives: [],
       isLoading: true,
-      isRecording: true,
       isLoadingDeleting: false,
       uploadGpxVisible: false,
       modalChooseSportVisible: false,
       selectedSport: -1,
+      sectionID : -1,
+      refresh : false
+
     };
 
     this._unsubscribe = this.props.navigation.addListener('focus', () => {
@@ -100,7 +123,7 @@ class Lives extends Component {
 
   async componentDidMountOk() {
     if (this.props.isRecording) {
-      this.onClickNavigate('SimpleMap');
+      this.goToMap();
     } else {
       this.downloadData();
     }
@@ -169,7 +192,6 @@ class Lives extends Component {
       .then(ApiUtils.checkStatus)
       .then(response => response.json())
       .then(responseJson => {
-        console.log(responseJson);
         var action = {type: 'GET_LIVES', data: responseJson};
         this.props.dispatch(action);
 
@@ -213,7 +235,6 @@ class Lives extends Component {
   };
 
   onClickCreateLive() {
-    console.log(this.props.lives)
     if (this.props.lives.filter(l => l.etatLive == 0).length > 0) {
       let currentLive = this.props.lives.filter(l => l.etatLive == 0)[0];
       this.viewLive(currentLive);
@@ -228,8 +249,8 @@ class Lives extends Component {
     formData.append('method', 'createLive');
     formData.append('auth', ApiUtils.getAPIAuth());
     formData.append('idUtilisateur', this.props.userData.idUtilisateur);
-    formData.append('idversion', ApiUtils.VersionNumberInt());
-    formData.append('idSport', this.state.selectedSport);
+    formData.append('idversion', ApiUtils.VersionNumberInt().toString());
+    formData.append('idSport', this.state.selectedSport.toString());
     formData.append('os', Platform.OS);
     var libelleLive = this.getLibelleLive();
 
@@ -266,7 +287,7 @@ class Lives extends Component {
           var action = {type: 'CREATE_LIVE', data: live};
           this.props.dispatch(action);
           this.setState({spinner: false});
-          this.onClickNavigate('SimpleMap');
+          this.goToMap();
         } else {
           alert(responseJson.message);
         }
@@ -276,7 +297,6 @@ class Lives extends Component {
         this.setState({spinner: false});
         ApiUtils.logError('create live', JSON.stringify(e.message));
         if (e.message == 'Timeout' || e.message == 'Network request failed') {
-          this.setState({noConnection: true});
 
           Toast.show({
             text: "Vous n'avez pas de connection internet, merci de réessayer",
@@ -289,21 +309,6 @@ class Lives extends Component {
       });
   }
 
-  initTimer(idLive) {
-    try {
-      var timerIntString = JSON.stringify(0);
-      AsyncStorage.setItem('@followme:timer' + idLive, timerIntString);
-    } catch (error) {
-      ApiUtils.logError('saveTimer', error.message);
-    }
-
-    try {
-      return AsyncStorage.setItem('@followme:timerString' + idLive, '00:00:00');
-    } catch (error) {
-      ApiUtils.logError('saveTimerstring', error.message);
-    }
-  }
-
   viewLive(live) {
     var action = {type: 'SAVE_CURRENT_LIVE', data: live};
 
@@ -311,21 +316,23 @@ class Lives extends Component {
 
     if (live.etatLive == 0 || live.etatLive == 1) {
       if (!this.props.isRecording) {
-        //set time à zero pour la map
-        this.initTimer(live.idLive).then(() => {
-          this.props.navigation.navigate('SimpleMap');
-        });
+        this.goToMap();
       } else {
-        this.props.navigation.navigate('SimpleMap');
+        this.goToMap();
       }
     } else {
       this.props.navigation.navigate('LiveSummary');
     }
   }
+  goToMap = () => {
+    if (this.props.isOkPopupGps) {
+      this.onClickNavigate('SimpleMap');
+    } else {
+      this.onClickNavigate('AskGpsModal');
+    }
+  };
 
-
-  onPressDeleteLive = (item) => {
-  
+  onPressDeleteLive = item => {
     Alert.alert(
       "Supprimer l'activité",
       "Etes-vous sûr de supprimer l'activité ?",
@@ -334,14 +341,16 @@ class Lives extends Component {
           text: 'Annuler',
           style: 'cancel',
         },
-        {text: 'Supprimer', onPress: () => this.deleteLiveLongPressOk(item.idLive)},
+        {
+          text: 'Supprimer',
+          onPress: () => this.deleteLiveLongPressOk(item.idLive),
+        },
       ],
       {cancelable: false},
     );
   };
 
-  deleteLiveLongPressOk(idLive)
-  {
+  deleteLiveLongPressOk(idLive) {
     var deletingIds = this.state.deletingIds;
     if (deletingIds.filter(d => d == idLive).length == 0) {
       deletingIds.push(idLive);
@@ -426,7 +435,6 @@ class Lives extends Component {
         ApiUtils.logError('create live', JSON.stringify(e.message));
         // alert('Une erreur est survenue : ' + JSON.stringify(e.message));
         if (e.message == 'Timeout' || e.message == 'Network request failed') {
-          this.setState({noConnection: true});
 
           Toast.show({
             text: "Vous n'avez pas de connection internet, merci de réessayer",
@@ -505,7 +513,7 @@ class Lives extends Component {
     const formData = new FormData();
     formData.append('method', 'getnewVersion');
     formData.append('auth', ApiUtils.getAPIAuth());
-    formData.append('idVersion', ApiUtils.VersionNumberInt());
+    formData.append('idVersion', ApiUtils.VersionNumberInt().toString());
 
     fetch(ApiUtils.getAPIUrl(), {
       method: 'POST',
@@ -567,21 +575,18 @@ class Lives extends Component {
         var result = responseJson;
 
         if (result.traces != null && result.traces.length != 0) {
-          this.setState({nomStation: result.nomStation});
-
-          this.setState({descriptionStation: result.descriptionStation});
           var tracesArray = Object.values(result.traces);
 
           var finalTraceArray = []; // new Object(this.props.polylines);
           var finalinterestArray = [];
-          if ((tracesArray != null) & (tracesArray.length != 0)) {
+          if (tracesArray != null && tracesArray.length != 0) {
             tracesArray.forEach(trace => {
               var finalTrace = trace;
 
               var positionArray = Object.values(trace.positionsTrace);
               trace.positionsTrace = positionArray;
 
-              var finalTrace = {
+              finalTrace = {
                 positionsTrace: positionArray,
                 couleurTrace: trace.couleurTrace,
                 nomTrace: trace.nomTrace,
@@ -613,6 +618,7 @@ class Lives extends Component {
                 telephoneInteret: interest.telephoneInteret,
                 lienInteret: interest.lienInteret,
                 photoInteret: interest.photoInteret,
+                description: '',
               };
 
               if (
@@ -665,6 +671,7 @@ class Lives extends Component {
       return 'SKATING';
     }
   }
+
   getnbInvites(live) {
     var invites = live.invites;
     var finalInvites = [];
@@ -770,7 +777,7 @@ class Lives extends Component {
                 />
               }>
               <View style={styles.loginButtonSection}>
-                {this.props.lives.length == 0 ? (
+                {this.props.lives == null || this.props.lives.length == 0 ? (
                   <Text
                     style={{
                       paddingTop: 100,
@@ -787,7 +794,7 @@ class Lives extends Component {
                       return b.idLive - a.idLive;
                     })}
                     extraData={this.props.lives}
-                    key={({item}) => item.idLive}
+                    key={(item) => item.idLive}
                     renderItem={({item}) =>
                       this.state.isLoadingDeleting &&
                       this.state.deletingIds.filter(d => d == item.idLive)
@@ -803,7 +810,6 @@ class Lives extends Component {
 
                               <View
                                 style={{
-                                  color: 'black',
                                   alignContent: 'center',
                                 }}>
                                 <ActivityIndicator />
@@ -817,15 +823,15 @@ class Lives extends Component {
                                   width: '60%',
                                 }}>
                                 {/* {item.etatLive > ? ( */}
-                                  <Text style={{width: 200}}>
-                                    <Text
-                                      style={{
-                                        fontWeight: 'bold',
-                                        color: ApiUtils.getBackgroundColor(),
-                                      }}>
-                                      {this.getSport(item.idSport)}
-                                    </Text>
+                                <Text style={{width: 200}}>
+                                  <Text
+                                    style={{
+                                      fontWeight: 'bold',
+                                      color: ApiUtils.getBackgroundColor(),
+                                    }}>
+                                    {this.getSport(item.idSport)}
                                   </Text>
+                                </Text>
                                 {/* ) : null} */}
                               </View>
                             </View>
@@ -849,9 +855,12 @@ class Lives extends Component {
                               rowID,
                             });
                           }}>
-                           <TouchableOpacity
-                        delayLongPress={500}
-                        onLongPress={this.onPressDeleteLive.bind(this, item)}
+                          <TouchableOpacity
+                            delayLongPress={500}
+                            onLongPress={this.onPressDeleteLive.bind(
+                              this,
+                              item,
+                            )}
                             onPress={this.viewLive.bind(this, item)}>
                             <View>
                               <View style={styles.rowContainer}>
@@ -942,17 +951,17 @@ class Lives extends Component {
                                       width: '60%',
                                     }}>
                                     {/* {item.etatLive > 1 ? ( */}
-                                      <View>
-                                        <Text style={{width: 200}}>
-                                          <Text
-                                            style={{
-                                              color: ApiUtils.getBackgroundColor(),
-                                              fontWeight: 'bold',
-                                            }}>
-                                            {this.getSport(item.idSport)}
-                                          </Text>
+                                    <View>
+                                      <Text style={{width: 200}}>
+                                        <Text
+                                          style={{
+                                            color: ApiUtils.getBackgroundColor(),
+                                            fontWeight: 'bold',
+                                          }}>
+                                          {this.getSport(item.idSport)}
                                         </Text>
-                                      </View>
+                                      </Text>
+                                    </View>
                                     {/* ) : null} */}
                                   </View>
                                 </View>
@@ -1027,7 +1036,7 @@ class Lives extends Component {
               visible={
                 !this.props.isOkPopupBAttery || this.state.isOpenModalHelp
               }>
-              <Container style={{flex: 1}} scrollEnabled={true}>
+              <Container style={{flex: 1}}>
                 <View style={{flex: 1}}>
                   <Help noHeader={true} />
 
@@ -1040,7 +1049,7 @@ class Lives extends Component {
               visible={
                 !this.props.isOkPopupBAttery2 && this.props.isOkPopupBAttery
               }>
-              <Container style={{flex: 1}} scrollEnabled={true}>
+              <Container style={{flex: 1}}>
                 <View style={{flex: 1}}>
                   <BatteryModal noHeader={true} />
 
@@ -1063,21 +1072,17 @@ class Lives extends Component {
               transparent={false}
               visible={this.state.modalChooseSportVisible}
               onRequestClose={() => {
-                this.toggleModalChooseSport(
-                  !this.state.modalChooseSportVisible,
-                );
+                this.toggleModalChooseSport();
               }}>
               {/* {this.state.modal3Visible ? ( */}
               <Root>
-                <View style={styles.modal}>
+                <View>
                   <Header style={styles.headerModal}>
                     <Left>
                       <Button
                         style={styles.drawerButton}
                         onPress={() => {
-                          this.toggleModalChooseSport(
-                            !this.state.modalChooseSportVisible,
-                          );
+                          this.toggleModalChooseSport();
                         }}>
                         <Icon
                           style={styles.saveText}
@@ -1096,7 +1101,7 @@ class Lives extends Component {
 
                   <ScrollView scrollEnabled={true}>
                     <View>
-                      <View style={styles.picker}>
+                      <View>
                         <Picker
                           mode="dropdown"
                           accessibilityLabel={'Choisissez le type de glisse'}

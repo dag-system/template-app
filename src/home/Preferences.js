@@ -148,9 +148,9 @@ class Preferences extends Component {
     for (let i = 2021; i > 1930; i--) {
       years.push(i);
     }
-    this.setState({years: years},() => this.fillDate());
+    this.setState({years: years}, () => this.fillDate());
 
-    this.getInformations();
+  //  this.getInformations();
     this.setState({userdata: this.props.userData});
     if (this.props.userData.clubUtilisateur == 'NULL') {
       this.props.userData.clubUtilisateur = '';
@@ -160,9 +160,7 @@ class Preferences extends Component {
       this.props.userData.villeUtilisateur = '';
     }
 
-    this.setClubs(this.props.userClubs);
-
-  
+   // this.setClubs(this.props.userClubs);
 
     //this.getClubs();
   }
@@ -185,8 +183,7 @@ class Preferences extends Component {
     }
   }
 
-  fillDate()
-  {
+  fillDate() {
     if (this.props.userData.ddnUtilisateur != '0000-00-00') {
       this.setState({showDefaultDdn: true});
 
@@ -265,9 +262,9 @@ class Preferences extends Component {
       isError = true;
     }
 
-    // if (this.state.userdata.telUtilisateur == '') {
-    //   isError = true;
-    // }
+    if (this.state.userdata.telUtilisateur == '') {
+      isError = true;
+    }
 
     // if (this.state.userdata.adresseUtilisateur == '') {
     //   isError = true;
@@ -343,16 +340,8 @@ class Preferences extends Component {
       .then(response => response.json())
       .then(responseJson => {
         //save values in cache
-        console.log(responseJson);
         if (responseJson.codeErreur == 'SUCCESS') {
-          let clubsstring = responseJson.clubs;
-          console.log(clubsstring);
-          let clubs = Object.values(clubsstring);
-          console.log(clubs);
-          var action = {type: 'GET_USER_CLUBS', data: clubs};
-          this.props.dispatch(action);
 
-          this.setClubs(clubs);
         } else {
           this.setState({isLoading: false});
         }
@@ -390,6 +379,19 @@ class Preferences extends Component {
 
     formData.append('telUtilisateur', this.state.userdata.telUtilisateur);
 
+    var acceptChallengeTelUtilisateur = 0;
+    if (
+      this.state.userdata.acceptChallengeTelUtilisateur ||
+      this.state.userdata.acceptChallengeTelUtilisateur
+    ) {
+      acceptChallengeTelUtilisateur = 1;
+    }
+
+    formData.append(
+      'acceptChallengeTelUtilisateur',
+      acceptChallengeTelUtilisateur,
+    );
+
     var finalDate = moment(this.state.userdata.ddnUtilisateur).format(
       'YYYY-MM-DD',
     );
@@ -405,49 +407,10 @@ class Preferences extends Component {
     formData.append('villeUtilisateur', this.state.userdata.villeUtilisateur);
     formData.append('paysUtilisateur', this.state.userdata.paysUtilisateur);
 
-    // formData.append('clubUtilisateur', this.state.userdata.clubUtilisateur);
 
     let clubs = [];
 
-    if (
-      (this.state.acceptChallengeEntreprise || this.hasClub('Entreprise')) &&
-      this.state.clubEntreprise != ''
-    ) {
-      clubs.push({club: this.state.clubEntreprise, type: 'Entreprise'});
-    }
-
-    if (
-      (this.state.acceptChallengeFamille || this.hasClub('Famille')) &&
-      this.state.clubFamille != ''
-    ) {
-      clubs.push({club: this.state.clubFamille, type: 'Famille'});
-    }
-
-    if (
-      (this.state.acceptChallengeUniversite || this.hasClub('Ecole')) &&
-      this.state.clubUniversite != ''
-    ) {
-      console.log();
-      clubs.push({club: this.state.clubUniversite, type: 'Ecole'});
-    }
-
-    if (
-      (this.state.acceptChallengeUnss || this.hasClub('Unss')) &&
-      this.state.unss != ''
-    ) {
-      clubs.push({club: this.state.unss, type: 'Unss'});
-    }
     formData.append('clubsUtilisateur', JSON.stringify(clubs));
-
-    var acceptChallengeUtilisateur = 0;
-    if (
-      this.state.userdata.acceptChallengeUtilisateur ||
-      this.state.userdata.acceptChallengeUtilisateur
-    ) {
-      acceptChallengeUtilisateur = 1;
-    }
-
-    formData.append('acceptChallengeUtilisateur', acceptChallengeUtilisateur);
 
     var acceptChallengeNameUtilisateur = 0;
     if (
@@ -474,7 +437,6 @@ class Preferences extends Component {
       .then(ApiUtils.checkStatus)
       .then(response => response.json())
       .then(responseJson => {
-        console.log(responseJson);
         if (responseJson.codeErreur == 'SUCCESS') {
           this.setState({isLoading: false});
 
@@ -540,7 +502,6 @@ class Preferences extends Component {
 
   onValueYearddn(value) {
     this.setState({yearDdn: value});
-  
   }
 
   hasClub(type) {
@@ -692,9 +653,11 @@ class Preferences extends Component {
                 ) : null}
 
                 <Item stackedLabel style={{marginBottom: 5}}>
-                  <Label>Numéro de télephone </Label>
+                  <Label>Numéro de télephone * </Label>
                   <Input
                     returnKeyType="next"
+                    keyboardType="phone-pad"
+                    autoCompleteType="tel"
                     clearButtonMode="always"
                     value={this.state.userdata.telUtilisateur}
                     onChangeText={phoneNumber =>
@@ -707,6 +670,35 @@ class Preferences extends Component {
                     }
                   />
                 </Item>
+
+                <View
+                style={{
+                  marginTop: 20,
+                  paddingLeft: 10,
+                  width: '80%',
+                  display: 'flex',
+                  flexDirection: 'row',
+                  justifyContent: 'space-between',
+                }}>
+                <Switch
+                  tyle={{paddingTop: 20}}
+                  onValueChange={text =>
+                    this.setState({
+                      userdata: {
+                        ...this.state.userdata,
+                        acceptChallengeTelUtilisateur: text,
+                      },
+                    })
+                  }
+                  value={
+                    this.state.userdata.acceptChallengeTelUtilisateur == 1
+                  }
+                />
+                <Text style={{marginLeft: 10}}>
+                  J’accepte l’utilisation de mon numéro de téléphone pour le tirage au sort des lots
+                </Text>
+              </View>
+
 
                 <Text style={styles.label}>Sexe</Text>
 
@@ -772,6 +764,20 @@ class Preferences extends Component {
                           },
                         });
                       }}
+                    />
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    style={{
+                      display: 'flex',
+                      flexDirection: 'row',
+                      width: '30%',
+                      justifyContent: 'space-around',
+                    }}
+                    onPress={() => this.setState({sexeUtilisateur: 'A'})}>
+                    <Text>Autre</Text>
+                    <Radio
+                      selected={this.state.sexeUtilisateur == 'A'}
+                      onPress={() => this.setState({sexeUtilisateur: 'A'})}
                     />
                   </TouchableOpacity>
                 </View>
@@ -884,7 +890,12 @@ class Preferences extends Component {
                             borderBottomWidth: 1,
                           }}>
                           {this.state.years.map(year => {
-                            return <Picker.Item label={year} value={year.toString()} />;
+                            return (
+                              <Picker.Item
+                                label={year}
+                                value={year.toString()}
+                              />
+                            );
                           })}
                         </Picker>
                       </View>
@@ -1028,162 +1039,6 @@ class Preferences extends Component {
                   />
                 </Item>
               </Form>
-
-              <Text style={{textAlign: 'left', marginTop: 20, paddingLeft: 20}}>
-                Informations Complementaires
-              </Text>
-
-              <View
-                style={{
-                  marginTop: 20,
-                  paddingLeft: 10,
-                  width: '80%',
-                  display: 'flex',
-                  flexDirection: 'row',
-                  justifyContent: 'space-between',
-                }}>
-                <Switch
-                  disabled={this.hasClub('Entreprise')}
-                  style={{marginTop: -5}}
-                  onValueChange={text =>
-                    this.setState({acceptChallengeEntreprise: text})
-                  }
-                  value={
-                    this.state.acceptChallengeEntreprise ||
-                    this.hasClub('Entreprise')
-                  }
-                />
-                <TouchableOpacity
-                  onPress={() =>
-                    this.setState({
-                      acceptChallengeEntreprise: !this.state
-                        .acceptChallengeEntreprise,
-                    })
-                  }>
-                  <Text style={{marginLeft: 10}}>
-                    Je participe au challenge entreprise
-                  </Text>
-                </TouchableOpacity>
-              </View>
-
-              {this.state.acceptChallengeEntreprise ||
-              this.hasClub('Entreprise') ? (
-                <Item
-                  stackedLabel
-                  style={{marginBottom: 5, marginTop: 10, marginLeft: 10}}>
-                  <Label>Nom de mon équipe entreprise</Label>
-                  <Input
-                    // autoCapitalize="characters"
-                    returnKeyType="next"
-                    disabled={this.hasClub('Entreprise')}
-                    clearButtonMode={this.hasClub('Entreprise') ? '' : 'always'}
-                    value={this.state.clubEntreprise}
-                    onChangeText={value =>
-                      this.setState({clubEntreprise: value})
-                    }
-                  />
-                </Item>
-              ) : null}
-
-              <View
-                style={{
-                  marginTop: 20,
-                  paddingLeft: 10,
-                  width: '80%',
-                  display: 'flex',
-                  flexDirection: 'row',
-                  justifyContent: 'space-between',
-                }}>
-                <Switch
-                  disabled={this.hasClub('Famille')}
-                  style={{marginTop: -5}}
-                  onValueChange={text =>
-                    this.setState({acceptChallengeFamille: text})
-                  }
-                  value={
-                    this.state.acceptChallengeFamille || this.hasClub('Famille')
-                  }
-                />
-                <TouchableOpacity
-                  onPress={() =>
-                    this.setState({
-                      acceptChallengeFamille: !this.state
-                        .acceptChallengeFamille,
-                    })
-                  }>
-                  <Text style={{marginLeft: 10}}>
-                    Je participe au challenge Famille/amis
-                  </Text>
-                </TouchableOpacity>
-              </View>
-
-              {this.state.acceptChallengeFamille || this.hasClub('Famille') ? (
-                <Item
-                  stackedLabel
-                  style={{marginBottom: 5, marginTop: 10, marginLeft: 10}}>
-                  <Label>Nom de mon équipe Famille/Ami</Label>
-                  <Input
-                    disabled={this.hasClub('Famille')}
-                    // autoCapitalize="characters"
-                    returnKeyType="next"
-                    clearButtonMode={this.hasClub('Famille') ? '' : 'always'}
-                    value={this.state.clubFamille}
-                    onChangeText={value => this.setState({clubFamille: value})}
-                  />
-                </Item>
-              ) : null}
-
-              <View
-                style={{
-                  marginTop: 20,
-                  paddingLeft: 10,
-                  width: '80%',
-                  display: 'flex',
-                  flexDirection: 'row',
-                  justifyContent: 'space-between',
-                }}>
-                <Switch
-                  disabled={this.hasClub('Ecole')}
-                  style={{marginTop: -5}}
-                  onValueChange={text =>
-                    this.setState({acceptChallengeUniversite: text})
-                  }
-                  value={
-                    this.state.acceptChallengeUniversite ||
-                    this.hasClub('Ecole')
-                  }
-                />
-                <TouchableOpacity
-                  onPress={() =>
-                    this.setState({
-                      acceptChallengeUniversite: !this.state
-                        .acceptChallengeUniversite,
-                    })
-                  }>
-                  <Text style={{marginLeft: 10}}>
-                    Je participe au challenge Université
-                  </Text>
-                </TouchableOpacity>
-              </View>
-
-              {this.state.acceptChallengeUniversite || this.hasClub('Ecole') ? (
-                <Item
-                  stackedLabel
-                  style={{marginBottom: 5, marginTop: 10, marginLeft: 10}}>
-                  <Label>Nom de mon équipe Université</Label>
-                  <Input
-                    disabled={this.hasClub('Ecole')}
-                    clearButtonMode={this.hasClub('Ecole') ? '' : 'always'}
-                    // autoCapitalize="characters"
-                    returnKeyType="next"
-                    value={this.state.clubUniversite}
-                    onChangeText={value =>
-                      this.setState({clubUniversite: value})
-                    }
-                  />
-                </Item>
-              ) : null}
-
               <View
                 style={{
                   marginTop: 20,
@@ -1212,6 +1067,7 @@ class Preferences extends Component {
                 </Text>
               </View>
 
+        
               {ApiUtils.ISDEBUG() ? (
                 <Text
                   full

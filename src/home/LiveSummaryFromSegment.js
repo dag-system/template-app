@@ -13,9 +13,8 @@ import {
 } from 'native-base';
 import MapView from 'react-native-maps';
 import ApiUtils from '../ApiUtils';
-import AsyncStorage from '@react-native-community/async-storage';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { connect } from 'react-redux'
-import Logo from '../assets/logo_header.png';
 const mapStateToProps = (state) => {
   return {
     currentLive: state.currentLive,
@@ -59,7 +58,6 @@ class LiveSummaryFromSegment extends Component {
     // // this.getSports(responseJson.idSport);
 
     // // this.setState({ sports: this.props.sports });
-    // console.log(this.props.sports);
     // var libelleSport = this.props.sports[idSport - 1].label;
     // this.setState({ libelleSport: libelleSport });
 

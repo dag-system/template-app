@@ -4,15 +4,13 @@ import {
   Image,
   TouchableOpacity,
   View,
-  Linking,
-  Platform,
   Dimensions,
+  Linking,
 } from 'react-native';
 import {
   Container,
   Header,
   Body,
-  Toast,
   Root,
   Drawer,
   Icon,
@@ -21,20 +19,15 @@ import {
   Left,
   Right,
 } from 'native-base';
-import md5 from 'md5';
 import ApiUtils from '../ApiUtils';
 import {connect} from 'react-redux';
 import Sidebar from './SideBar';
-import moment from 'moment';
-import GlobalStyles from '../styles';
-import WebView from 'react-native-webview';
-import {url} from 'inspector';
 import Logo from '../assets/logo_header.png';
 import Rotate from '../assets/rotate.png';
 import Autrans from '../assets/autrans.svg';
 
-import AutoHeightWebView from 'react-native-autoheight-webview'
-const mapStateToProps = state => {
+import AutoHeightWebView from 'react-native-autoheight-webview';
+const mapStateToProps = () => {
   return {};
 };
 class Classement extends Component {
@@ -42,19 +35,17 @@ class Classement extends Component {
     super(props);
 
     this.state = {
-      isPortrait : true
+      isPortrait: true,
     };
 
-    Dimensions.addEventListener("change", () => {
-      if(Dimensions.get('screen').width < Dimensions.get('screen').height)
-      {
-        this.setState({isPortrait : true})
-      }else{
-        this.setState({isPortrait : false})
+    Dimensions.addEventListener('change', () => {
+      if (Dimensions.get('screen').width < Dimensions.get('screen').height) {
+        this.setState({isPortrait: true});
+      } else {
+        this.setState({isPortrait: false});
       }
       // orientation has changed, check if it is portrait or landscape here
-      })
-
+    });
   }
 
   componentDidMount() {
@@ -73,36 +64,16 @@ class Classement extends Component {
     this.props.navigation.navigate('Home');
   }
 
-  // async getClassement() {
-  //   this.setState({isLoading: true});
-  //   let formData = new FormData();
-  //   formData.append('method', 'getClassement');
-  //   formData.append('auth', ApiUtils.getAPIAuth());
+  openLink(url) {
+    Linking.canOpenURL(url).then(supported => {
+      if (supported) {
+        Linking.openURL(url);
+      } else {
+        ApiUtils.logError('Home openLink', 'Dont know how to open URI: ' + url);
+      }
+    });
+  }
 
-  //   //fetch followCode API
-  //   fetch(ApiUtils.getAPIUrl(), {
-  //     method: 'POST',
-  //     headers: {
-  //       // Accept: 'application/json',
-  //       // 'Content-Type': 'application/json',
-  //     },
-  //     body: formData,
-  //   })
-  //     .then(ApiUtils.checkStatus)
-  //     .then(response => response.json())
-  //     .then(responseJson => {
-
-  //       var action = {type: 'GET_CLASSEMENT', data: responseJson};
-  //       this.props.dispatch(action);
-
-  //       this.setState({isLoading: false});
-  //     })
-  //     .catch(e => {
-  //       this.setState({isLoading: false});
-  //       ApiUtils.logError('getLives', e.message);
-  //     })
-  //     .then(() => this.setState({isLoading: false}));
-  // }
   render() {
     return (
       <Drawer
@@ -158,31 +129,48 @@ class Classement extends Component {
                   fontWeight: 'bold',
                   textAlign: 'center',
                   color: ApiUtils.getBackgroundColor(),
-                  fontSize: 25,
+                  fontSize: 20,
+                  marginBottom : 10,
                   textTransform: 'uppercase',
                 }}>
-                Classement
+                Classement de l'after foulée
               </Text>
 
-{ this.state.isPortrait ? 
-      <View>
-      <Image
-        source={Rotate}
-        style={{height: 70, width: 100, alignSelf: 'center'}}
-        resizeMode="contain"
-      />
-      <Text style={{textAlign: 'center'}}>
-        Tourner votre écran pour voir plus d'infos
-      </Text>
-    </View> : null
-     }
-        
+              <TouchableOpacity
+                onPress={() =>
+                  this.openLink(
+                    'https://www.lafouleeblanche.com/classements-challenges/',
+                  )
+                }>
+                <Text
+                  style={{
+                    textAlign: 'center',
+                    color: ApiUtils.getBackgroundColor(),
+                  }}>
+                  Retrouvez tous les classements sur notre site internet :
+                  https://www.lafouleeblanche.com/resultats-2021/
+                </Text>
+              </TouchableOpacity>
+
+              {this.state.isPortrait ? (
+                <View>
+                  <Image
+                    source={Rotate}
+                    style={{height: 70, width: 100, alignSelf: 'center'}}
+                    resizeMode="contain"
+                  />
+                  <Text style={{textAlign: 'center'}}>
+                    Tourner votre écran pour voir plus d'infos
+                  </Text>
+                </View>
+              ) : null}
 
               <AutoHeightWebView
                 source={{
-                  uri: 'https://www.folomi.fr/fouleeBlanche/classement.html',
+                  uri:
+                    'https://www.folomi.fr/fouleeBlanche/classementFevrier.html',
                 }}
-                style={{marginTop: 20,  width: '100%'}}
+                style={{marginTop: 20, width: '100%'}}
                 startInLoadingState={true}
                 showsHorizontalScrollIndicator={true}
                 scrollEnabled={true}

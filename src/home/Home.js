@@ -30,7 +30,7 @@ import {
 } from 'native-base';
 import * as Animated from 'react-native-animatable';
 import md5 from 'md5';
-import BackgroundGeolocation from '../react-native-background-geolocation';
+import BackgroundGeolocation from 'react-native-background-geolocation';
 import {connect} from 'react-redux';
 
 import ApiUtils from '../ApiUtils';
@@ -39,10 +39,7 @@ import Logo from '../assets/logoHome.svg';
 import LogoHeader from '../assets/logo_header.png';
 import skieur from '../assets/skieur.png';
 import Titre from '../assets/titre.svg';
-
 import Autrans from '../assets/autrans.svg';
-import Date from '../assets/date.svg';
-
 import Loading from './Loading';
 import {Modal} from 'react-native';
 import WebviewJetCode from './WebviewJetCode';
@@ -198,7 +195,7 @@ class Home extends Component {
             //SaveData
 
             var action = {type: 'LOGIN', data: responseJson};
-            console.log(responseJson);
+            
             this.props.dispatch(action);
             this.setState({isLoading: false});
             this.onClickNavigate('Lives');
@@ -283,7 +280,6 @@ class Home extends Component {
   }
 
   onValueFolocodeChange(value) {
-    console.log(value);
     this.setState({
       selectedFolocode: value,
     });
@@ -442,11 +438,7 @@ class Home extends Component {
                       style={[GlobalStyles.row, {justifyContent: 'center'}]}
                       animation="bounceInDown"
                       delay={300}>
-                      <Date
-                        width={'30%'}
-                        height={50}
-                        style={{alignSelf: 'center', marginRight: 10}}
-                      />
+                      <View style={{width : '30%'}}></View>
                       <Logo
                         width={'70%'}
                         height={120}

@@ -3,8 +3,8 @@
 const ISDEBUG = false;
 const ISDEMO = false;
 
-const VersionNumber = '1.0.14';
-const VersionNumberInt = 12;
+const VersionNumber = '1.0.15';
+const VersionNumberInt = 13;
 
 var ApiUtils = {
   ISDEBUG() {
@@ -42,7 +42,7 @@ var ApiUtils = {
       return response;
     } else {
       response.text().then(function(text) {
-        console.log(text);
+      
       });
 
       let error = new Error(response.statusText);
@@ -63,7 +63,7 @@ var ApiUtils = {
 
   getAPIUrl() {
     // return 'http://folomi.snowdag.com/api/fouleev2.php';
-    return 'https://www.folomi.fr/api/fouleev3.php';
+    return 'https://www.folomi.fr/api/fouleev2.php';
   },
 
   getAPIAuth() {

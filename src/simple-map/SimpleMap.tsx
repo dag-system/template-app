@@ -1,4 +1,4 @@
-import React, {Component, PureComponent} from 'react';
+import React, {PureComponent} from 'react';
 import {
   Linking,
   StyleSheet,
@@ -21,7 +21,6 @@ import {isPointInPolygon} from 'geolib';
 import ApiUtils from '../ApiUtils';
 import ErrorMessage from '../home/ErrorMessage';
 import {ReactNativeModal as ModalSmall} from 'react-native-modal';
-import RNFetchBlob from 'rn-fetch-blob';
 import {buildGPX, GarminBuilder} from 'gpx-builder';
 const {Point} = GarminBuilder.MODELS;
 import {check,request, PERMISSIONS, RESULTS} from 'react-native-permissions';
@@ -34,46 +33,27 @@ import {
   Text,
   Body,
   Switch,
-  Fab,
   Header,
-  Footer,
   Toast,
   Root,
   Spinner,
   Picker,
   Left,
   Right,
-  Content,
 } from 'native-base';
-// import Geolocation from 'react-native-geolocation-service';
 import Geolocation from '@react-native-community/geolocation';
 import MarkerInteret from '../assets/marker.png';
-import MarkerCircle from '../assets/circle.png';
 import {Icon as IconElement} from 'react-native-elements';
-// import gpxParse from 'gpx-parse';
-import GPXDocument from '../lib/gpx-parse/GPXDocument';
 import {connect} from 'react-redux';
-// import gpxParser from 'gpxparser';
-////
-// Import BackgroundGeolocation plugin
-// Note: normally you will not specify a relative url ../ here.  I do this in the sample app
-// because the plugin can be installed from 2 sources:
-//
-// 1.  npm:  react-native-background-geolocation
-// 2.  private github repo (customers only):  react-native-background-geolocation-android
-//
-// This simply allows one to change the import in a single file.
-import BackgroundGeolocation from '../react-native-background-geolocation';
+import BackgroundGeolocation from 'react-native-background-geolocation';
 
 // react-native-maps
 import MapView, {Polyline, Marker} from 'react-native-maps';
-import DocumentPicker from 'react-native-document-picker';
 import GlobalStyles from '../styles';
 import {Sponsors} from '../home/Sponsors';
 import {Dimensions} from 'react-native';
 import BatteryModal from '../home/BatteryModal';
 import DefaultProps from '../models/DefaultProps';
-import Timer from './Timer';
 
 const LATITUDE_DELTA = 0.00922;
 const LONGITUDE_DELTA = 0.00421;
@@ -81,7 +61,6 @@ const LONGITUDE_DELTA = 0.00421;
 // const LONGITUDE_DELTA = 0.01221;
 const haversine = require('haversine');
 
-var interval = null;
 
 const mapStateToProps = state => {
   return {
@@ -100,7 +79,6 @@ const mapStateToProps = state => {
     // recording: false,
     // isStarted: false,
     odometer: state.odometer,
-    isFirstPoint: state.isFirstPoint,
     pointsInterets: state.pointsInterets,
     polylines: state.polylines,
     odometerInitialValue: state.odometerInitialValue,
@@ -128,7 +106,6 @@ interface Props extends DefaultProps  {
   // recording: false,
   // isStarted: false,
   odometer: number,
-  isFirstPoint: boolean,
   pointsInterets: any[],
   polylines: any[],
   odometerInitialValue: number,
@@ -185,7 +162,6 @@ interface State {
 
 class SimpleMap extends PureComponent<Props,State> {
   interval: number;
-  private _unsubscribe2: any;
   _unsubscribe: any;
   intervalPoints: number;
   constructor(props : any) {
@@ -236,13 +212,10 @@ class SimpleMap extends PureComponent<Props,State> {
       time : 0
     };
 
-    this._unsubscribe = this.props.navigation.addListener('focus', payload => {
+    this._unsubscribe = this.props.navigation.addListener('focus', () => {
       this.componentDidMount();
     });
 
-    this._unsubscribe2 = this.props.navigation.addListener('blur', payload => {
-      this.componentWillUnmount();
-    });
   }
 
 
@@ -477,36 +450,20 @@ class SimpleMap extends PureComponent<Props,State> {
    
     };
     
-    BackgroundGeolocation.reset(config, success => { 
-    }, fail =>{
+    BackgroundGeolocation.reset(config, () => { 
+    }, () =>{
     });
 
-    BackgroundGeolocation.ready(config, state => {
+    BackgroundGeolocation.ready(config, () => {
       this.setState({
         libelleLive: ApiUtils.getLibelleLive()
       })
-      // this.setState({
-      //   enabled: state.enabled,
-      //   isMoving: state.isMoving,
-      //   showsUserLocation: false,
-      //   comments: '',
-      //   selectedSport: -1,
-      //   libelleLive: ApiUtils.getLibelleLive(),
-      //   nomPersonne: '',
-      //   prenomPersonne: '',
-      //   telPersonne: '',
-      //   mailPersonne: '',
-      // });
      BackgroundGeolocation.start();
 
-     BackgroundGeolocation.setConfig(config).then((state) => {
+     BackgroundGeolocation.setConfig(config).then(() => {
     })
 
     });
-
-    
-
-    // .then(() => {
 
     // Step 1:  Listen to events:
     BackgroundGeolocation.on(
@@ -553,7 +510,7 @@ class SimpleMap extends PureComponent<Props,State> {
       }
     });
 
-    BackgroundGeolocation.onHeartbeat(event => {
+    BackgroundGeolocation.onHeartbeat(() => {
 
       // You could request a new location if you wish.
       BackgroundGeolocation.getCurrentPosition({
@@ -594,7 +551,7 @@ class SimpleMap extends PureComponent<Props,State> {
             this.setCenter(newCoordinate);
           }
         })
-        .catch(error => {
+        .catch(() => {
         });
     }
   }
@@ -634,7 +591,7 @@ class SimpleMap extends PureComponent<Props,State> {
 
     }
   })
-  .catch((error) => {
+  .catch(() => {
 
   });
   }
@@ -706,6 +663,7 @@ class SimpleMap extends PureComponent<Props,State> {
 
       if (location.coords.speed == -1 && !this.state.isGpsNotOk) {
         this.setState({isGpsNotOk: true});
+
       }
   
     }
@@ -717,14 +675,11 @@ class SimpleMap extends PureComponent<Props,State> {
    
   }
 
-  async calcDistance(location, oldLatLong, newLatLng) {
+  async calcDistance(oldLatLong, newLatLng) {
     var dist = haversine(oldLatLong, newLatLng);
 
     var odometerDataNew = {
-      odometerInitialValue: this.props.odometerInitialValue,
-      isFirstPoint: false,
       odometer: this.props.odometer + dist,
-      currentPosition: location,
     };
 
     var action = {type: 'UPDATE_ODOMETER', data: odometerDataNew};
@@ -742,10 +697,7 @@ class SimpleMap extends PureComponent<Props,State> {
     });
 
     var odometerData = {
-      // odometerInitialValue: this.props.odometerInitialValue,
-      // isFirstPoint: this.props.isFirstPoint,
       odometer: dist,
-      // currentPosition: this.props.currentLocation,
     };
     var action = {type: 'SET_ODOMETER', data: odometerData};
     this.props.dispatch(action);
@@ -781,7 +733,7 @@ class SimpleMap extends PureComponent<Props,State> {
       // clearInterval(this.interval);
       // this.interval = setInterval(() => this.setState({time: Date.now()}), 15000);
       BackgroundGeolocation.start(
-        state => {
+        () => {
           // NOTE:  We tell react-native-maps to show location only AFTER BackgroundGeolocation
           // has requested location authorization.  If react-native-maps requests authorization first,
           // it will request WhenInUse -- "Permissions Tug-of-war"
@@ -862,7 +814,7 @@ class SimpleMap extends PureComponent<Props,State> {
     if (this.props.coordinates.length > 0) {
       var lastPos = this.props.coordinates[this.props.coordinates.length - 1];
       var newPost = coordinate;
-      this.calcDistance(location, lastPos, newPost);
+      this.calcDistance(lastPos, newPost);
     }
 
     var actionMarker = {type: 'ADD_MARKER', data: marker};
@@ -871,19 +823,17 @@ class SimpleMap extends PureComponent<Props,State> {
     var action = {type: 'ADD_COORDINATE', data: coordinate};
     this.props.dispatch(action);
 
-    var actionCurrentPosition = {type: 'UPDATE_CURRENT_POSITION', data: location};
-    this.props.dispatch(actionCurrentPosition);
   }
 
 
-  setCenter(location) {
+  setCenter(coords) {
     if (!this.refs.map) {
       return;
     }
 
     this.refs.map.animateToRegion({
-      latitude: location.coords.latitude,
-      longitude: location.coords.longitude,
+      latitude: coords.latitude,
+      longitude: coords.longitude,
       latitudeDelta: LATITUDE_DELTA,
       longitudeDelta: LONGITUDE_DELTA,
     });
@@ -1186,10 +1136,10 @@ class SimpleMap extends PureComponent<Props,State> {
   }
 
   onstart() {
-    BackgroundGeolocation.destroyLocations(s => {
+    BackgroundGeolocation.destroyLocations(() => {
       this.saveRecordingState(true);
       this.onTimerStartPause();
-    },f => {
+    },() => {
       this.saveRecordingState(true);
       this.onTimerStartPause();
     });
@@ -1278,10 +1228,10 @@ class SimpleMap extends PureComponent<Props,State> {
   {
   
 
-    BackgroundGeolocation.getLocations(records => {
+    BackgroundGeolocation.getLocations(() => {
 
       Sentry.captureMessage("getLocations ok");
-    },error => {
+    },() => {
     });
 
 
@@ -1297,7 +1247,7 @@ class SimpleMap extends PureComponent<Props,State> {
           'sync at end idUtilisateur: ' + this.props.userData.idUtilisateur,
           JSON.stringify(records),
         );
-      },error => {
+      },() => {
       });
     } catch (e) {
 
@@ -1521,6 +1471,10 @@ class SimpleMap extends PureComponent<Props,State> {
 
   goBackOk() {
     this.onDisconnect(false);
+
+    var action = {type: 'CLEAR_MAP', data: null};
+    this.props.dispatch(action);
+
   }
 
   ignoreActivity = () => {
@@ -1645,7 +1599,7 @@ class SimpleMap extends PureComponent<Props,State> {
   closeInterestModal() {
     this.setState({isModalInterestVisible: false});
   }
-  formatphoneNumber(phoneNumber) {}
+  formatphoneNumber() {}
 
   onClickInterestPhone(phoneNumber, idInteret) {
     ApiUtils.logStats(
@@ -1720,32 +1674,9 @@ class SimpleMap extends PureComponent<Props,State> {
     this.props.dispatch(action);
   }
 
-  getInvites() {
-    if (!!this.props.currentLive) {
-      var invites = this.props.currentLive.invites;
-      var finalInvites = [];
-      if (invites != null) {
-        invites.forEach(i => {
-          if (i.idUtilisateur != this.props.userData.idUtilisateur) {
-            if (
-              finalInvites.filter(f => f.idUtilisateur == i.idUtilisateur)
-                .length == 0
-            ) {
-              finalInvites.push(i);
-            }
-          }
-        });
-      }
-
-      return finalInvites;
-    } else {
-      return [];
-    }
-  }
 
   toggleTrace(traceName) {
     //update isVisiblede trace name
-    var traces = this.props.polylines;
 
     //TO DO ACTION DISPATCH
 
@@ -1762,7 +1693,7 @@ class SimpleMap extends PureComponent<Props,State> {
   };
 
   onGetLogs = () => {
-    BackgroundGeolocation.logger.getLog(function(log) {
+    BackgroundGeolocation.logger.getLog(function() {
     });
   }
 
@@ -2402,35 +2333,6 @@ class SimpleMap extends PureComponent<Props,State> {
 
                     <View
                       style={{
-                        marginTop: 30,
-                        width: '80%',
-                        display: 'flex',
-                        flexDirection: 'row',
-                        justifyContent: 'space-between',
-                      }}>
-                      <Switch
-                        style={{paddingTop: 20}}
-                        onValueChange={text => {
-                          this.setState({acceptChallengeUtilisateur: text});
-                        }}
-                        value={this.state.acceptChallengeUtilisateur}
-                      />
-                      <TouchableOpacity
-                        onPress={text => {
-                          this.setState({
-                            acceptChallengeUtilisateur: !this.state
-                              .acceptChallengeUtilisateur,
-                          });
-                        }}>
-                        <Text style={{marginLeft: 10}}>
-                          J'accepte de participer aux challenges de la foulée
-                          blanche 2021
-                        </Text>
-                      </TouchableOpacity>
-                    </View>
-
-                    <View
-                      style={{
                         marginTop: 20,
                         width: '80%',
                         display: 'flex',
@@ -2448,7 +2350,7 @@ class SimpleMap extends PureComponent<Props,State> {
                       />
 
                       <TouchableOpacity
-                        onPress={text => {
+                        onPress={() => {
                           this.setState({
                             acceptChallengeNameUtilisateur: !this.state
                               .acceptChallengeNameUtilisateur,
@@ -2867,60 +2769,8 @@ class SimpleMap extends PureComponent<Props,State> {
           </ScrollView>
         </ModalSmall>
 
-        <Footer style={[styles.footer]}>
-          <View style={{flex: 1}}>
-            {!this.props.isRecording ? (
-              <Button
-                full
-                style={{
-                  backgroundColor: '#39F800',
-                  width: '100%',
-                  height: '100%',
-                }}
-                onPress={this.onstart.bind(this)}>
-                <Text style={[styles.buttonText, {color: 'black'}]}>
-                  DEMARRER
-                </Text>
-              </Button>
-            ) : (
-              <View
-                style={{
-                  height: '100%',
-                  flexDirection: 'row',
-                  justifyContent: 'flex-start',
-                  width: Dimensions.get('screen').width,
-                  paddingRight: 0,
-                  paddingLeft: 0,
-                  paddingBottom: 0,
-                }}>
-                <Button
-                  full
-                  style={{
-                    backgroundColor: '#C7C7C9',
-                    width: '50%',
-                    height: '100%',
-                  }}
-                  onPress={this.onTimerPause.bind(this)}>
-                  <Text style={[styles.buttonText, {color: 'black'}]}>
-                    {this.props.isMoving ? 'PAUSE' : 'RELANCER'}
-                  </Text>
-                </Button>
-                <Button
-                  full
-                  onPress={this.onStop}
-                  style={{
-                    backgroundColor: '#FE3C03',
-                    width: '50%',
-                    height: '100%',
-                  }}>
-                  <Text style={[styles.buttonText, {color: 'white'}]}>
-                    STOP
-                  </Text>
-                </Button>
-              </View>
-            )}
-          </View>
-        </Footer>
+   
+      
       </Container>
     );
   }
@@ -3194,18 +3044,5 @@ var styles = StyleSheet.create({
   },
 });
 
-const pickerSelectStyles = StyleSheet.create({
-  inputIOS: {
-    fontSize: 16,
-    paddingTop: 13,
-    paddingHorizontal: 10,
-    paddingBottom: 12,
-    borderWidth: 1,
-    borderColor: 'gray',
-    borderRadius: 4,
-    backgroundColor: 'white',
-    color: 'black',
-  },
-});
 
 export default connect(mapStateToProps)(SimpleMap);

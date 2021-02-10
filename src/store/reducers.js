@@ -1,3 +1,4 @@
+const haversine = require('haversine');
 const initialState = {
   userData: null,
   sports: [],
@@ -8,12 +9,11 @@ const initialState = {
   dates: [],
   markers: [],
   coordinates: [],
+  coordinatesString: '[]',
   showsUserLocation: false,
   isMoving: false,
   isStarted: false,
   odometer: 0,
-  odometerInitialValue: null,
-  isFirstPoint: null,
   pointsInterets: [],
   polylines: [],
   nomStation: null,
@@ -27,6 +27,7 @@ const initialState = {
   isOkPopupBAttery: false,
   isOkPopupBAttery2: false,
   userClubs: [],
+  isGpsNotOk: true,
 };
 
 const initialMockState = {
@@ -43,12 +44,11 @@ const initialMockState = {
   dates: [],
   markers: [],
   coordinates: [],
+  coordinatesString: '[]',
   showsUserLocation: false,
   isMoving: false,
   isStarted: false,
   odometer: 0,
-  odometerInitialValue: null,
-  isFirstPoint: null,
   pointsInterets: [],
   polylines: [],
   nomStation: null,
@@ -229,35 +229,48 @@ const reducer = (state = initialState, action) => {
     case 'SAVE_COORDINATES': {
       let nextState = {
         ...state,
-        coordinates: action.data,
+       // coordinates: action.data,
+        coordinatesString: JSON.stringify(action.data),
       };
 
       return nextState || state;
     }
 
-    case 'ADD_MARKER': {
+    case 'UPDATE_GPS_OK': {
       let nextState = {
         ...state,
-        markers: [...state.markers, action.data],
+        isGpsNotOk: action.data.isGpsNotOk,
+        currentPosition : action.data.location.coords
       };
-
-      // console.log(nextState.markers)
-
       return nextState || state;
     }
+
     case 'ADD_COORDINATE': {
-      let nbDuplicate = state.coordinates.filter(
-        c => c.uuuid == action.data.uuid,
-      ).length;
-      if (nbDuplicate > 0) {
-        return state;
-      } else {
-        let nextState = {
-          ...state,
-          coordinates: [...state.coordinates, action.data],
-        };
-        return nextState || state;
+      var coords = JSON.parse(state.coordinatesString);
+
+      let isGpsNotOk = true;
+
+      if (action.data.speed != -1) {
+        isGpsNotOk = false;
       }
+      let odometer = state.odometer;
+
+      if (coords.length > 1) {
+        let oldLatLong = coords[coords.length - 1];
+        var dist = haversine(oldLatLong, action.data);
+        odometer += dist;
+      }
+
+      coords.push(action.data);
+
+      let nextState = {
+        ...state,
+        coordinatesString: JSON.stringify(coords),
+        currentPosition: action.data,
+        isGpsNotOk: isGpsNotOk,
+        odometer: odometer,
+      };
+      return nextState || state;
     }
     case 'IGNORE_LIVE': {
       let lives = JSON.parse(JSON.stringify(state.lives));
@@ -275,14 +288,13 @@ const reducer = (state = initialState, action) => {
       let nextState = {
         ...state,
         coordinates: [],
+        coordinatesString: '[]',
         markers: [],
         dates: [],
         showsUserLocation: false,
         isRecording: false,
         isMoving: false,
         odometer: 0,
-        isFirstPoint: true,
-        odometerInitialValue: null,
         pointsInterets: [],
         polylines: [],
         nomStation: null,
@@ -305,23 +317,12 @@ const reducer = (state = initialState, action) => {
       var data = action.data;
       let nextState = {
         ...state,
-        isFirstPoint: data.isFirstPoint,
         odometer: data.odometer,
-        odometerInitialValue: data.odometerInitialValue,
-        currentPosition: data.currentPosition,
       };
 
       return nextState || state;
     }
 
-    case 'UPDATE_CURRENT_POSITION': {
-      let nextState = {
-        ...state,
-        currentPosition: action.data,
-      };
-
-      return nextState || state;
-    }
     case 'IS_MOVING': {
       let nextState = {
         ...state,
@@ -373,7 +374,6 @@ const reducer = (state = initialState, action) => {
         ...state,
         polylines: traces,
       };
-      console.log(trace.positionsTrace.length);
       return nextState || state;
     }
     case 'CURRENT_LIVE_FOR_SEGMENT': {
@@ -382,7 +382,6 @@ const reducer = (state = initialState, action) => {
         currentLiveFromSegmentId: action.data.idLive,
         currentLiveFromSegment: action.data,
       };
-      // console.log(nextState.polylines)
       return nextState || state;
     }
     case 'CURRENT_LIVE_FOR_SEGMENT_ID': {

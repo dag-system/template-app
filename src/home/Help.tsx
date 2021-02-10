@@ -40,6 +40,7 @@ const mapStateToProps = state => {
 };
 
 class Help extends Component {
+  drawer: any;
   constructor(props) {
     super(props);
 
@@ -114,7 +115,6 @@ class Help extends Component {
   }
 
   onPopupOk() {
-    console.log('ok');
     var action = {type: 'VIEW_POPUPAIDE', data: null};
     this.props.dispatch(action);
   }

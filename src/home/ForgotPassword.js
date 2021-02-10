@@ -1,5 +1,5 @@
-import React, {Component} from 'react';
-import {StyleSheet, View, TextInput, Image, ScrollView, TouchableOpacity} from 'react-native';
+import React from 'react';
+import {StyleSheet, View, Image, TouchableOpacity,Keyboard} from 'react-native';
 import {
   Container,
   Header,
@@ -18,14 +18,10 @@ import {
 } from 'native-base';
 import Logo from '../assets/logo_header.png';
 import {Button as ButtonElement} from 'react-native-elements';
-import md5 from 'md5';
 import {connect} from 'react-redux';
 import ApiUtils from '../ApiUtils';
 import defaultMessages from './defaultMessages';
-import ErrorMessage from './ErrorMessage';
 import GlobalStyles from '../styles';
-import {NavigationContainer} from '@react-navigation/native';
-import {createStackNavigator} from '@react-navigation/stack';
 import ValidationComponent from 'react-native-form-validator';
 
 
@@ -39,7 +35,7 @@ const mapStateToProps = state => {
 class ForgotPassword extends ValidationComponent {
   constructor(props) {
     super(props);
-
+    this.input = React.createRef();
     this.messages = defaultMessages;
     this.deviceLocale = 'fr';
 
@@ -61,6 +57,7 @@ class ForgotPassword extends ValidationComponent {
     var isValid = this.validate({
       emailUtilisateur: {email: true, required: true},
     });
+    Keyboard.dismiss()
 
     this.setState({folocodes : [], selectedFolocode :-1});
 
@@ -99,7 +96,6 @@ class ForgotPassword extends ValidationComponent {
             //SaveData
 
             var action = {type: 'LOGIN', data: responseJson};
-            console.log(responseJson);
             this.props.dispatch(action);
             this.setState({isLoading: false});
             this.onClickNavigate('Lives');
@@ -109,7 +105,6 @@ class ForgotPassword extends ValidationComponent {
         })
         .catch(e => {
           this.setState({isLoading: false});
-          console.log(e);
           ApiUtils.logError('login', JSON.stringify(e.message));
           // alert('Une erreur est survenue : ' + JSON.stringify(e.message));
   
@@ -142,11 +137,9 @@ class ForgotPassword extends ValidationComponent {
       .then(ApiUtils.checkStatus)
       .then(response => response.json())
       .then(responseJson => {
-        console.log(responseJson);
         if (responseJson.codeErreur == 'SUCCESS') {
           var folocodes = Object.values(responseJson);
           this.setState({folocodes: folocodes});
-          console.log(folocodes);
           // Toast.show({
           //   text: "Votre mot de passe vous a été envoyé par email à l'instant",
           //   buttonText: 'Ok',
@@ -165,7 +158,6 @@ class ForgotPassword extends ValidationComponent {
       })
       .catch(e => {
         this.setState({spinner: false});
-        console.log(e);
         ApiUtils.logError('create live', JSON.stringify(e.message));
         if (e.message == 'Timeout' || e.message == 'Network request failed') {
           this.setState({noConnection: true});
@@ -195,7 +187,6 @@ class ForgotPassword extends ValidationComponent {
   };
 
   onValueFolocodeChange(value) {
-    console.log(value);
     this.setState({
       selectedFolocode: value,
     });
@@ -244,8 +235,8 @@ class ForgotPassword extends ValidationComponent {
               <Label>Email *</Label>
               <Input
            
-           
-           ref="emailInput"
+           ref={ (c) => this.input = c }
+          //  ref={this.input} 
               // ref={(c) => {
               //   this.emailInput = c;
               // }}

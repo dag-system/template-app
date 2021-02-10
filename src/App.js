@@ -1,9 +1,7 @@
-
-
 import React, { Component } from 'react';
 import 'react-native-gesture-handler';
 // import { StackActions, NavigationActions } from 'react-navigation';
-import { StyleProvider, Root, View, Text } from "native-base";
+import { Root } from "native-base";
 
 import Navigator from './Navigator';
 
@@ -20,21 +18,19 @@ export default class App extends Component {
 
     var HeadlessTask = async (event) => {
       let params = event.params;
-      console.log('[BackgroundGeolocation HeadlessTask] -', event.name, params);
 
       switch (event.name) {
         case 'location':
           var location = params;
           var coordinate = {
             latitude: location.coords.latitude,
-            longitude: location.coords.longitude
+            longitude: location.coords.longitude,
+            timestamp: location.timestamp,
+            speed : location.coords.speed
           };
       
           var action = { type: 'ADD_COORDINATE', data: coordinate }
           store.dispatch(action);
-          // Use await for async tasks
-          // let location = await getCurrentPosition();
-          console.log('[BackgroundGeolocation HeadlessTask] - getCurrentPosition:', location);
           break;
       }
     }

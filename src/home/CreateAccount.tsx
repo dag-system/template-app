@@ -1,11 +1,9 @@
-import React, {Component} from 'react';
+import React from 'react';
 import {
   StyleSheet,
   View,
-  TextInput,
   TouchableOpacity,
   Image,
-  ScrollView,
   Switch,
   ActivityIndicator,
 } from 'react-native';
@@ -31,10 +29,8 @@ import {
 } from 'native-base';
 import md5 from 'md5';
 import ApiUtils from '../ApiUtils';
-import ErrorMessage from './ErrorMessage';
 import moment from 'moment';
 import Logo from '../assets/logo_header.png';
-import AsyncStorage from '@react-native-community/async-storage';
 import ValidationComponent from 'react-native-form-validator';
 import defaultMessages from './defaultMessages';
 import {connect} from 'react-redux';
@@ -156,6 +152,7 @@ class CreateAccount extends ValidationComponent {
     var isValid = this.validate({
       nomUtilisateur: {required: true},
       prenomUtilisateur: {required: true},
+      telUtilisateur: {required: true},
       // newPassword: {required: true},
       // newPasswordConfirmation: {required: true},
       emailUtilisateur: {email: true, required: true},
@@ -186,14 +183,22 @@ class CreateAccount extends ValidationComponent {
 
     // alert(finalDate)
     if (Platform.OS == 'ios') {
-      formData.append(
-        'ddnUtilisateur',
-        this.state.yearDdn +
-          '-' +
-          this.state.monthDdn +
-          '-' +
-          this.state.dayDdn,
-      );
+      if (
+        this.state.yearDdn != undefined &&
+        this.state.yearDdn != undefined &&
+        this.state.yearDdn != undefined
+      ) {
+        formData.append(
+          'ddnUtilisateur',
+          this.state.yearDdn +
+            '-' +
+            this.state.monthDdn +
+            '-' +
+            this.state.dayDdn,
+        );
+      } else {
+        formData.append('ddnUtilisateur', '');
+      }
     } else {
       var finalDate = moment(this.state.ddnUtilisateur).format('YYYY-MM-DD');
       formData.append('ddnUtilisateur', finalDate);
@@ -206,39 +211,41 @@ class CreateAccount extends ValidationComponent {
 
     let clubs = [];
 
-    if (this.state.acceptChallengeEntreprise) {
-      clubs.push({club: this.state.clubEntreprise, type: 'Entreprise'});
-    }
-
-    if (this.state.acceptChallengeFamille) {
-      clubs.push({club: this.state.clubFamille, type: 'Famille'});
-    }
-
-    if (this.state.acceptChallengeUniversite) {
-      clubs.push({club: this.state.clubUniversite, type: 'Ecole'});
-    }
-
-    if (this.state.acceptChallengeUnss) {
-      clubs.push({club: this.state.unss, type: 'Unss'});
-    }
     formData.append('clubUtilisateur', JSON.stringify(clubs));
 
     formData.append('emailUtilisateur', this.state.emailUtilisateur);
 
     formData.append('telUtilisateur', this.state.telUtilisateur);
+
+    var acceptChallengeTelUtilisateur = 0;
+    if (
+      this.state.acceptChallengeTelUtilisateur ||
+      this.state.acceptChallengeTelUtilisateur
+    ) {
+      acceptChallengeTelUtilisateur = 1;
+    }
+
+    formData.append(
+      'acceptChallengeTelUtilisateur',
+      acceptChallengeTelUtilisateur,
+    );
+
     formData.append('adresseUtilisateur', this.state.adresseUtilisateur);
     formData.append('cpUtilisateur', this.state.cpUtilisateur);
     formData.append('villeUtilisateur', this.state.villeUtilisateur);
     formData.append('paysUtilisateur', this.state.paysUtilisateur);
-    var acceptChallengeUtilisateur = 0;
+    var acceptChallengeNameUtilisateur = 0;
     if (
-      this.state.acceptChallengeUtilisateur ||
-      this.state.acceptChallengeUtilisateur
+      this.state.acceptChallengenameUtilisateur ||
+      this.state.acceptChallengenameUtilisateur
     ) {
-      acceptChallengeUtilisateur = 1;
+      acceptChallengeNameUtilisateur = 1;
     }
 
-    formData.append('acceptChallengeUtilisateur', acceptChallengeUtilisateur);
+    formData.append(
+      'acceptChallengeNameUtilisateur',
+      acceptChallengeNameUtilisateur,
+    );
 
     formData.append('passUtilisateur', md5(this.state.newPassword));
 
@@ -260,7 +267,7 @@ class CreateAccount extends ValidationComponent {
           Toast.show({
             text: responseJson.message,
             buttonText: 'Ok',
-            type: 'error',
+            type: 'danger',
             position: 'top',
           });
         }
@@ -396,17 +403,49 @@ class CreateAccount extends ValidationComponent {
                     ),
                   )}
 
-                {/* <Item stackedLabel style={{marginBottom: 5}}>
-                  <Label>Numéro de télephone </Label>
+                <Item stackedLabel style={{marginBottom: 5}}>
+                  <Label>Numéro de télephone * </Label>
                   <Input
                     returnKeyType="next"
+                    ref="telUtilisateur"
+                    keyboardType="phone-pad"
+                    autoCompleteType="tel"
                     clearButtonMode="always"
                     value={this.state.telUtilisateur}
-                    onChangeText={value =>
-                      this.setState({telUtilisateur: value})
+                    onChangeText={phoneNumber =>
+                      this.setState({
+                        telUtilisateur: phoneNumber,
+                      })
                     }
                   />
-                </Item> */}
+                </Item>
+
+                {this.isFieldInError('telUtilisateur') &&
+                  this.getErrorsInField('telUtilisateur').map(errorMessage => (
+                    <Text style={styles.error}>{errorMessage}</Text>
+                  ))}
+
+                <View
+                  style={{
+                    marginTop: 20,
+                    paddingLeft: 10,
+                    width: '80%',
+                    display: 'flex',
+                    flexDirection: 'row',
+                    justifyContent: 'space-between',
+                  }}>
+                  <Switch
+                    style={{paddingTop: 20}}
+                    onValueChange={text =>
+                      this.setState({acceptChallengeTelUtilisateur: text})
+                    }
+                    value={this.state.acceptChallengeTelUtilisateur == 1}
+                  />
+                  <Text style={{marginLeft: 10}}>
+                    J’accepte l’utilisation de mon numéro de téléphone pour le
+                    tirage au sort des lots
+                  </Text>
+                </View>
 
                 <Text style={styles.label}>Sexe</Text>
 
@@ -530,7 +569,7 @@ class CreateAccount extends ValidationComponent {
                           borderBottomColor: ApiUtils.getBackgroundColor(),
                           borderBottomWidth: 1,
                         }}>
-                        {this.state.monthsString.map((month, index) => {
+                        {this.state.monthsString.map((month) => {
                           return <Picker.Item label={month} value={month} />;
                         })}
                       </Picker>
@@ -656,184 +695,6 @@ class CreateAccount extends ValidationComponent {
                     }
                   />
                 </Item>
-
-                <Text
-                  style={{textAlign: 'left', marginTop: 20, paddingLeft: 20}}>
-                  Informations Complementaires
-                </Text>
-
-                <View
-                  style={{
-                    marginTop: 20,
-                    paddingLeft: 10,
-                    width: '80%',
-                    display: 'flex',
-                    flexDirection: 'row',
-                    justifyContent: 'space-between',
-                  }}>
-                  <Switch
-                    style={{marginTop: -5}}
-                    onValueChange={text =>
-                      this.setState({acceptChallengeEntreprise: text})
-                    }
-                    value={this.state.acceptChallengeEntreprise}
-                  />
-                  <TouchableOpacity
-                    onPress={() =>
-                      this.setState({
-                        acceptChallengeEntreprise: !this.state
-                          .acceptChallengeEntreprise,
-                      })
-                    }>
-                    <Text style={{marginLeft: 10}}>
-                      Je participe au challenge entreprise
-                    </Text>
-                  </TouchableOpacity>
-                </View>
-
-                {this.state.acceptChallengeEntreprise ? (
-                  <Item stackedLabel style={{marginBottom: 5, marginTop: 10}}>
-                    <Label>Nom de mon équipe entreprise</Label>
-                    <Input
-                      autoCapitalize="characters"
-                      returnKeyType="next"
-                      clearButtonMode="always"
-                      value={this.state.clubEntreprise}
-                      onChangeText={value =>
-                        this.setState({clubEntreprise: value})
-                      }
-                    />
-                  </Item>
-                ) : null}
-
-                <View
-                  style={{
-                    marginTop: 20,
-                    paddingLeft: 10,
-                    width: '80%',
-                    display: 'flex',
-                    flexDirection: 'row',
-                    justifyContent: 'space-between',
-                  }}>
-                  <Switch
-                    style={{marginTop: -5}}
-                    onValueChange={text =>
-                      this.setState({acceptChallengeFamille: text})
-                    }
-                    value={this.state.acceptChallengeFamille}
-                  />
-                  <TouchableOpacity
-                    onPress={() =>
-                      this.setState({
-                        acceptChallengeFamille: !this.state
-                          .acceptChallengeFamille,
-                      })
-                    }>
-                    <Text style={{marginLeft: 10}}>
-                      Je participe au challenge Famille/amis
-                    </Text>
-                  </TouchableOpacity>
-                </View>
-
-                {this.state.acceptChallengeFamille ? (
-                  <Item stackedLabel style={{marginBottom: 5, marginTop: 10}}>
-                    <Label>Nom de mon équipe Famille/Ami</Label>
-                    <Input
-                      autoCapitalize="characters"
-                      returnKeyType="next"
-                      clearButtonMode="always"
-                      value={this.state.clubFamille}
-                      onChangeText={value =>
-                        this.setState({clubFamille: value})
-                      }
-                    />
-                  </Item>
-                ) : null}
-
-                <View
-                  style={{
-                    marginTop: 20,
-                    paddingLeft: 10,
-                    width: '80%',
-                    display: 'flex',
-                    flexDirection: 'row',
-                    justifyContent: 'space-between',
-                  }}>
-                  <Switch
-                    style={{marginTop: -5}}
-                    onValueChange={text =>
-                      this.setState({acceptChallengeUniversite: text})
-                    }
-                    value={this.state.acceptChallengeUniversite}
-                  />
-                  <TouchableOpacity
-                    onPress={() =>
-                      this.setState({
-                        acceptChallengeUniversite: !this.state
-                          .acceptChallengeUniversite,
-                      })
-                    }>
-                    <Text style={{marginLeft: 10}}>
-                      Je participe au challenge Université
-                    </Text>
-                  </TouchableOpacity>
-                </View>
-
-                {this.state.acceptChallengeUniversite ? (
-                  <Item stackedLabel style={{marginBottom: 5, marginTop: 10}}>
-                    <Label>Nom de mon équipe Université</Label>
-                    <Input
-                      autoCapitalize="characters"
-                      returnKeyType="next"
-                      clearButtonMode="always"
-                      value={this.state.clubUniversite}
-                      onChangeText={value =>
-                        this.setState({clubUniversite: value})
-                      }
-                    />
-                  </Item>
-                ) : null}
-
-                <View
-                  style={{
-                    marginTop: 20,
-                    paddingLeft: 10,
-                    width: '80%',
-                    display: 'flex',
-                    flexDirection: 'row',
-                    justifyContent: 'space-between',
-                  }}>
-                  <Switch
-                    style={{marginTop: -5}}
-                    onValueChange={text =>
-                      this.setState({acceptChallengeUnss: text})
-                    }
-                    value={this.state.acceptChallengeUnss}
-                  />
-                  <TouchableOpacity
-                    onPress={() =>
-                      this.setState({
-                        acceptChallengeUnss: !this.state.acceptChallengeUnss,
-                      })
-                    }>
-                    <Text style={{marginLeft: 10}}>
-                      je participe à la foulée des jeunes
-                    </Text>
-                  </TouchableOpacity>
-                </View>
-
-                {this.state.acceptChallengeUnss ? (
-                  <Item stackedLabel style={{marginBottom: 5, marginTop: 10}}>
-                    <Label>AS UNSS</Label>
-                    <Input
-                      autoCapitalize="characters"
-                      returnKeyType="next"
-                      clearButtonMode="always"
-                      value={this.state.unss}
-                      onChangeText={value => this.setState({unss: value})}
-                    />
-                  </Item>
-                ) : null}
               </Form>
 
               <View
@@ -848,15 +709,15 @@ class CreateAccount extends ValidationComponent {
                 <Switch
                   style={{paddingTop: 20}}
                   onValueChange={text =>
-                    this.setState({acceptChallengeUtilisateur: text})
+                    this.setState({acceptChallengenameUtilisateur: text})
                   }
-                  value={this.state.acceptChallengeUtilisateur}
+                  value={this.state.acceptChallengenameUtilisateur}
                 />
                 <TouchableOpacity
                   onPress={() =>
                     this.setState({
-                      acceptChallengeUtilisateur: !this.state
-                        .acceptChallengeUtilisateur,
+                      acceptChallengenameUtilisateur: !this.state
+                        .acceptChallengenameUtilisateur,
                     })
                   }>
                   <Text style={{marginLeft: 10}}>

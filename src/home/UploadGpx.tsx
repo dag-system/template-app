@@ -2,16 +2,11 @@ import React, {Component} from 'react';
 import {
   Platform,
   StyleSheet,
-  Linking,
   View,
   PermissionsAndroid,
   Image,
-  ActivityIndicator,
   ScrollView,
-  Share as ShareRn,
-  TouchableHighlight,
   TouchableOpacity,
-  Dimensions,
 } from 'react-native';
 import {
   Container,
@@ -21,7 +16,6 @@ import {
   Right,
   Text,
   Button,
-  Fab,
   Icon,
   Content,
   Root,
@@ -30,19 +24,15 @@ import {
   Switch,
   Spinner,
 } from 'native-base';
-import MapView from 'react-native-maps';
 import ApiUtils from '../ApiUtils';
-import AsyncStorage from '@react-native-community/async-storage';
 import {connect} from 'react-redux';
-import RNFetchBlob from 'rn-fetch-blob';
-import Share from 'react-native-share';
 import Logo from '../assets/logo_header.png';
-import GlobalStyles from '../styles';
 import {Sponsors} from './Sponsors';
 import Autrans from '../assets/autrans.svg';
 import ErrorMessage from './ErrorMessage';
 import {TextInput} from 'react-native-gesture-handler';
 import DocumentPicker from 'react-native-document-picker';
+import DefaultProps from '../models/DefaultProps';
 const mapStateToProps = state => {
   return {
     userData: state.userData,
@@ -52,29 +42,30 @@ const mapStateToProps = state => {
   };
 };
 
-const LATITUDE_DELTA = 0.16022;
-const LONGITUDE_DELTA = 0.01221;
 
-class UploadGpx extends Component {
+interface Props extends DefaultProps {
+  userData: any;
+  currentLive: any;
+  currentMapStyle: string;
+  sports: any[]
+}
+
+interface State {
+  selectedSport: number;
+  libelleLive: string;
+  comments: string;
+  isLoading: boolean;
+}
+
+class UploadGpx extends Component<Props,State> {
   constructor(props) {
     super(props);
 
     this.state = {
-      live: {},
-      sports: [],
-      libelleSport: '',
       libelleLive: 'Nouvelle activité importée',
-      coordinates: [],
-      isMapFullSize: false,
-      isloading: true,
-      file: null,
-      selectedSport : -1,
-      libelleLiveIsModified: false,
-      statsLive: {
-        distance: null,
-      },
-      fabActive: false,
-      segmentEfforts: [],
+      selectedSport: -1,
+      isLoading : false,
+      comments: ""
     };
   }
 
@@ -100,7 +91,7 @@ class UploadGpx extends Component {
     });
   }
 
-  requestStoragePermission = async (url, name) => {
+  requestStoragePermission = async () => {
     try {
       const granted = await PermissionsAndroid.requestMultiple(
         ['android.permission.READ_EXTERNAL_STORAGE'],
@@ -113,7 +104,6 @@ class UploadGpx extends Component {
         },
       );
       if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-       
       } else {
       }
     } catch (err) {
@@ -184,8 +174,6 @@ class UploadGpx extends Component {
       );
 
       var uri = res.uri;
-      var filePath = uri;
-
 
       if (res.name.toLowerCase().includes('.gpx')) {
         setTimeout(() => this.setState({file: res}), 100);
@@ -208,9 +196,8 @@ class UploadGpx extends Component {
   }
 
   async sendFile() {
-    this.setState({isLoading : true});
+    this.setState({isLoading: true});
     // var path = this.normalize(filePath);
-    var _this = this;
     // const file = {
     //   uri  :path ,             // e.g. 'file:///path/to/file/image123.jpg'
     //   name : 'test',            // e.g. 'image123.jpg',
@@ -238,10 +225,7 @@ class UploadGpx extends Component {
       acceptChallengeUtilisateur = 1;
     }
 
-    formData.append(
-      'acceptChallengeUtilisateur',
-      acceptChallengeUtilisateur,
-    );
+    formData.append('acceptChallengeUtilisateur', acceptChallengeUtilisateur);
 
     var acceptChallengeNameUtilisateur = 0;
     if (
@@ -267,10 +251,9 @@ class UploadGpx extends Component {
       });
 
       let responseJson = await res.json();
-      console.log(responseJson);
 
       if (responseJson.status == 1) {
-        this.setState({isLoading : false});
+        this.setState({isLoading: false});
         var idLive = responseJson.idLive;
         var live = {
           idLive: idLive,
@@ -288,21 +271,27 @@ class UploadGpx extends Component {
 
         this.props.finish();
       } else {
-        this.setState({isLoading : false});
+        this.setState({isLoading: false});
         console.log(responseJson);
       }
     } catch (e) {
-      this.setState({isLoading : false});
+      this.setState({isLoading: false});
       Toast.show({
         text: 'Une erreur est survenue. Merci de réessayer',
         buttonText: 'Ok',
-        type: 'error',
+        type: 'danger',
         position: 'bottom',
       });
 
-      this.setState({file : null})
-      ApiUtils.logError('upload gpx ', JSON.stringify(e.message) +" "+ Platform.OS + " Version : "+ ApiUtils.VersionNumberInt());
-
+      this.setState({file: null});
+      ApiUtils.logError(
+        'upload gpx ',
+        JSON.stringify(e.message) +
+          ' ' +
+          Platform.OS +
+          ' Version : ' +
+          ApiUtils.VersionNumberInt(),
+      );
     }
   }
 
@@ -351,8 +340,15 @@ class UploadGpx extends Component {
           </Header>
           <Content style={styles.body} scrollEnabled={true}>
             <ScrollView scrollEnabled={true}>
-
-              <Text style={{textAlign : 'center', marginTop : 15, marginBottom: 5, fontWeight : 'bold'}}>Envoyer un fichier GPX </Text>
+              <Text
+                style={{
+                  textAlign: 'center',
+                  marginTop: 15,
+                  marginBottom: 5,
+                  fontWeight: 'bold',
+                }}>
+                Envoyer un fichier GPX{' '}
+              </Text>
               <View style={styles.loginButtonSection}>
                 <Button
                   style={{
@@ -369,15 +365,19 @@ class UploadGpx extends Component {
                     <Text
                       style={{
                         color: 'white',
-                      }}>Ajouter un fichier gpx</Text>
+                      }}>
+                      Ajouter un fichier gpx
+                    </Text>
                   ) : (
                     <Text
                       style={{
                         color: 'white',
-                      }}>Modifier le fichier gpx</Text>
+                      }}>
+                      Modifier le fichier gpx
+                    </Text>
                   )}
                 </Button>
-                
+
                 <TextInput
                   style={[styles.inputCode, {fontWeight: 'bold'}]}
                   clearButtonMode="always"
@@ -465,33 +465,6 @@ class UploadGpx extends Component {
                   </View>
                   <View
                     style={{
-                      marginTop: 30,
-                      width: '80%',
-                      display: 'flex',
-                      flexDirection: 'row',
-                      justifyContent: 'space-between',
-                    }}>
-                    <Switch
-                      tyle={{paddingTop: 20}}
-                      onValueChange={text => {
-                        this.setState({acceptChallengeUtilisateur: text});
-                      }}
-                      value={this.state.acceptChallengeUtilisateur}
-                    />
-                    <TouchableOpacity
-                      onPress={text => {
-                        this.setState({
-                          acceptChallengeUtilisateur: !this.state.acceptChallengeUtilisateur,
-                        });
-                      }}>
-                      <Text style={{marginLeft: 10}}>
-                        J'accepte de participer aux challenges de la foulée
-                        blanche 2021
-                      </Text>
-                    </TouchableOpacity>
-                  </View>
-                  <View
-                    style={{
                       marginTop: 20,
                       width: '80%',
                       display: 'flex',
@@ -508,9 +481,10 @@ class UploadGpx extends Component {
                       value={this.state.acceptChallengeNameUtilisateur}
                     />
                     <TouchableOpacity
-                      onPress={text => {
+                      onPress={() => {
                         this.setState({
-                          acceptChallengeNameUtilisateur: !this.state.acceptChallengeNameUtilisateur,
+                          acceptChallengeNameUtilisateur: !this.state
+                            .acceptChallengeNameUtilisateur,
                         });
                       }}>
                       <Text style={{marginLeft: 10}}>
@@ -648,7 +622,7 @@ const styles = StyleSheet.create({
     marginTop: 5,
     fontSize: 16,
   },
- 
+
   errorMessage: {
     marginLeft: 10,
     marginTop: 10,

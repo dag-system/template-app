@@ -12,6 +12,7 @@ import {
   TouchableHighlight,
   TouchableOpacity,
   Dimensions,
+  Alert,
 } from 'react-native';
 import {
   Container,
@@ -27,9 +28,9 @@ import {
   Root,
   Toast,
 } from 'native-base';
-import MapView from 'react-native-maps';
+import MapView, { Polyline } from 'react-native-maps';
 import ApiUtils from '../ApiUtils';
-import AsyncStorage from '@react-native-community/async-storage';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import {connect} from 'react-redux';
 import RNFetchBlob from 'rn-fetch-blob';
 import Share from 'react-native-share';
@@ -42,6 +43,8 @@ import {Icon as IconElement} from 'react-native-elements';
 import {FlatList} from 'react-native';
 import GPXDocument from '../lib/gpx-parse/GPXDocument';
 import {check,request, PERMISSIONS, RESULTS} from 'react-native-permissions';
+import * as Sentry from '@sentry/react-native';
+import DefaultProps from '../models/DefaultProps';
 
 const mapStateToProps = state => {
   return {
@@ -56,7 +59,42 @@ const mapStateToProps = state => {
 const LATITUDE_DELTA = 0.16022;
 const LONGITUDE_DELTA = 0.01221;
 
-class LiveSummary extends Component {
+
+interface Props extends DefaultProps{
+  userData: any,
+    currentLive: any,
+    currentMapStyle: string,
+    polylines: any[],
+    sports: any[],
+}
+
+interface State{
+  live: any,
+  sports: any[],
+  libelleSport: string,
+  coordinates: any[],
+  isMapFullSize: boolean,
+  isloading: boolean,
+  statsLive: {
+    distance: number,
+    dPlus :string,
+    vMoy : string,
+    dMoins : string,
+    allureKm : string,
+    lienReplay : string,
+   lienPartage : string,
+   duree : string
+    
+  },
+  followCode : string,
+  fabActive: boolean,
+  currentPolyline : any;
+  segmentEfforts: any[],
+  isModalTraceVisible :boolean;
+  refresh :boolean;
+}
+
+class LiveSummary extends Component<Props,State> {
   constructor(props) {
     super(props);
 
@@ -69,9 +107,20 @@ class LiveSummary extends Component {
       isloading: true,
       statsLive: {
         distance: null,
+        allureKm : null,
+        dMoins :"",
+        dPlus : "",
+        duree : "",
+        lienPartage : null,
+        lienReplay : null,
+        vMoy : ""
       },
+      refresh: false,
+      followCode : null,
       fabActive: false,
       segmentEfforts: [],
+      currentPolyline : null,
+      isModalTraceVisible : false,
     };
   }
 
@@ -85,7 +134,7 @@ class LiveSummary extends Component {
     formData.append('method', 'getDetailLive');
     formData.append('auth', ApiUtils.getAPIAuth());
     formData.append('idLive', idLive);
-    formData.append('positions', 1);
+    formData.append('positions', "1");
 
     //fetch followCode API
     fetch(ApiUtils.getAPIUrl(), {
@@ -103,7 +152,6 @@ class LiveSummary extends Component {
         // alert(JSON.stringify(responseJson.segmentEfforts.length));
         // this.setState({ segmentEfforts: responseJson.segmentEfforts });
         this.setState({statsLive: responseJson.statsLive});
-        console.log(responseJson);
         var action = {type: 'SAVE_CURRENT_LIVE', data: responseJson};
 
         this.props.dispatch(action);
@@ -132,7 +180,7 @@ class LiveSummary extends Component {
         // alert('Une erreur est survenue : ' + JSON.stringify(e.message));
         console.log(e);
         if (e.message == 'Timeout' || e.message == 'Network request failed') {
-          this.setState({noConnection: true});
+
 
           Toast.show({
             text: "Vous n'avez pas de connection internet, merci de réessayer",
@@ -146,7 +194,6 @@ class LiveSummary extends Component {
   }
 
   getGpxPoint(gpxName) {
-    this.setState({isDownloaded1: false});
 
     this.setState({isloading: true});
     let formData = new FormData();
@@ -167,22 +214,12 @@ class LiveSummary extends Component {
       .then(response => response.json())
       .then(responseJson => {
         let data = Object.values(responseJson);
-        console.log(data);
         this.setState({isloading: false});
 
         let dataMap = this.getCoordinatesForMap(data);
         this.setState({coordinates: dataMap}, () => this.centerMapOnGpx(dataMap));
 
-        this.setState({isDownloaded1: true});
         this.centerMapOnGpx(dataMap);
-
-        // var finalTrace = {
-        //   // positionsTrace: positionArray,
-        //   couleurTrace: ApiUtils.getColor(),
-        //   nomTrace: tr.getName(),
-        //   isActive: true,
-        //   sportTrace: 'inconnu',
-        // };
       })
 
       .catch(e => {
@@ -191,7 +228,7 @@ class LiveSummary extends Component {
         // alert('Une erreur est survenue : ' + JSON.stringify(e.message));
         console.log(e);
         if (e.message == 'Timeout' || e.message == 'Network request failed') {
-          this.setState({noConnection: true});
+   
 
           Toast.show({
             text: "Vous n'avez pas de connection internet, merci de réessayer",
@@ -219,18 +256,25 @@ class LiveSummary extends Component {
     return coordinates;
   }
 
-  onDownloadFileok(url, name) {
-    console.log('la')
+  async onDownloadFileok(url, name) {
     let dirs = RNFetchBlob.fs.dirs;
-    let path = dirs.DownloadDir + '/' + 'folomi' + '/' + name + '.gpx';
+    let path = dirs.DocumentDir + '/' + name + '.gpx';
 
     var _this = this;
     return RNFetchBlob.config({
       path: path,
     })
       .fetch('GET', encodeURI(url))
-      .then(() => {
-        _this.shareToFiles(path);
+      .then((res) => {
+        let status = res.info().status;
+            
+
+              if (status == 200) {
+                console.log(status)
+                console.log(res.path())
+                _this.shareToFiles(res.path());
+              }
+     
       })
       .catch(e => alert(e));
   }
@@ -250,8 +294,7 @@ class LiveSummary extends Component {
           .then(res => {
             try {
               let status = res.info().status;
-              console.log(res);
-              console.log(status);
+            
 
               if (status == 200) {
                 this.readGpxFile(res.path());
@@ -278,7 +321,6 @@ class LiveSummary extends Component {
   readGpxFile(filePath) {
     // var path = this.normalize(filePath);
     var _this = this;
-    console.log(filePath);
 
     RNFetchBlob.fs
       .readFile(filePath, 'utf8')
@@ -355,7 +397,8 @@ class LiveSummary extends Component {
   }
 
   onClickDownloadGpx(url, name) {
-    this.downloadFile(url, name);
+
+   this.downloadFile(url, name);
   }
 
   saveCoordinates(positions) {
@@ -497,8 +540,6 @@ class LiveSummary extends Component {
 
     RNFetchBlob.fetch('GET', url)
       .then(resp => {
-        // console.log('response : ', resp);
-        // console.log(resp.data);
         let base64image = resp.data;
         if (Platform.OS == 'ios') {
           this.shareOldStyle();
@@ -521,7 +562,6 @@ class LiveSummary extends Component {
 
     Share.open(shareOptions)
       .then(res => {
-        console.log(res);
       })
       .catch(err => {
         err && console.log(err);
@@ -547,20 +587,7 @@ class LiveSummary extends Component {
     // }
   }
 
-  onDownloadFileok(url, name) {
-    let dirs = RNFetchBlob.fs.dirs;
-    let path = dirs.DownloadDir + '/' + 'folomi' + '/' + name + '.gpx';
 
-    var _this = this;
-    return RNFetchBlob.config({
-      path: path,
-    })
-      .fetch('GET', encodeURI(url))
-      .then(() => {
-        _this.shareToFiles(path);
-      })
-      .catch(e => alert(e));
-  }
 
   checkPermissions(url, name) {
     if (Platform.OS == 'android') {
@@ -568,8 +595,8 @@ class LiveSummary extends Component {
         PermissionsAndroid.request(
           'android.permission.WRITE_EXTERNAL_STORAGE',
         ).then(res => {
-          console.warn(res);
           if (res == 'granted') {
+        
             this.onDownloadFileok(url, name);
           } else {
             // alert('error')
@@ -595,7 +622,7 @@ class LiveSummary extends Component {
         this.onDownloadFileok(url, name);
         break;
       case RESULTS.DENIED:
-        this.askMediaLibraryPermission();
+        this.askMediaLibraryPermission(url, name);
         break;
       case RESULTS.LIMITED:
         break;
@@ -631,14 +658,7 @@ class LiveSummary extends Component {
   requestStoragePermission = async (url, name) => {
     try {
       const granted = await PermissionsAndroid.requestMultiple(
-        ['android.permission.WRITE_EXTERNAL_STORAGE'],
-        {
-          title: 'Accèder à vos fichiers',
-          message: '',
-          buttonNeutral: 'Plus tard',
-          buttonNegative: 'Annuler',
-          buttonPositive: 'OK',
-        },
+        ['android.permission.WRITE_EXTERNAL_STORAGE']
       );
       if (granted === PermissionsAndroid.RESULTS.GRANTED) {
         this.onDownloadFileok(url, name);
@@ -654,10 +674,10 @@ class LiveSummary extends Component {
   }
 
   toggleTrace(traceName) {
-    var traces = this.props.polylines;
 
     var action = {type: 'TOGGLE_TRACE', data: traceName};
     this.props.dispatch(action);
+    this.setState({refresh : !this.state.refresh})
   }
 
   shareToFiles = async filePath => {
@@ -665,7 +685,7 @@ class LiveSummary extends Component {
       title: 'Save file',
       failOnCancel: false,
       saveToFiles: true,
-      url: Platform.OS === 'android' ? 'file://' + filePath : filePath, // base64 with mimeType or path to local file
+      url: Platform.OS === 'android' ? 'file://' +  filePath : filePath, 
     };
 
     // If you want, you can use a try catch, to parse
@@ -677,6 +697,7 @@ class LiveSummary extends Component {
       // setResult('error: '.concat(getErrorString(error)));
     }
   };
+
 
   centerMapOnTrace(polyline) {
     if (polyline.positionsTrace.length != 0) {
@@ -849,7 +870,7 @@ class LiveSummary extends Component {
                 </View>
               ) : null}
 
-              {this.isMapFullSize ? null : (
+              {this.state.isMapFullSize ? null : (
                 <View>
                   {this.state.live.idActiviteStravaLive == null &&
                   this.state.live.gpxLive != null &&
@@ -1088,7 +1109,7 @@ class LiveSummary extends Component {
                     onLayout={() => this.centerMap()}>
                     {this.state.coordinates != null &&
                     this.state.coordinates.length > 0 ? (
-                      <MapView.Polyline
+                      <Polyline
                         key="polyline"
                         coordinates={this.state.coordinates}
                         geodesic={true}
@@ -1102,12 +1123,11 @@ class LiveSummary extends Component {
                       ? this.props.polylines
                           .filter(pol => pol.isActive == true)
                           .map((polyline, index) => (
-                            <MapView.Polyline
+                            <Polyline
                               key={polyline.nomTrace + index}
                               onPress={() => this.selectPolyline(polyline)}
                               coordinates={polyline.positionsTrace}
                               tappable={true}
-                              tracksViewChanges={false}
                               zIndex={0}
                               geodesic={true}
                               strokeColor={polyline.couleurTrace}
@@ -1198,7 +1218,6 @@ class LiveSummary extends Component {
                   style={{
                     backgroundColor: 'white',
                     height: 53,
-                    backgroundColor: 'white',
                     width: 53,
                     position: 'absolute',
                     top: Platform.OS == 'ios' ? 20 : 20,
@@ -1486,9 +1505,6 @@ class LiveSummary extends Component {
           {/******** modal5 : Traces list  *****************/}
           <ModalSmall
             isVisible={this.state.isModalTraceVisible}
-            onRequestClose={() => {
-              this.setState({isModalTraceVisible: false});
-            }}
             onSwipeComplete={() => this.setState({isModalTraceVisible: false})}
             // swipeDirection={'left'}
           >
@@ -1511,7 +1527,7 @@ class LiveSummary extends Component {
                 onPress={() => {
                   this.closeTraceModal();
                 }}>
-                <IconElement active name="times-circle" type="font-awesome" />
+                <IconElement name="times-circle" type="font-awesome" />
               </Button>
             </View>
             <ScrollView
@@ -1639,17 +1655,13 @@ class LiveSummary extends Component {
                             }}>
                             {!item.isActive ? (
                               <IconElement
-                                active
                                 name="eye-slash"
                                 type="font-awesome"
-                                style={styles.toggleRaceLogo}
                               />
                             ) : (
                               <IconElement
-                                active
                                 name="eye"
                                 type="font-awesome"
-                                style={styles.toggleRaceLogo}
                               />
                             )}
                           </Button>

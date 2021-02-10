@@ -134,8 +134,8 @@ android {
             applicationId "com.fouleeblanche.app"
             minSdkVersion rootProject.ext.minSdkVersion
             targetSdkVersion rootProject.ext.targetSdkVersion
-            versionCode 522
-            versionName "1.0.13"
+            versionCode 523
+            versionName "1.0.14"
     }
     splits {
         abi {
