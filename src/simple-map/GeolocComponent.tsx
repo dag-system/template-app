@@ -9,7 +9,6 @@ import Geolocation from '@react-native-community/geolocation';
 import BackgroundGeolocation from 'react-native-background-geolocation';
 import {check,request,PERMISSIONS, RESULTS} from 'react-native-permissions';
 const haversine = require('haversine');
-import * as Sentry from '@sentry/react-native';
 import DefaultProps from '../models/DefaultProps';
 
 const mapStateToProps = state => {
@@ -77,7 +76,7 @@ class GeolocComponent extends Component<Props,State> {
       if(result ==RESULTS.DENIED)
       {
         Alert.alert("Permission refusée", "Vous devez accepter cette permission pour avoir un bon enregistrement de votre parcours");
-        Sentry.captureMessage("Motion Permission refusée");
+        // Sentry.captureMessage("Motion Permission refusée");
       }
     });
   }
@@ -116,6 +115,30 @@ class GeolocComponent extends Component<Props,State> {
   }
 
 
+  configureGeofences()
+  {
+    let geofences = [
+      {
+      identifier: "foo",
+      radius: 200,
+      latitude: 37.33016634,
+      longitude:-122.02686902,
+      notifyOnEntry: true,
+      notifyOnExit: true
+    },
+    {
+      identifier: "bar",
+      radius: 200,
+      latitude: 45.51921926,
+      longitude:-122.0306692,
+      notifyOnEntry: true,
+      notifyOnExit: true
+    }];
+    
+    BackgroundGeolocation.addGeofences(geofences);
+  }
+  
+
 
   configGeoloc()
   {
@@ -128,6 +151,7 @@ class GeolocComponent extends Component<Props,State> {
       url: ApiUtils.getAPIUrl(),
       httpRootProperty: '.',
       httpTimeout: 300000,
+      
       params: {
         method: 'createPositions2',
         idLive: idLive,
@@ -199,7 +223,9 @@ class GeolocComponent extends Component<Props,State> {
     });
 
     });
+    
 
+    this.configureGeofences();
     // Step 1:  Listen to events:
     BackgroundGeolocation.on(
       'location',
@@ -209,13 +235,17 @@ class GeolocComponent extends Component<Props,State> {
 
     BackgroundGeolocation.onAuthorization(authorizationEvent => {
       if (authorizationEvent.success) {
-        Sentry.captureMessage("[authorization] SUCCESS: ");
+        // Sentry.captureMessage("[authorization] SUCCESS: ");
         
       }
             else {
-              Sentry.captureMessage("[authorization] FAILURE: " + JSON.stringify(authorizationEvent.error));
+              // Sentry.captureMessage("[authorization] FAILURE: " + JSON.stringify(authorizationEvent.error));
             }
     });
+
+     BackgroundGeolocation.onGeofence((event) => {
+       console.log("[onGeofence] ", event);
+     });
 
     BackgroundGeolocation.onProviderChange(async event => {
       if (
@@ -232,10 +262,10 @@ class GeolocComponent extends Component<Props,State> {
             BackgroundGeolocation.ACCURACY_AUTHORIZATION_FULL
           ) {
           } else {
-            Sentry.captureMessage("[requestTemporaryFullAccuracy] DENIED: ");
+            // Sentry.captureMessage("[requestTemporaryFullAccuracy] DENIED: ");
           }
         } catch (error) {
-          Sentry.captureMessage("[requestTemporaryFullAccuracy] FAILED TO SHOW DIALOG: ");
+          // Sentry.captureMessage("[requestTemporaryFullAccuracy] FAILED TO SHOW DIALOG: ");
           console.warn(
             '[requestTemporaryFullAccuracy] FAILED TO SHOW DIALOG: ',
             error,
@@ -257,7 +287,7 @@ class GeolocComponent extends Component<Props,State> {
   }
 
   onLocationError(error) {
-    Sentry.captureMessage('location Error', JSON.stringify(error));
+    // Sentry.captureMessage('location Error', JSON.stringify(error));
     ApiUtils.logError(
       'Location Error' +
         'ErrorCode : ' +
@@ -286,7 +316,6 @@ class GeolocComponent extends Component<Props,State> {
         location : location,
         isGpsNotOk : isGpsNotOk
       }
-      console.log(data)
       var action = {type: 'UPDATE_GPS_OK', data: data};
       this.props.dispatch(action);
       

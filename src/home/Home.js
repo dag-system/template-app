@@ -111,6 +111,7 @@ class Home extends Component {
     this.setState({isLoading: true});
     let formData = new FormData();
     formData.append('method', 'getInformationsUtilisateur');
+    formData.append('organisation', ApiUtils.getOrganisation());
     formData.append('auth', ApiUtils.getAPIAuth());
     formData.append('emailUtilisateur', this.state.email);
 

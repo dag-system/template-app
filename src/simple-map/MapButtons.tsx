@@ -24,7 +24,6 @@ import {
 import ApiUtils from '../ApiUtils';
 import {connect} from 'react-redux';
 import {Sponsors} from '../home/Sponsors';
-import * as Sentry from '@sentry/react-native';
 import BackgroundGeolocation from 'react-native-background-geolocation';
 import {Dimensions} from 'react-native';
 import ErrorMessage from '../home/ErrorMessage';
@@ -314,7 +313,6 @@ class MapButtons extends Component<Props, State> {
 
       gpxData.setSegmentPoints(points);
       var gpxString = buildGPX(gpxData.toObject());
-      console.log(gpxString);
       await this.sendGeneratedGPX(gpxString);
     } catch (e) {
       console.log(e);
@@ -405,7 +403,6 @@ class MapButtons extends Component<Props, State> {
       BackgroundGeolocation.sync(
         records => {
           // this.setState({isSyncOk: true});
-          Sentry.captureMessage('sync ok');
           ApiUtils.logError(
             'sync at end idUtilisateur: ' + this.props.userData.idUtilisateur,
             JSON.stringify(records),
@@ -415,7 +412,6 @@ class MapButtons extends Component<Props, State> {
       );
     } catch (e) {
       // this.setState({isSyncOk : false}) ;
-      Sentry.captureMessage('sync ko');
       ApiUtils.logError(
         'ERROR sync at end idUtilisateur: ' + this.props.userData.idUtilisateur,
       );

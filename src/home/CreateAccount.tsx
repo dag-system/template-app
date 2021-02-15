@@ -185,8 +185,8 @@ class CreateAccount extends ValidationComponent {
     if (Platform.OS == 'ios') {
       if (
         this.state.yearDdn != undefined &&
-        this.state.yearDdn != undefined &&
-        this.state.yearDdn != undefined
+        this.state.monthDdn != undefined &&
+        this.state.dayDdn != undefined
       ) {
         formData.append(
           'ddnUtilisateur',
@@ -234,6 +234,7 @@ class CreateAccount extends ValidationComponent {
     formData.append('cpUtilisateur', this.state.cpUtilisateur);
     formData.append('villeUtilisateur', this.state.villeUtilisateur);
     formData.append('paysUtilisateur', this.state.paysUtilisateur);
+    formData.append('organisation', ApiUtils.getOrganisation());
     var acceptChallengeNameUtilisateur = 0;
     if (
       this.state.acceptChallengenameUtilisateur ||

@@ -7,6 +7,10 @@ const VersionNumber = '1.0.15';
 const VersionNumberInt = 13;
 
 var ApiUtils = {
+  getOrganisation()
+  {
+    return 'FOULEEBLANCHE';
+  },
   ISDEBUG() {
     return ISDEBUG;
   },
@@ -62,8 +66,8 @@ var ApiUtils = {
   },
 
   getAPIUrl() {
-    // return 'http://folomi.snowdag.com/api/fouleev2.php';
-    return 'https://www.folomi.fr/api/fouleev2.php';
+    // return 'http://folomi.snowdag.com/api/sportapi.php';
+    return 'https://www.folomi.fr/api/sportapi.php';
   },
 
   getAPIAuth() {

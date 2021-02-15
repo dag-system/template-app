@@ -69,6 +69,7 @@ class ForgotPassword extends ValidationComponent {
     if (this.state.selectedFolocode != -1) {
       let formData = new FormData();
       formData.append('method', 'getInformationsUtilisateur');
+      formData.append('organisation', ApiUtils.getOrganisation());
       formData.append('auth', ApiUtils.getAPIAuth());
 
       if (this.state.selectedFolocode != -1) {
@@ -128,7 +129,7 @@ class ForgotPassword extends ValidationComponent {
     formData.append('method', 'getFolocode');
     formData.append('auth', ApiUtils.getAPIAuth());
     formData.append('emailUtilisateur', this.state.emailUtilisateur);
-
+    formData.append('organisation', ApiUtils.getOrganisation());
     fetch(ApiUtils.getAPIUrl(), {
       method: 'POST',
       headers: {},

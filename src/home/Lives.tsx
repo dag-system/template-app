@@ -40,7 +40,6 @@ import GlobalStyles from '../styles';
 import {Modal} from 'react-native';
 import Help from './Help';
 import BatteryModal from './BatteryModal';
-import * as Sentry from '@sentry/react';
 import {Sponsors} from './Sponsors';
 import UploadGpx from './UploadGpx';
 import {Platform} from 'react-native';
@@ -132,7 +131,6 @@ class Lives extends Component<Props, State> {
     await this.getNewVersion();
     await this.getLives(this.props.userData.idUtilisateur);
 
-    Sentry.setUser({id: this.props.userData.idUtilisateur});
 
     await this.getinformationStation();
   }

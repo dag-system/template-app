@@ -163,9 +163,10 @@ class UploadGpx extends Component<Props,State> {
 
     // Pick a single file
     try {
-      const res = await DocumentPicker.pick({
-        // type: 'application/gpx+xml',
-      });
+      let config = {
+
+      }
+      const res = await DocumentPicker.pick(config);
       console.log(
         res.uri,
         res.type, // mime type

@@ -187,15 +187,20 @@ class Preferences extends Component {
     if (this.props.userData.ddnUtilisateur != '0000-00-00') {
       this.setState({showDefaultDdn: true});
 
-      var day = moment(this.props.userData.ddnUtilisateur).format('DD');
-      this.onValueDayddn(day);
-
-      var month = moment(this.props.userData.ddnUtilisateur).format('MM');
-      this.onValueMonthddn(month);
-
-      var year = moment(this.props.userData.ddnUtilisateur).format('YYYY');
-
-      this.onValueYearddn(year);
+      console.log(this.props.userData.ddnUtilisateur)
+      if(this.props.userData.ddnUtilisateur!=null)
+      {
+        var day = moment(this.props.userData.ddnUtilisateur).format('DD');
+        this.onValueDayddn(day);
+  
+        var month = moment(this.props.userData.ddnUtilisateur).format('MM');
+        this.onValueMonthddn(month);
+  
+        var year = moment(this.props.userData.ddnUtilisateur).format('YYYY');
+        this.onValueYearddn(year);
+      }
+ 
+  
     } else {
       this.setState({showDefaultDdn: false});
     }
@@ -325,6 +330,7 @@ class Preferences extends Component {
     // this.setState({isLoading: true});
     let formData = new FormData();
     formData.append('method', 'getInformationsUtilisateur');
+    formData.append('organisation', ApiUtils.getOrganisation());
     formData.append('auth', ApiUtils.getAPIAuth());
     formData.append('idUtilisateur', this.props.userData.idUtilisateur);
 
@@ -378,6 +384,7 @@ class Preferences extends Component {
     formData.append('emailUtilisateur', this.state.userdata.emailUtilisateur);
 
     formData.append('telUtilisateur', this.state.userdata.telUtilisateur);
+    formData.append('organisation', ApiUtils.getOrganisation());
 
     var acceptChallengeTelUtilisateur = 0;
     if (
@@ -392,11 +399,29 @@ class Preferences extends Component {
       acceptChallengeTelUtilisateur,
     );
 
-    var finalDate = moment(this.state.userdata.ddnUtilisateur).format(
-      'YYYY-MM-DD',
-    );
-    // alert(finalDate)
-    formData.append('ddnUtilisateur', finalDate);
+    if (Platform.OS == 'ios') {
+      if (
+        this.state.yearDdn != undefined &&
+        this.state.monthDdn != undefined &&
+        this.state.dayDdn != undefined
+      ) {
+        formData.append(
+          'ddnUtilisateur',
+          this.state.yearDdn +
+            '-' +
+            this.state.monthDdn +
+            '-' +
+            this.state.dayDdn,
+        );
+      } else {
+        formData.append('ddnUtilisateur', '');
+      }
+    } else {
+      var finalDate = moment(this.state.ddnUtilisateur).format('YYYY-MM-DD');
+      formData.append('ddnUtilisateur', finalDate);
+
+      
+    }
     formData.append('sexeUtilisateur', this.state.userdata.sexeUtilisateur);
 
     formData.append(

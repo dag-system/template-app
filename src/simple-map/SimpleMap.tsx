@@ -24,7 +24,6 @@ import {ReactNativeModal as ModalSmall} from 'react-native-modal';
 import {buildGPX, GarminBuilder} from 'gpx-builder';
 const {Point} = GarminBuilder.MODELS;
 import {check,request, PERMISSIONS, RESULTS} from 'react-native-permissions';
-import * as Sentry from '@sentry/react-native';
 // Import native-base UI components
 import {
   Container,
@@ -474,11 +473,11 @@ class SimpleMap extends PureComponent<Props,State> {
 
     BackgroundGeolocation.onAuthorization(authorizationEvent => {
       if (authorizationEvent.success) {
-        Sentry.captureMessage("[authorization] SUCCESS: ");
+        // Sentry.captureMessage("[authorization] SUCCESS: ");
         
       }
             else {
-              Sentry.captureMessage("[authorization] FAILURE: " + JSON.stringify(authorizationEvent.error));
+              // Sentry.captureMessage("[authorization] FAILURE: " + JSON.stringify(authorizationEvent.error));
             }
     });
 
@@ -498,10 +497,10 @@ class SimpleMap extends PureComponent<Props,State> {
           ) {
             this.getFirstLocation();
           } else {
-            Sentry.captureMessage("[requestTemporaryFullAccuracy] DENIED: ");
+            // Sentry.captureMessage("[requestTemporaryFullAccuracy] DENIED: ");
           }
         } catch (error) {
-          Sentry.captureMessage("[requestTemporaryFullAccuracy] FAILED TO SHOW DIALOG: ");
+          // Sentry.captureMessage("[requestTemporaryFullAccuracy] FAILED TO SHOW DIALOG: ");
           console.warn(
             '[requestTemporaryFullAccuracy] FAILED TO SHOW DIALOG: ',
             error,
@@ -517,7 +516,7 @@ class SimpleMap extends PureComponent<Props,State> {
         samples: 3,
         persist: true,
       }).then(location => {
-        Sentry.captureMessage("heartbeat event "+ JSON.stringify(location));
+        // Sentry.captureMessage("heartbeat event "+ JSON.stringify(location));
       });
     });
 
@@ -603,7 +602,7 @@ class SimpleMap extends PureComponent<Props,State> {
       if(result ==RESULTS.DENIED)
       {
         Alert.alert("Permission refusée", "Vous devez accepter cette permission pour avoir un bon enregistrement de votre parcours");
-        Sentry.captureMessage("Motion Permission refusée");
+        // Sentry.captureMessage("Motion Permission refusée");
       }
     });
   }
@@ -704,7 +703,7 @@ class SimpleMap extends PureComponent<Props,State> {
   }
 
   onLocationError(error) {
-    Sentry.captureMessage('location Error', JSON.stringify(error));
+    // Sentry.captureMessage('location Error', JSON.stringify(error));
     ApiUtils.logError(
       'Location Error' +
         'ErrorCode : ' +
@@ -1230,7 +1229,7 @@ class SimpleMap extends PureComponent<Props,State> {
 
     BackgroundGeolocation.getLocations(() => {
 
-      Sentry.captureMessage("getLocations ok");
+      // Sentry.captureMessage("getLocations ok");
     },() => {
     });
 
@@ -1242,7 +1241,7 @@ class SimpleMap extends PureComponent<Props,State> {
     try {
       BackgroundGeolocation.sync(records => {
         this.setState({isSyncOk : true}) ;
-        Sentry.captureMessage("sync ok");
+        // Sentry.captureMessage("sync ok");
         ApiUtils.logError(
           'sync at end idUtilisateur: ' + this.props.userData.idUtilisateur,
           JSON.stringify(records),
@@ -1252,7 +1251,7 @@ class SimpleMap extends PureComponent<Props,State> {
     } catch (e) {
 
       // this.setState({isSyncOk : false}) ;
-      Sentry.captureMessage("sync ko");
+      // Sentry.captureMessage("sync ko");
       ApiUtils.logError(
         'ERROR sync at end idUtilisateur: ' + this.props.userData.idUtilisateur,
       );
