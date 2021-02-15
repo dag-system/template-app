@@ -276,23 +276,23 @@ class Map extends PureComponent<Props,State> {
     return (
       <View style={styles.map}>
 
-        <TouchableOpacity
+        <Button
           style={{
             position: 'absolute',
 
             // alignSelf: 'center',
             // width: 70,
             // heigth: 100,
-            padding: 10,
-            width: 60,
-            height: 60,
-            borderRadius: 300,
+            // padding: 10,
+            width: 53,
+            height: 53,
+            // borderRadius: 300,
             top: 20,
             zIndex: 100,
             display: 'flex',
             flexDirection: 'row',
             justifyContent: 'center',
-            backgroundColor: '#5067FF',
+            backgroundColor: 'white',
             left: 100,
             shadowColor: '#000',
             shadowOffset: {
@@ -302,31 +302,17 @@ class Map extends PureComponent<Props,State> {
             shadowOpacity: 0.34,
             shadowRadius: 6.27,
 
-            elevation: 10,
+            elevation: 0,
           }}
           onPress={() => this.saveCurrentMapStyle()}>
-          <View
-            style={{
-              justifyContent: 'center',
-              alignSelf: 'center',
-              alignContent: 'center',
-              // width: 40,
-              // heigth: 100,
-            }}>
+    
             <Icon
+          style={[styles.title, {fontSize: 19}]}
               name={this.getFabDefaultLogo()}
-              style={{
-                color: 'white',
-                alignSelf: 'center',
-                marginBottom: 3,
-                fontSize: 23,
-              }}
-              color="white"
+              color="black"
               type="FontAwesome5"
             />
-            {/* <Text style={{textAlign : 'center', color : 'white'}}>{this.props.currentMapStyle}</Text> */}
-          </View>
-        </TouchableOpacity>
+        </Button>
 
         <Button
           onPress={() => this.onClickGetCurrentPosition()}
