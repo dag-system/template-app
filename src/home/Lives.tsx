@@ -46,7 +46,8 @@ import {Platform} from 'react-native';
 import {Linking} from 'react-native';
 import {Alert} from 'react-native';
 import DefaultProps from '../models/DefaultProps';
-const mapStateToProps = state => {
+import VersionCheck from 'react-native-version-check';
+const mapStateToProps = (state) => {
   return {
     userData: state.userData,
     isRecording: state.isRecording,
@@ -106,9 +107,8 @@ class Lives extends Component<Props, State> {
       uploadGpxVisible: false,
       modalChooseSportVisible: false,
       selectedSport: -1,
-      sectionID : -1,
-      refresh : false
-
+      sectionID: -1,
+      refresh: false,
     };
 
     this._unsubscribe = this.props.navigation.addListener('focus', () => {
@@ -130,7 +130,6 @@ class Lives extends Component<Props, State> {
   async downloadData() {
     await this.getNewVersion();
     await this.getLives(this.props.userData.idUtilisateur);
-
 
     await this.getinformationStation();
   }
@@ -188,14 +187,14 @@ class Lives extends Component<Props, State> {
       body: formData,
     })
       .then(ApiUtils.checkStatus)
-      .then(response => response.json())
-      .then(responseJson => {
+      .then((response) => response.json())
+      .then((responseJson) => {
         var action = {type: 'GET_LIVES', data: responseJson};
         this.props.dispatch(action);
 
         this.setState({isLoading: false});
       })
-      .catch(e => {
+      .catch((e) => {
         console.log(e);
         this.setState({isLoading: false});
         ApiUtils.logError('getLives', e.message);
@@ -233,8 +232,8 @@ class Lives extends Component<Props, State> {
   };
 
   onClickCreateLive() {
-    if (this.props.lives.filter(l => l.etatLive == 0).length > 0) {
-      let currentLive = this.props.lives.filter(l => l.etatLive == 0)[0];
+    if (this.props.lives.filter((l) => l.etatLive == 0).length > 0) {
+      let currentLive = this.props.lives.filter((l) => l.etatLive == 0)[0];
       this.viewLive(currentLive);
     } else {
       this.setState({modalChooseSportVisible: true});
@@ -263,8 +262,8 @@ class Lives extends Component<Props, State> {
       body: formData,
     })
       .then(ApiUtils.checkStatus)
-      .then(response => response.json())
-      .then(responseJson => {
+      .then((response) => response.json())
+      .then((responseJson) => {
         // alert("success http");
         this.setState({spinner: false});
         //save values in cache
@@ -290,12 +289,11 @@ class Lives extends Component<Props, State> {
           alert(responseJson.message);
         }
       })
-      .catch(e => {
+      .catch((e) => {
         console.log(e);
         this.setState({spinner: false});
         ApiUtils.logError('create live', JSON.stringify(e.message));
         if (e.message == 'Timeout' || e.message == 'Network request failed') {
-
           Toast.show({
             text: "Vous n'avez pas de connection internet, merci de réessayer",
             buttonText: 'Ok',
@@ -330,7 +328,7 @@ class Lives extends Component<Props, State> {
     }
   };
 
-  onPressDeleteLive = item => {
+  onPressDeleteLive = (item) => {
     Alert.alert(
       "Supprimer l'activité",
       "Etes-vous sûr de supprimer l'activité ?",
@@ -350,7 +348,7 @@ class Lives extends Component<Props, State> {
 
   deleteLiveLongPressOk(idLive) {
     var deletingIds = this.state.deletingIds;
-    if (deletingIds.filter(d => d == idLive).length == 0) {
+    if (deletingIds.filter((d) => d == idLive).length == 0) {
       deletingIds.push(idLive);
     }
     this.setState(
@@ -362,7 +360,7 @@ class Lives extends Component<Props, State> {
   deleteLive() {
     var idLive = this.state.rowID;
     var deletingIds = this.state.deletingIds;
-    if (deletingIds.filter(d => d == idLive).length == 0) {
+    if (deletingIds.filter((d) => d == idLive).length == 0) {
       deletingIds.push(idLive);
     }
     this.setState(
@@ -386,8 +384,8 @@ class Lives extends Component<Props, State> {
       body: formData,
     })
       .then(ApiUtils.checkStatus)
-      .then(response => response.json())
-      .then(responseJson => {
+      .then((response) => response.json())
+      .then((responseJson) => {
         // alert("success http");
         //save values in cache
 
@@ -403,7 +401,7 @@ class Lives extends Component<Props, State> {
           this.props.dispatch(action);
 
           var deletingIds = this.state.deletingIds;
-          deletingIds = deletingIds.filter(d => d != idLive);
+          deletingIds = deletingIds.filter((d) => d != idLive);
 
           this.setState({
             isLoading: false,
@@ -418,10 +416,10 @@ class Lives extends Component<Props, State> {
         }
         this.setState({isLoadingDeleting: false});
       })
-      .catch(e => {
+      .catch((e) => {
         console.log(e);
         var deletingIds = this.state.deletingIds;
-        deletingIds = deletingIds.filter(d => d != idLive);
+        deletingIds = deletingIds.filter((d) => d != idLive);
 
         this.setState({
           isLoading: false,
@@ -433,7 +431,6 @@ class Lives extends Component<Props, State> {
         ApiUtils.logError('create live', JSON.stringify(e.message));
         // alert('Une erreur est survenue : ' + JSON.stringify(e.message));
         if (e.message == 'Timeout' || e.message == 'Network request failed') {
-
           Toast.show({
             text: "Vous n'avez pas de connection internet, merci de réessayer",
             buttonText: 'Ok',
@@ -508,38 +505,24 @@ class Lives extends Component<Props, State> {
   }
 
   async getNewVersion() {
-    const formData = new FormData();
-    formData.append('method', 'getnewVersion');
-    formData.append('auth', ApiUtils.getAPIAuth());
-    formData.append('idVersion', ApiUtils.VersionNumberInt().toString());
-
-    fetch(ApiUtils.getAPIUrl(), {
-      method: 'POST',
-      headers: {
-        // Accept: 'application/json',
-        // 'Content-Type': 'application/json',
-      },
-      body: formData,
-    })
-      .then(ApiUtils.checkStatus)
-      .then(response => response.json())
-      .then(responseJson => {
-        if (responseJson == 'ok') {
-        } else {
-          Alert.alert(
-            'Nouvelle version disponible',
-            "Une nouvelle version de l'application est disponible",
-            [
-              {
-                text: 'Annuler',
-                style: 'cancel',
-              },
-              {text: 'Télécharger', onPress: () => this.openStorePage()},
-            ],
-            {cancelable: false},
-          );
-        }
-      });
+    VersionCheck.needUpdate({
+      depth: Platform.OS == 'android' ? 3 : 2,
+    }).then((res) => {
+      if (res.isNeeded) {
+        Alert.alert(
+          'Nouvelle version disponible',
+          "Une nouvelle version de l'application est disponible",
+          [
+            {
+              text: 'Annuler',
+              style: 'cancel',
+            },
+            {text: 'Télécharger', onPress: () => this.openStorePage()},
+          ],
+          {cancelable: false},
+        );
+      }
+    });
   }
 
   openStorePage() {
@@ -566,8 +549,8 @@ class Lives extends Component<Props, State> {
       body: formData,
     })
       .then(ApiUtils.checkStatus)
-      .then(response => response.json())
-      .then(responseJson => {
+      .then((response) => response.json())
+      .then((responseJson) => {
         //save values in cache
 
         var result = responseJson;
@@ -578,7 +561,7 @@ class Lives extends Component<Props, State> {
           var finalTraceArray = []; // new Object(this.props.polylines);
           var finalinterestArray = [];
           if (tracesArray != null && tracesArray.length != 0) {
-            tracesArray.forEach(trace => {
+            tracesArray.forEach((trace) => {
               var finalTrace = trace;
 
               var positionArray = Object.values(trace.positionsTrace);
@@ -599,7 +582,7 @@ class Lives extends Component<Props, State> {
           if (result.interets != null && result.interets.length != 0) {
             var interestArray = Object.values(result.interets);
             var count = 0;
-            interestArray.forEach(interest => {
+            interestArray.forEach((interest) => {
               var coordinate = {
                 latitude: parseFloat(interest.latitudeInteret),
                 longitude: parseFloat(interest.longitudeInteret),
@@ -673,11 +656,11 @@ class Lives extends Component<Props, State> {
   getnbInvites(live) {
     var invites = live.invites;
     var finalInvites = [];
-    invites.forEach(i => {
+    invites.forEach((i) => {
       if (i.idUtilisateur != this.props.userData.idUtilisateur) {
         if (
-          finalInvites.filter(f => f.idUtilisateur == i.idUtilisateur).length ==
-          0
+          finalInvites.filter((f) => f.idUtilisateur == i.idUtilisateur)
+            .length == 0
         ) {
           finalInvites.push(i);
         }
@@ -694,7 +677,7 @@ class Lives extends Component<Props, State> {
     }
   }
 
-  onValueSportChange = value => {
+  onValueSportChange = (value) => {
     this.setState({selectedSport: value});
   };
 
@@ -726,7 +709,7 @@ class Lives extends Component<Props, State> {
     return (
       <Root>
         <Drawer
-          ref={ref => {
+          ref={(ref) => {
             this.drawer = ref;
           }}
           content={
@@ -788,14 +771,14 @@ class Lives extends Component<Props, State> {
                 ) : (
                   <FlatList
                     style={{height: '100%', width: '100%', marginBottom: 100}}
-                    data={this.props.lives.sort(function(a, b) {
+                    data={this.props.lives.sort(function (a, b) {
                       return b.idLive - a.idLive;
                     })}
                     extraData={this.props.lives}
                     key={(item) => item.idLive}
                     renderItem={({item}) =>
                       this.state.isLoadingDeleting &&
-                      this.state.deletingIds.filter(d => d == item.idLive)
+                      this.state.deletingIds.filter((d) => d == item.idLive)
                         .length > 0 ? (
                         <TouchableOpacity
                           onPress={this.viewLive.bind(this, item)}>
