@@ -84,36 +84,6 @@ class Help extends Component {
     this.props.navigation.navigate('Home');
   }
 
-  getClubs() {
-    this.setState({isLoading: true});
-    let formData = new FormData();
-    formData.append('method', 'getClubs');
-    formData.append('auth', ApiUtils.getAPIAuth());
-
-    //fetch followCode API
-    fetch(ApiUtils.getAPIUrl(), {
-      method: 'POST',
-      headers: {
-        // Accept: 'application/json',
-        // 'Content-Type': 'application/json',
-      },
-      body: formData,
-    })
-      .then(ApiUtils.checkStatus)
-      .then(response => response.json())
-      .then(responseJson => {
-        var action = {type: 'GET_CLUBS', data: responseJson};
-        this.props.dispatch(action);
-
-        this.setState({isLoading: false});
-      })
-      .catch(e => {
-        this.setState({isLoading: false});
-        ApiUtils.logError('getCLUBS', e.message);
-      })
-      .then(() => this.setState({isLoading: false}));
-  }
-
   onPopupOk() {
     var action = {type: 'VIEW_POPUPAIDE', data: null};
     this.props.dispatch(action);

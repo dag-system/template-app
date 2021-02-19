@@ -170,6 +170,7 @@ class Home extends Component {
       let formData = new FormData();
       formData.append('method', 'getInformationsUtilisateur');
       formData.append('auth', ApiUtils.getAPIAuth());
+      formData.append('organisation', ApiUtils.getOrganisation());
 
       if (this.state.selectedFolocode != -1) {
         formData.append('folocode', this.state.selectedFolocode);
