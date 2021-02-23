@@ -33,7 +33,7 @@ import {Sponsors} from './Sponsors';
 import IosReglages from '../assets/iosReglages.png';
 import Ios2 from '../assets/ios2.png';
 
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
   return {
     userData: state.userData,
   };
@@ -100,14 +100,14 @@ class Help extends Component {
       body: formData,
     })
       .then(ApiUtils.checkStatus)
-      .then(response => response.json())
-      .then(responseJson => {
+      .then((response) => response.json())
+      .then((responseJson) => {
         var action = {type: 'GET_CLUBS', data: responseJson};
         this.props.dispatch(action);
 
         this.setState({isLoading: false});
       })
-      .catch(e => {
+      .catch((e) => {
         this.setState({isLoading: false});
         ApiUtils.logError('getCLUBS', e.message);
       })
@@ -120,7 +120,7 @@ class Help extends Component {
   }
 
   openLink(url) {
-    Linking.canOpenURL(url).then(supported => {
+    Linking.canOpenURL(url).then((supported) => {
       if (supported) {
         Linking.openURL(url);
       } else {
@@ -131,7 +131,7 @@ class Help extends Component {
   render() {
     return (
       <Drawer
-        ref={ref => {
+        ref={(ref) => {
           this.drawer = ref;
         }}
         content={
@@ -164,15 +164,6 @@ class Help extends Component {
             <Content style={{padding: 10, paddingTop: 20}} scrollEnabled={true}>
               <View style={[GlobalStyles.row, {justifyContent: 'center'}]}>
                 <Image resizeMode="contain" source={Logo} style={styles.logo} />
-                <Autrans
-                  width={'25%'}
-                  height={50}
-                  style={{
-                    opacity: 1,
-                    marginLeft: 1,
-                    marginBottom: 5,
-                  }}
-                />
               </View>
               <Text
                 style={{
@@ -181,52 +172,48 @@ class Help extends Component {
                   color: ApiUtils.getBackgroundColor(),
                   marginTop: 30,
                 }}>
-                Bienvenue sur l’application officielle de la Foulée Blanche 2021
-                !
+                Bienvenue sur votre application sportive !
               </Text>
               <Text style={{marginTop: 10}}>
-                Venez skier et comparer vos temps avec ceux de vos amis ou vos
-                familles !
+                Venez pratiquer et comparez vos temps avec ceux de vos amis ou
+                vos familles !
               </Text>
               <Text style={{marginTop: 10}}>
                 Faites la course contre des centaines de personne sans jamais
-                les croiser !
+                vous croiser.
               </Text>
               <Text style={{marginTop: 10}}>
                 Pas besoin de choisir son parcours à l’inscription, c’est au
-                départ des pistes que vous ferez votre choix de distance selon
+                départ des parcours que vous ferez votre choix de distance selon
                 votre forme du jour.
               </Text>
               <Text style={{marginTop: 10}}>
-                Chaque fois que vous déciderez de faire VOTRE « Foulée Blanche
-                », rendez-vous au départ des parcours, activez l’application, ne
-                vous souciez plus de rien, prenez le départ et skiez, votre
+                Chaque fois que vous déciderez de faire VOTRE course,
+                rendez-vous au départ des parcours, activez l’application, ne
+                vous souciez plus de rien, prenez le départ et pratiquer, votre
                 chrono se déclenche automatiquement en fonction de votre
                 position GPS. Vous devez bien sûr garder votre smartphone sur
                 vous.
               </Text>
               <Text style={{marginTop: 10}}>
                 Lors de votre inscription vous pouvez choisir de participer
-                également à un ou plusieurs challenge(s), info ici :
+                également à un ou plusieurs challenge(s).
               </Text>
               <TouchableOpacity
-                onPress={() =>
-                  this.openLink(
-                    'https://www.lafouleeblanche.com/classements-challenges/',
-                  )
-                }>
+                onPress={() => this.openLink('https://www.grenoble-inp.fr/')}>
                 <Text
                   style={{
                     textAlign: 'center',
                     marginTop: 10,
                     textDecorationLine: 'underline',
                   }}>
-                  https://www.lafouleeblanche.com/classements-challenges/
+                  https://www.grenoble-inp.fr/
                 </Text>
               </TouchableOpacity>
               <Text style={{marginTop: 10}}>
                 Consultez votre temps sur l'application puis votre classement
-                sera disponible en fin de journée sur notre site internet
+                sera disponible en fin de journée sur le site internet de
+                l’organisateur.
               </Text>
               <Text style={{marginTop: 10}}>
                 <Text
@@ -236,8 +223,7 @@ class Help extends Component {
                   }}>
                   C’EST GRATUIT, A LA CARTE, ILLIMITE
                 </Text>
-                seul un forfait d'accès aux pistes est obligatoire, de quoi
-                améliorer votre résultat à chaque sortie !
+                de quoi améliorer votre résultat à chaque sorti !
               </Text>
               <Text
                 style={{
@@ -245,24 +231,20 @@ class Help extends Component {
                   fontWeight: 'bold',
                   textAlign: 'center',
                 }}>
-                La Foulée Blanche est le seul évènement nordique à vous proposer
-                ce format de course donc n’hésitez plus et venez skier à Autrans
-                pour battre vos propres records.
+                Venez battre vos propres records.
               </Text>
               <Text style={{marginTop: 10, fontWeight: 'bold'}}>
                 Pour les infos complètes rendez-vous sur
               </Text>
               <TouchableOpacity
-                onPress={() =>
-                  this.openLink('https://www.lafouleeblanche.com')
-                }>
+                onPress={() => this.openLink('https://www.grenoble-inp.fr/')}>
                 <Text
                   style={{
                     textAlign: 'center',
                     marginTop: 10,
                     textDecorationLine: 'underline',
                   }}>
-                  www.lafouleeblanche.com
+                  https://www.grenoble-inp.fr/
                 </Text>
               </TouchableOpacity>
               <Text
@@ -295,43 +277,36 @@ class Help extends Component {
                 - A votre arrivée cliquez sur « stop ».
               </Text>
               <Text style={{marginTop: 5}}>
-                - Déclarez dans quel style vous avez réalisé le parcours,
-                classique ou skating, merci de votre honnêteté.
+                - Cliquez sur « enregistrer » votre parcours
               </Text>
               <Text style={{marginTop: 5}}>
-                - Cliquez sur « enregistrer » votre parcours
+                Pour voir la liste des parcours cliquez sur (petit logo carte)
               </Text>
               <Text style={{marginTop: 5}}>
                 Retrouvez les classements sur notre site, mis à jour chaque soir
                 :
               </Text>
               <TouchableOpacity
-                onPress={() =>
-                  this.openLink('https://www.lafouleeblanche.com/')
-                }>
+                onPress={() => this.openLink('https://www.grenoble-inp.fr/')}>
                 <Text
                   style={{
                     textAlign: 'center',
                     marginTop: 10,
                     textDecorationLine: 'underline',
                   }}>
-                  https://www.lafouleeblanche.com/
+                  https://www.grenoble-inp.fr/
                 </Text>
               </TouchableOpacity>
               <Text style={{marginTop: 10, fontWeight: 'bold'}}>
                 2 - Paramétrez votre téléphone
               </Text>
               <Text style={{marginTop: 10}}>
-                Avant de partir, assurez-vous d’avoir bien paramétré votre
-                téléphone pour avoir le meilleur enregistrement de votre
-                activité :
+                Pour un meilleur enregistrement de votre activité, paramétrez la
+                gestion de la batterie de votre téléphone pour que l’app ne se
+                stoppe pas pendant l’effort
               </Text>
               <TouchableOpacity
-                onPress={() =>
-                  this.openLink(
-                    'https://www.lafouleeblanche.com/wp-content/uploads/2020/12/Reglages-bateries-telephones.pdf',
-                  )
-                }>
+                onPress={() => this.openLink('https://www.grenoble-inp.fr/')}>
                 <Text
                   style={{
                     textAlign: 'center',
@@ -357,8 +332,7 @@ class Help extends Component {
                 batterie
               </Text>
               <Text style={{marginTop: 10}}>
-                - Lancer l’activité dans une zone couverte par le réseau (au
-                départ de Gève)
+                - Lancer l’activité dans une zone couverte par le réseau
               </Text>
               <Text style={{marginTop: 10}}>
                 - Faire strictement le parcours du départ à l’arrivée, ne pas
@@ -375,17 +349,6 @@ class Help extends Component {
 
               {!this.props.noHeader ? (
                 <View>
-                  <Text
-                    style={{
-                      textAlign: 'center',
-                      fontWeight: 'bold',
-                      color: ApiUtils.getBackgroundColor(),
-                      textDecorationLine: 'underline',
-                      marginTop: 30,
-                    }}>
-                    Important avant de skier
-                  </Text>
-
                   <Icon
                     type="FontAwesome5"
                     name="exclamation-triangle"
@@ -453,7 +416,7 @@ class Help extends Component {
                       <Text> 3. Cliquer sur "Lancement d'application"</Text>
                       <Text>
                         {' '}
-                        4. Rechercher et désactiver l’appli « Foulée Blanche »{' '}
+                        4. Rechercher et désactiver notre application{' '}
                       </Text>
                       <Text>
                         5. Cliquer sur OK en vérifiant que tout soit activé
@@ -468,7 +431,7 @@ class Help extends Component {
                       <Text> 2. Cliquer sur "Maintenance de l'appareil"</Text>
                       <Text> 3. Cliquer sur "Batterie"</Text>
                       <Text> 5. Cliquer sur "Ajouter des applications"</Text>
-                      <Text>6.Sélectionner l’appli « Foulée Blanche »</Text>
+                      <Text>6.Sélectionner notre application</Text>
                       <Text>Cliquer sur "Terminé"</Text>
 
                       <Text style={{fontWeight: 'bold', marginTop: 10}}>
@@ -480,7 +443,7 @@ class Help extends Component {
                       <Text> 2. Cliquer sur "Maintenance de l'appareil"</Text>
                       <Text> 3. Cliquer sur "Batterie"</Text>
                       <Text> 5. Cliquer sur "Ajouter des applications"</Text>
-                      <Text>6.Sélectionner l’appli « Foulée Blanche »</Text>
+                      <Text>6.Sélectionner notre application</Text>
                       <Text>Cliquer sur "Terminé"</Text>
 
                       <Text style={{fontWeight: 'bold', marginTop: 10}}>
@@ -501,9 +464,9 @@ class Help extends Component {
                       </Text>
                       <Text>8. Cliquer sur "Applications en veille" </Text>
                       <Text>
-                        9. Vérifier que l'application l’appli « Foulée Blanche »
-                        ne soit pas dans la liste, sinon supprimer-là à l'aide
-                        de la corbeille en haut à droite{' '}
+                        9. Vérifier que l'application notre application ne soit
+                        pas dans la liste, sinon supprimer-là à l'aide de la
+                        corbeille en haut à droite{' '}
                       </Text>
 
                       <Text style={{fontWeight: 'bold', marginTop: 10}}>
@@ -517,8 +480,8 @@ class Help extends Component {
                       <Text>1. Aller dans “Paramètres”</Text>
                       <Text>2. Cliquer sur “Batterie”</Text>
                       <Text>3. Cliquer sur “Détails”</Text>
-                      <Text>4. Cliquer sur l’appli « Foulée Blanche »</Text>
-                      <Text>5. Désactivé l’appli « Foulée Blanche »</Text>
+                      <Text>4. Cliquer sur notre application</Text>
+                      <Text>5. Désactivé notre application</Text>
 
                       <Text style={{fontWeight: 'bold', marginTop: 10}}>
                         HONOR (8, 9, 10, …)
@@ -526,7 +489,7 @@ class Help extends Component {
                       <Text>1. Aller dans “Réglages”</Text>
                       <Text>2. Cliquer sur “Batterie”</Text>
                       <Text>3. Cliquer sur “Lancement d'application”</Text>
-                      <Text>4. Chercher "la foulée blanche"</Text>
+                      <Text>4. Chercher notre application</Text>
                       <Text>5. Désélectionner la checkbox</Text>
                       <Text>
                         5. Sélectionner les 3 champs qui vont s'afficher en
@@ -540,7 +503,7 @@ class Help extends Component {
                       <Text>1. Aller dans "Paramètres"</Text>
                       <Text>2. Cliquer sur "Gérer les applications"</Text>
                       <Text>
-                        3. Rechercher et cliquer sur l’appli « Foulée Blanche »
+                        3. Rechercher et cliquer sur notre application
                       </Text>
                       <Text>4. Activer "Démarrage automatique"</Text>
                       <Text>5. Une fenêtre s'ouvre, cliquer sur "OK"</Text>
@@ -570,7 +533,7 @@ class Help extends Component {
                         7. Retourner sur la page précédente (Réglages)
                       </Text>
                       <Text>8. Cliquer sur "Gestionnaire de démarrage"</Text>
-                      <Text>9. Activer l’appli « Foulée Blanche »</Text>
+                      <Text>9. Activer notre application</Text>
                       <Text>10. Cliquer sur "Autoriser"</Text>
 
                       <Text style={{fontWeight: 'bold', marginTop: 10}}>
@@ -590,7 +553,7 @@ class Help extends Component {
                       <Text>
                         8. Cliquer sur "White-list des apps en arrière-plan"
                       </Text>
-                      <Text>9. Activer l’appli « Foulée Blanche » </Text>
+                      <Text>9. Activer notre application </Text>
 
                       <Text style={{fontWeight: 'bold', marginTop: 10}}>
                         ONEPLUS (6 et plus...)
@@ -598,7 +561,7 @@ class Help extends Component {
                       <Text>1. Aller dans "Paramètres"</Text>
                       <Text>2. Cliquer sur "Batterie"</Text>
                       <Text>3. Cliquer sur "Optimisation de la batterie"</Text>
-                      <Text>4. Sélectionner l’appli « Foulée Blanche »</Text>
+                      <Text>4. Sélectionner notre application</Text>
                       <Text>5. Sélectionner "Ne pas optimiser"</Text>
                     </View>
                   ) : (
@@ -613,7 +576,7 @@ class Help extends Component {
                       </Text>
                       <Text>1. Ouvrez les paramètres de votre téléphone</Text>
                       <Text>
-                        2. Accédez à "La foulée blanche {'>'} Position"
+                        2. Accédez à "Digiraid Grenoble {'>'} Position"
                       </Text>
                       <Text>
                         3. Sélectionnez “Lorsque l’app est active” et réglez
@@ -642,9 +605,7 @@ class Help extends Component {
                         localisation :
                       </Text>
                       <Text>1. Ouvrez les paramètres de votre téléphone</Text>
-                      <Text>
-                        2. Accédez à "La foulée blanche {'>'} Position"
-                      </Text>
+                      <Text>2. Accédez à "Digiraid {'>'} Position"</Text>
                       <Text>
                         3. Sélectionnez “Lorsque l’app est active” (voir capture
                         d'écran ci-dessous)
@@ -672,7 +633,7 @@ class Help extends Component {
                 </Text>
               ) : null}
               <Text style={{textAlign: 'center', marginTop: 10}}>
-                Bon ski !
+                Bonne course !
               </Text>
               {this.props.noHeader ? (
                 <TouchableOpacity
@@ -698,7 +659,6 @@ class Help extends Component {
               ) : null}
               <View style={{marginBottom: 100}} />
             </Content>
-            <Sponsors />
           </Root>
         </Container>
       </Drawer>
@@ -708,7 +668,7 @@ class Help extends Component {
 
 const styles = StyleSheet.create({
   header: {
-    backgroundColor: 'white',
+    backgroundColor: '#2B3990',
     // width: '100%'
   },
   title: {
@@ -733,7 +693,7 @@ const styles = StyleSheet.create({
     elevation: 0,
   },
   saveText: {
-    color: 'black',
+    color: 'white',
   },
   body: {
     width: '100%',

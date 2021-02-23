@@ -15,10 +15,7 @@ if (__DEV__) {
   // whyDidYouRender(React, {
   //   trackAllPureComponents: true,
   // });
-
-
 }
-
 
 // Sentry.init({
 //   dsn:
@@ -27,7 +24,6 @@ if (__DEV__) {
 //     deactivateStacktraceMerging: true
 
 // });
-
 
 AppRegistry.registerComponent(appName, () => App);
 

@@ -46,8 +46,7 @@ export default class Sidebar extends Component {
 
   onClickNavigate(routeName) {
     // this.props.drawer.close()
-    if(this.props.drawer !=null && this.props.drawer._root !=null ) 
-    {
+    if (this.props.drawer != null && this.props.drawer._root != null) {
       this.props.drawer._root.close();
     }
 
@@ -86,10 +85,13 @@ export default class Sidebar extends Component {
                 justifyContent: 'flex-start',
                 padding: 10,
               }}>
-                <Icon
-                name="skiing-nordic"
+              <Icon
+                name="running"
                 type="FontAwesome5"
-                style={[styles.icon, {color: this.props.selected == 'Lives' ? 'black' : 'white'}]}
+                style={[
+                  styles.icon,
+                  {color: this.props.selected == 'Lives' ? 'black' : 'white'},
+                ]}
               />
               <Text
                 style={[
@@ -140,10 +142,16 @@ export default class Sidebar extends Component {
                 justifyContent: 'flex-start',
                 padding: 10,
               }}>
-               <Icon
+              <Icon
                 name="user"
                 type="FontAwesome5"
-                style={[styles.icon, {color:  this.props.selected == 'Preferences' ? 'black' : 'white'}]}
+                style={[
+                  styles.icon,
+                  {
+                    color:
+                      this.props.selected == 'Preferences' ? 'black' : 'white',
+                  },
+                ]}
               />
               <Text
                 style={[
@@ -164,9 +172,7 @@ export default class Sidebar extends Component {
             style={{
               width: '100%',
               backgroundColor:
-                this.props.selected == 'Classement'
-                  ? '#E9E9E9'
-                  : 'transparent',
+                this.props.selected == 'Classement' ? '#E9E9E9' : 'transparent',
             }}>
             <View
               style={{
@@ -175,10 +181,16 @@ export default class Sidebar extends Component {
                 justifyContent: 'flex-start',
                 padding: 10,
               }}>
-               <Icon
+              <Icon
                 name="trophy"
                 type="FontAwesome5"
-                style={[styles.icon, {color:  this.props.selected == 'Classement' ? 'black' : 'white'}]}
+                style={[
+                  styles.icon,
+                  {
+                    color:
+                      this.props.selected == 'Classement' ? 'black' : 'white',
+                  },
+                ]}
               />
               <Text
                 style={[
@@ -188,7 +200,7 @@ export default class Sidebar extends Component {
                       this.props.selected == 'Classement' ? 'black' : 'white',
                   },
                 ]}>
-               Classement
+                Classement
               </Text>
             </View>
           </TouchableHighlight>
@@ -199,38 +211,35 @@ export default class Sidebar extends Component {
             style={{
               width: '100%',
               backgroundColor:
-                this.props.selected == 'Replay'
-                  ? '#E9E9E9'
-                  : 'transparent',
+                this.props.selected == 'Replay' ? '#E9E9E9' : 'transparent',
             }}>
             <View
               style={{
                 display: 'flex',
                 flexDirection: 'row',
                 justifyContent: 'flex-start',
-                flexWrap :'wrap',
+                flexWrap: 'wrap',
                 padding: 10,
               }}>
-               <Icon
+              <Icon
                 name="chart-line"
                 type="FontAwesome5"
-                style={[styles.icon, {color:  this.props.selected == 'Replay' ? 'black' : 'white'}]}
+                style={[
+                  styles.icon,
+                  {color: this.props.selected == 'Replay' ? 'black' : 'white'},
+                ]}
               />
               <Text
                 style={[
                   styles.menuText,
                   {
-                    color:
-                      this.props.selected == 'Replay' ? 'black' : 'white',
+                    color: this.props.selected == 'Replay' ? 'black' : 'white',
                   },
                 ]}>
-               Comparateur
+                Comparateur
               </Text>
-            
             </View>
-         
           </TouchableHighlight>
-
 
           <TouchableHighlight
             underlayColor="rgba(255,255,255,1,0.6)"
@@ -238,106 +247,35 @@ export default class Sidebar extends Component {
             style={{
               width: '100%',
               backgroundColor:
-                this.props.selected == 'Help'
-                  ? '#E9E9E9'
-                  : 'transparent',
+                this.props.selected == 'Help' ? '#E9E9E9' : 'transparent',
             }}>
             <View
               style={{
                 display: 'flex',
                 flexDirection: 'row',
                 justifyContent: 'flex-start',
+                flexWrap: 'wrap',
                 padding: 10,
               }}>
-               <Icon
+              <Icon
                 name="question-circle"
                 type="FontAwesome5"
-                style={[styles.icon, {color:  this.props.selected == 'Help' ? 'black' : 'white'}]}
+                style={[
+                  styles.icon,
+                  {color: this.props.selected == 'Help' ? 'black' : 'white'},
+                ]}
               />
               <Text
                 style={[
                   styles.menuText,
                   {
-                    color:
-                      this.props.selected == 'Help' ? 'black' : 'white',
+                    color: this.props.selected == 'Help' ? 'black' : 'white',
                   },
                 ]}>
-               Aide
+                Guide d'utilisation
               </Text>
             </View>
           </TouchableHighlight>
-
-          {/* <TouchableHighlight
-            underlayColor="rgba(255,255,255,1,0.6)"
-            onPress={() => this.onClickNavigate('AddExternalActivity')}
-            style={{
-              width: '100%',
-              backgroundColor:
-                this.props.selected == 'Help'
-                  ? '#E9E9E9'
-                  : 'transparent',
-            }}>
-            <View
-              style={{
-                display: 'flex',
-                flexDirection: 'row',
-                justifyContent: 'flex-start',
-                padding: 10,
-              }}>
-               <Icon
-                name="question-circle"
-                type="FontAwesome5"
-                style={[styles.icon, {color:  this.props.selected == 'Help' ? 'black' : 'white'}]}
-              />
-              <Text
-                style={[
-                  styles.menuText,
-                  {
-                    color:
-                      this.props.selected == 'Help' ? 'black' : 'white',
-                  },
-                ]}>
-               Importer une activité
-              </Text>
-            </View>
-          </TouchableHighlight> */}
-
-          <TouchableHighlight
-            underlayColor="rgba(255,255,255,1,0.6)"
-            onPress={() => this.onClickNavigate('Partenaires')}
-            style={{
-              width: '100%',
-              backgroundColor:
-                this.props.selected == 'Partenaires'
-                  ? '#E9E9E9'
-                  : 'transparent',
-            }}>
-            <View
-              style={{
-                display: 'flex',
-                flexDirection: 'row',
-                justifyContent: 'flex-start',
-                padding: 10,
-              }}>
-               <Icon
-                name="handshake"
-                type="FontAwesome5"
-                style={[styles.icon, { fontSize : 20, width: 27, color:  this.props.selected == 'Partenaires' ? 'black' : 'white'}]}
-              />
-              <Text
-                style={[
-                  styles.menuText,
-                  {
-                    marginLeft : 25,
-                    color:
-                      this.props.selected == 'Partenaires' ? 'black' : 'white',
-                  },
-                ]}>
-               Nos partenaires
-              </Text>
-            </View>
-          </TouchableHighlight>
-
 
           <TouchableHighlight
             underlayColor="rgba(255,255,255,1,0.6)"
@@ -376,14 +314,14 @@ const styles = StyleSheet.create({
   },
   logo: {
     width: '50%',
-    height: 80,
+    height: 120,
     marginLeft: 25,
     marginRight: 25,
     marginBottom: 20,
   },
   menuText: {
     marginLeft: 30,
-    maxWidth : '100%'
+    maxWidth: '100%',
   },
   versionInfo: {
     fontSize: 11,

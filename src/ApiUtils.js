@@ -3,13 +3,13 @@
 const ISDEBUG = false;
 const ISDEMO = false;
 
-const VersionNumber = '1.0.15';
-const VersionNumberInt = 13;
+const VersionNumber = '1.0.0';
+const VersionNumberInt = 1;
 
 var ApiUtils = {
   getOrganisation()
   {
-    return 'FOULEEBLANCHE';
+    return 'DIGIRAIDINP';
   },
   ISDEBUG() {
     return ISDEBUG;
@@ -18,7 +18,7 @@ var ApiUtils = {
     return ISDEBUG;
   },
   getBackgroundColor() {
-    return '#3266aa';
+    return '#2B3990';
   },
   VersionNumber() {
     return VersionNumber;
@@ -51,7 +51,7 @@ var ApiUtils = {
 
       let error = new Error(response.statusText);
       error.response = response;
-      throw error;
+      throw response;
     }
   },
 

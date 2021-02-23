@@ -32,7 +32,7 @@ import DefaultProps from '../models/DefaultProps';
 import {buildGPX, GarminBuilder} from 'gpx-builder';
 import {Point} from 'gpx-builder/dist/builder/BaseBuilder/models';
 
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
   return {
     isRecording: state.isRecording,
     currentLive: state.currentLive,
@@ -194,7 +194,7 @@ class MapButtons extends Component<Props, State> {
 
           BackgroundGeolocation.changePace(true);
         },
-        state => {
+        (state) => {
           ApiUtils.logError('failure geoloc', JSON.stringify(state));
         },
       );
@@ -257,8 +257,8 @@ class MapButtons extends Component<Props, State> {
         body: formData,
       })
         .then(ApiUtils.checkStatus)
-        .then(response => response.json())
-        .then(responseJson => {
+        .then((response) => response.json())
+        .then((responseJson) => {
           if (responseJson.codeErreur == 'SUCCESS') {
             this.setState({spinner: false});
 
@@ -279,7 +279,7 @@ class MapButtons extends Component<Props, State> {
             alert(responseJson.message);
           }
         })
-        .catch(e => {
+        .catch((e) => {
           console.log(JSON.stringify(e));
           this.setState({spinner: false});
           ApiUtils.logError('create live', JSON.stringify(e.message));
@@ -304,7 +304,7 @@ class MapButtons extends Component<Props, State> {
       let points = [];
 
       let coords = JSON.parse(this.props.coordinatesString);
-      coords.forEach(c => {
+      coords.forEach((c) => {
         var point = new Point(c.latitude, c.longitude, {
           time: new Date(c.timestamp),
         });
@@ -343,15 +343,15 @@ class MapButtons extends Component<Props, State> {
       body: formData,
     })
       .then(ApiUtils.checkStatus)
-      .then(response => response.json())
-      .then(responseJson => {
+      .then((response) => response.json())
+      .then((responseJson) => {
         console.log('sendgenerated SUCCESS');
         if (responseJson.codeErreur == 'SUCCESS') {
         } else {
           // alert('erreur : ' + responseJson.message);
         }
       })
-      .catch(e => {
+      .catch((e) => {
         console.log(e);
         // alert('erreur : ' + e.message);
         ApiUtils.logError(
@@ -381,12 +381,12 @@ class MapButtons extends Component<Props, State> {
       body: formData,
     })
       .then(ApiUtils.checkStatus)
-      .then(response => response.json())
-      .then(responseJson => {
+      .then((response) => response.json())
+      .then((responseJson) => {
         if (responseJson.codeErreur == 'SUCCESS') {
         }
       })
-      .catch(e => {
+      .catch((e) => {
         // alert('erreur : ' + e.message);
         ApiUtils.logError(
           'send all coordinates gpx',
@@ -401,7 +401,7 @@ class MapButtons extends Component<Props, State> {
   syncPositions() {
     try {
       BackgroundGeolocation.sync(
-        records => {
+        (records) => {
           // this.setState({isSyncOk: true});
           ApiUtils.logError(
             'sync at end idUtilisateur: ' + this.props.userData.idUtilisateur,
@@ -434,8 +434,8 @@ class MapButtons extends Component<Props, State> {
       body: formData,
     })
       .then(ApiUtils.checkStatus)
-      .then(response => response.json())
-      .then(responseJson => {
+      .then((response) => response.json())
+      .then((responseJson) => {
         if (responseJson.codeErreur == 'SUCCESS') {
           var action = {
             type: 'IGNORE_LIVE',
@@ -455,7 +455,7 @@ class MapButtons extends Component<Props, State> {
           this.setState({spinner: false});
         }
       })
-      .catch(e => {
+      .catch((e) => {
         this.setState({spinner: false});
 
         ApiUtils.logError('simpleMap ignoreActivity', e.message);
@@ -523,7 +523,7 @@ class MapButtons extends Component<Props, State> {
     this.setState({modalStopVisible: !this.state.modalStopVisible});
   }
 
-  onValueSportChange = value => {
+  onValueSportChange = (value) => {
     this.setState({selectedSport: value});
   };
 
@@ -620,7 +620,7 @@ class MapButtons extends Component<Props, State> {
                     clearButtonMode="always"
                     placeholder="Titre"
                     value={this.state.libelleLive}
-                    onChangeText={value => this.onChangeLiveName(value)}
+                    onChangeText={(value) => this.onChangeLiveName(value)}
                   />
 
                   <ErrorMessage
@@ -631,13 +631,13 @@ class MapButtons extends Component<Props, State> {
                   <View style={styles.picker}>
                     <Picker
                       mode="dropdown"
-                      accessibilityLabel={'Choisissez le type de glisse'}
-                      iosHeader={'Choisissez le type de glisse'}
+                      accessibilityLabel={"Choisissez le type d'activité"}
+                      iosHeader={"Choisissez le type d'activité"}
                       iosIcon={<Icon name="chevron-down" type="FontAwesome5" />}
                       style={{marginTop: 0}}
                       selectedValue={this.state.selectedSport}
-                      onValueChange={value => this.onValueSportChange(value)}
-                      placeholder={'Choisissez le type de glisse'}
+                      onValueChange={(value) => this.onValueSportChange(value)}
+                      placeholder={"Choisissez le type d'activité"}
                       placeholderStyle={{
                         color: ApiUtils.getBackgroundColor(),
                       }}
@@ -656,11 +656,10 @@ class MapButtons extends Component<Props, State> {
                         borderBottomWidth: 1,
                       }}>
                       <Picker.Item
-                        label="Choisissez le type de glisse"
+                        label="Choisissez le type d'activité"
                         value="-1"
                       />
-                      <Picker.Item label={'CLASSIQUE'} value="14" />
-                      <Picker.Item label={'SKATING'} value="15" />
+                      <Picker.Item label={'RAID'} value="16" />
                     </Picker>
 
                     {this.state.selectedSport == -1 ? (
@@ -672,7 +671,7 @@ class MapButtons extends Component<Props, State> {
                           paddingLeft: 5,
                           fontStyle: 'italic',
                         }}>
-                        Le type de glisse doit être renseigné
+                        Le type d'activité doit être renseigné
                       </Text>
                     ) : null}
 
@@ -698,7 +697,7 @@ class MapButtons extends Component<Props, State> {
                         style={{marginTop: 0, paddingBottom: 10}}
                         multiline={true}
                         numberOfLines={4}
-                        onChangeText={text => this.setState({comments: text})}
+                        onChangeText={(text) => this.setState({comments: text})}
                         value={this.state.comments}
                         placeholder="Commentaire"
                       />
@@ -714,7 +713,7 @@ class MapButtons extends Component<Props, State> {
                       }}>
                       <Switch
                         style={{paddingTop: 20}}
-                        onValueChange={text => {
+                        onValueChange={(text) => {
                           this.setState({
                             acceptChallengeNameUtilisateur: text,
                           });
@@ -792,9 +791,7 @@ class MapButtons extends Component<Props, State> {
                   zIndex: 12,
                   width: '100%',
                   backgroundColor: 'white',
-                }}>
-                <Sponsors />
-              </View>
+                }}></View>
             </View>
           </Root>
         </Modal>

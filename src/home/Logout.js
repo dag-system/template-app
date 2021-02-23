@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import {
   Platform,
   StyleSheet,
@@ -6,25 +6,23 @@ import {
   Linking,
   View,
   TextInput,
-  Image, ScrollView
+  Image,
+  ScrollView,
 } from 'react-native';
 import ApiUtils from '../ApiUtils';
 import Logo from '../assets/logo.png';
-import { connect } from 'react-redux'
-
+import {connect} from 'react-redux';
 
 const mapStateToProps = (state) => {
   return {
     userData: state.userData,
-  }
-}
+  };
+};
 
-
- class Logout extends Component {
+class Logout extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-    }
+    this.state = {};
   }
 
   // static navigationOptions = {
@@ -37,52 +35,44 @@ const mapStateToProps = (state) => {
   //   ),
   // };
 
-
-
   componentDidMount() {
-
-    var action = { type: 'LOGOUT', data: null }
+    var action = {type: 'LOGOUT', data: null};
 
     this.props.dispatch(action);
 
     this.onClickNavigate('Home');
 
-  //   ApiUtils.setLoggedOut().then((res) => {
-  //    // alert(res);
-  //     this.onClickNavigate('Home');
-  // });
-}
+    //   ApiUtils.setLoggedOut().then((res) => {
+    //    // alert(res);
+    //     this.onClickNavigate('Home');
+    // });
+  }
 
-onClickNavigate(routeName) {
+  onClickNavigate(routeName) {
+    this.props.navigation.navigate('Home');
+  }
 
-  this.props.navigation.navigate("Home");
-}
-
-
-render() {
-  return (
-    null
-  );
-}
+  render() {
+    return null;
+  }
 }
 
 const styles = StyleSheet.create({
   header: {
     //Ò  backgroundColor: ApiUtils.getBackgroundColor()
-    backgroundColor: '#DADADA',
+    backgroundColor: '#2B3990',
   },
   title: {
     color: '#000',
     // fontFamily: 'roboto'
   },
   text: {
-    fontFamily: 'Roboto'
+    fontFamily: 'Roboto',
   },
   body: {
     width: '100%',
     backgroundColor: '#DADADA',
     //  justifyContent: 'center',
-
   },
   logo: {
     width: '80%',
@@ -90,8 +80,7 @@ const styles = StyleSheet.create({
     marginLeft: 25,
     marginRight: 25,
     marginTop: 50,
-    marginBottom: 50
-
+    marginBottom: 50,
   },
   loginButtonSection: {
     width: '100%',
@@ -102,13 +91,11 @@ const styles = StyleSheet.create({
   },
 
   followCodeLoginSection: {
-
     backgroundColor: '#DADADA',
     width: '100%',
     justifyContent: 'center',
     alignItems: 'center',
     paddingTop: 30,
-
   },
 
   inputCode: {
@@ -118,15 +105,15 @@ const styles = StyleSheet.create({
     height: 30,
     padding: 0,
     marginBottom: 20,
-    marginTop: 20
+    marginTop: 20,
   },
   p: {
     fontSize: 12,
-    marginBottom: 5
+    marginBottom: 5,
   },
   url: {
     fontSize: 12,
-    textAlign: 'center'
+    textAlign: 'center',
   },
   textLink: {
     color: '#5D8BE6',
@@ -151,11 +138,11 @@ const styles = StyleSheet.create({
     backgroundColor: '#DADADA',
   },
   footer: {
-    backgroundColor: "transparent",
-    height: 215
+    backgroundColor: 'transparent',
+    height: 215,
   },
   userInfo: {
-    padding: 10
+    padding: 10,
   },
   icon: {
     width: 24,

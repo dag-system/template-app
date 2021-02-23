@@ -5,7 +5,7 @@ import reducer from './reducers';
 
 
 const persistConfig = {
-  key: 'fouleeblanche',
+  key: 'digiraidinp',
   storage: AsyncStorage,
   debug: false,
 };

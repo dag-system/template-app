@@ -601,8 +601,8 @@ class Map extends PureComponent<Props,State> {
           showsScale={false}
           showsTraffic={false}
           initialRegion={{
-            latitude: 45.1667, // 44.843884,
-            longitude: 5.55,
+            latitude: 45.19080336677786, // 44.843884,
+            longitude: 5.717292753977742,
             latitudeDelta: LATITUDE_DELTA,
             longitudeDelta: LONGITUDE_DELTA,
           }}

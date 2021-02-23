@@ -26,7 +26,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import {connect} from 'react-redux';
 import Logo from '../assets/logo_header.png';
 import Autrans from '../assets/autrans.svg';
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
   return {
     userData: state.userData,
     recordingState: state.recordingState,
@@ -69,7 +69,7 @@ class SegmentSummary extends Component {
   componentDidMount() {
     this.setState({showEffortList: false});
 
-    this.loadCurrentSegment().then(res => {
+    this.loadCurrentSegment().then((res) => {
       var segment = JSON.parse(res);
 
       this.setState({
@@ -85,7 +85,7 @@ class SegmentSummary extends Component {
     if (segment.segmentEfforts != null && segment.segmentEfforts.length > 0) {
       var minTime = this.getMinTimeOfSegments(segment.segmentEfforts);
       var bestSegment = this.segment.segmentEfforts.filter(
-        s => s.timeSegment == minTime,
+        (s) => s.timeSegment == minTime,
       )[0];
       this.setState({bestSegment: bestSegment});
     }
@@ -134,10 +134,10 @@ class SegmentSummary extends Component {
       body: formData,
     })
       .then(ApiUtils.checkStatus)
-      .then(response => response.json()) //;
-      .then(responseJson => {
+      .then((response) => response.json()) //;
+      .then((responseJson) => {
         // alert(JSON.stringify(responseJson));
-        console.log(responseJson)
+        console.log(responseJson);
         this.setState({segment: responseJson});
         // this.setState({ segmentEfforts: responseJson.efforts });
 
@@ -147,7 +147,7 @@ class SegmentSummary extends Component {
         this.setState({isLoading: false});
       })
 
-      .catch(e => {
+      .catch((e) => {
         this.setState({isloading: false});
         ApiUtils.logError('get segment', JSON.stringify(e.message));
         // alert('Une erreur est survenue : ' + JSON.stringify(e.message));
@@ -167,7 +167,7 @@ class SegmentSummary extends Component {
   }
 
   async loaduserData() {
-    return ApiUtils.loaduserData().then(res => {
+    return ApiUtils.loaduserData().then((res) => {
       var user = JSON.parse(res);
       this.setState({userdata: user});
       return user;
@@ -176,7 +176,7 @@ class SegmentSummary extends Component {
 
   saveCoordinates(positions) {
     var coordinates = [];
-    positions.forEach(element => {
+    positions.forEach((element) => {
       var coordinate = {
         latitude: parseFloat(element[0]),
         longitude: parseFloat(element[1]),
@@ -237,19 +237,19 @@ class SegmentSummary extends Component {
     Share.share(
       {
         message:
-          'Découvrez mon activité à la Foulée Blanche  : ' +
+          'Découvrez mon activité DigiRAID Grenoble INP  : ' +
           this.state.statsLive.lienPartage,
-        title: 'Découvrez mon activité  à la Foulée Blanche!',
+        title: 'Découvrez mon activité DigiRAID Grenoble INP!',
       },
       {
         // Android only:
-        dialogTitle: 'Découvrez mon activité à la Foulée Blanche! ',
+        dialogTitle: 'Découvrez mon activité DigiRAID Grenoble INP! ',
       },
     );
   }
 
   openLink(url) {
-    Linking.canOpenURL(url).then(supported => {
+    Linking.canOpenURL(url).then((supported) => {
       if (supported) {
         Linking.openURL(url);
       } else {
@@ -600,7 +600,7 @@ class SegmentSummary extends Component {
 
 const styles = StyleSheet.create({
   header: {
-    backgroundColor: 'white',
+    backgroundColor: '#2B3990',
     width: '100%',
   },
   title: {
@@ -648,7 +648,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   saveText: {
-    color: 'black',
+    color: 'white',
     paddingLeft: 0,
     marginLeft: 5,
     marginRight: -5,

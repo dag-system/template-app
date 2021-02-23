@@ -33,7 +33,7 @@ import ErrorMessage from './ErrorMessage';
 import {TextInput} from 'react-native-gesture-handler';
 import DocumentPicker from 'react-native-document-picker';
 import DefaultProps from '../models/DefaultProps';
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
   return {
     userData: state.userData,
     currentLive: state.currentLive,
@@ -42,12 +42,11 @@ const mapStateToProps = state => {
   };
 };
 
-
 interface Props extends DefaultProps {
   userData: any;
   currentLive: any;
   currentMapStyle: string;
-  sports: any[]
+  sports: any[];
 }
 
 interface State {
@@ -57,15 +56,15 @@ interface State {
   isLoading: boolean;
 }
 
-class UploadGpx extends Component<Props,State> {
+class UploadGpx extends Component<Props, State> {
   constructor(props) {
     super(props);
 
     this.state = {
       libelleLive: 'Nouvelle activité importée',
       selectedSport: -1,
-      isLoading : false,
-      comments: ""
+      isLoading: false,
+      comments: '',
     };
   }
 
@@ -144,7 +143,7 @@ class UploadGpx extends Component<Props,State> {
       try {
         PermissionsAndroid.request(
           'android.permission.READ_EXTERNAL_STORAGE',
-        ).then(res => {
+        ).then((res) => {
           console.warn(res);
           if (res == 'granted') {
           } else {
@@ -163,9 +162,7 @@ class UploadGpx extends Component<Props,State> {
 
     // Pick a single file
     try {
-      let config = {
-
-      }
+      let config = {};
       const res = await DocumentPicker.pick(config);
       console.log(
         res.uri,
@@ -384,7 +381,7 @@ class UploadGpx extends Component<Props,State> {
                   clearButtonMode="always"
                   placeholder="Titre"
                   value={this.state.libelleLive}
-                  onChangeText={value => this.onChangeLiveName(value)}
+                  onChangeText={(value) => this.onChangeLiveName(value)}
                 />
                 <ErrorMessage
                   style={styles.errorMessage}
@@ -394,13 +391,13 @@ class UploadGpx extends Component<Props,State> {
                 <View style={styles.picker}>
                   <Picker
                     mode="dropdown"
-                    accessibilityLabel={'Choisissez le type de glisse'}
-                    iosHeader={'Choisissez le type de glisse'}
+                    accessibilityLabel={"Choisissez le type d'activité"}
+                    iosHeader={"Choisissez le type d'activité"}
                     iosIcon={<Icon name="chevron-down" type="FontAwesome5" />}
                     style={{marginTop: 0}}
                     selectedValue={this.state.selectedSport}
                     onValueChange={this.onValueSportChange.bind(this)}
-                    placeholder={'Choisissez le type de glisse'}
+                    placeholder={"Choisissez le type d'activité"}
                     placeholderStyle={{
                       color: ApiUtils.getBackgroundColor(),
                     }}
@@ -419,11 +416,10 @@ class UploadGpx extends Component<Props,State> {
                       borderBottomWidth: 1,
                     }}>
                     <Picker.Item
-                      label="Choisissez le type de glisse"
+                      label="Choisissez le type d'activité"
                       value="-1"
                     />
-                    <Picker.Item label={'CLASSIQUE'} value="14" />
-                    <Picker.Item label={'SKATING'} value="15" />
+                    <Picker.Item label={'RAID'} value="16" />
                   </Picker>
                   {this.state.selectedSport == -1 ? (
                     <Text
@@ -434,7 +430,7 @@ class UploadGpx extends Component<Props,State> {
                         paddingLeft: 5,
                         fontStyle: 'italic',
                       }}>
-                      Le type de glisse doit être renseigné
+                      Le type d'activité doit être renseigné
                     </Text>
                   ) : null}
                   <View
@@ -459,7 +455,7 @@ class UploadGpx extends Component<Props,State> {
                       style={{marginTop: 0, paddingBottom: 10}}
                       multiline={true}
                       numberOfLines={4}
-                      onChangeText={text => this.setState({comments: text})}
+                      onChangeText={(text) => this.setState({comments: text})}
                       value={this.state.comments}
                       placeholder="Commentaire"
                     />
@@ -474,7 +470,7 @@ class UploadGpx extends Component<Props,State> {
                     }}>
                     <Switch
                       style={{paddingTop: 20}}
-                      onValueChange={text => {
+                      onValueChange={(text) => {
                         this.setState({
                           acceptChallengeNameUtilisateur: text,
                         });
@@ -540,9 +536,7 @@ class UploadGpx extends Component<Props,State> {
                 bottom: Platform.OS == 'ios' ? 80 : 50,
                 zIndex: 12,
                 backgroundColor: 'white',
-              }}>
-              <Sponsors />
-            </View>
+              }}></View>
           </Content>
         </Container>
       </Root>
@@ -552,7 +546,7 @@ class UploadGpx extends Component<Props,State> {
 
 const styles = StyleSheet.create({
   header: {
-    backgroundColor: 'white',
+    backgroundColor: '#2B3990',
     width: '100%',
     borderBottomColor: '#D3D3D3',
     borderBottomWidth: 1,
@@ -607,7 +601,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   saveText: {
-    color: 'black',
+    color: 'white',
     paddingLeft: 0,
     marginLeft: 5,
     marginRight: -5,

@@ -1,4 +1,4 @@
-package com.fouleeblanche.app;
+package com.dag.digiraidinp.app;
 
 import com.facebook.react.ReactActivity;
 

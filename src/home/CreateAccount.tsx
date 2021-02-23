@@ -38,7 +38,7 @@ import {KeyboardAvoidingView} from 'react-native';
 import GlobalStyles from '../styles';
 import {Platform} from 'react-native';
 import {Dimensions} from 'react-native';
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
   return {
     userData: state,
     isRecording: state.isRecording,
@@ -133,10 +133,19 @@ class CreateAccount extends ValidationComponent {
         '12',
       ],
       years: [],
+      challengeRadioUtilisateur: 'Actifs',
+      equipeUtilisateur: '',
+      equipeChoiceUtilisateur: '',
+      fetchClub: [],
+      alertClub: false,
+      alertEquipe: false,
+      alertSexe: false,
+      acceptChallengeUtilisateur: false,
     };
   }
 
   componentDidMount() {
+    this.getClubs();
     let years = [];
     for (let i = 2021; i > 1930; i--) {
       years.push(i);
@@ -163,10 +172,19 @@ class CreateAccount extends ValidationComponent {
       // newPasswordConfirmation: {
       //   required: true,
       //   equalPassword: this.state.newPassword,
+      acceptChallengeUtilisateur: {required: true},
       // },
     });
 
     if (isValid) {
+      if (
+        !this.state.equipeUtilisateur ||
+        !this.state.equipeChoiceUtilisateur
+      ) {
+        this.setState({alertEquipe: true});
+        return false;
+      }
+      this.setState({alertEquipe: false});
       this.onSendRequest();
     }
   }
@@ -209,7 +227,37 @@ class CreateAccount extends ValidationComponent {
     //alert(this.state.sexeUtilisateur);
     formData.append('sexeUtilisateur', this.state.sexeUtilisateur);
 
+    if (!this.state.sexeUtilisateur) {
+      this.setState({alertSexe: true});
+      return false;
+    } else {
+      this.setState({alertSexe: false});
+    }
+
+    formData.append('extraInfo', this.state.challengeRadioUtilisateur);
+
     let clubs = [];
+
+    let nameClub = this.state.equipeUtilisateur;
+    let selectedClub = this.state.equipeChoiceUtilisateur;
+    let allClubs = this.state.fetchClub;
+
+    if (selectedClub != '') {
+      clubs.push({club: this.state.equipeChoiceUtilisateur, type: 'RAID'});
+    } else {
+      let clubExist = allClubs.filter(
+        (fClub) => fClub.nom.toLowerCase() == nameClub.toLowerCase(),
+      );
+
+      if (clubExist.length > 0) {
+        this.setState({alertClub: true});
+        this.setState({isLoading: false});
+        return false;
+      } else {
+        clubs.push({club: this.state.equipeUtilisateur, type: 'RAID'});
+        this.setState({alertClub: false});
+      }
+    }
 
     formData.append('clubUtilisateur', JSON.stringify(clubs));
 
@@ -235,6 +283,16 @@ class CreateAccount extends ValidationComponent {
     formData.append('villeUtilisateur', this.state.villeUtilisateur);
     formData.append('paysUtilisateur', this.state.paysUtilisateur);
     formData.append('organisation', ApiUtils.getOrganisation());
+
+    var acceptChallengeUtilisateur = 0;
+    if (
+      this.state.acceptChallengeUtilisateur ||
+      this.state.acceptChallengeUtilisateur
+    ) {
+      acceptChallengeUtilisateur = 1;
+    }
+
+    formData.append('acceptChallengeUtilisateur', acceptChallengeUtilisateur);
     var acceptChallengeNameUtilisateur = 0;
     if (
       this.state.acceptChallengenameUtilisateur ||
@@ -256,8 +314,8 @@ class CreateAccount extends ValidationComponent {
       body: formData,
     })
       .then(ApiUtils.checkStatus)
-      .then(response => response.json())
-      .then(responseJson => {
+      .then((response) => response.json())
+      .then((responseJson) => {
         this.setState({isLoading: false});
         if (responseJson.codeErreur == 'SUCCESS') {
           var action = {type: 'LOGIN', data: responseJson};
@@ -273,7 +331,7 @@ class CreateAccount extends ValidationComponent {
           });
         }
       })
-      .catch(e => {
+      .catch((e) => {
         this.setState({isLoading: false});
         console.log(e);
         ApiUtils.logError('create account', JSON.stringify(e.message));
@@ -290,6 +348,32 @@ class CreateAccount extends ValidationComponent {
             duration: 5000,
           });
         }
+      });
+  }
+
+  getClubs() {
+    let formData = new FormData();
+    formData.append('method', 'getClubs');
+    formData.append('auth', ApiUtils.getAPIAuth());
+    formData.append('organisation', 'DIGIRAIDINP');
+
+    //fetch followCode API
+    fetch(ApiUtils.getAPIUrl(), {
+      method: 'POST',
+      headers: {
+        // Accept: 'application/json',
+        // 'Content-Type': 'application/json',
+      },
+      body: formData,
+    })
+      .then(ApiUtils.checkStatus)
+      .then((response) => response.json())
+      .then((responseJson) => {
+        console.log(responseJson);
+        this.setState({fetchClub: responseJson});
+      })
+      .catch((e) => {
+        ApiUtils.logError('getCLUBS', e.message);
       });
   }
 
@@ -311,6 +395,10 @@ class CreateAccount extends ValidationComponent {
 
   onValueYearddn(value) {
     this.setState({yearDdn: value});
+  }
+
+  onChangeChoiceEquipe(value) {
+    this.setState({equipeChoiceUtilisateur: value});
   }
 
   render() {
@@ -346,13 +434,15 @@ class CreateAccount extends ValidationComponent {
                     textContentType="familyName"
                     clearButtonMode="always"
                     value={this.state.nomUtilisateur}
-                    onChangeText={value =>
+                    onChangeText={(value) =>
                       this.setState({nomUtilisateur: value})
                     }
                   />
                 </Item>
                 {this.isFieldInError('nomUtilisateur') &&
-                  this.getErrorsInField('nomUtilisateur').map(errorMessage => (
+                  this.getErrorsInField(
+                    'nomUtilisateur',
+                  ).map((errorMessage) => (
                     <Text style={styles.error}>{errorMessage}</Text>
                   ))}
 
@@ -367,17 +457,17 @@ class CreateAccount extends ValidationComponent {
                     textContentType="name"
                     clearButtonMode="always"
                     value={this.state.prenomUtilisateur}
-                    onChangeText={value =>
+                    onChangeText={(value) =>
                       this.setState({prenomUtilisateur: value})
                     }
                   />
                 </Item>
                 {this.isFieldInError('prenomUtilisateur') &&
-                  this.getErrorsInField('prenomUtilisateur').map(
-                    errorMessage => (
-                      <Text style={styles.error}>{errorMessage}</Text>
-                    ),
-                  )}
+                  this.getErrorsInField(
+                    'prenomUtilisateur',
+                  ).map((errorMessage) => (
+                    <Text style={styles.error}>{errorMessage}</Text>
+                  ))}
 
                 <Item stackedLabel style={{marginBottom: 5}}>
                   <Label>Email *</Label>
@@ -390,7 +480,7 @@ class CreateAccount extends ValidationComponent {
                     // autoCapitalize="characters"
                     clearButtonMode="always"
                     value={this.state.emailUtilisateur}
-                    onChangeText={value =>
+                    onChangeText={(value) =>
                       this.setState({
                         emailUtilisateur: value.replace(/\s+/g, ''),
                       })
@@ -398,11 +488,11 @@ class CreateAccount extends ValidationComponent {
                   />
                 </Item>
                 {this.isFieldInError('emailUtilisateur') &&
-                  this.getErrorsInField('emailUtilisateur').map(
-                    errorMessage => (
-                      <Text style={styles.error}>{errorMessage}</Text>
-                    ),
-                  )}
+                  this.getErrorsInField(
+                    'emailUtilisateur',
+                  ).map((errorMessage) => (
+                    <Text style={styles.error}>{errorMessage}</Text>
+                  ))}
 
                 <Item stackedLabel style={{marginBottom: 5}}>
                   <Label>Numéro de télephone * </Label>
@@ -413,7 +503,7 @@ class CreateAccount extends ValidationComponent {
                     autoCompleteType="tel"
                     clearButtonMode="always"
                     value={this.state.telUtilisateur}
-                    onChangeText={phoneNumber =>
+                    onChangeText={(phoneNumber) =>
                       this.setState({
                         telUtilisateur: phoneNumber,
                       })
@@ -422,7 +512,9 @@ class CreateAccount extends ValidationComponent {
                 </Item>
 
                 {this.isFieldInError('telUtilisateur') &&
-                  this.getErrorsInField('telUtilisateur').map(errorMessage => (
+                  this.getErrorsInField(
+                    'telUtilisateur',
+                  ).map((errorMessage) => (
                     <Text style={styles.error}>{errorMessage}</Text>
                   ))}
 
@@ -437,7 +529,7 @@ class CreateAccount extends ValidationComponent {
                   }}>
                   <Switch
                     style={{paddingTop: 20}}
-                    onValueChange={text =>
+                    onValueChange={(text) =>
                       this.setState({acceptChallengeTelUtilisateur: text})
                     }
                     value={this.state.acceptChallengeTelUtilisateur == 1}
@@ -486,22 +578,18 @@ class CreateAccount extends ValidationComponent {
                       onPress={() => this.setState({sexeUtilisateur: 'H'})}
                     />
                   </TouchableOpacity>
-
-                  <TouchableOpacity
-                    style={{
-                      display: 'flex',
-                      flexDirection: 'row',
-                      width: '30%',
-                      justifyContent: 'space-around',
-                    }}
-                    onPress={() => this.setState({sexeUtilisateur: 'A'})}>
-                    <Text>Autre</Text>
-                    <Radio
-                      selected={this.state.sexeUtilisateur == 'A'}
-                      onPress={() => this.setState({sexeUtilisateur: 'A'})}
-                    />
-                  </TouchableOpacity>
                 </View>
+                {this.state.alertSexe == true ? (
+                  <Text
+                    style={{
+                      width: '100%',
+                      textAlign: 'center',
+                      fontSize: 18,
+                      color: 'red',
+                    }}>
+                    Il vous faut choisir un sexe
+                  </Text>
+                ) : null}
 
                 {Platform.OS == 'ios' ? (
                   <Item stackedLabel style={{marginBottom: 5}}>
@@ -519,7 +607,7 @@ class CreateAccount extends ValidationComponent {
                           <Icon name="chevron-down" type="FontAwesome5" />
                         }
                         selectedValue={this.state.dayDdn}
-                        onValueChange={value => this.onValueDayddn(value)}
+                        onValueChange={(value) => this.onValueDayddn(value)}
                         placeholder={'Jour'}
                         placeholderStyle={{
                           color: ApiUtils.getBackgroundColor(),
@@ -538,7 +626,7 @@ class CreateAccount extends ValidationComponent {
                           borderBottomColor: ApiUtils.getBackgroundColor(),
                           borderBottomWidth: 1,
                         }}>
-                        {this.state.days.map(d => {
+                        {this.state.days.map((d) => {
                           return <Picker.Item label={d} value={d} />;
                         })}
                       </Picker>
@@ -551,7 +639,7 @@ class CreateAccount extends ValidationComponent {
                           <Icon name="chevron-down" type="FontAwesome5" />
                         }
                         selectedValue={this.state.monthDdn}
-                        onValueChange={value => this.onValueMonthddn(value)}
+                        onValueChange={(value) => this.onValueMonthddn(value)}
                         placeholder={'Mois'}
                         placeholderStyle={{
                           color: ApiUtils.getBackgroundColor(),
@@ -584,7 +672,7 @@ class CreateAccount extends ValidationComponent {
                           <Icon name="chevron-down" type="FontAwesome5" />
                         }
                         selectedValue={this.state.yearDdn}
-                        onValueChange={value => this.onValueYearddn(value)}
+                        onValueChange={(value) => this.onValueYearddn(value)}
                         placeholder={'Année'}
                         placeholderStyle={{
                           color: ApiUtils.getBackgroundColor(),
@@ -603,7 +691,7 @@ class CreateAccount extends ValidationComponent {
                           borderBottomColor: ApiUtils.getBackgroundColor(),
                           borderBottomWidth: 1,
                         }}>
-                        {this.state.years.map(year => {
+                        {this.state.years.map((year) => {
                           return <Picker.Item label={year} value={year} />;
                         })}
                       </Picker>
@@ -649,7 +737,7 @@ class CreateAccount extends ValidationComponent {
                             marginLeft: 100,
                           },
                         }}
-                        onDateChange={date => {
+                        onDateChange={(date) => {
                           this.setState({ddnUtilisateur: date});
                         }}
                       />
@@ -664,7 +752,7 @@ class CreateAccount extends ValidationComponent {
                     clearButtonMode="always"
                     textContentType="fullStreetAddress"
                     value={this.state.adresseUtilisateur}
-                    onChangeText={value =>
+                    onChangeText={(value) =>
                       this.setState({adresseUtilisateur: value})
                     }
                   />
@@ -677,7 +765,7 @@ class CreateAccount extends ValidationComponent {
                     clearButtonMode="always"
                     textContentType="postalCode"
                     value={this.state.cpUtilisateur}
-                    onChangeText={value =>
+                    onChangeText={(value) =>
                       this.setState({cpUtilisateur: value})
                     }
                   />
@@ -691,11 +779,141 @@ class CreateAccount extends ValidationComponent {
                     textContentType="addressCity"
                     clearButtonMode="always"
                     value={this.state.villeUtilisateur}
-                    onChangeText={value =>
+                    onChangeText={(value) =>
                       this.setState({villeUtilisateur: value})
                     }
                   />
                 </Item>
+
+                <Text style={styles.label}>Challenge</Text>
+
+                <View
+                  style={{
+                    display: 'flex',
+                    flexDirection: 'row',
+                    width: '100%',
+                    justifyContent: 'space-between',
+                    alignSelf: 'center',
+                  }}>
+                  <TouchableOpacity
+                    style={{
+                      display: 'flex',
+                      flexDirection: 'row',
+                      width: '50%',
+                      justifyContent: 'space-around',
+                    }}
+                    onPress={() =>
+                      this.setState({challengeRadioUtilisateur: 'Actifs'})
+                    }>
+                    <Text>Actifs</Text>
+                    <Radio
+                      selected={
+                        this.state.challengeRadioUtilisateur == 'Actifs'
+                      }
+                      onPress={() =>
+                        this.setState({challengeRadioUtilisateur: 'Actifs'})
+                      }
+                    />
+                  </TouchableOpacity>
+
+                  <TouchableOpacity
+                    style={{
+                      display: 'flex',
+                      flexDirection: 'row',
+                      width: '50%',
+                      justifyContent: 'space-around',
+                    }}
+                    onPress={() =>
+                      this.setState({challengeRadioUtilisateur: 'Etudiants'})
+                    }>
+                    <Text>Etudiants</Text>
+                    <Radio
+                      selected={
+                        this.state.challengeRadioUtilisateur == 'Etudiants'
+                      }
+                      onPress={() =>
+                        this.setState({challengeRadioUtilisateur: 'Etudiants'})
+                      }
+                    />
+                  </TouchableOpacity>
+                </View>
+
+                <Item stackedLabel style={{marginBottom: 20}}>
+                  <Label>Choix de votre équipe</Label>
+                  <Input
+                    ref="equipeUtilisateur"
+                    autoCapitalize="characters"
+                    returnKeyType="next"
+                    textContentType="addressCity"
+                    clearButtonMode="always"
+                    placeholder="Créer votre équipe"
+                    value={this.state.equipeUtilisateur}
+                    onChangeText={(value) =>
+                      this.setState({equipeUtilisateur: value})
+                    }
+                  />
+                </Item>
+                {this.state.alertClub == true ? (
+                  <Text
+                    style={{
+                      width: '100%',
+                      textAlign: 'center',
+                      fontSize: 18,
+                      color: 'red',
+                    }}>
+                    Ce club existe déjà, veuillez choisir un autre nom !
+                  </Text>
+                ) : null}
+                <Text style={{width: '100%', textAlign: 'center'}}>Ou</Text>
+                <View>
+                  <Picker
+                    mode="dropdown"
+                    accessibilityLabel={'Choisissez votre équipe'}
+                    iosHeader={'Choisissez votre équipe'}
+                    iosIcon={<Icon name="chevron-down" type="FontAwesome5" />}
+                    style={{marginTop: 0}}
+                    selectedValue={this.state.equipeChoiceUtilisateur}
+                    onValueChange={this.onChangeChoiceEquipe.bind(this)}
+                    placeholder={'Choisissez votre équipe'}
+                    placeholderStyle={{
+                      color: ApiUtils.getBackgroundColor(),
+                    }}
+                    placeholderIconColor={ApiUtils.getBackgroundColor()}
+                    textStyle={{color: ApiUtils.getBackgroundColor()}}
+                    itemStyle={{
+                      color: ApiUtils.getBackgroundColor(),
+                      marginLeft: 0,
+                      paddingLeft: 10,
+                      borderBottomColor: ApiUtils.getBackgroundColor(),
+                      borderBottomWidth: 1,
+                    }}
+                    itemTextStyle={{
+                      color: ApiUtils.getBackgroundColor(),
+                      borderBottomColor: ApiUtils.getBackgroundColor(),
+                      borderBottomWidth: 1,
+                    }}>
+                    <Picker.Item label="Choisissez votre équipe" value="-1" />
+                    {this.state.fetchClub.map((fetchEquipe) => {
+                      return fetchEquipe.nbUsers < 5 ? (
+                        <Picker.Item
+                          label={fetchEquipe.nom}
+                          value={fetchEquipe.nom}
+                        />
+                      ) : null;
+                    })}
+                  </Picker>
+                </View>
+                {this.state.alertEquipe == true ? (
+                  <Text
+                    style={{
+                      width: '100%',
+                      textAlign: 'center',
+                      fontSize: 18,
+                      color: 'red',
+                    }}>
+                    Vous n'avez choisis aucune équipe !
+                  </Text>
+                ) : null}
               </Form>
 
               <View
@@ -709,7 +927,7 @@ class CreateAccount extends ValidationComponent {
                 }}>
                 <Switch
                   style={{paddingTop: 20}}
-                  onValueChange={text =>
+                  onValueChange={(text) =>
                     this.setState({acceptChallengenameUtilisateur: text})
                   }
                   value={this.state.acceptChallengenameUtilisateur}
@@ -725,6 +943,45 @@ class CreateAccount extends ValidationComponent {
                     J'accepte que mon nom apparaisse dans le classement
                   </Text>
                 </TouchableOpacity>
+              </View>
+
+              <View
+                style={{
+                  marginTop: 20,
+                  paddingLeft: 10,
+                  width: '80%',
+                  display: 'flex',
+                  flexDirection: 'row',
+                  justifyContent: 'space-between',
+                }}>
+                <Switch
+                  ref="acceptChallengeUtilisateur"
+                  style={{paddingTop: 20}}
+                  onValueChange={(text) =>
+                    this.setState({acceptChallengeUtilisateur: text})
+                  }
+                  value={this.state.acceptChallengeUtilisateur}
+                />
+                <TouchableOpacity
+                  onPress={() =>
+                    this.setState({
+                      acceptChallengeUtilisateur: !this.state
+                        .acceptChallengeUtilisateur,
+                    })
+                  }>
+                  <Text style={{marginLeft: 10}}>
+                    Je reconnais être en autonomie le jour de ma participation à
+                    l’évènement, être responsable de ma sécurité et celle de mon
+                    équipe, respecter une éthique sportive et avoir pris
+                    connaissance du règlement.
+                  </Text>
+                </TouchableOpacity>
+                {this.isFieldInError('acceptChallengeUtilisateur') &&
+                  this.getErrorsInField(
+                    'acceptChallengeUtilisateur',
+                  ).map((errorMessage) => (
+                    <Text style={styles.error}>{errorMessage}</Text>
+                  ))}
               </View>
 
               {this.state.isLoading ? (
@@ -752,10 +1009,7 @@ class CreateAccount extends ValidationComponent {
                     },
                   ]}
                   onPress={() => this.onClickValidate()}>
-                  <Text
-                    style={[
-                      {textAlign: 'center', color: 1 == 1 ? 'black' : 'black'},
-                    ]}>
+                  <Text style={{textAlign: 'center', color: 'white'}}>
                     ENREGISTRER
                   </Text>
                 </TouchableOpacity>
@@ -792,7 +1046,7 @@ class CreateAccount extends ValidationComponent {
 
 const styles = StyleSheet.create({
   header: {
-    backgroundColor: 'white',
+    backgroundColor: '#2B3990',
     // backgroundColor: ApiUtils.getBackgroundColor(),
     width: '100%',
   },
@@ -824,7 +1078,7 @@ const styles = StyleSheet.create({
     paddingLeft: 0,
   },
   saveText: {
-    color: 'black',
+    color: 'white',
     paddingLeft: 0,
     marginLeft: 5,
     marginRight: -5,

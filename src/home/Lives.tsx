@@ -528,7 +528,7 @@ class Lives extends Component<Props, State> {
   openStorePage() {
     let url =
       Platform.OS === 'android'
-        ? 'https://play.google.com/store/apps/details?id=com.fouleeblanche.app'
+        ? 'https://play.google.com/store/apps/details?id=com.dag.digiraidinp.app'
         : 'https://apps.apple.com/fr/app/la-foul%C3%A9e-blanche/id1546257921';
     Linking.openURL(url);
   }
@@ -537,7 +537,7 @@ class Lives extends Component<Props, State> {
     const formData = new FormData();
     formData.append('method', 'getInformationStation');
     formData.append('auth', ApiUtils.getAPIAuth());
-    formData.append('idStation', '36');
+    formData.append('idStation', '51');
     //fetch followCode API
 
     fetch(ApiUtils.getAPIUrl(), {
@@ -646,11 +646,7 @@ class Lives extends Component<Props, State> {
   }
 
   getSport(idSport) {
-    if (idSport == 14) {
-      return 'CLASSIQUE';
-    } else {
-      return 'SKATING';
-    }
+    return 'RAID';
   }
 
   getnbInvites(live) {
@@ -721,7 +717,7 @@ class Lives extends Component<Props, State> {
           }>
           <Container>
             <Header style={styles.header}>
-              <Left style={{flex: 1}}>
+              <Left style={{flex: 1, width: '20%'}}>
                 <TouchableOpacity
                   style={styles.drawerButton}
                   onPress={() => this.onDrawer()}>
@@ -732,19 +728,8 @@ class Lives extends Component<Props, State> {
                   />
                 </TouchableOpacity>
               </Left>
-              <Body style={{flex: 0}} />
-              <Right style={{flex: 1}}>
+              <Right style={{flex: 1, width: '80%'}}>
                 <Image resizeMode="contain" source={Logo} style={styles.logo} />
-                <Autrans
-                  width={'40%'}
-                  height={50}
-                  style={{
-                    alignSelf: 'center',
-                    opacity: 1,
-                    marginLeft: 10,
-                    marginBottom: 5,
-                  }}
-                />
               </Right>
             </Header>
 
@@ -1011,21 +996,6 @@ class Lives extends Component<Props, State> {
               }
             </TouchableHighlight>
 
-            <Sponsors />
-
-            <Modal
-              visible={
-                !this.props.isOkPopupBAttery || this.state.isOpenModalHelp
-              }>
-              <Container style={{flex: 1}}>
-                <View style={{flex: 1}}>
-                  <Help noHeader={true} />
-
-                  {/* <View style={{height: 300}} /> */}
-                </View>
-              </Container>
-            </Modal>
-
             <Modal
               visible={
                 !this.props.isOkPopupBAttery2 && this.props.isOkPopupBAttery
@@ -1073,7 +1043,7 @@ class Lives extends Component<Props, State> {
                       </Button>
                     </Left>
                     <Body style={{justifyContent: 'center', flex: 1}}>
-                      <Text style={{fontWeight: 'bold'}}>
+                      <Text style={{fontWeight: 'bold', color: 'white'}}>
                         Démarrer une activité
                       </Text>
                     </Body>
@@ -1085,15 +1055,15 @@ class Lives extends Component<Props, State> {
                       <View>
                         <Picker
                           mode="dropdown"
-                          accessibilityLabel={'Choisissez le type de glisse'}
-                          iosHeader={'Choisissez le type de glisse'}
+                          accessibilityLabel={"Choisissez le type d'activité"}
+                          iosHeader={"Choisissez le type d'activité"}
                           iosIcon={
                             <Icon name="chevron-down" type="FontAwesome5" />
                           }
                           style={{marginTop: 0}}
                           selectedValue={this.state.selectedSport}
                           onValueChange={this.onValueSportChange.bind(this)}
-                          placeholder={'Choisissez le type de glisse'}
+                          placeholder={"Choisissez le type d'activité"}
                           placeholderStyle={{
                             color: ApiUtils.getBackgroundColor(),
                           }}
@@ -1112,11 +1082,10 @@ class Lives extends Component<Props, State> {
                             borderBottomWidth: 1,
                           }}>
                           <Picker.Item
-                            label="Choisissez le type de glisse"
+                            label="Choisissez le type d'activité"
                             value="-1"
                           />
-                          <Picker.Item label={'CLASSIQUE'} value="14" />
-                          <Picker.Item label={'SKATING'} value="15" />
+                          <Picker.Item label={'RAID'} value="16" />
                         </Picker>
 
                         {this.state.selectedSport == -1 ? (
@@ -1128,7 +1097,7 @@ class Lives extends Component<Props, State> {
                               paddingLeft: 5,
                               fontStyle: 'italic',
                             }}>
-                            Le type de glisse doit être renseigné
+                            Le type d'activité doit être renseigné
                           </Text>
                         ) : null}
                       </View>
@@ -1180,7 +1149,6 @@ class Lives extends Component<Props, State> {
                   />
                 </View>
               </Root>
-              <Sponsors />
               {/* ) : null} */}
             </Modal>
           </Container>
@@ -1192,7 +1160,7 @@ class Lives extends Component<Props, State> {
 
 const styles = StyleSheet.create({
   header: {
-    backgroundColor: 'white',
+    backgroundColor: '#2B3990',
     width: '100%',
     borderBottomColor: '#D3D3D3',
     borderBottomWidth: 1,
@@ -1217,7 +1185,7 @@ const styles = StyleSheet.create({
     elevation: 0,
   },
   saveText: {
-    color: 'black',
+    color: 'white',
   },
   container: {
     flex: 1,
@@ -1254,7 +1222,7 @@ const styles = StyleSheet.create({
   logo: {
     width: '100%',
     height: 70,
-    alignSelf: 'center',
+    marginRight: '50%',
   },
   p: {
     fontSize: 12,
@@ -1286,7 +1254,7 @@ const styles = StyleSheet.create({
     // paddingLeft: 18,
     position: 'absolute',
     right: 20,
-    bottom: 120,
+    bottom: 20,
     justifyContent: 'center',
   },
   plusButtonLogo: {
@@ -1303,7 +1271,7 @@ const styles = StyleSheet.create({
     height: 215,
   },
   headerModal: {
-    backgroundColor: 'white',
+    backgroundColor: '#2B3990',
     paddingLeft: 10,
     paddingTop: 0,
     paddingBottom: 5,

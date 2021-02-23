@@ -35,7 +35,7 @@ import BackgroundGeolocation, {
   DeviceSettingsRequest,
 } from 'react-native-background-geolocation';
 import {Dimensions} from 'react-native';
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
   return {
     userData: state.userData,
   };
@@ -79,36 +79,6 @@ class BatteryModal extends Component {
 
   ongoHome() {
     this.props.navigation.navigate('Home');
-  }
-
-  getClubs() {
-    this.setState({isLoading: true});
-    let formData = new FormData();
-    formData.append('method', 'getClubs');
-    formData.append('auth', ApiUtils.getAPIAuth());
-
-    //fetch followCode API
-    fetch(ApiUtils.getAPIUrl(), {
-      method: 'POST',
-      headers: {
-        // Accept: 'application/json',
-        // 'Content-Type': 'application/json',
-      },
-      body: formData,
-    })
-      .then(ApiUtils.checkStatus)
-      .then(response => response.json())
-      .then(responseJson => {
-        var action = {type: 'GET_CLUBS', data: responseJson};
-        this.props.dispatch(action);
-
-        this.setState({isLoading: false});
-      })
-      .catch(e => {
-        this.setState({isLoading: false});
-        ApiUtils.logError('getCLUBS', e.message);
-      })
-      .then(() => this.setState({isLoading: false}));
   }
 
   isErrorForm() {
@@ -185,7 +155,7 @@ class BatteryModal extends Component {
   }
 
   openLink(url) {
-    Linking.canOpenURL(url).then(supported => {
+    Linking.canOpenURL(url).then((supported) => {
       if (supported) {
         Linking.openURL(url);
       } else {
@@ -195,8 +165,8 @@ class BatteryModal extends Component {
   }
 
   onClose = () => {
-      this.props.onclose && this.props.onclose();
-  }
+    this.props.onclose && this.props.onclose();
+  };
 
   alet() {
     BackgroundGeolocation.deviceSettings
@@ -204,9 +174,7 @@ class BatteryModal extends Component {
       .then((request: DeviceSettingsRequest) => {
         console.log(`- Screen seen? ${request.seen} ${request.lastSeenAt}`);
         console.log(
-          `- Device: ${request.manufacturer} ${request.model} ${
-            request.version
-          }`,
+          `- Device: ${request.manufacturer} ${request.model} ${request.version}`,
         );
 
         // If we've already shown this screen to the user, we don't want to annoy them.
@@ -217,7 +185,7 @@ class BatteryModal extends Component {
         // User clicked [Confirm] button.  Execute the redirect to settings screen:
         BackgroundGeolocation.deviceSettings.show(request);
       })
-      .catch(error => {
+      .catch((error) => {
         // Depending on Manufacturer/Model/OS Version, a Device may not implement
         // a particular Settings screen.
         console.log(error);
@@ -226,7 +194,7 @@ class BatteryModal extends Component {
   render() {
     return (
       <Drawer
-        ref={ref => {
+        ref={(ref) => {
           this.drawer = ref;
         }}
         content={
@@ -265,7 +233,7 @@ class BatteryModal extends Component {
                     <Icon
                       style={styles.saveText}
                       name="chevron-left"
-                        type="FontAwesome5"
+                      type="FontAwesome5"
                     />
                   </TouchableOpacity>
                 </Left>
@@ -275,18 +243,6 @@ class BatteryModal extends Component {
             ) : null}
 
             <Content style={{padding: 10, paddingTop: 20}} scrollEnabled={true}>
-              <View style={[GlobalStyles.row, {justifyContent: 'center'}]}>
-                <Image resizeMode="contain" source={Logo} style={styles.logo} />
-                <Autrans
-                  width={'25%'}
-                  height={50}
-                  style={{
-                    opacity: 1,
-                    marginLeft: 1,
-                    marginBottom: 5,
-                  }}
-                />
-              </View>
               <Text
                 style={{
                   textAlign: 'center',
@@ -363,7 +319,8 @@ class BatteryModal extends Component {
                   <Text> 3. Cliquer sur "Lancement d'application"</Text>
                   <Text>
                     {' '}
-                    4. Rechercher et désactiver l’appli « Foulée Blanche »{' '}
+                    4. Rechercher et désactiver l’appli « DigiRAID Grenoble INP
+                    »{' '}
                   </Text>
                   <Text>
                     5. Cliquer sur OK en vérifiant que tout soit activé
@@ -378,7 +335,7 @@ class BatteryModal extends Component {
                   <Text> 2. Cliquer sur "Maintenance de l'appareil"</Text>
                   <Text> 3. Cliquer sur "Batterie"</Text>
                   <Text> 5. Cliquer sur "Ajouter des applications"</Text>
-                  <Text>6.Sélectionner l’appli « Foulée Blanche »</Text>
+                  <Text>6.Sélectionner l’appli « DigiRAID Grenoble INP »</Text>
                   <Text>Cliquer sur "Terminé"</Text>
 
                   <Text style={{fontWeight: 'bold', marginTop: 10}}>
@@ -390,7 +347,7 @@ class BatteryModal extends Component {
                   <Text> 2. Cliquer sur "Maintenance de l'appareil"</Text>
                   <Text> 3. Cliquer sur "Batterie"</Text>
                   <Text> 5. Cliquer sur "Ajouter des applications"</Text>
-                  <Text>6.Sélectionner l’appli « Foulée Blanche »</Text>
+                  <Text>6.Sélectionner l’appli « DigiRAID Grenoble INP »</Text>
                   <Text>Cliquer sur "Terminé"</Text>
 
                   <Text style={{fontWeight: 'bold', marginTop: 10}}>
@@ -411,9 +368,9 @@ class BatteryModal extends Component {
                   </Text>
                   <Text>8. Cliquer sur "Applications en veille" </Text>
                   <Text>
-                    9. Vérifier que l'application l’appli « Foulée Blanche » ne
-                    soit pas dans la liste, sinon supprimer-là à l'aide de la
-                    corbeille en haut à droite{' '}
+                    9. Vérifier que l'application l’appli « DigiRAID Grenoble
+                    INP » ne soit pas dans la liste, sinon supprimer-là à l'aide
+                    de la corbeille en haut à droite{' '}
                   </Text>
 
                   <Text style={{fontWeight: 'bold', marginTop: 10}}>
@@ -427,20 +384,20 @@ class BatteryModal extends Component {
                   <Text>1. Aller dans “Paramètres”</Text>
                   <Text>2. Cliquer sur “Batterie”</Text>
                   <Text>3. Cliquer sur “Détails”</Text>
-                  <Text>4. Cliquer sur l’appli « Foulée Blanche »</Text>
-                  <Text>5. Désactivé l’appli « Foulée Blanche »</Text>
+                  <Text>4. Cliquer sur l’appli « DigiRAID Grenoble INP »</Text>
+                  <Text>5. Désactivé l’appli « DigiRAID Grenoble INP »</Text>
 
                   <Text style={{fontWeight: 'bold', marginTop: 10}}>
                     HONOR (8, 9, 10, …)
                   </Text>
                   <Text>1. Aller dans “Réglages”</Text>
                   <Text>2. Cliquer sur “Batterie”</Text>
-                  <Text>
-                    3. Cliquer sur “Lancement d'application”
-                  </Text>
-                  <Text>4. Chercher "la foulée blanche"</Text>
+                  <Text>3. Cliquer sur “Lancement d'application”</Text>
+                  <Text>4. Chercher "DigiRAID Grenoble INP"</Text>
                   <Text>5. Désélectionner la checkbox</Text>
-                  <Text>5. Sélectionner les 3 champs qui vont s'afficher en popup</Text>
+                  <Text>
+                    5. Sélectionner les 3 champs qui vont s'afficher en popup
+                  </Text>
 
                   <Text style={{fontWeight: 'bold', marginTop: 10}}>
                     {' '}
@@ -449,7 +406,8 @@ class BatteryModal extends Component {
                   <Text>1. Aller dans "Paramètres"</Text>
                   <Text>2. Cliquer sur "Gérer les applications"</Text>
                   <Text>
-                    3. Rechercher et cliquer sur l’appli « Foulée Blanche »
+                    3. Rechercher et cliquer sur l’appli « DigiRAID Grenoble INP
+                    »
                   </Text>
                   <Text>4. Activer "Démarrage automatique"</Text>
                   <Text>5. Une fenêtre s'ouvre, cliquer sur "OK"</Text>
@@ -472,7 +430,7 @@ class BatteryModal extends Component {
                   <Text>6. Désactiver "Nettoyage suspendu"</Text>
                   <Text>7. Retourner sur la page précédente (Réglages)</Text>
                   <Text>8. Cliquer sur "Gestionnaire de démarrage"</Text>
-                  <Text>9. Activer l’appli « Foulée Blanche »</Text>
+                  <Text>9. Activer l’appli « DigiRAID Grenoble INP »</Text>
                   <Text>10. Cliquer sur "Autoriser"</Text>
 
                   <Text style={{fontWeight: 'bold', marginTop: 10}}>
@@ -490,7 +448,7 @@ class BatteryModal extends Component {
                   <Text>
                     8. Cliquer sur "White-list des apps en arrière-plan"
                   </Text>
-                  <Text>9. Activer l’appli « Foulée Blanche » </Text>
+                  <Text>9. Activer l’appli « DigiRAID Grenoble INP » </Text>
 
                   <Text style={{fontWeight: 'bold', marginTop: 10}}>
                     ONEPLUS (6 et plus...)
@@ -498,7 +456,7 @@ class BatteryModal extends Component {
                   <Text>1. Aller dans "Paramètres"</Text>
                   <Text>2. Cliquer sur "Batterie"</Text>
                   <Text>3. Cliquer sur "Optimisation de la batterie"</Text>
-                  <Text>4. Sélectionner l’appli « Foulée Blanche »</Text>
+                  <Text>4. Sélectionner l’appli « DigiRAID Grenoble INP »</Text>
                   <Text>5. Sélectionner "Ne pas optimiser"</Text>
                 </View>
               ) : (
@@ -512,7 +470,9 @@ class BatteryModal extends Component {
                     localisation :
                   </Text>
                   <Text>1. Ouvrez les paramètres de votre téléphone</Text>
-                  <Text>2. Accédez à "La foulée blanche {'>'} Position"</Text>
+                  <Text>
+                    2. Accédez à "DigiRAID Grenoble INP {'>'} Position"
+                  </Text>
                   <Text>
                     3. Sélectionnez “Lorsque l’app est active” et réglez
                     “Position exacte” sur ON (voir capture d'écran ci-dessous)
@@ -539,7 +499,9 @@ class BatteryModal extends Component {
                     localisation :
                   </Text>
                   <Text>1. Ouvrez les paramètres de votre téléphone</Text>
-                  <Text>2. Accédez à "La foulée blanche {'>'} Position"</Text>
+                  <Text>
+                    2. Accédez à "DigiRAID Grenoble INP {'>'} Position"
+                  </Text>
                   <Text>
                     3. Sélectionnez “Lorsque l’app est active” (voir capture
                     d'écran ci-dessous)
@@ -558,7 +520,7 @@ class BatteryModal extends Component {
                   />
                 </View>
               )}
-              
+
               {this.props.noHeader ? (
                 <Text style={{textAlign: 'center', marginTop: 10}}>
                   Vous retrouverez ces informations dans le menu d'aide
@@ -591,7 +553,6 @@ class BatteryModal extends Component {
               ) : null}
               <View style={{marginBottom: 100}} />
             </Content>
-            <Sponsors />
           </Root>
         </Container>
       </Drawer>
@@ -601,7 +562,7 @@ class BatteryModal extends Component {
 
 const styles = StyleSheet.create({
   header: {
-    backgroundColor: 'white',
+    backgroundColor: '#2B3990',
     // width: '100%'
   },
   title: {
@@ -626,7 +587,7 @@ const styles = StyleSheet.create({
     elevation: 0,
   },
   saveText: {
-    color: 'black',
+    color: 'white',
   },
   body: {
     width: '100%',

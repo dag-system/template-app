@@ -59,15 +59,6 @@ export default class Navigator extends Component {
           />
 
           <Stack.Screen
-            name="Help"
-            component={Help}
-            headerMode="none"
-            options={{
-              animationEnabled: false,
-            }}
-          />
-
-          <Stack.Screen
             name="Partenaires"
             component={Partenaires}
             headerMode="none"
@@ -79,6 +70,15 @@ export default class Navigator extends Component {
           <Stack.Screen
             name="Classement"
             component={Classement}
+            headerMode="none"
+            options={{
+              animationEnabled: false,
+            }}
+          />
+
+          <Stack.Screen
+            name="Help"
+            component={Help}
             headerMode="none"
             options={{
               animationEnabled: false,

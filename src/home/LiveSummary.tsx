@@ -153,14 +153,13 @@ class LiveSummary extends Component<Props, State> {
 
         this.props.dispatch(action);
 
-        let libelleSport = 'SKATING';
-        if (responseJson.idSport == 14) libelleSport = 'CLASSIQUE';
+        let libelleSport = 'RAID';
+        if (responseJson.idSport == 16) libelleSport = 'RAID';
 
         this.setState({libelleSport: libelleSport});
 
         if (responseJson.IsImportedFromGpx == 1) {
           this.getGpxPoint(responseJson.gpxLive);
-
         } else {
           this.saveCoordinates(
             responseJson.positions.tracks[0].trkseg[0].points,
@@ -269,7 +268,7 @@ class LiveSummary extends Component<Props, State> {
       })
       .catch((e) => alert(e));
   }
-  
+
   onClickDownloadGpx(url, name) {
     this.downloadFile(url, name);
   }
@@ -390,12 +389,12 @@ class LiveSummary extends Component<Props, State> {
 
     ShareRn.share(
       {
-        message: 'Découvrez mon activité à la Foulée Blanche  : ' + url,
-        title: 'Découvrez mon activité à la Foulée Blanche !',
+        message: 'Découvrez mon activité DigiRAID Grenoble INP  : ' + url,
+        title: 'Découvrez mon activité DigiRAID Grenoble INP !',
       },
       {
         // Android only:
-        dialogTitle: 'Découvrez mon activité à la Foulée Blanche ! ',
+        dialogTitle: 'Découvrez mon activité DigiRAID Grenoble INP ! ',
       },
     );
   }
@@ -425,12 +424,12 @@ class LiveSummary extends Component<Props, State> {
 
   share = (base64image) => {
     let shareOptions = {
-      title: 'Découvrez mon activité à la Foulée Blanche',
+      title: 'Découvrez mon activité DigiRAID Grenoble INP',
       url: base64image,
       message:
         'https://www.folomi.fr/s/compte/partage-fouleeblanche.php?c=' +
         this.state.live.codeLive,
-      subject: 'Découvrez mon activité à la Foulée Blanche',
+      subject: 'Découvrez mon activité DigiRAID Grenoble INP',
     };
 
     Share.open(shareOptions)
@@ -665,16 +664,6 @@ class LiveSummary extends Component<Props, State> {
             <Body style={{flex: 0}} />
             <Right style={{flex: 1}}>
               <Image resizeMode="contain" source={Logo} style={styles.logo} />
-              <Autrans
-                width={'40%'}
-                height={50}
-                style={{
-                  alignSelf: 'center',
-                  opacity: 1,
-                  marginLeft: 10,
-                  marginBottom: 5,
-                }}
-              />
             </Right>
           </Header>
           <Content style={styles.body} scrollEnabled={true}>
@@ -692,7 +681,8 @@ class LiveSummary extends Component<Props, State> {
                       style={{
                         textAlign: 'center',
                       }}>
-                      Votre challenge Foulée Blanche est en cours de calcul.
+                      Votre challenge DigiRAID Grenoble INP est en cours de
+                      calcul.
                     </Text>
                   </TouchableOpacity>
                   <TouchableOpacity
@@ -706,14 +696,12 @@ class LiveSummary extends Component<Props, State> {
                         marginTop: 10,
                       }}>
                       Cliquez ici plus tard pour recevoir un résumé de votre
-                      Challenge Foulée Blanche
+                      Challenge DigiRAID Grenoble INP
                     </Text>
                   </TouchableOpacity>
                   <TouchableOpacity
                     onPress={() =>
-                      Linking.openURL(
-                        'https://www.lafouleeblanche.com/resultats-2021/',
-                      )
+                      Linking.openURL('https://www.grenoble-inp.fr/')
                     }>
                     <Text style={{textAlign: 'center', marginTop: 10}}>
                       (Résultats plus complets sur
@@ -724,7 +712,7 @@ class LiveSummary extends Component<Props, State> {
                         textDecorationLine: 'underline',
                       }}>
                       {' '}
-                      https://www.lafouleeblanche.com/resultats-2021/)
+                      https://www.grenoble-inp.fr/)
                     </Text>
                   </TouchableOpacity>
                 </View>
@@ -738,9 +726,9 @@ class LiveSummary extends Component<Props, State> {
                     <View style={{marginTop: 10}}>
                       <Text
                         style={{textAlign: 'center', paddingHorizontal: 12}}>
-                        Patientez, votre challenge Foulée Blanche est toujours
-                        en cours de calcul. Voici en attendant votre activité
-                        globale de votre journée
+                        Patientez, votre challenge DigiRAID Grenoble INP est
+                        toujours en cours de calcul. Voici en attendant votre
+                        activité globale de votre journée
                       </Text>
                       <TouchableOpacity
                         onPress={() =>
@@ -753,15 +741,13 @@ class LiveSummary extends Component<Props, State> {
                             marginTop: 10,
                           }}>
                           Cliquez ici plus tard pour recevoir un résumé de votre
-                          Challenge Foulée Blanche
+                          Challenge DigiRAID Grenoble INP
                         </Text>
                       </TouchableOpacity>
 
                       <TouchableOpacity
                         onPress={() =>
-                          Linking.openURL(
-                            'https://www.lafouleeblanche.com/resultats-2021/',
-                          )
+                          Linking.openURL('https://www.grenoble-inp.fr/')
                         }>
                         <Text style={{textAlign: 'center', marginTop: 10}}>
                           (Résultats plus complets sur
@@ -772,7 +758,7 @@ class LiveSummary extends Component<Props, State> {
                             textDecorationLine: 'underline',
                           }}>
                           {' '}
-                          https://www.lafouleeblanche.com/resultats-2021/)
+                          https://www.grenoble-inp.fr/)
                         </Text>
                       </TouchableOpacity>
                     </View>
@@ -794,7 +780,7 @@ class LiveSummary extends Component<Props, State> {
                           color: ApiUtils.getBackgroundColor(),
                           // backgroundColor: '#E6E6E6',
                         }}>
-                        Challenge Foulée Blanche
+                        Challenge DigiRAID Grenoble INP
                       </Text>
 
                       {this.state.live.segmentEfforts.map((segment) => {
@@ -904,7 +890,7 @@ class LiveSummary extends Component<Props, State> {
                           marginTop: 10,
                           marginBottom: 10,
                         }}>
-                        Aucun challenge "La foulée blanche" détécté
+                        Aucun challenge "DigiRAID Grenoble INP" détécté
                       </Text>
                     </View>
                   ) : null}
@@ -961,8 +947,8 @@ class LiveSummary extends Component<Props, State> {
                     // onPress={(coordinate) => { this.showMapFullSize() }}
                     toolbarEnabled={false}
                     initialRegion={{
-                      latitude: 45.1667, // 44.843884,
-                      longitude: 5.55,
+                      latitude: 45.19080336677786, // 44.843884,
+                      longitude: 5.717292753977742,
                       latitudeDelta: LATITUDE_DELTA,
                       longitudeDelta: LONGITUDE_DELTA,
                     }}
@@ -1361,7 +1347,6 @@ class LiveSummary extends Component<Props, State> {
 
             {/* </View> */}
           </Content>
-          <Sponsors />
           {/******** modal5 : Traces list  *****************/}
           <ModalSmall
             isVisible={this.state.isModalTraceVisible}
@@ -1567,7 +1552,7 @@ class LiveSummary extends Component<Props, State> {
 
 const styles = StyleSheet.create({
   header: {
-    backgroundColor: 'white',
+    backgroundColor: '#2B3990',
     width: '100%',
     borderBottomColor: '#D3D3D3',
     borderBottomWidth: 1,
@@ -1597,7 +1582,7 @@ const styles = StyleSheet.create({
   logo: {
     width: '100%',
     height: 50,
-    alignSelf: 'center',
+    marginRight: '50%',
   },
   bold: {
     fontWeight: 'bold',
@@ -1622,7 +1607,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   saveText: {
-    color: 'black',
+    color: 'white',
     paddingLeft: 0,
     marginLeft: 5,
     marginRight: -5,

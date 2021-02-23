@@ -7,6 +7,7 @@
     "android-d": "npx react-native run-android",
     "ios": "npx react-native run-ios",
     "android": "cd android && ./gradlew clean && ./gradlew assembleRelease && cd ..",
+    "android:windows": "cd android && gradlew clean && gradlew assembleRelease && cd ..",
     "start": "react-native start",
     "test": "jest",
     "lint": "eslint .",

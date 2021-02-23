@@ -1,5 +1,11 @@
 import React from 'react';
-import {StyleSheet, View, Image, TouchableOpacity,Keyboard} from 'react-native';
+import {
+  StyleSheet,
+  View,
+  Image,
+  TouchableOpacity,
+  Keyboard,
+} from 'react-native';
 import {
   Container,
   Header,
@@ -24,8 +30,7 @@ import defaultMessages from './defaultMessages';
 import GlobalStyles from '../styles';
 import ValidationComponent from 'react-native-form-validator';
 
-
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
   return {
     userData: state.userData,
     folocodes: state.folocodes,
@@ -57,9 +62,9 @@ class ForgotPassword extends ValidationComponent {
     var isValid = this.validate({
       emailUtilisateur: {email: true, required: true},
     });
-    Keyboard.dismiss()
+    Keyboard.dismiss();
 
-    this.setState({folocodes : [], selectedFolocode :-1});
+    this.setState({folocodes: [], selectedFolocode: -1});
 
     if (isValid) {
       this.onSendRequest();
@@ -88,8 +93,8 @@ class ForgotPassword extends ValidationComponent {
         body: formData,
       })
         .then(ApiUtils.checkStatus)
-        .then(response => response.json())
-        .then(responseJson => {
+        .then((response) => response.json())
+        .then((responseJson) => {
           // alert("success http");
           //save values in cache
 
@@ -104,16 +109,17 @@ class ForgotPassword extends ValidationComponent {
             alert("Votre folocode n'est pas valide");
           }
         })
-        .catch(e => {
+        .catch((e) => {
           this.setState({isLoading: false});
           ApiUtils.logError('login', JSON.stringify(e.message));
           // alert('Une erreur est survenue : ' + JSON.stringify(e.message));
-  
+
           if (e.message == 'Timeout' || e.message == 'Network request failed') {
             this.setState({noConnection: true});
-  
+
             Toast.show({
-              text: "Vous n'avez pas de connection internet, merci de réessayer",
+              text:
+                "Vous n'avez pas de connection internet, merci de réessayer",
               buttonText: 'Ok',
               type: 'danger',
               position: 'bottom',
@@ -136,8 +142,8 @@ class ForgotPassword extends ValidationComponent {
       body: formData,
     })
       .then(ApiUtils.checkStatus)
-      .then(response => response.json())
-      .then(responseJson => {
+      .then((response) => response.json())
+      .then((responseJson) => {
         if (responseJson.codeErreur == 'SUCCESS') {
           var folocodes = Object.values(responseJson);
           this.setState({folocodes: folocodes});
@@ -157,7 +163,7 @@ class ForgotPassword extends ValidationComponent {
           });
         }
       })
-      .catch(e => {
+      .catch((e) => {
         this.setState({spinner: false});
         ApiUtils.logError('create live', JSON.stringify(e.message));
         if (e.message == 'Timeout' || e.message == 'Network request failed') {
@@ -229,27 +235,28 @@ class ForgotPassword extends ValidationComponent {
 
           <View style={styles.loginButtonSection}>
             <Text style={{textAlign: 'justify'}}>
-              Entrez votre email ci-dessous pour récuperer votre foulée code
+              Entrez votre email ci-dessous pour récuperer votre code
             </Text>
 
             <Item stackedLabel style={{marginBottom: 5, marginTop: 20}}>
               <Label>Email *</Label>
               <Input
-           
-           ref={ (c) => this.input = c }
-          //  ref={this.input} 
-              // ref={(c) => {
-              //   this.emailInput = c;
-              // }}
+                ref={(c) => (this.input = c)}
+                //  ref={this.input}
+                // ref={(c) => {
+                //   this.emailInput = c;
+                // }}
 
                 returnKeyType="next"
                 clearButtonMode="always"
                 value={this.state.emailUtilisateur}
-                onChangeText={value => this.setState({emailUtilisateur: value})}
+                onChangeText={(value) =>
+                  this.setState({emailUtilisateur: value})
+                }
               />
             </Item>
             {this.isFieldInError('emailUtilisateur') &&
-              this.getErrorsInField('emailUtilisateur').map(errorMessage => (
+              this.getErrorsInField('emailUtilisateur').map((errorMessage) => (
                 <Text style={styles.error}>{errorMessage}</Text>
               ))}
 
@@ -263,19 +270,21 @@ class ForgotPassword extends ValidationComponent {
 
             {this.state.folocodes.length > 0 ? (
               <View>
-                <Text style={{textAlign: 'center', marginTop :  10}}>Vos foulée codes</Text>
+                <Text style={{textAlign: 'center', marginTop: 10}}>
+                  Vos codes
+                </Text>
 
                 {/* {this.state.folocodes.map()} */}
 
                 <Picker
                   style={{width: 300}}
                   mode="dropdown"
-                  accessibilityLabel={'Choisir le Foulée Code'}
-                  iosHeader={'Choisir le Foulée Code'}
+                  accessibilityLabel={'Choisir le Code'}
+                  iosHeader={'Choisir le Code'}
                   iosIcon={<Icon name="chevron-down" type="FontAwesome5" />}
                   selectedValue={this.state.selectedFolocode}
                   onValueChange={this.onValueFolocodeChange.bind(this)}
-                  placeholder={'Choisissez le Foulée Code'}
+                  placeholder={'Choisissez le Code'}
                   placeholderStyle={{
                     color: ApiUtils.getBackgroundColor(),
                   }}
@@ -293,10 +302,10 @@ class ForgotPassword extends ValidationComponent {
                     borderBottomColor: ApiUtils.getBackgroundColor(),
                     borderBottomWidth: 1,
                   }}>
-                  <Picker.Item label="Choisissez le Foulée Code" value={-1} />
+                  <Picker.Item label="Choisissez le Code" value={-1} />
                   {this.state.folocodes
-                    .filter(f => f.folocodeUtilisateur != undefined)
-                    .map(folocode => {
+                    .filter((f) => f.folocodeUtilisateur != undefined)
+                    .map((folocode) => {
                       return (
                         <Picker.Item
                           label={
@@ -313,52 +322,52 @@ class ForgotPassword extends ValidationComponent {
                 </Picker>
 
                 {this.state.selectedFolocode != -1 ? (
-               <View
-               style={{
-                 flexDirection: 'row',
-                 justifyContent: 'center',
-                 alignSelf: 'center',
-               }}>
-               <TouchableOpacity
-                 full
-                 style={[
-                   GlobalStyles.button,
-                   {
-                     width: '80%',
-                     elevation: 0,
-                     borderColor:
-                       this.state.followCode == '' &&
-                       this.state.selectedFolocode == -1
-                         ? 'black'
-                         : ApiUtils.getBackgroundColor(),
-                     borderWidth: 1,
-                     padding: 10,
-                   },
- 
-                   this.state.followCode == '' &&
-                   this.state.selectedFolocode == -1
-                     ? {backgroundColor: 'transparent'}
-                     : {backgroundColor: ApiUtils.getBackgroundColor()},
-                 ]}
-                 onPress={() => this.onClickSendFollowCode()}
-                 disabled={
-                   this.state.followCode == '' &&
-                   this.state.selectedFolocode == -1
-                 }>
-                 <Text
-                   style={{
-                     fontWeight: 'bold',
-                     textAlign: 'center',
-                     color:
-                       this.state.followCode == '' &&
-                       this.state.selectedFolocode == -1
-                         ? 'black'
-                         : 'white',
-                   }}>
-                   CONNEXION
-                 </Text>
-               </TouchableOpacity>
-             </View>
+                  <View
+                    style={{
+                      flexDirection: 'row',
+                      justifyContent: 'center',
+                      alignSelf: 'center',
+                    }}>
+                    <TouchableOpacity
+                      full
+                      style={[
+                        GlobalStyles.button,
+                        {
+                          width: '80%',
+                          elevation: 0,
+                          borderColor:
+                            this.state.followCode == '' &&
+                            this.state.selectedFolocode == -1
+                              ? 'black'
+                              : ApiUtils.getBackgroundColor(),
+                          borderWidth: 1,
+                          padding: 10,
+                        },
+
+                        this.state.followCode == '' &&
+                        this.state.selectedFolocode == -1
+                          ? {backgroundColor: 'transparent'}
+                          : {backgroundColor: ApiUtils.getBackgroundColor()},
+                      ]}
+                      onPress={() => this.onClickSendFollowCode()}
+                      disabled={
+                        this.state.followCode == '' &&
+                        this.state.selectedFolocode == -1
+                      }>
+                      <Text
+                        style={{
+                          fontWeight: 'bold',
+                          textAlign: 'center',
+                          color:
+                            this.state.followCode == '' &&
+                            this.state.selectedFolocode == -1
+                              ? 'black'
+                              : 'white',
+                        }}>
+                        CONNEXION
+                      </Text>
+                    </TouchableOpacity>
+                  </View>
                 ) : null}
               </View>
             ) : null}
@@ -371,7 +380,7 @@ class ForgotPassword extends ValidationComponent {
 
 const styles = StyleSheet.create({
   header: {
-    backgroundColor: 'white',
+    backgroundColor: '#2B3990',
     // backgroundColor: ApiUtils.getBackgroundColor(),
     width: '100%',
   },
@@ -390,7 +399,7 @@ const styles = StyleSheet.create({
     paddingLeft: 0,
   },
   saveText: {
-    color: 'black',
+    color: 'white',
     paddingLeft: 0,
     marginLeft: 5,
     marginRight: -5,
