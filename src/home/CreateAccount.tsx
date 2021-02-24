@@ -176,16 +176,21 @@ class CreateAccount extends ValidationComponent {
       // },
     });
 
+    console.log();
+
     if (isValid) {
       if (
-        !this.state.equipeUtilisateur ||
-        !this.state.equipeChoiceUtilisateur
+        !this.state.equipeUtilisateur &&
+        !this.state.equipeChoiceUtilisateur &&
+        this.state.equipeUtilisateur == '' &&
+        this.state.equipeChoiceUtilisateur == ''
       ) {
         this.setState({alertEquipe: true});
         return false;
       }
       this.setState({alertEquipe: false});
       this.onSendRequest();
+      <i class="fa fa-th-list" aria-hidden="true"></i>;
     }
   }
 
@@ -285,14 +290,18 @@ class CreateAccount extends ValidationComponent {
     formData.append('organisation', ApiUtils.getOrganisation());
 
     var acceptChallengeUtilisateur = 0;
-    if (
-      this.state.acceptChallengeUtilisateur ||
-      this.state.acceptChallengeUtilisateur
-    ) {
+    if (this.state.acceptChallengeUtilisateur == true) {
       acceptChallengeUtilisateur = 1;
     }
 
-    formData.append('acceptChallengeUtilisateur', acceptChallengeUtilisateur);
+    if (acceptChallengeUtilisateur == 1) {
+      formData.append('acceptChallengeUtilisateur', 1);
+      this.setState({errorAutorisationRespons: false});
+    } else {
+      this.setState({errorAutorisationRespons: true});
+      this.setState({isLoading: false});
+      return false;
+    }
     var acceptChallengeNameUtilisateur = 0;
     if (
       this.state.acceptChallengenameUtilisateur ||
@@ -976,13 +985,18 @@ class CreateAccount extends ValidationComponent {
                     connaissance du règlement.
                   </Text>
                 </TouchableOpacity>
-                {this.isFieldInError('acceptChallengeUtilisateur') &&
-                  this.getErrorsInField(
-                    'acceptChallengeUtilisateur',
-                  ).map((errorMessage) => (
-                    <Text style={styles.error}>{errorMessage}</Text>
-                  ))}
               </View>
+              {this.state.errorAutorisationRespons == true ? (
+                <Text
+                  style={{
+                    width: '100%',
+                    textAlign: 'center',
+                    fontSize: 18,
+                    color: 'red',
+                  }}>
+                  Vous devez accepter le réglement
+                </Text>
+              ) : null}
 
               {this.state.isLoading ? (
                 <View
@@ -1009,7 +1023,7 @@ class CreateAccount extends ValidationComponent {
                     },
                   ]}
                   onPress={() => this.onClickValidate()}>
-                  <Text style={{textAlign: 'center', color: 'white'}}>
+                  <Text style={{textAlign: 'center', color: 'black'}}>
                     ENREGISTRER
                   </Text>
                 </TouchableOpacity>
