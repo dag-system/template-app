@@ -251,7 +251,7 @@ class BatteryModal extends Component {
                   textDecorationLine: 'underline',
                   marginTop: 30,
                 }}>
-                Important avant de skier
+                Important avant de faitre votre activité
               </Text>
 
               <Icon

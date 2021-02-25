@@ -255,7 +255,7 @@ class Help extends Component {
                   textDecorationLine: 'underline',
                   textTransform: 'uppercase',
                 }}>
-                Manuel à lire avant de skier :
+                Manuel à lire avant de lancer une activité :
               </Text>
               <Text style={{marginTop: 10, fontWeight: 'bold'}}>
                 1 - Enregistrer vos activités
@@ -316,6 +316,11 @@ class Help extends Component {
                   Suivez nos instructions ici
                 </Text>
               </TouchableOpacity>
+              <Text style={{marginTop: 10}}>
+                Vous retrouverez ces informations dans le menu aide. Bonne
+                course.
+              </Text>
+              <Text style={{marginTop: 10}}>« C’EST PARTI »</Text>
 
               <Text style={{marginTop: 10, fontWeight: 'bold'}}>
                 3 – Pour un fonctionnement optimal
