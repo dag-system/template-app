@@ -1,33 +1,29 @@
-
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import {
   StyleSheet,
   Linking,
   View,
-  ScrollView, Share, TouchableHighlight
+  ScrollView,
+  Share,
+  TouchableHighlight,
 } from 'react-native';
-import {
-  Container, Header, Body, Text,
-  Button,
-  Icon
-} from 'native-base';
+import {Container, Header, Body, Text, Button, Icon} from 'native-base';
 import MapView from 'react-native-maps';
 import ApiUtils from '../ApiUtils';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { connect } from 'react-redux'
+import {connect} from 'react-redux';
 const mapStateToProps = (state) => {
   return {
     currentLive: state.currentLive,
     sports: state.sports,
     currentLiveFromSegment: state.currentLiveFromSegment,
-    currentLiveFromSegmentId: state.currentLiveFromSegmentId
-  }
-}
+    currentLiveFromSegmentId: state.currentLiveFromSegmentId,
+  };
+};
 
 class LiveSummaryFromSegment extends Component {
   constructor(props) {
     super(props);
-
 
     this.state = {
       live: {},
@@ -37,16 +33,11 @@ class LiveSummaryFromSegment extends Component {
       statsLive: {
         distance: null,
       },
-      segmentEfforts: []
-    }
-
+      segmentEfforts: [],
+    };
   }
 
-
-
   componentDidMount() {
-
-
     this.loadLive(this.props.currentLiveFromSegmentId);
     // this.setState({ live: this.props.currentLive });
     // // alert(JSON.stringify(responseJson.segmentEfforts.length));
@@ -60,13 +51,9 @@ class LiveSummaryFromSegment extends Component {
     // // this.setState({ sports: this.props.sports });
     // var libelleSport = this.props.sports[idSport - 1].label;
     // this.setState({ libelleSport: libelleSport });
-
-
   }
 
   loadLive(idLive) {
-
-
     let formData = new FormData();
     formData.append('method', 'getDetailLive');
     formData.append('auth', ApiUtils.getAPIAuth());
@@ -80,30 +67,25 @@ class LiveSummaryFromSegment extends Component {
         // Accept: 'application/json',
         // 'Content-Type': 'application/json',
       },
-      body: formData
+      body: formData,
     })
       .then(ApiUtils.checkStatus)
-      .then(response => response.json())
+      .then((response) => response.json())
       .then((responseJson) => {
-
-        this.setState({ live: responseJson });
+        this.setState({live: responseJson});
         // alert(JSON.stringify(responseJson.segmentEfforts.length));
         // this.setState({ segmentEfforts: responseJson.segmentEfforts });
-        this.setState({ statsLive: responseJson.statsLive });
-
+        this.setState({statsLive: responseJson.statsLive});
 
         this.saveCurrentLive(responseJson);
 
         this.saveCoordinates(responseJson.positions.tracks[0].trkseg[0].points);
 
         this.getSports(responseJson.idSport);
-
       })
-      .catch(e => ApiUtils.logError('LiveSummary loadLive', e.message)).then(
-
-      );
+      .catch((e) => ApiUtils.logError('LiveSummary loadLive', e.message))
+      .then();
   }
-
 
   saveCurrentLive(live) {
     try {
@@ -113,30 +95,29 @@ class LiveSummaryFromSegment extends Component {
     }
   }
 
-
   saveCoordinates(positions) {
     var coordinates = [];
 
-    positions.forEach(element => {
+    positions.forEach((element) => {
       var coordinate = {
         latitude: element.lat,
-        longitude: element.lon
+        longitude: element.lon,
       };
       coordinates.push(coordinate);
     });
     if (coordinates.length > 0) {
-      this.refs.map.fitToCoordinates(coordinates, { edgePadding: { top: 10, right: 10, bottom: 10, left: 10 }, animated: false })
+      this.refs.map.fitToCoordinates(coordinates, {
+        edgePadding: {top: 10, right: 10, bottom: 10, left: 10},
+        animated: false,
+      });
     }
 
-    this.setState({ coordinates: coordinates });
+    this.setState({coordinates: coordinates});
   }
-
-
 
   onClickNavigate() {
     this.props.navigation.navigate('SimpleMap');
   }
-
 
   getSports(idSport) {
     let formData = new FormData();
@@ -150,12 +131,11 @@ class LiveSummaryFromSegment extends Component {
         // Accept: 'application/json',
         // 'Content-Type': 'application/json',
       },
-      body: formData
+      body: formData,
     })
       .then(ApiUtils.checkStatus)
-      .then(response => response.json())
+      .then((response) => response.json())
       .then((responseJson) => {
-
         var result = [];
         for (var i in responseJson) {
           result.push(responseJson[i]);
@@ -164,19 +144,16 @@ class LiveSummaryFromSegment extends Component {
         result.forEach(function (element, index) {
           var newSelectableSport = {
             value: index,
-            label: element
+            label: element,
           };
           selectableSports.push(newSelectableSport);
         });
-        this.setState({ sports: selectableSports });
+        this.setState({sports: selectableSports});
         var libelleSport = this.props.sports[idSport - 1].label;
-        this.setState({ libelleSport: libelleSport });
-      }
-
-      )
-      .catch(e => ApiUtils.logError('LiveSummary getSports', e.message)).then(
-
-      );
+        this.setState({libelleSport: libelleSport});
+      })
+      .catch((e) => ApiUtils.logError('LiveSummary getSports', e.message))
+      .then();
   }
 
   onGoBack() {
@@ -186,20 +163,19 @@ class LiveSummaryFromSegment extends Component {
   getShortDate(date) {
     if (!!date) {
       var justDate = date.substr(0, 10);
-      var splitDate = justDate.split("-");
+      var splitDate = justDate.split('-');
       var year = splitDate[0].substr(2, 2);
       var month = splitDate[1];
       var day = splitDate[2];
       return day + '/' + month + '/' + year;
     }
-
   }
 
   getShortTime(date) {
     if (!!date) {
       var justDate = date.substr(10, 10);
 
-      var splitDate = justDate.split(":");
+      var splitDate = justDate.split(':');
 
       var hour = splitDate[0];
 
@@ -209,19 +185,22 @@ class LiveSummaryFromSegment extends Component {
   }
 
   onClickShare() {
-    Share.share({
-      message: 'Découvrez mon activité sur Foulée blanche  : ' + this.props.currentLive.statsLive.lienPartage,
-      title: 'Découvrez mon activité sur Foulée blanche !'
-    }, {
-      // Android only:
-      dialogTitle: 'Découvrez mon activité sur Foulée blanche ! ',
-
-    })
+    Share.share(
+      {
+        message:
+          'Découvrez mon activité sur Cross INSA Lyon  : ' +
+          this.props.currentLive.statsLive.lienPartage,
+        title: 'Découvrez mon activité sur Cross INSA Lyon !',
+      },
+      {
+        // Android only:
+        dialogTitle: 'Découvrez mon activité sur Cross INSA Lyon ! ',
+      },
+    );
   }
 
-
   openLink(url) {
-    Linking.canOpenURL(url).then(supported => {
+    Linking.canOpenURL(url).then((supported) => {
       if (supported) {
         Linking.openURL(url);
       } else {
@@ -230,17 +209,16 @@ class LiveSummaryFromSegment extends Component {
     });
   }
 
-
-
   static navigationOptions = {
-
-    drawerLabel: () => null
-
+    drawerLabel: () => null,
   };
 
   centerMap() {
-    if (this.state.coordinates !=null && this.state.coordinates.length != 0) {
-      this.refs.map.fitToCoordinates(this.state.coordinates, { edgePadding: { top: 10, right: 10, bottom: 10, left: 10 }, animated: true });
+    if (this.state.coordinates != null && this.state.coordinates.length != 0) {
+      this.refs.map.fitToCoordinates(this.state.coordinates, {
+        edgePadding: {top: 10, right: 10, bottom: 10, left: 10},
+        animated: true,
+      });
     }
   }
 
@@ -258,136 +236,269 @@ class LiveSummaryFromSegment extends Component {
     }
   }
 
-
   render() {
     return (
-
       <Container>
         {/* <Body style={styles.body}> */}
 
-          <Header style={styles.header}>
-            <Body>
-              <View style={{ flexDirection: 'row', justifyContent: 'flex-start', width: '100%', paddingRight: 0, paddingLeft: 0, marginTop: 20, marginBottom: 20 }}>
-                <Button style={styles.drawerButton} onPress={() => this.onGoBack()}>
-                  <Icon style={styles.saveText} name="chevron-left" type="FontAwesome5" />
-                  <Text style={styles.saveText}>Précedent</Text>
+        <Header style={styles.header}>
+          <Body>
+            <View
+              style={{
+                flexDirection: 'row',
+                justifyContent: 'flex-start',
+                width: '100%',
+                paddingRight: 0,
+                paddingLeft: 0,
+                marginTop: 20,
+                marginBottom: 20,
+              }}>
+              <Button
+                style={styles.drawerButton}
+                onPress={() => this.onGoBack()}>
+                <Icon
+                  style={styles.saveText}
+                  name="chevron-left"
+                  type="FontAwesome5"
+                />
+                <Text style={styles.saveText}>Précedent</Text>
+              </Button>
+            </View>
+          </Body>
+        </Header>
+        <View style={styles.loginButtonSection}>
+          <ScrollView contentContainerStyle={styles.loginButtonSection}>
+            {this.props.currentLive.statsLive != null ? (
+              <View style={styles.loginButtonSection}>
+                <View
+                  style={{paddingLeft: 10, paddingRight: 5, marginBottom: 10}}>
+                  <Text style={styles.bold}>
+                    {this.props.currentLive.libelleLive}
+                  </Text>
+                  <Text>
+                    {this.getShortDate(
+                      this.props.currentLive.dateCreationLive,
+                    ) +
+                      ' - ' +
+                      this.getShortTime(
+                        this.props.currentLive.dateCreationLive,
+                      )}
+                  </Text>
+                </View>
+
+                <Button
+                  onPress={this.centerMap.bind(this)}
+                  style={{
+                    flexDirection: 'row',
+                    justifyContent: 'space-between',
+                    width: 53,
+                    height: 53,
+                    backgroundColor: 'white',
+                    zIndex: 5,
+                    position: 'absolute',
+                    top: 70,
+                    right: 20,
+                  }}>
+                  <Icon active name="md-locate" style={styles.centerLogo} />
                 </Button>
-              </View>
+                <View style={styles.map}>
+                  <MapView
+                    ref="map"
+                    style={styles.map}
+                    showsUserLocation={false}
+                    followsUserLocation={false}
+                    showsMyLocationButton={false}
+                    showsPointsOfInterest={false}
+                    showsScale={false}
+                    showsTraffic={false}
+                    onPress={() => {
+                      this.props.navigation.navigate('LiveSummaryMap');
+                    }}
+                    toolbarEnabled={false}
+                    onLayout={() => this.centerMap()}>
+                    <MapView.Polyline
+                      key="polyline"
+                      coordinates={this.props.currentLive.coordinates}
+                      geodesic={true}
+                      strokeColor="rgba(63,170,239, 1)"
+                      strokeWidth={3}
+                      zIndex={0}
+                    />
+                  </MapView>
+                </View>
 
-            </Body>
-          </Header>
-          <View style={styles.loginButtonSection}>
-            <ScrollView contentContainerStyle={styles.loginButtonSection}>
-              {this.props.currentLive.statsLive != null ?
-                <View style={styles.loginButtonSection}>
-                  <View style={{ paddingLeft: 10, paddingRight: 5, marginBottom: 10 }}>
-                    <Text style={styles.bold}>{this.props.currentLive.libelleLive}</Text>
-                    <Text >{this.getShortDate(this.props.currentLive.dateCreationLive) + " - " + this.getShortTime(this.props.currentLive.dateCreationLive)}</Text>
-                  </View>
-
-                  <Button onPress={this.centerMap.bind(this)}
+                <View>
+                  <View
                     style={{
-                      flexDirection: 'row', justifyContent: 'space-between', width: 53, height: 53, backgroundColor: 'white',
-                      zIndex: 5, position: 'absolute', top: 70, right: 20
+                      flexDirection: 'row',
+                      justifyContent: 'center',
+                      width: '100%',
+                      paddingRight: 0,
+                      paddingLeft: 0,
+                      marginTop: 10,
+                      marginBottom: 10,
                     }}>
-                    <Icon active name="md-locate" style={styles.centerLogo} />
-                  </Button>
-                  <View style={styles.map}>
-
-                    <MapView
-                      ref="map"
-                      style={styles.map}
-                      showsUserLocation={false}
-                      followsUserLocation={false}
-                      showsMyLocationButton={false}
-                      showsPointsOfInterest={false}
-                      showsScale={false}
-                      showsTraffic={false}
-                      onPress={() => { this.props.navigation.navigate('LiveSummaryMap'); }}
-                      toolbarEnabled={false}
-                      onLayout={() => this.centerMap()}
-                    >
-                      <MapView.Polyline
-                        key="polyline"
-                        coordinates={this.props.currentLive.coordinates}
-                        geodesic={true}
-                        strokeColor='rgba(63,170,239, 1)'
-                        strokeWidth={3}
-                        zIndex={0}
-                      />
-                    </MapView>
-
+                    <Text style={{fontStyle: 'italic', fontWeight: 'bold'}}>
+                      {' '}
+                      {this.props.currentLive.libelleSport}
+                    </Text>
+                  </View>
+                  <View
+                    style={{
+                      flexDirection: 'row',
+                      justifyContent: 'space-between',
+                      width: '100%',
+                      paddingRight: 10,
+                      paddingLeft: 10,
+                      marginTop: 0,
+                      marginBottom: 20,
+                    }}>
+                    <View style={styles.resultCol}>
+                      <Text>Distance</Text>
+                      <Text style={styles.resultNumber}>
+                        {this.props.currentLive.statsLive.distance} km
+                      </Text>
+                    </View>
+                    <View style={styles.resultCol}>
+                      <Text>Denivelé +</Text>
+                      <Text style={styles.resultNumber}>
+                        {this.props.currentLive.statsLive.dPlus} m
+                      </Text>
+                    </View>
+                    <View style={styles.resultCol}>
+                      <Text>Denivelé -</Text>
+                      <Text style={styles.resultNumber}>
+                        {this.props.currentLive.statsLive.dMoins} m{' '}
+                      </Text>
+                    </View>
+                  </View>
+                  <View
+                    style={{
+                      flexDirection: 'row',
+                      justifyContent: 'space-between',
+                      width: '100%',
+                      paddingRight: 10,
+                      paddingLeft: 10,
+                    }}>
+                    <View style={styles.resultCol}>
+                      <Text>Durée</Text>
+                      <Text style={styles.resultNumber}>
+                        {this.props.currentLive.statsLive.duree}
+                      </Text>
+                    </View>
+                    <View style={styles.resultCol}>
+                      <Text>Vitesse Moy</Text>
+                      <Text style={styles.resultNumber}>
+                        {this.props.currentLive.statsLive.vMoy} km/h
+                      </Text>
+                    </View>
+                    <View style={styles.resultCol}>
+                      <Text>Allure</Text>
+                      <Text style={styles.resultNumber}>
+                        {this.props.currentLive.statsLive.allureKm}
+                      </Text>
+                    </View>
                   </View>
 
-
-
-                  <View>
-                    <View style={{ flexDirection: 'row', justifyContent: 'center', width: '100%', paddingRight: 0, paddingLeft: 0, marginTop: 10, marginBottom: 10 }}>
-                      <Text style={{ fontStyle: 'italic', fontWeight: 'bold' }}> {this.props.currentLive.libelleSport}</Text>
+                  {this.props.currentLive.commentLive != '' &&
+                  this.props.currentLive.commentLive != null ? (
+                    <View
+                      style={{width: '100%', paddingRight: 10, paddingLeft: 5}}>
+                      <Text style={{marginTop: 10, fontWeight: 'bold'}}>
+                        {' '}
+                        Commentaires :{' '}
+                      </Text>
+                      <Text style={{marginTop: 5, paddingLeft: 5}}>
+                        {this.props.currentLive.commentLive}
+                      </Text>
                     </View>
-                    <View style={{ flexDirection: 'row', justifyContent: 'space-between', width: '100%', paddingRight: 10, paddingLeft: 10, marginTop: 0, marginBottom: 20 }}>
-                      <View style={styles.resultCol}><Text>Distance</Text><Text style={styles.resultNumber}>{this.props.currentLive.statsLive.distance} km</Text></View>
-                      <View style={styles.resultCol}><Text>Denivelé +</Text><Text style={styles.resultNumber}>{this.props.currentLive.statsLive.dPlus} m</Text></View>
-                      <View style={styles.resultCol}><Text>Denivelé -</Text><Text style={styles.resultNumber}>{this.props.currentLive.statsLive.dMoins} m </Text></View>
-                    </View>
-                    <View style={{ flexDirection: 'row', justifyContent: 'space-between', width: '100%', paddingRight: 10, paddingLeft: 10 }}>
-                      <View style={styles.resultCol}><Text>Durée</Text><Text style={styles.resultNumber}>{this.props.currentLive.statsLive.duree}</Text></View>
-                      <View style={styles.resultCol}><Text>Vitesse Moy</Text><Text style={styles.resultNumber}>{this.props.currentLive.statsLive.vMoy} km/h</Text></View>
-                      <View style={styles.resultCol}><Text>Allure</Text><Text style={styles.resultNumber}>{this.props.currentLive.statsLive.allureKm}</Text></View>
-                    </View>
+                  ) : null}
 
-                    {this.props.currentLive.commentLive != "" && this.props.currentLive.commentLive != null ?
-                      <View style={{ width: '100%', paddingRight: 10, paddingLeft: 5 }}>
-                        <Text style={{ marginTop: 10, fontWeight: 'bold' }}> Commentaires : </Text>
-                        <Text style={{ marginTop: 5, paddingLeft: 5 }}>{this.props.currentLive.commentLive}</Text>
-                      </View>
+                  {this.props.currentLive.statsLive.lienReplay != null ? (
+                    <Button
+                      full
+                      style={styles.buttonok}
+                      onPress={() =>
+                        this.openLink(
+                          this.props.currentLive.statsLive.lienReplay,
+                        )
+                      }
+                      disabled={this.props.currentLive.followCode == ''}>
+                      <Text>REJOUER VOTRE ACTIVITE</Text>
+                    </Button>
+                  ) : (
+                    <View></View>
+                  )}
+                  {this.props.currentLive.statsLive.lienPartage != null ? (
+                    <Button
+                      full
+                      style={[styles.buttonok, {marginTop: 5}]}
+                      onPress={() => this.onClickShare()}
+                      disabled={this.props.currentLive.followCode == ''}>
+                      <Text>PARTAGER</Text>
+                    </Button>
+                  ) : (
+                    <View></View>
+                  )}
 
-                      : null}
+                  {this.props.currentLive.segmentEfforts != null &&
+                  this.props.currentLive.segmentEfforts.length > 0 ? (
+                    <View style={{width: '100%'}}>
+                      <Text
+                        style={{
+                          paddingTop: 5,
+                          paddingBottom: 5,
+                          fontSize: 20,
+                          fontWeight: 'bold',
+                          marginBottom: 20,
+                          marginTop: 20,
+                          textAlign: 'center',
+                          backgroundColor: '#E6E6E6',
+                        }}>
+                        Vos challenges de la séance{' '}
+                      </Text>
 
-
-
-
-                    {this.props.currentLive.statsLive.lienReplay != null ?
-                      <Button full style={styles.buttonok}
-                        onPress={() => this.openLink(this.props.currentLive.statsLive.lienReplay)} disabled={this.props.currentLive.followCode == ''} ><Text>REJOUER VOTRE ACTIVITE</Text></Button>
-
-
-                      : <View></View>}
-                    {this.props.currentLive.statsLive.lienPartage != null ?
-                      <Button full style={[styles.buttonok, { marginTop: 5 }]}
-                        onPress={() => this.onClickShare()} disabled={this.props.currentLive.followCode == ''} ><Text>PARTAGER</Text></Button>
-
-
-                      : <View></View>}
-
-
-                    {this.props.currentLive.segmentEfforts != null && this.props.currentLive.segmentEfforts.length > 0 ?
-                      <View style={{ width: '100%' }}>
-
-                        <Text style={{ paddingTop: 5, paddingBottom: 5, fontSize: 20, fontWeight: 'bold', marginBottom: 20, marginTop: 20, textAlign: 'center', backgroundColor: '#E6E6E6' }}>
-                          Vos challenges de la séance </Text>
-
-                        {this.props.currentLive.segmentEfforts.map((segment) => {
-
-                          return (
-                            <View>
-                              <TouchableHighlight
-                                underlayColor='rgba(255,255,255,1,0.6)'
-                                onPress={() => this.onOpenSegment(segment)}
-                              >
-                                <View style={{ width: '100%', marginBottom: 10, paddingLeft: 10, paddingRight: 10, display: "flex", flexDirection: "row", justifyContent: "space-between" }}>
+                      {this.props.currentLive.segmentEfforts.map((segment) => {
+                        return (
+                          <View>
+                            <TouchableHighlight
+                              underlayColor="rgba(255,255,255,1,0.6)"
+                              onPress={() => this.onOpenSegment(segment)}>
+                              <View
+                                style={{
+                                  width: '100%',
+                                  marginBottom: 10,
+                                  paddingLeft: 10,
+                                  paddingRight: 10,
+                                  display: 'flex',
+                                  flexDirection: 'row',
+                                  justifyContent: 'space-between',
+                                }}>
+                                <View>
                                   <View>
-                                    <View>
-                                      <Text style={{ fontSize: 14, marginBottom: 5 }}>{segment.nomSegment} </Text>
-                                    </View>
-                                    <View style={{ display: "flex", flexDirection: "row", justifyContent: "space-between" }}>
-                                      <Text style={{ fontSize: 14 }}>{segment.distanceSegment} km - </Text>
-                                      <Text style={{ fontSize: 14 }}>{segment.tempsSegmentString} - </Text>
-                                      <Text style={{ fontSize: 14 }}>{segment.vitesseMoyenneSegment}/km</Text>
-                                    </View>
-
+                                    <Text
+                                      style={{fontSize: 14, marginBottom: 5}}>
+                                      {segment.nomSegment}{' '}
+                                    </Text>
                                   </View>
-                                  {/* <View style={{ display: "flex", flexDirection: "row", marginTop: 4 }} >
+                                  <View
+                                    style={{
+                                      display: 'flex',
+                                      flexDirection: 'row',
+                                      justifyContent: 'space-between',
+                                    }}>
+                                    <Text style={{fontSize: 14}}>
+                                      {segment.distanceSegment} km -{' '}
+                                    </Text>
+                                    <Text style={{fontSize: 14}}>
+                                      {segment.tempsSegmentString} -{' '}
+                                    </Text>
+                                    <Text style={{fontSize: 14}}>
+                                      {segment.vitesseMoyenneSegment}/km
+                                    </Text>
+                                  </View>
+                                </View>
+                                {/* <View style={{ display: "flex", flexDirection: "row", marginTop: 4 }} >
 
                                     {segment.classementSegment <= 10 ?
                                       <Text style={{ fontSize: 20, marginTop: 2, color: ApiUtils.getBackgroundColor() }}>
@@ -406,37 +517,26 @@ class LiveSummaryFromSegment extends Component {
                                       /{segment.nombreParticipantSegment}</Text>
 
                                   </View> */}
-
-                                </View>
-
-
-                              </TouchableHighlight>
-
-
-                            </View>
-                          )
-                        })}
-
-                      </View>
-
-                      : null}
-
-
-                  </View>
-
-
-
+                              </View>
+                            </TouchableHighlight>
+                          </View>
+                        );
+                      })}
+                    </View>
+                  ) : null}
                 </View>
-                :
-
-                <View><Text style={{ textAlign: 'center', marginTop: 60 }}>Nous ne trouvons pas d'activité correspondante</Text></View>}
-            </ScrollView>
-
-          </View>
+              </View>
+            ) : (
+              <View>
+                <Text style={{textAlign: 'center', marginTop: 60}}>
+                  Nous ne trouvons pas d'activité correspondante
+                </Text>
+              </View>
+            )}
+          </ScrollView>
+        </View>
         {/* </Body> */}
-
-
-      </Container >
+      </Container>
     );
   }
 }
@@ -444,13 +544,13 @@ class LiveSummaryFromSegment extends Component {
 const styles = StyleSheet.create({
   header: {
     backgroundColor: 'white',
-    width: '100%'
+    width: '100%',
   },
   title: {
     width: '25%',
   },
   map: {
-    height: 200
+    height: 200,
   },
   buttonok: {
     marginTop: 20,
@@ -460,13 +560,13 @@ const styles = StyleSheet.create({
     height: 30,
     borderRadius: 10,
     // marginRight: 40,
-    backgroundColor: 'black'
+    backgroundColor: 'black',
   },
   saveButton: {
     backgroundColor: 'transparent',
     width: '38%',
     marginTop: 0,
-    paddingTop: 0
+    paddingTop: 0,
   },
   bold: {
     fontWeight: 'bold',
@@ -476,7 +576,7 @@ const styles = StyleSheet.create({
     width: 120,
     marginTop: 0,
     paddingTop: 10,
-    shadowOffset: { height: 0, width: 0 },
+    shadowOffset: {height: 0, width: 0},
     shadowOpacity: 0,
     elevation: 0,
     paddingLeft: 0,
@@ -488,7 +588,7 @@ const styles = StyleSheet.create({
   },
   resultNumber: {
     fontWeight: 'bold',
-    fontSize: 16
+    fontSize: 16,
   },
   saveText: {
     color: 'black',
@@ -506,7 +606,7 @@ const styles = StyleSheet.create({
     marginTop: 5,
   },
   centerLogo: {
-    color: '#000'
+    color: '#000',
   },
   container: {
     width: '100%',
@@ -525,8 +625,8 @@ const styles = StyleSheet.create({
     backgroundColor: ApiUtils.getBackgroundColor(),
     width: 10,
     height: 10,
-    borderRadius: 5
-  }
+    borderRadius: 5,
+  },
 });
 
 export default connect(mapStateToProps)(LiveSummaryFromSegment);

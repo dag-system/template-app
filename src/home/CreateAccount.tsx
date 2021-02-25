@@ -38,7 +38,7 @@ import {KeyboardAvoidingView} from 'react-native';
 import GlobalStyles from '../styles';
 import {Platform} from 'react-native';
 import {Dimensions} from 'react-native';
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
   return {
     userData: state,
     isRecording: state.isRecording,
@@ -256,8 +256,8 @@ class CreateAccount extends ValidationComponent {
       body: formData,
     })
       .then(ApiUtils.checkStatus)
-      .then(response => response.json())
-      .then(responseJson => {
+      .then((response) => response.json())
+      .then((responseJson) => {
         this.setState({isLoading: false});
         if (responseJson.codeErreur == 'SUCCESS') {
           var action = {type: 'LOGIN', data: responseJson};
@@ -273,7 +273,7 @@ class CreateAccount extends ValidationComponent {
           });
         }
       })
-      .catch(e => {
+      .catch((e) => {
         this.setState({isLoading: false});
         console.log(e);
         ApiUtils.logError('create account', JSON.stringify(e.message));
@@ -346,13 +346,15 @@ class CreateAccount extends ValidationComponent {
                     textContentType="familyName"
                     clearButtonMode="always"
                     value={this.state.nomUtilisateur}
-                    onChangeText={value =>
+                    onChangeText={(value) =>
                       this.setState({nomUtilisateur: value})
                     }
                   />
                 </Item>
                 {this.isFieldInError('nomUtilisateur') &&
-                  this.getErrorsInField('nomUtilisateur').map(errorMessage => (
+                  this.getErrorsInField(
+                    'nomUtilisateur',
+                  ).map((errorMessage) => (
                     <Text style={styles.error}>{errorMessage}</Text>
                   ))}
 
@@ -367,17 +369,17 @@ class CreateAccount extends ValidationComponent {
                     textContentType="name"
                     clearButtonMode="always"
                     value={this.state.prenomUtilisateur}
-                    onChangeText={value =>
+                    onChangeText={(value) =>
                       this.setState({prenomUtilisateur: value})
                     }
                   />
                 </Item>
                 {this.isFieldInError('prenomUtilisateur') &&
-                  this.getErrorsInField('prenomUtilisateur').map(
-                    errorMessage => (
-                      <Text style={styles.error}>{errorMessage}</Text>
-                    ),
-                  )}
+                  this.getErrorsInField(
+                    'prenomUtilisateur',
+                  ).map((errorMessage) => (
+                    <Text style={styles.error}>{errorMessage}</Text>
+                  ))}
 
                 <Item stackedLabel style={{marginBottom: 5}}>
                   <Label>Email *</Label>
@@ -390,7 +392,7 @@ class CreateAccount extends ValidationComponent {
                     // autoCapitalize="characters"
                     clearButtonMode="always"
                     value={this.state.emailUtilisateur}
-                    onChangeText={value =>
+                    onChangeText={(value) =>
                       this.setState({
                         emailUtilisateur: value.replace(/\s+/g, ''),
                       })
@@ -398,11 +400,11 @@ class CreateAccount extends ValidationComponent {
                   />
                 </Item>
                 {this.isFieldInError('emailUtilisateur') &&
-                  this.getErrorsInField('emailUtilisateur').map(
-                    errorMessage => (
-                      <Text style={styles.error}>{errorMessage}</Text>
-                    ),
-                  )}
+                  this.getErrorsInField(
+                    'emailUtilisateur',
+                  ).map((errorMessage) => (
+                    <Text style={styles.error}>{errorMessage}</Text>
+                  ))}
 
                 <Item stackedLabel style={{marginBottom: 5}}>
                   <Label>Numéro de télephone * </Label>
@@ -413,7 +415,7 @@ class CreateAccount extends ValidationComponent {
                     autoCompleteType="tel"
                     clearButtonMode="always"
                     value={this.state.telUtilisateur}
-                    onChangeText={phoneNumber =>
+                    onChangeText={(phoneNumber) =>
                       this.setState({
                         telUtilisateur: phoneNumber,
                       })
@@ -422,7 +424,9 @@ class CreateAccount extends ValidationComponent {
                 </Item>
 
                 {this.isFieldInError('telUtilisateur') &&
-                  this.getErrorsInField('telUtilisateur').map(errorMessage => (
+                  this.getErrorsInField(
+                    'telUtilisateur',
+                  ).map((errorMessage) => (
                     <Text style={styles.error}>{errorMessage}</Text>
                   ))}
 
@@ -437,7 +441,7 @@ class CreateAccount extends ValidationComponent {
                   }}>
                   <Switch
                     style={{paddingTop: 20}}
-                    onValueChange={text =>
+                    onValueChange={(text) =>
                       this.setState({acceptChallengeTelUtilisateur: text})
                     }
                     value={this.state.acceptChallengeTelUtilisateur == 1}
@@ -519,7 +523,7 @@ class CreateAccount extends ValidationComponent {
                           <Icon name="chevron-down" type="FontAwesome5" />
                         }
                         selectedValue={this.state.dayDdn}
-                        onValueChange={value => this.onValueDayddn(value)}
+                        onValueChange={(value) => this.onValueDayddn(value)}
                         placeholder={'Jour'}
                         placeholderStyle={{
                           color: ApiUtils.getBackgroundColor(),
@@ -538,7 +542,7 @@ class CreateAccount extends ValidationComponent {
                           borderBottomColor: ApiUtils.getBackgroundColor(),
                           borderBottomWidth: 1,
                         }}>
-                        {this.state.days.map(d => {
+                        {this.state.days.map((d) => {
                           return <Picker.Item label={d} value={d} />;
                         })}
                       </Picker>
@@ -551,7 +555,7 @@ class CreateAccount extends ValidationComponent {
                           <Icon name="chevron-down" type="FontAwesome5" />
                         }
                         selectedValue={this.state.monthDdn}
-                        onValueChange={value => this.onValueMonthddn(value)}
+                        onValueChange={(value) => this.onValueMonthddn(value)}
                         placeholder={'Mois'}
                         placeholderStyle={{
                           color: ApiUtils.getBackgroundColor(),
@@ -584,7 +588,7 @@ class CreateAccount extends ValidationComponent {
                           <Icon name="chevron-down" type="FontAwesome5" />
                         }
                         selectedValue={this.state.yearDdn}
-                        onValueChange={value => this.onValueYearddn(value)}
+                        onValueChange={(value) => this.onValueYearddn(value)}
                         placeholder={'Année'}
                         placeholderStyle={{
                           color: ApiUtils.getBackgroundColor(),
@@ -603,7 +607,7 @@ class CreateAccount extends ValidationComponent {
                           borderBottomColor: ApiUtils.getBackgroundColor(),
                           borderBottomWidth: 1,
                         }}>
-                        {this.state.years.map(year => {
+                        {this.state.years.map((year) => {
                           return <Picker.Item label={year} value={year} />;
                         })}
                       </Picker>
@@ -649,7 +653,7 @@ class CreateAccount extends ValidationComponent {
                             marginLeft: 100,
                           },
                         }}
-                        onDateChange={date => {
+                        onDateChange={(date) => {
                           this.setState({ddnUtilisateur: date});
                         }}
                       />
@@ -664,7 +668,7 @@ class CreateAccount extends ValidationComponent {
                     clearButtonMode="always"
                     textContentType="fullStreetAddress"
                     value={this.state.adresseUtilisateur}
-                    onChangeText={value =>
+                    onChangeText={(value) =>
                       this.setState({adresseUtilisateur: value})
                     }
                   />
@@ -677,7 +681,7 @@ class CreateAccount extends ValidationComponent {
                     clearButtonMode="always"
                     textContentType="postalCode"
                     value={this.state.cpUtilisateur}
-                    onChangeText={value =>
+                    onChangeText={(value) =>
                       this.setState({cpUtilisateur: value})
                     }
                   />
@@ -691,7 +695,7 @@ class CreateAccount extends ValidationComponent {
                     textContentType="addressCity"
                     clearButtonMode="always"
                     value={this.state.villeUtilisateur}
-                    onChangeText={value =>
+                    onChangeText={(value) =>
                       this.setState({villeUtilisateur: value})
                     }
                   />
@@ -709,7 +713,7 @@ class CreateAccount extends ValidationComponent {
                 }}>
                 <Switch
                   style={{paddingTop: 20}}
-                  onValueChange={text =>
+                  onValueChange={(text) =>
                     this.setState({acceptChallengenameUtilisateur: text})
                   }
                   value={this.state.acceptChallengenameUtilisateur}
@@ -802,7 +806,7 @@ const styles = StyleSheet.create({
   logo: {
     width: '100%',
     height: 50,
-    alignSelf: 'center',
+    marginRight: '20%',
   },
   saveButton: {
     backgroundColor: 'transparent',

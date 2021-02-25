@@ -3,9 +3,8 @@ import {persistStore, persistReducer} from 'redux-persist';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import reducer from './reducers';
 
-
 const persistConfig = {
-  key: 'fouleeblanche',
+  key: 'insalyon',
   storage: AsyncStorage,
   debug: false,
 };

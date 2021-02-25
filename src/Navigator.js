@@ -59,15 +59,6 @@ export default class Navigator extends Component {
           />
 
           <Stack.Screen
-            name="Help"
-            component={Help}
-            headerMode="none"
-            options={{
-              animationEnabled: false,
-            }}
-          />
-
-          <Stack.Screen
             name="Partenaires"
             component={Partenaires}
             headerMode="none"
@@ -117,6 +108,7 @@ export default class Navigator extends Component {
               animationEnabled: false,
             }}
           />
+          <Stack.Screen name="Help" component={Help} />
           <Stack.Screen name="Logout" component={Logout} />
           <Stack.Screen name="CreateAccount" component={CreateAccount} />
           <Stack.Screen name="SegmentSummary" component={SegmentSummary} />

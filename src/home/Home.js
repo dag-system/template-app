@@ -37,16 +37,13 @@ import ApiUtils from '../ApiUtils';
 // import Logo from '../assets/logoHome.svg';
 import Logo from '../assets/logoHome.svg';
 import LogoHeader from '../assets/logo_header.png';
-import skieur from '../assets/skieur.png';
 import Titre from '../assets/titre.svg';
-import Autrans from '../assets/autrans.svg';
 import Loading from './Loading';
 import {Modal} from 'react-native';
 import WebviewJetCode from './WebviewJetCode';
 import GlobalStyles from '../styles';
-import {Sponsors} from './Sponsors';
 
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
   return {
     userData: state.userData,
     folocodes: state.folocodes,
@@ -69,9 +66,12 @@ class Home extends Component {
       isVisibleModalLogin: false,
     };
 
-    this._unsubscribe = this.props.navigation.addListener('focus', payload => {
-      this.componentDidMount();
-    });
+    this._unsubscribe = this.props.navigation.addListener(
+      'focus',
+      (payload) => {
+        this.componentDidMount();
+      },
+    );
   }
 
   componentDidMount() {
@@ -98,7 +98,7 @@ class Home extends Component {
   }
 
   openLink(url) {
-    Linking.canOpenURL(url).then(supported => {
+    Linking.canOpenURL(url).then((supported) => {
       if (supported) {
         Linking.openURL(url);
       } else {
@@ -127,8 +127,8 @@ class Home extends Component {
       body: formData,
     })
       .then(ApiUtils.checkStatus)
-      .then(response => response.json())
-      .then(responseJson => {
+      .then((response) => response.json())
+      .then((responseJson) => {
         //save values in cache
         if (responseJson.codeErreur == 'SUCCESS') {
           //SaveData
@@ -145,7 +145,7 @@ class Home extends Component {
           this.setState({isLoading: false});
         }
       })
-      .catch(e => {
+      .catch((e) => {
         this.setState({isLoading: false});
         console.log(e);
         ApiUtils.logError('login', JSON.stringify(e.message));
@@ -170,12 +170,15 @@ class Home extends Component {
       let formData = new FormData();
       formData.append('method', 'getInformationsUtilisateur');
       formData.append('auth', ApiUtils.getAPIAuth());
+      formData.append('organisation', ApiUtils.getOrganisation());
 
       if (this.state.selectedFolocode != -1) {
         formData.append('folocode', this.state.selectedFolocode);
       } else {
         formData.append('folocode', this.state.followCode);
       }
+
+      console.log(formData);
 
       //fetch followCode API
       fetch(ApiUtils.getAPIUrl(), {
@@ -187,8 +190,8 @@ class Home extends Component {
         body: formData,
       })
         .then(ApiUtils.checkStatus)
-        .then(response => response.json())
-        .then(responseJson => {
+        .then((response) => response.json())
+        .then((responseJson) => {
           // alert("success http");
           //save values in cache
 
@@ -196,7 +199,7 @@ class Home extends Component {
             //SaveData
 
             var action = {type: 'LOGIN', data: responseJson};
-            
+
             this.props.dispatch(action);
             this.setState({isLoading: false});
             this.onClickNavigate('Lives');
@@ -204,7 +207,7 @@ class Home extends Component {
             alert("Votre folocode n'est pas valide");
           }
         })
-        .catch(e => {
+        .catch((e) => {
           this.setState({isLoading: false});
           console.log(e);
           ApiUtils.logError('login', JSON.stringify(e.message));
@@ -290,7 +293,7 @@ class Home extends Component {
     const formData = new FormData();
     formData.append('method', 'getInformationStation');
     formData.append('auth', ApiUtils.getAPIAuth());
-    formData.append('idStation', '36');
+    formData.append('idStation', '52');
     //fetch followCode API
 
     fetch(ApiUtils.getAPIUrl(), {
@@ -302,8 +305,8 @@ class Home extends Component {
       body: formData,
     })
       .then(ApiUtils.checkStatus)
-      .then(response => response.json())
-      .then(responseJson => {
+      .then((response) => response.json())
+      .then((responseJson) => {
         //save values in cache
 
         var result = responseJson;
@@ -316,7 +319,7 @@ class Home extends Component {
 
           var finalTraceArray = []; // new Object(this.props.polylines);
           if ((tracesArray != null) & (tracesArray.length != 0)) {
-            tracesArray.forEach(trace => {
+            tracesArray.forEach((trace) => {
               var finalTrace = trace;
 
               var positionArray = Object.values(trace.positionsTrace);
@@ -342,7 +345,7 @@ class Home extends Component {
             var finalinterestArray = [];
             var interestArray = Object.values(result.pointsInterets);
             var count = 0;
-            interestArray.forEach(interest => {
+            interestArray.forEach((interest) => {
               var coordinate = {
                 latitude: parseFloat(interest.latitudeInteret),
                 longitude: parseFloat(interest.longitudeInteret),
@@ -401,7 +404,7 @@ class Home extends Component {
           this.props.dispatch(action);
         }
       })
-      .catch(e => console.log(e.message))
+      .catch((e) => console.log(e.message))
       .then();
   }
 
@@ -425,41 +428,25 @@ class Home extends Component {
                   alignItems: 'center',
                   backgroundColor: ApiUtils.getBackgroundColor(),
                 }}>
-                <ImageBackground
-                  source={skieur}
-                  style={{width: '100%', minHeight: 10}}>
+                <ImageBackground style={{width: '100%', minHeight: 10}}>
                   <TouchableHighlight
                     underlayColor="transparent"
                     onPress={() => this.pressLogo()}
                     style={styles.logo}>
                     <Animated.View
-                      ref={ref => {
+                      ref={(ref) => {
                         this.logo = ref;
                       }}
                       style={[GlobalStyles.row, {justifyContent: 'center'}]}
                       animation="bounceInDown"
                       delay={300}>
-                      <View style={{width : '30%'}}></View>
                       <Logo
-                        width={'70%'}
+                        width={'100%'}
                         height={120}
                         style={{alignSelf: 'center'}}
                       />
-                      <Autrans
-                        width={'30%'}
-                        height={70}
-                        style={{alignSelf: 'center', opacity: 1}}
-                      />
                     </Animated.View>
                   </TouchableHighlight>
-                  <Animated.View animation="bounceInLeft" delay={200} style={{marginTop : 0}}>
-                    <Titre
-                      width={'55%'}
-                      height={140}
-                      style={{alignSelf: 'center'}}
-                    />
-                  </Animated.View>
-
                   <View
                     style={{
                       flexDirection: 'row',
@@ -508,7 +495,7 @@ class Home extends Component {
                           width: '80%',
                           borderColor: 'white',
                           padding: 10,
-                          backgroundColor : 'white'
+                          backgroundColor: 'white',
                         },
                       ]}
                       onPress={() => this.openModalLogin()}>
@@ -549,7 +536,7 @@ class Home extends Component {
                           color: 'white',
                           textTransform: 'uppercase',
                         }}>
-                        J'ai oublié mon foulée code ?
+                        J'ai oublié mon code ?
                       </Text>
                     </TouchableOpacity>
                   </View>
@@ -588,7 +575,7 @@ class Home extends Component {
                     fontWeight: 'bold',
                     textTransform: 'uppercase',
                     textAlign: 'center',
-                    marginTop : 30,
+                    marginTop: 30,
                     color: ApiUtils.getBackgroundColor(),
                   }}>
                   Vous avez déjà un compte ?
@@ -599,12 +586,12 @@ class Home extends Component {
                     <Picker
                       style={{width: 300}}
                       mode="dropdown"
-                      accessibilityLabel={'Choisir le Foulée Code'}
-                      iosHeader={'Choisir le Foulée Code'}
+                      accessibilityLabel={'Choisir le Code'}
+                      iosHeader={'Choisir le Code'}
                       iosIcon={<Icon name="chevron-down" type="FontAwesome5" />}
                       selectedValue={this.state.selectedFolocode}
                       onValueChange={this.onValueFolocodeChange.bind(this)}
-                      placeholder={'Choisissez le Foulée Code'}
+                      placeholder={'Choisissez le Code'}
                       placeholderStyle={{
                         color: ApiUtils.getBackgroundColor(),
                       }}
@@ -622,11 +609,8 @@ class Home extends Component {
                         borderBottomColor: ApiUtils.getBackgroundColor(),
                         borderBottomWidth: 1,
                       }}>
-                      <Picker.Item
-                        label="Choisissez le Foulée Code"
-                        value={-1}
-                      />
-                      {this.props.folocodes.map(folocode => {
+                      <Picker.Item label="Choisissez le Code" value={-1} />
+                      {this.props.folocodes.map((folocode) => {
                         return (
                           <Picker.Item
                             label={
@@ -650,10 +634,10 @@ class Home extends Component {
 
                 <TextInput
                   style={styles.inputCode}
-                  placeholder="Entrez votre Foulée code"
+                  placeholder="Entrez votre code"
                   placeholderTextColor="black"
                   value={this.state.followCode}
-                  onChangeText={followCode =>
+                  onChangeText={(followCode) =>
                     this.setState({followCode: followCode})
                   }
                   clearButtonMode="always"
@@ -708,7 +692,6 @@ class Home extends Component {
 
                 <View style={{marginBottom: 0}} />
               </KeyboardAvoidingView>
-              <Sponsors />
             </Modal>
 
             <Modal
@@ -731,13 +714,6 @@ class Home extends Component {
               <WebviewJetCode uri={'https://google.com'} />
             </Modal>
           </Content>
-          <View style={{backgroundColor: 'white'}}>
-            <Animated.View animation="bounceInUp" delay={200}>
-              <Sponsors />
-            </Animated.View>
-          </View>
-
-          {/* <SafeAreaView style={{flex: 0, backgroundColor: '#DADADA'}} /> */}
         </Container>
       </Root>
     );
@@ -771,12 +747,11 @@ const styles = StyleSheet.create({
     // marginLeft: 25,
     // marginRight: 25,
     marginTop: Platform.OS == 'ios' ? 20 : 25,
-    marginTop: 20,
-    marginBottom: 30,
+    marginTop: 75,
+    marginBottom: 100,
   },
   loginButtonSection: {
     width: '100%',
-    // justifyContent: 'center',
 
     paddingBottom: 30,
     borderBottomLeftRadius: 100,
@@ -865,7 +840,7 @@ const styles = StyleSheet.create({
   logoHeader: {
     width: '100%',
     height: 50,
-    alignSelf: 'center',
+    marginRight: '20%',
   },
 });
 

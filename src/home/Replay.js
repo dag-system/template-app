@@ -804,16 +804,6 @@ class Replay extends Component {
               <Body style={{flex: 0}} />
               <Right style={{flex: 1}}>
                 <Image resizeMode="contain" source={Logo} style={styles.logo} />
-                <Autrans
-                  width={'40%'}
-                  height={50}
-                  style={{
-                    alignSelf: 'center',
-                    opacity: 1,
-                    marginLeft: 10,
-                    marginBottom: 5,
-                  }}
-                />
               </Right>
             </Header>
             <Content style={styles.body} scrollEnabled={true}>
@@ -861,9 +851,7 @@ class Replay extends Component {
                       borderBottomWidth: 1,
                     }}>
                     <Picker.Item label="Choisissez une épreuve" value="-1" />
-                    <Picker.Item label="5km village" value={47} />
-                    <Picker.Item label="10 km" value={46} />
-                    <Picker.Item label="20 km " value={48} />
+                    <Picker.Item label="Myrtilles" value={49} />
                   </Picker>
 
                   {!this.state.isloadingChallenge &&
@@ -1443,7 +1431,6 @@ class Replay extends Component {
               {/* </View> */}
               <View style={{marginBottom: 300}} />
             </Content>
-            <Sponsors />
             {/******** modal5 : Traces list  *****************/}
             <ModalSmall
               isVisible={this.state.isModalTraceVisible}
@@ -1517,7 +1504,7 @@ const styles = StyleSheet.create({
   logo: {
     width: '100%',
     height: 50,
-    alignSelf: 'center',
+    marginRight: '50%',
   },
   bold: {
     fontWeight: 'bold',

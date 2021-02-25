@@ -153,14 +153,13 @@ class LiveSummary extends Component<Props, State> {
 
         this.props.dispatch(action);
 
-        let libelleSport = 'SKATING';
-        if (responseJson.idSport == 14) libelleSport = 'CLASSIQUE';
+        let libelleSport = 'CROSS';
+        if (responseJson.idSport == 17) libelleSport = 'CROSS';
 
         this.setState({libelleSport: libelleSport});
 
         if (responseJson.IsImportedFromGpx == 1) {
           this.getGpxPoint(responseJson.gpxLive);
-
         } else {
           this.saveCoordinates(
             responseJson.positions.tracks[0].trkseg[0].points,
@@ -269,7 +268,7 @@ class LiveSummary extends Component<Props, State> {
       })
       .catch((e) => alert(e));
   }
-  
+
   onClickDownloadGpx(url, name) {
     this.downloadFile(url, name);
   }
@@ -375,12 +374,13 @@ class LiveSummary extends Component<Props, State> {
   }
 
   onClickShare() {
-    this.shareImage();
+    //this.shareImage();
+    this.shareOldStyle();
   }
 
   shareOldStyle() {
     let url =
-      'https://www.folomi.fr/s/compte/partage-fouleeblanche.php?c=' +
+      'https://www.folomi.fr/s/compte/partage.php?c=' +
       this.state.live.codeLive;
     if (this.state.live.segmentEfforts.length > 0) {
       url =
@@ -390,12 +390,12 @@ class LiveSummary extends Component<Props, State> {
 
     ShareRn.share(
       {
-        message: 'Découvrez mon activité à la Foulée Blanche  : ' + url,
-        title: 'Découvrez mon activité à la Foulée Blanche !',
+        message: 'Découvrez mon activité au Cross INSA Lyon  : ' + url,
+        title: 'Découvrez mon activité au Cross INSA Lyon !',
       },
       {
         // Android only:
-        dialogTitle: 'Découvrez mon activité à la Foulée Blanche ! ',
+        dialogTitle: 'Découvrez mon activité au Cross INSA Lyon ! ',
       },
     );
   }
@@ -425,12 +425,12 @@ class LiveSummary extends Component<Props, State> {
 
   share = (base64image) => {
     let shareOptions = {
-      title: 'Découvrez mon activité à la Foulée Blanche',
+      title: 'Découvrez mon activité au Cross INSA Lyon',
       url: base64image,
       message:
         'https://www.folomi.fr/s/compte/partage-fouleeblanche.php?c=' +
         this.state.live.codeLive,
-      subject: 'Découvrez mon activité à la Foulée Blanche',
+      subject: 'Découvrez mon activité au Cross INSA Lyon',
     };
 
     Share.open(shareOptions)
@@ -665,16 +665,6 @@ class LiveSummary extends Component<Props, State> {
             <Body style={{flex: 0}} />
             <Right style={{flex: 1}}>
               <Image resizeMode="contain" source={Logo} style={styles.logo} />
-              <Autrans
-                width={'40%'}
-                height={50}
-                style={{
-                  alignSelf: 'center',
-                  opacity: 1,
-                  marginLeft: 10,
-                  marginBottom: 5,
-                }}
-              />
             </Right>
           </Header>
           <Content style={styles.body} scrollEnabled={true}>
@@ -692,7 +682,7 @@ class LiveSummary extends Component<Props, State> {
                       style={{
                         textAlign: 'center',
                       }}>
-                      Votre challenge Foulée Blanche est en cours de calcul.
+                      Votre challenge Cross INSA Lyon est en cours de calcul.
                     </Text>
                   </TouchableOpacity>
                   <TouchableOpacity
@@ -706,14 +696,12 @@ class LiveSummary extends Component<Props, State> {
                         marginTop: 10,
                       }}>
                       Cliquez ici plus tard pour recevoir un résumé de votre
-                      Challenge Foulée Blanche
+                      Challenge Cross INSA Lyon
                     </Text>
                   </TouchableOpacity>
                   <TouchableOpacity
                     onPress={() =>
-                      Linking.openURL(
-                        'https://www.lafouleeblanche.com/resultats-2021/',
-                      )
+                      Linking.openURL('https://www.insa-lyon.fr/')
                     }>
                     <Text style={{textAlign: 'center', marginTop: 10}}>
                       (Résultats plus complets sur
@@ -724,7 +712,7 @@ class LiveSummary extends Component<Props, State> {
                         textDecorationLine: 'underline',
                       }}>
                       {' '}
-                      https://www.lafouleeblanche.com/resultats-2021/)
+                      https://www.insa-lyon.fr/)
                     </Text>
                   </TouchableOpacity>
                 </View>
@@ -738,7 +726,7 @@ class LiveSummary extends Component<Props, State> {
                     <View style={{marginTop: 10}}>
                       <Text
                         style={{textAlign: 'center', paddingHorizontal: 12}}>
-                        Patientez, votre challenge Foulée Blanche est toujours
+                        Patientez, votre challenge Cross INSA Lyon est toujours
                         en cours de calcul. Voici en attendant votre activité
                         globale de votre journée
                       </Text>
@@ -753,15 +741,13 @@ class LiveSummary extends Component<Props, State> {
                             marginTop: 10,
                           }}>
                           Cliquez ici plus tard pour recevoir un résumé de votre
-                          Challenge Foulée Blanche
+                          Challenge Cross INSA Lyon
                         </Text>
                       </TouchableOpacity>
 
                       <TouchableOpacity
                         onPress={() =>
-                          Linking.openURL(
-                            'https://www.lafouleeblanche.com/resultats-2021/',
-                          )
+                          Linking.openURL('https://www.insa-lyon.fr/')
                         }>
                         <Text style={{textAlign: 'center', marginTop: 10}}>
                           (Résultats plus complets sur
@@ -772,7 +758,7 @@ class LiveSummary extends Component<Props, State> {
                             textDecorationLine: 'underline',
                           }}>
                           {' '}
-                          https://www.lafouleeblanche.com/resultats-2021/)
+                          https://www.insa-lyon.fr/)
                         </Text>
                       </TouchableOpacity>
                     </View>
@@ -794,7 +780,7 @@ class LiveSummary extends Component<Props, State> {
                           color: ApiUtils.getBackgroundColor(),
                           // backgroundColor: '#E6E6E6',
                         }}>
-                        Challenge Foulée Blanche
+                        Challenge Cross INSA Lyon
                       </Text>
 
                       {this.state.live.segmentEfforts.map((segment) => {
@@ -904,7 +890,7 @@ class LiveSummary extends Component<Props, State> {
                           marginTop: 10,
                           marginBottom: 10,
                         }}>
-                        Aucun challenge "La foulée blanche" détécté
+                        Aucun challenge "Cross INSA Lyon" détécté
                       </Text>
                     </View>
                   ) : null}
@@ -1361,7 +1347,6 @@ class LiveSummary extends Component<Props, State> {
 
             {/* </View> */}
           </Content>
-          <Sponsors />
           {/******** modal5 : Traces list  *****************/}
           <ModalSmall
             isVisible={this.state.isModalTraceVisible}
@@ -1597,7 +1582,7 @@ const styles = StyleSheet.create({
   logo: {
     width: '100%',
     height: 50,
-    alignSelf: 'center',
+    marginRight: '50%',
   },
   bold: {
     fontWeight: 'bold',

@@ -24,7 +24,6 @@ import {connect} from 'react-redux';
 import Sidebar from './SideBar';
 import Logo from '../assets/logo_header.png';
 import Rotate from '../assets/rotate.png';
-import Autrans from '../assets/autrans.svg';
 
 import AutoHeightWebView from 'react-native-autoheight-webview';
 const mapStateToProps = () => {
@@ -65,7 +64,7 @@ class Classement extends Component {
   }
 
   openLink(url) {
-    Linking.canOpenURL(url).then(supported => {
+    Linking.canOpenURL(url).then((supported) => {
       if (supported) {
         Linking.openURL(url);
       } else {
@@ -77,7 +76,7 @@ class Classement extends Component {
   render() {
     return (
       <Drawer
-        ref={ref => {
+        ref={(ref) => {
           this.drawer = ref;
         }}
         content={
@@ -109,16 +108,6 @@ class Classement extends Component {
                     source={Logo}
                     style={styles.logo}
                   />
-                  <Autrans
-                    width={'40%'}
-                    height={50}
-                    style={{
-                      alignSelf: 'center',
-                      opacity: 1,
-                      marginLeft: 10,
-                      marginBottom: 5,
-                    }}
-                  />
                 </Right>
               </Header>
             )}
@@ -130,25 +119,21 @@ class Classement extends Component {
                   textAlign: 'center',
                   color: ApiUtils.getBackgroundColor(),
                   fontSize: 20,
-                  marginBottom : 10,
+                  marginBottom: 10,
                   textTransform: 'uppercase',
                 }}>
-                Classement de l'after foulée
+                Classement du challenge Cross INSA Lyon
               </Text>
 
               <TouchableOpacity
-                onPress={() =>
-                  this.openLink(
-                    'https://www.lafouleeblanche.com/classements-challenges/',
-                  )
-                }>
+                onPress={() => this.openLink('https://www.insa-lyon.fr/')}>
                 <Text
                   style={{
                     textAlign: 'center',
                     color: ApiUtils.getBackgroundColor(),
                   }}>
-                  Retrouvez tous les classements sur notre site internet :
-                  https://www.lafouleeblanche.com/resultats-2021/
+                  Retrouvez tous les classements sur notre site internet : A
+                  RENTRER
                 </Text>
               </TouchableOpacity>
 
@@ -167,8 +152,7 @@ class Classement extends Component {
 
               <AutoHeightWebView
                 source={{
-                  uri:
-                    'https://www.folomi.fr/fouleeBlanche/classementFevrier.html',
+                  uri: 'https://www.folomi.fr/classement/insalyon.html',
                 }}
                 style={{marginTop: 20, width: '100%'}}
                 startInLoadingState={true}
@@ -276,7 +260,7 @@ const styles = StyleSheet.create({
   logo: {
     width: '100%',
     height: 50,
-    alignSelf: 'center',
+    marginRight: '50%',
   },
 });
 

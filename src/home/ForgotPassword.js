@@ -229,7 +229,7 @@ class ForgotPassword extends ValidationComponent {
 
           <View style={styles.loginButtonSection}>
             <Text style={{textAlign: 'justify'}}>
-              Entrez votre email ci-dessous pour récuperer votre foulée code
+              Entrez votre email ci-dessous pour récuperer votre code
             </Text>
 
             <Item stackedLabel style={{marginBottom: 5, marginTop: 20}}>
@@ -263,19 +263,19 @@ class ForgotPassword extends ValidationComponent {
 
             {this.state.folocodes.length > 0 ? (
               <View>
-                <Text style={{textAlign: 'center', marginTop :  10}}>Vos foulée codes</Text>
+                <Text style={{textAlign: 'center', marginTop :  10}}>Vos codes</Text>
 
                 {/* {this.state.folocodes.map()} */}
 
                 <Picker
                   style={{width: 300}}
                   mode="dropdown"
-                  accessibilityLabel={'Choisir le Foulée Code'}
-                  iosHeader={'Choisir le Foulée Code'}
+                  accessibilityLabel={'Choisir le Code'}
+                  iosHeader={'Choisir le Code'}
                   iosIcon={<Icon name="chevron-down" type="FontAwesome5" />}
                   selectedValue={this.state.selectedFolocode}
                   onValueChange={this.onValueFolocodeChange.bind(this)}
-                  placeholder={'Choisissez le Foulée Code'}
+                  placeholder={'Choisissez le Code'}
                   placeholderStyle={{
                     color: ApiUtils.getBackgroundColor(),
                   }}
@@ -293,7 +293,7 @@ class ForgotPassword extends ValidationComponent {
                     borderBottomColor: ApiUtils.getBackgroundColor(),
                     borderBottomWidth: 1,
                   }}>
-                  <Picker.Item label="Choisissez le Foulée Code" value={-1} />
+                  <Picker.Item label="Choisissez le Code" value={-1} />
                   {this.state.folocodes
                     .filter(f => f.folocodeUtilisateur != undefined)
                     .map(folocode => {

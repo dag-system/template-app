@@ -1,86 +1,74 @@
 import React, {Component} from 'react';
-import {
-  View,
-  Platform,Alert,
-} from 'react-native';
+import {View, Platform, Alert} from 'react-native';
 import ApiUtils from '../ApiUtils';
 import {connect} from 'react-redux';
 import Geolocation from '@react-native-community/geolocation';
 import BackgroundGeolocation from 'react-native-background-geolocation';
-import {check,request,PERMISSIONS, RESULTS} from 'react-native-permissions';
+import {check, request, PERMISSIONS, RESULTS} from 'react-native-permissions';
 const haversine = require('haversine');
 import DefaultProps from '../models/DefaultProps';
 
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
   return {
     isRecording: state.isRecording,
     currentLive: state.currentLive,
-    userData : state.userData,
-    coordinates : state.coordinates,
-    isMoving : state.isMoving,
-    odometer : state.odometer,
+    userData: state.userData,
+    coordinates: state.coordinates,
+    isMoving: state.isMoving,
+    odometer: state.odometer,
   };
 };
 
 interface Props extends DefaultProps {
-  isRecording: boolean,
-  currentLive: any,
-  userData : any,
-  dates : any[],
-  odometer : any,
-  isMoving : boolean,
+  isRecording: boolean;
+  currentLive: any;
+  userData: any;
+  dates: any[];
+  odometer: any;
+  isMoving: boolean;
 }
 
 interface State {}
 
-
-class GeolocComponent extends Component<Props,State> {
+class GeolocComponent extends Component<Props, State> {
   constructor(props) {
     super(props);
 
-    this.state = {
-    
+    this.state = {};
   }
-}
-  
 
-
-  requestMotionPermission()
-  {
+  requestMotionPermission() {
     check(PERMISSIONS.IOS.MOTION)
-  .then((result) => {
-    switch (result) {
-      case RESULTS.UNAVAILABLE:
-        break;
-      case RESULTS.DENIED:
-        this.askMotionPermission();
-        break;
-      case RESULTS.LIMITED:
-        break;
-      case RESULTS.GRANTED:
-        break;
-      case RESULTS.BLOCKED:
-        break;
-        default : 
-
-    }
-  })
-  .catch(() => {
-
-  });
+      .then((result) => {
+        switch (result) {
+          case RESULTS.UNAVAILABLE:
+            break;
+          case RESULTS.DENIED:
+            this.askMotionPermission();
+            break;
+          case RESULTS.LIMITED:
+            break;
+          case RESULTS.GRANTED:
+            break;
+          case RESULTS.BLOCKED:
+            break;
+          default:
+        }
+      })
+      .catch(() => {});
   }
 
-  askMotionPermission()
-  {
+  askMotionPermission() {
     request(PERMISSIONS.IOS.MOTION).then((result) => {
-      if(result ==RESULTS.DENIED)
-      {
-        Alert.alert("Permission refusée", "Vous devez accepter cette permission pour avoir un bon enregistrement de votre parcours");
+      if (result == RESULTS.DENIED) {
+        Alert.alert(
+          'Permission refusée',
+          'Vous devez accepter cette permission pour avoir un bon enregistrement de votre parcours',
+        );
         // Sentry.captureMessage("Motion Permission refusée");
       }
     });
   }
-
 
   componentDidMount() {
     setTimeout(() => this.didMount(), 300);
@@ -89,17 +77,17 @@ class GeolocComponent extends Component<Props,State> {
     if (this.props.currentLive == null) {
       //  this.onDisconnect(false);
       this.props.navigation.navigate('Lives');
-    }
-    else{
+    } else {
       this.requestMotionPermission();
-      Geolocation.setRNConfiguration({authorizationLevel: 'always', skipPermissionRequests : false});
+      Geolocation.setRNConfiguration({
+        authorizationLevel: 'always',
+        skipPermissionRequests: false,
+      });
       this.configGeoloc();
-    
     }
   }
 
-  componentWillUnmount()
-  {
+  componentWillUnmount() {
     BackgroundGeolocation.removeAllListeners();
   }
 
@@ -114,44 +102,39 @@ class GeolocComponent extends Component<Props,State> {
     this.props.dispatch(action);
   }
 
-
-  configureGeofences()
-  {
+  configureGeofences() {
     let geofences = [
       {
-      identifier: "foo",
-      radius: 200,
-      latitude: 37.33016634,
-      longitude:-122.02686902,
-      notifyOnEntry: true,
-      notifyOnExit: true
-    },
-    {
-      identifier: "bar",
-      radius: 200,
-      latitude: 45.51921926,
-      longitude:-122.0306692,
-      notifyOnEntry: true,
-      notifyOnExit: true
-    }];
-    
+        identifier: 'foo',
+        radius: 200,
+        latitude: 37.33016634,
+        longitude: -122.02686902,
+        notifyOnEntry: true,
+        notifyOnExit: true,
+      },
+      {
+        identifier: 'bar',
+        radius: 200,
+        latitude: 45.51921926,
+        longitude: -122.0306692,
+        notifyOnEntry: true,
+        notifyOnExit: true,
+      },
+    ];
+
     BackgroundGeolocation.addGeofences(geofences);
   }
-  
 
-
-  configGeoloc()
-  {
-
+  configGeoloc() {
     var idLive = this.props.currentLive?.idLive;
-  
+
     let config = {
-      debug : false,
+      debug: false,
       distanceFilter: 10,
       url: ApiUtils.getAPIUrl(),
       httpRootProperty: '.',
       httpTimeout: 300000,
-      
+
       params: {
         method: 'createPositions2',
         idLive: idLive,
@@ -166,7 +149,7 @@ class GeolocComponent extends Component<Props,State> {
       },
       notification: {
         sticky: true,
-        title: 'Foulée Blanche',
+        title: 'Cross INSA Lyon',
         text: 'Suivi de votre position en cours',
         channelImportance: BackgroundGeolocation.NOTIFICATION_PRIORITY_LOW,
       },
@@ -184,70 +167,64 @@ class GeolocComponent extends Component<Props,State> {
       autoSyncThreshold: 5,
       batchSync: true,
       preventSuspend: true,
-      maxRecordsToPersist : -1,
+      maxRecordsToPersist: -1,
       stopOnTerminate: false, //TODO TO DO
       startOnBoot: true,
-      reset : true,
+      reset: true,
       foregroundService: true,
       disableElasticity: true,
       logLevel: BackgroundGeolocation.LOG_LEVEL_VERBOSE,
-      disableStopDetection : true,
-      disableMotionActivityUpdates : true,
+      disableStopDetection: true,
+      disableMotionActivityUpdates: true,
       stationaryRadius: 5,
       maxDaysToPersist: 4,
       heartbeatInterval: 20,
-      stopTimeout : Platform.OS == 'ios'?  60  : 5,
+      stopTimeout: Platform.OS == 'ios' ? 60 : 5,
       desiredAccuracy:
         Platform.OS == 'ios'
           ? BackgroundGeolocation.DESIRED_ACCURACY_NAVIGATION
           : BackgroundGeolocation.DESIRED_ACCURACY_HIGH,
-      desiredOdometerAccuracy: 10, 
-   
+      desiredOdometerAccuracy: 10,
     };
-    
-    BackgroundGeolocation.reset(config, () => { 
-    }, () =>{
-    });
+
+    BackgroundGeolocation.reset(
+      config,
+      () => {},
+      () => {},
+    );
 
     BackgroundGeolocation.ready(config, () => {
       this.setState({
-        libelleLive: ApiUtils.getLibelleLive()
-      })
-     BackgroundGeolocation.start(() =>
-      {
+        libelleLive: ApiUtils.getLibelleLive(),
+      });
+      BackgroundGeolocation.start(() => {
         BackgroundGeolocation.changePace(true);
-      }
-     );
+      });
 
-     BackgroundGeolocation.setConfig(config).then(() => {
+      BackgroundGeolocation.setConfig(config).then(() => {});
     });
-
-    });
-    
 
     this.configureGeofences();
     // Step 1:  Listen to events:
     BackgroundGeolocation.on(
       'location',
-      loc => this.onLocation(loc),
+      (loc) => this.onLocation(loc),
       this.onLocationError.bind(this),
     );
 
-    BackgroundGeolocation.onAuthorization(authorizationEvent => {
+    BackgroundGeolocation.onAuthorization((authorizationEvent) => {
       if (authorizationEvent.success) {
         // Sentry.captureMessage("[authorization] SUCCESS: ");
-        
+      } else {
+        // Sentry.captureMessage("[authorization] FAILURE: " + JSON.stringify(authorizationEvent.error));
       }
-            else {
-              // Sentry.captureMessage("[authorization] FAILURE: " + JSON.stringify(authorizationEvent.error));
-            }
     });
 
-     BackgroundGeolocation.onGeofence((event) => {
-       console.log("[onGeofence] ", event);
-     });
+    BackgroundGeolocation.onGeofence((event) => {
+      console.log('[onGeofence] ', event);
+    });
 
-    BackgroundGeolocation.onProviderChange(async event => {
+    BackgroundGeolocation.onProviderChange(async (event) => {
       if (
         event.accuracyAuthorization ==
         BackgroundGeolocation.ACCURACY_AUTHORIZATION_REDUCED
@@ -275,15 +252,12 @@ class GeolocComponent extends Component<Props,State> {
     });
 
     BackgroundGeolocation.onHeartbeat(() => {
-
       // You could request a new location if you wish.
       BackgroundGeolocation.getCurrentPosition({
         samples: 3,
         persist: true,
-      }).then(() => {
-      });
+      }).then(() => {});
     });
-    
   }
 
   onLocationError(error) {
@@ -303,35 +277,28 @@ class GeolocComponent extends Component<Props,State> {
     }
   }
 
-   onLocation(location) {
-
-    if(this.props.isMoving)
-    {
+  onLocation(location) {
+    if (this.props.isMoving) {
       this.addMarker(location);
       this.props.onUpdatePosition(location);
-    }else{
-
-      let isGpsNotOk = location.coords.speed ==-1;
+    } else {
+      let isGpsNotOk = location.coords.speed == -1;
       let data = {
-        location : location,
-        isGpsNotOk : isGpsNotOk
-      }
+        location: location,
+        isGpsNotOk: isGpsNotOk,
+      };
       var action = {type: 'UPDATE_GPS_OK', data: data};
       this.props.dispatch(action);
-      
-    } 
-
-    
+    }
   }
 
   async addMarker(location) {
-
     var coordinate = {
-      uuid : location.uuid,
+      uuid: location.uuid,
       latitude: location.coords.latitude,
       longitude: location.coords.longitude,
       timestamp: location.timestamp,
-      speed : location.coords.speed
+      speed: location.coords.speed,
     };
 
     // if (this.props.coordinates.length > 0) {
@@ -342,21 +309,11 @@ class GeolocComponent extends Component<Props,State> {
 
     var action = {type: 'ADD_COORDINATE', data: coordinate};
     this.props.dispatch(action);
-    
   }
 
   render() {
-    return (
-    <View>
- 
-
-    
-    </View>
-
-    
-    );
+    return <View></View>;
   }
 }
-
 
 export default connect(mapStateToProps)(GeolocComponent);

@@ -3,13 +3,12 @@
 const ISDEBUG = false;
 const ISDEMO = false;
 
-const VersionNumber = '1.0.15';
-const VersionNumberInt = 13;
+const VersionNumber = '1.0.0';
+const VersionNumberInt = 1;
 
 var ApiUtils = {
-  getOrganisation()
-  {
-    return 'FOULEEBLANCHE';
+  getOrganisation() {
+    return 'INSALYON';
   },
   ISDEBUG() {
     return ISDEBUG;
@@ -18,7 +17,7 @@ var ApiUtils = {
     return ISDEBUG;
   },
   getBackgroundColor() {
-    return '#3266aa';
+    return '#f2f2f2';
   },
   VersionNumber() {
     return VersionNumber;
@@ -35,19 +34,15 @@ var ApiUtils = {
     return '#FEAA00';
   },
 
-  green()
-  {
+  green() {
     return '#39F800';
   },
 
-  checkStatus: function(response) {
-  
+  checkStatus: function (response) {
     if (response.ok) {
       return response;
     } else {
-      response.text().then(function(text) {
-      
-      });
+      response.text().then(function (text) {});
 
       let error = new Error(response.statusText);
       error.response = response;
@@ -123,12 +118,11 @@ var ApiUtils = {
     }
   },
 
-  logError: function(methodName, message) {
+  logError: function (methodName, message) {
     // alert(message)
     // let formData = new FormData();
     // formData.append('method', 'debug');
     // formData.append('auth', ApiUtils.getAPIAuth());
-
     // var finalMessage =
     //   '----DATE---: ' +
     //   ' ' +
@@ -139,7 +133,6 @@ var ApiUtils = {
     //   methodName +
     //   '---MESSAGE---:  ' +
     //   message;
-
     // formData.append('message', finalMessage);
     // formData.append('type', 0);
     // //fetch followCode API
@@ -152,14 +145,12 @@ var ApiUtils = {
     //   .catch(e => e);
   },
 
-  logStats: function(message) {
+  logStats: function (message) {
     // let formData = new FormData();
     // formData.append('method', 'debug');
     // formData.append('auth', ApiUtils.getAPIAuth());
-
     // formData.append('message', message);
     // formData.append('type', 1);
-
     // //fetch followCode API
     // fetch(ApiUtils.getAPIUrl(), {
     //   method: 'POST',
