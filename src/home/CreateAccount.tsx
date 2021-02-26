@@ -141,6 +141,7 @@ class CreateAccount extends ValidationComponent {
       enseignantUser: '',
       errorPickers: false,
       errorCNIL: false,
+      acceptChallengeUtilisateur: 0,
     };
   }
 
@@ -297,6 +298,16 @@ class CreateAccount extends ValidationComponent {
     var acceptChallengeNameUtilisateur = 0;
     if (this.state.acceptChallengenameUtilisateur) {
       acceptChallengeNameUtilisateur = 1;
+    }
+
+    formData.append(
+      'acceptChallengeNameUtilisateur',
+      acceptChallengeNameUtilisateur,
+    );
+
+    var acceptChallengeUtilisateur = 0;
+    if (this.state.acceptChallengeUtilisateur) {
+      acceptChallengeUtilisateur = 1;
       this.setState({errorCNIL: false});
     } else {
       this.setState({errorCNIL: true});
@@ -304,10 +315,7 @@ class CreateAccount extends ValidationComponent {
       return false;
     }
 
-    formData.append(
-      'acceptChallengeNameUtilisateur',
-      acceptChallengeNameUtilisateur,
-    );
+    formData.append('acceptChallengeUtilisateur', acceptChallengeUtilisateur);
 
     formData.append('passUtilisateur', md5(this.state.newPassword));
 
@@ -877,15 +885,44 @@ class CreateAccount extends ValidationComponent {
                   <Switch
                     style={{paddingTop: 20}}
                     onValueChange={(text) =>
-                      this.setState({acceptChallengenameUtilisateur: text})
+                      this.setState({acceptChallengeNameUtilisateur: text})
                     }
-                    value={this.state.acceptChallengenameUtilisateur}
+                    value={this.state.acceptChallengeNameUtilisateur}
                   />
                   <TouchableOpacity
                     onPress={() =>
                       this.setState({
-                        acceptChallengenameUtilisateur: !this.state
-                          .acceptChallengenameUtilisateur,
+                        acceptChallengeNameUtilisateur: !this.state
+                          .acceptChallengeNameUtilisateur,
+                      })
+                    }>
+                    <Text style={{marginLeft: 10}}>
+                      Je souhaite voir mon nom apparaître dans le classement
+                    </Text>
+                  </TouchableOpacity>
+                </View>
+
+                <View
+                  style={{
+                    marginTop: 20,
+                    paddingLeft: 10,
+                    width: '80%',
+                    display: 'flex',
+                    flexDirection: 'row',
+                    justifyContent: 'space-between',
+                  }}>
+                  <Switch
+                    style={{paddingTop: 20}}
+                    onValueChange={(text) =>
+                      this.setState({acceptChallengeUtilisateur: text})
+                    }
+                    value={this.state.acceptChallengeUtilisateur}
+                  />
+                  <TouchableOpacity
+                    onPress={() =>
+                      this.setState({
+                        acceptChallengeUtilisateur: !this.state
+                          .acceptChallengeUtilisateur,
                       })
                     }>
                     <Text style={{marginLeft: 10}}>
