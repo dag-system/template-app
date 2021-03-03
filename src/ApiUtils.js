@@ -42,8 +42,9 @@ var ApiUtils = {
     if (response.ok) {
       return response;
     } else {
-      response.text().then(function (text) {});
-
+      response.text().then(function (text) {
+        console.log(text);
+      });
       let error = new Error(response.statusText);
       error.response = response;
       throw error;

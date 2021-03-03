@@ -43,6 +43,7 @@ import {Modal} from 'react-native';
 import WebviewJetCode from './WebviewJetCode';
 import GlobalStyles from '../styles';
 
+
 const mapStateToProps = (state) => {
   return {
     userData: state.userData,
@@ -77,6 +78,7 @@ class Home extends Component {
   componentDidMount() {
     // #stop BackroundGeolocation and remove-listeners when Home Screen is rendered.
     this.setState({selectedFolocode: -1});
+
     if (this.props.userData != null) {
       this.onClickNavigate('Lives');
     } else {
@@ -84,9 +86,13 @@ class Home extends Component {
       BackgroundGeolocation.removeListeners();
     }
 
+
+
     setTimeout(() => this.checkIsConnected(), 200);
     this.getinformationStation();
   }
+
+ 
   checkIsConnected = () => {
     if (this.props.userData != null) {
       this.onClickNavigate('Lives');

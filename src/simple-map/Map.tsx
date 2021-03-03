@@ -24,8 +24,8 @@ import BatteryModal from '../home/BatteryModal';
 import DefaultProps from '../models/DefaultProps';
 import ApiUtils from '../ApiUtils';
 
-const LATITUDE_DELTA_CLOSE = 0.00922;
-const LONGITUDE_DELTA_CLOSE = 0.00421;
+const LATITUDE_DELTA_CLOSE = 0.02922;
+const LONGITUDE_DELTA_CLOSE = 0.02421;
 
 const LATITUDE_DELTA = 0.16022;
 const LONGITUDE_DELTA = 0.01221;
@@ -601,10 +601,10 @@ class Map extends PureComponent<Props,State> {
           showsScale={false}
           showsTraffic={false}
           initialRegion={{
-            latitude: 45.1667, // 44.843884,
-            longitude: 5.55,
-            latitudeDelta: LATITUDE_DELTA,
-            longitudeDelta: LONGITUDE_DELTA,
+            latitude: 45.78666352,
+            longitude: 4.875329832,
+            latitudeDelta: LATITUDE_DELTA_CLOSE,
+            longitudeDelta: LONGITUDE_DELTA_CLOSE,
           }}
           toolbarEnabled={false}>
             {

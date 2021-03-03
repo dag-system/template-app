@@ -1,5 +1,11 @@
 import React from 'react';
-import {StyleSheet, View, Image, TouchableOpacity,Keyboard} from 'react-native';
+import {
+  StyleSheet,
+  View,
+  Image,
+  TouchableOpacity,
+  Keyboard,
+} from 'react-native';
 import {
   Container,
   Header,
@@ -24,8 +30,7 @@ import defaultMessages from './defaultMessages';
 import GlobalStyles from '../styles';
 import ValidationComponent from 'react-native-form-validator';
 
-
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
   return {
     userData: state.userData,
     folocodes: state.folocodes,
@@ -57,9 +62,9 @@ class ForgotPassword extends ValidationComponent {
     var isValid = this.validate({
       emailUtilisateur: {email: true, required: true},
     });
-    Keyboard.dismiss()
+    Keyboard.dismiss();
 
-    this.setState({folocodes : [], selectedFolocode :-1});
+    this.setState({folocodes: [], selectedFolocode: -1});
 
     if (isValid) {
       this.onSendRequest();
@@ -88,8 +93,8 @@ class ForgotPassword extends ValidationComponent {
         body: formData,
       })
         .then(ApiUtils.checkStatus)
-        .then(response => response.json())
-        .then(responseJson => {
+        .then((response) => response.json())
+        .then((responseJson) => {
           // alert("success http");
           //save values in cache
 
@@ -104,16 +109,17 @@ class ForgotPassword extends ValidationComponent {
             alert("Votre folocode n'est pas valide");
           }
         })
-        .catch(e => {
+        .catch((e) => {
           this.setState({isLoading: false});
           ApiUtils.logError('login', JSON.stringify(e.message));
           // alert('Une erreur est survenue : ' + JSON.stringify(e.message));
-  
+
           if (e.message == 'Timeout' || e.message == 'Network request failed') {
             this.setState({noConnection: true});
-  
+
             Toast.show({
-              text: "Vous n'avez pas de connection internet, merci de réessayer",
+              text:
+                "Vous n'avez pas de connection internet, merci de réessayer",
               buttonText: 'Ok',
               type: 'danger',
               position: 'bottom',
@@ -130,15 +136,18 @@ class ForgotPassword extends ValidationComponent {
     formData.append('auth', ApiUtils.getAPIAuth());
     formData.append('emailUtilisateur', this.state.emailUtilisateur);
     formData.append('organisation', ApiUtils.getOrganisation());
+
     fetch(ApiUtils.getAPIUrl(), {
       method: 'POST',
       headers: {},
       body: formData,
     })
       .then(ApiUtils.checkStatus)
-      .then(response => response.json())
-      .then(responseJson => {
+      .then((response) => response.json())
+      .then((responseJson) => {
         if (responseJson.codeErreur == 'SUCCESS') {
+          console.log('test');
+          console.log(responseJson);
           var folocodes = Object.values(responseJson);
           this.setState({folocodes: folocodes});
           // Toast.show({
@@ -149,6 +158,7 @@ class ForgotPassword extends ValidationComponent {
 
           // });
         } else {
+          console.log(responseJson.message);
           Toast.show({
             text: responseJson.message,
             buttonText: 'Ok',
@@ -157,8 +167,10 @@ class ForgotPassword extends ValidationComponent {
           });
         }
       })
-      .catch(e => {
+      .catch((e) => {
+        console.log(e);
         this.setState({spinner: false});
+
         ApiUtils.logError('create live', JSON.stringify(e.message));
         if (e.message == 'Timeout' || e.message == 'Network request failed') {
           this.setState({noConnection: true});
@@ -235,35 +247,78 @@ class ForgotPassword extends ValidationComponent {
             <Item stackedLabel style={{marginBottom: 5, marginTop: 20}}>
               <Label>Email *</Label>
               <Input
-           
-           ref={ (c) => this.input = c }
-          //  ref={this.input} 
-              // ref={(c) => {
-              //   this.emailInput = c;
-              // }}
+                ref={(c) => (this.input = c)}
+                //  ref={this.input}
+                // ref={(c) => {
+                //   this.emailInput = c;
+                // }}
 
                 returnKeyType="next"
                 clearButtonMode="always"
                 value={this.state.emailUtilisateur}
-                onChangeText={value => this.setState({emailUtilisateur: value})}
+                onChangeText={(value) =>
+                  this.setState({emailUtilisateur: value})
+                }
               />
             </Item>
             {this.isFieldInError('emailUtilisateur') &&
-              this.getErrorsInField('emailUtilisateur').map(errorMessage => (
+              this.getErrorsInField('emailUtilisateur').map((errorMessage) => (
                 <Text style={styles.error}>{errorMessage}</Text>
               ))}
 
             <View style={{marginTop: 40}}>
-              <ButtonElement
-                style={styles.saveButton}
-                onPress={() => this.onClickValidate()}
-                title="Envoyer"
-              />
+              <TouchableOpacity
+                
+                style={[
+                  GlobalStyles.button,
+                  {
+                    width: '100%',
+                    elevation: 0,
+                    borderColor:
+                    this.isFieldInError('emailUtilisateur') || this.state.emailUtilisateur == ''
+                        ? 'black'
+                        : ApiUtils.getBackgroundColor(),
+                    borderWidth: 1,
+                    padding: 10,
+                  },
+
+                  this.isFieldInError('emailUtilisateur') || this.state.emailUtilisateur == ''
+                    ? {backgroundColor: 'transparent'}
+                    : {backgroundColor: ApiUtils.getBackgroundColor()},
+                ]}
+                onPress={() => this.onClickSendFollowCode()}
+                disabled={
+                  this.isFieldInError('emailUtilisateur') || this.state.emailUtilisateur == ''
+                }
+                // style={[
+                //   styles.saveButton,
+                //   {
+                //     backgroundColor:
+                //     this.isFieldInError('emailUtilisateur') || this.state.emailUtilisateur == ''
+                //         ? 'transparent'
+                //         : ApiUtils.getBackgroundColor(),
+                //   },
+                // ]}
+                onPress={() => this.onClickValidate()}>
+                   <Text
+                        style={{
+                          fontWeight: 'bold',
+                          textAlign: 'center',
+                          color:
+                          this.isFieldInError('emailUtilisateur') || this.state.emailUtilisateur == ''
+                              ? 'black'
+                              : 'white',
+                        }}>
+                        Envoyer
+                      </Text>
+              </TouchableOpacity>
             </View>
 
             {this.state.folocodes.length > 0 ? (
               <View>
-                <Text style={{textAlign: 'center', marginTop :  10}}>Vos codes</Text>
+                <Text style={{textAlign: 'center', marginTop: 10}}>
+                  Vos codes
+                </Text>
 
                 {/* {this.state.folocodes.map()} */}
 
@@ -295,8 +350,8 @@ class ForgotPassword extends ValidationComponent {
                   }}>
                   <Picker.Item label="Choisissez le Code" value={-1} />
                   {this.state.folocodes
-                    .filter(f => f.folocodeUtilisateur != undefined)
-                    .map(folocode => {
+                    .filter((f) => f.folocodeUtilisateur != undefined)
+                    .map((folocode) => {
                       return (
                         <Picker.Item
                           label={
@@ -313,52 +368,52 @@ class ForgotPassword extends ValidationComponent {
                 </Picker>
 
                 {this.state.selectedFolocode != -1 ? (
-               <View
-               style={{
-                 flexDirection: 'row',
-                 justifyContent: 'center',
-                 alignSelf: 'center',
-               }}>
-               <TouchableOpacity
-                 full
-                 style={[
-                   GlobalStyles.button,
-                   {
-                     width: '80%',
-                     elevation: 0,
-                     borderColor:
-                       this.state.followCode == '' &&
-                       this.state.selectedFolocode == -1
-                         ? 'black'
-                         : ApiUtils.getBackgroundColor(),
-                     borderWidth: 1,
-                     padding: 10,
-                   },
- 
-                   this.state.followCode == '' &&
-                   this.state.selectedFolocode == -1
-                     ? {backgroundColor: 'transparent'}
-                     : {backgroundColor: ApiUtils.getBackgroundColor()},
-                 ]}
-                 onPress={() => this.onClickSendFollowCode()}
-                 disabled={
-                   this.state.followCode == '' &&
-                   this.state.selectedFolocode == -1
-                 }>
-                 <Text
-                   style={{
-                     fontWeight: 'bold',
-                     textAlign: 'center',
-                     color:
-                       this.state.followCode == '' &&
-                       this.state.selectedFolocode == -1
-                         ? 'black'
-                         : 'white',
-                   }}>
-                   CONNEXION
-                 </Text>
-               </TouchableOpacity>
-             </View>
+                  <View
+                    style={{
+                      flexDirection: 'row',
+                      justifyContent: 'center',
+                      alignSelf: 'center',
+                    }}>
+                    <TouchableOpacity
+                      full
+                      style={[
+                        GlobalStyles.button,
+                        {
+                          width: '80%',
+                          elevation: 0,
+                          borderColor:
+                            this.state.followCode == '' &&
+                            this.state.selectedFolocode == -1
+                              ? 'black'
+                              : ApiUtils.getBackgroundColor(),
+                          borderWidth: 1,
+                          padding: 10,
+                        },
+
+                        this.state.followCode == '' &&
+                        this.state.selectedFolocode == -1
+                          ? {backgroundColor: 'transparent'}
+                          : {backgroundColor: ApiUtils.getBackgroundColor()},
+                      ]}
+                      onPress={() => this.onClickSendFollowCode()}
+                      disabled={
+                        this.state.followCode == '' &&
+                        this.state.selectedFolocode == -1
+                      }>
+                      <Text
+                        style={{
+                          fontWeight: 'bold',
+                          textAlign: 'center',
+                          color:
+                            this.state.followCode == '' &&
+                            this.state.selectedFolocode == -1
+                              ? 'black'
+                              : 'white',
+                        }}>
+                        CONNEXION
+                      </Text>
+                    </TouchableOpacity>
+                  </View>
                 ) : null}
               </View>
             ) : null}
