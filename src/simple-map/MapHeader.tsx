@@ -16,6 +16,7 @@ import ApiUtils from '../ApiUtils';
 import {connect} from 'react-redux';
 import GlobalStyles from '../styles';
 import DefaultProps from '../models/DefaultProps';
+import BackgroundGeolocation from 'react-native-background-geolocation';
 const mapStateToProps = state => {
   return {
     isRecording: state.isRecording,
@@ -64,6 +65,8 @@ class MapHeader extends Component<Props,State> {
   }
 
   goBackOk() {
+
+    BackgroundGeolocation.stop();
     var action = {type: 'CLEAR_MAP', data: null};
     this.props.dispatch(action);
 
