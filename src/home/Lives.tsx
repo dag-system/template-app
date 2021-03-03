@@ -47,6 +47,7 @@ import {Linking} from 'react-native';
 import {Alert} from 'react-native';
 import DefaultProps from '../models/DefaultProps';
 import VersionCheck from 'react-native-version-check';
+import RNPusherPushNotifications from 'react-native-pusher-push-notifications';
 const mapStateToProps = (state) => {
   return {
     userData: state.userData,
@@ -128,11 +129,60 @@ class Lives extends Component<Props, State> {
     }
   }
   async downloadData() {
+
+    this.init();
     await this.getNewVersion();
     await this.getLives(this.props.userData.idUtilisateur);
 
     await this.getinformationStation();
+
+
   }
+
+  init = () => {
+
+    RNPusherPushNotifications.setInstanceId('378c58b6-e7b0-43f9-ae64-a3e269a36658');
+
+    RNPusherPushNotifications.on('registered', () => {
+      console.log('la')
+      console.log("registred");
+      this.subscribe("debug-"+this.props.userData.idUtilisateur);
+    });
+
+    RNPusherPushNotifications.on('notification', this.handleNotification);
+    // RNPusherPushNotifications.setOnSubscriptionsChangedListener(this.onSubscriptionsChanged);
+ 
+  };
+
+  subscribe = (interest) => {
+    console.log(`Subscribing to "${interest}"`);
+    RNPusherPushNotifications.subscribe(
+      interest,
+      (statusCode, response) => {
+        console.error(statusCode, response);
+      },
+      () => {
+        console.log(`CALLBACK: Subscribed to ${interest}`);
+      },
+    );
+  };
+
+  handleNotification = (notification) => {
+    console.log(notification);
+    if (Platform.OS === 'ios') {
+      console.log('CALLBACK: handleNotification (ios)');
+    } else {
+      console.log('CALLBACK: handleNotification (android)');
+      console.log(notification);
+      console.log(notification.data)
+    }
+  };
+
+  onSubscriptionsChanged = (interests) => {
+    console.log('CALLBACK: onSubscriptionsChanged');
+    console.log(interests);
+  };
+
 
   onRefresh() {
     this.getLives(this.props.userData.idUtilisateur);
