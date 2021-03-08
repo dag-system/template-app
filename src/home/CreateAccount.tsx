@@ -223,6 +223,10 @@ class CreateAccount extends ValidationComponent {
       this.state.asUser == '' ||
       this.state.enseignantUser == ''
     ) {
+      this.setState({errorPickers: true});
+      this.setState({isLoading: false});
+      return false;
+    } else {
       extraInfoUser = {
         anneeUser: this.state.anneeUser,
         departementUser: this.state.departementUser,
@@ -231,10 +235,6 @@ class CreateAccount extends ValidationComponent {
         asUser: this.state.asUser,
         enseignantUser: this.state.enseignantUser,
       };
-      this.setState({errorPickers: true});
-      this.setState({isLoading: false});
-      return false;
-    } else {
       this.setState({errorPickers: false});
     }
 
@@ -319,6 +319,7 @@ class CreateAccount extends ValidationComponent {
     // formData.append('passUtilisateur', md5(this.state.newPassword));
 
     console.log(formData);
+
     fetch(ApiUtils.getAPIUrl(), {
       method: 'POST',
       headers: {},
@@ -327,6 +328,7 @@ class CreateAccount extends ValidationComponent {
       .then(ApiUtils.checkStatus)
       .then((response) => response.json())
       .then((responseJson) => {
+        console.log('LOOOOG FOLOMI : ', responseJson);
         this.setState({isLoading: false});
         if (responseJson.codeErreur == 'SUCCESS') {
           var action = {type: 'LOGIN', data: responseJson};
@@ -635,8 +637,6 @@ class CreateAccount extends ValidationComponent {
                       label="PERSONNEL INSA"
                       value="PERSONNEL INSA"
                     />
-                    
-                    
                   </Picker>
                 </View>
 
@@ -839,7 +839,7 @@ class CreateAccount extends ValidationComponent {
                       label="Choisissez votre Enseignant"
                       value="-1"
                     />
-                     <Picker.Item label="Pas concerné" value="Autre" />
+                    <Picker.Item label="Pas concerné" value="Autre" />
                     <Picker.Item label="Agneray" value="Agneray" />
                     <Picker.Item label="Barraud" value="Barraud" />
                     <Picker.Item label="Bessac" value="Bessac" />

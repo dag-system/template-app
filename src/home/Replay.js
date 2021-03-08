@@ -43,7 +43,7 @@ import Sidebar from './SideBar';
 import {isPointInPolygon} from 'geolib';
 
 const haversine = require('haversine');
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
   return {
     userData: state.userData,
     currentMapStyle: state.currentMapStyle,
@@ -134,14 +134,14 @@ class Replay extends Component {
       body: formData,
     })
       .then(ApiUtils.checkStatus)
-      .then(response => response.json())
-      .then(responseJson => {
+      .then((response) => response.json())
+      .then((responseJson) => {
         let result = Object.values(responseJson);
 
         this.setState({isloading: false, pointPassages: result});
       })
 
-      .catch(e => {
+      .catch((e) => {
         this.setState({isloading: false});
         // ApiUtils.logError('create live', JSON.stringify(e.message));
         // alert('Une erreur est survenue : ' + JSON.stringify(e.message));
@@ -191,8 +191,8 @@ class Replay extends Component {
       body: formData,
     })
       .then(ApiUtils.checkStatus)
-      .then(response => response.json())
-      .then(responseJson => {
+      .then((response) => response.json())
+      .then((responseJson) => {
         let data = Object.values(responseJson);
         this.setState({isloading: false});
 
@@ -222,7 +222,7 @@ class Replay extends Component {
         }
       })
 
-      .catch(e => {
+      .catch((e) => {
         this.setState({isloading: false});
         // ApiUtils.logError('create live', JSON.stringify(e.message));
         // alert('Une erreur est survenue : ' + JSON.stringify(e.message));
@@ -258,17 +258,17 @@ class Replay extends Component {
       body: formData,
     })
       .then(ApiUtils.checkStatus)
-      .then(response => response.json())
-      .then(responseJson => {
+      .then((response) => response.json())
+      .then((responseJson) => {
         this.setState({isloadingChallenge: false});
         this.setState({classement: responseJson.classement});
         if (
           responseJson.classement.filter(
-            c => c.idUtilisateur == this.props.userData.idUtilisateur,
+            (c) => c.idUtilisateur == this.props.userData.idUtilisateur,
           ).length > 0
         ) {
           let userGpx = responseJson.classement.filter(
-            c => c.idUtilisateur == this.props.userData.idUtilisateur,
+            (c) => c.idUtilisateur == this.props.userData.idUtilisateur,
           )[0].gpxLive;
           this.setState({gpx1Name: userGpx});
         }
@@ -276,7 +276,7 @@ class Replay extends Component {
         // this.setState({isloading: false, pointPassages: result});
       })
 
-      .catch(e => {
+      .catch((e) => {
         this.setState({isloadingChallenge: false});
         // ApiUtils.logError('create live', JSON.stringify(e.message));
         // alert('Une erreur est survenue : ' + JSON.stringify(e.message));
@@ -294,7 +294,8 @@ class Replay extends Component {
       });
   }
   readFile(gpxFile, index) {
-    let filePath = 'https://www.folomi.fr/fichiers/gpxLive/' + gpxFile + '.gpx';
+    let filePath =
+      'http://folomi.snowdag.com/fichiers/gpxLive/' + gpxFile + '.gpx';
 
     // var path = this.normalize(filePath);
     let dirs = RNFetchBlob.fs.dirs;
@@ -306,7 +307,7 @@ class Replay extends Component {
           path: path,
         })
           .fetch('GET', encodeURI(filePath))
-          .then(res => {
+          .then((res) => {
             try {
               let status = res.info().status;
 
@@ -325,7 +326,7 @@ class Replay extends Component {
               // alert(e)
             }
           })
-          .catch(e => alert(e));
+          .catch((e) => alert(e));
       } catch (e) {
         console.log(e);
       }
@@ -334,7 +335,7 @@ class Replay extends Component {
 
   getCoordinatesForMap(positions) {
     var coordinates = [];
-    positions.forEach(element => {
+    positions.forEach((element) => {
       element = Object.values(element);
 
       var coordinate = {
@@ -360,7 +361,7 @@ class Replay extends Component {
   getCoordinates(positions) {
     var coordinates = [];
 
-    positions.forEach(element => {
+    positions.forEach((element) => {
       element = Object.values(element);
       let time = element[2];
       time = Object.values(time);
@@ -392,7 +393,7 @@ class Replay extends Component {
 
     RNFetchBlob.fs
       .readFile(filePath, 'utf8')
-      .then(data => {
+      .then((data) => {
         // alert('ok')
         // console.log(data);
         // handle the data ..
@@ -400,8 +401,8 @@ class Replay extends Component {
         try {
           var test = new GPXDocument(data);
 
-          test.getTracks().then(t => {
-            t.forEach(tr => {
+          test.getTracks().then((t) => {
+            t.forEach((tr) => {
               var finalTrace = {
                 // positionsTrace: positionArray,
                 couleurTrace: ApiUtils.getColor(),
@@ -410,7 +411,7 @@ class Replay extends Component {
                 sportTrace: 'inconnu',
               };
 
-              tr.loadAllSegmentInfo().then(resu => {
+              tr.loadAllSegmentInfo().then((resu) => {
                 // console.log(resu);
                 finalTrace.distanceTrace = (
                   resu[0].totalDistance / 1000
@@ -470,7 +471,7 @@ class Replay extends Component {
           // alert(e)
         }
       })
-      .catch(e => {
+      .catch((e) => {
         Toast.show({
           text: 'Une erreur est survenue. Merci de réessayer',
           buttonText: 'Ok',
@@ -508,7 +509,7 @@ class Replay extends Component {
     })
       .fetch('GET', encodeURI(url))
       .then(() => {})
-      .catch(e => alert(e));
+      .catch((e) => alert(e));
   }
 
   realign() {}
@@ -529,7 +530,7 @@ class Replay extends Component {
       try {
         PermissionsAndroid.request(
           'android.permission.WRITE_EXTERNAL_STORAGE',
-        ).then(res => {
+        ).then((res) => {
           console.warn(res);
           if (res == 'granted') {
             this.onDownloadFileok(url, name);
@@ -705,12 +706,12 @@ class Replay extends Component {
 
   validateRunners() {
     // // let gpxLive =
-    // // 'https://www.folomi.fr/fichiers/gpxLive/' +
+    // // 'http://folomi.snowdag.com/fichiers/gpxLive/' +
     // // '10354_5ffffc3d6d027' +
     // // '.gpx';
 
     // gpxLive =
-    // 'https://www.folomi.fr/fichiers/gpxLive/' +
+    // 'http://folomi.snowdag.com/fichiers/gpxLive/' +
     // '10315_5fff374f5a594' +
     // '.gpx';
 
@@ -736,7 +737,7 @@ class Replay extends Component {
     var minDistance = Number.MAX_VALUE;
     var markerMin = null;
 
-    points.forEach(p => {
+    points.forEach((p) => {
       // if (!this.isAlreadyVisitedPoints(p) && this.isShowType(p.type) && p.coordinates != null) {
       var dist = haversine(startPoint, p.coordinates);
       if (dist < minDistance && dist < maxDistance) {
@@ -767,7 +768,7 @@ class Replay extends Component {
   render() {
     return (
       <Drawer
-        ref={ref => {
+        ref={(ref) => {
           this.drawer = ref;
         }}
         content={
@@ -917,7 +918,7 @@ class Replay extends Component {
                             }}>
                             <Picker.Item label="Choisir" value="-1" />
 
-                            {this.state.classement?.map(c => {
+                            {this.state.classement?.map((c) => {
                               return (
                                 <Picker.Item
                                   label={c.nomUtilisateur + ' ' + c.tempsEffort}
@@ -989,7 +990,7 @@ class Replay extends Component {
                             }}>
                             <Picker.Item label="Choisir" value="-1" />
 
-                            {this.state.classement?.map(c => {
+                            {this.state.classement?.map((c) => {
                               return (
                                 <Picker.Item
                                   label={c.nomUtilisateur + ' ' + c.tempsEffort}
@@ -1143,7 +1144,7 @@ class Replay extends Component {
                           maximumValue={500}
                           style={{width: '90%'}}
                           value={this.state.accelerator}
-                          onValueChange={value =>
+                          onValueChange={(value) =>
                             this.setState({accelerator: value})
                           }
                         />
@@ -1431,6 +1432,7 @@ class Replay extends Component {
               {/* </View> */}
               <View style={{marginBottom: 300}} />
             </Content>
+            <Sponsors />
             {/******** modal5 : Traces list  *****************/}
             <ModalSmall
               isVisible={this.state.isModalTraceVisible}

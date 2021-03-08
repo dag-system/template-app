@@ -5,7 +5,8 @@ import {
   TouchableOpacity,
   View,
   Linking,
-  Platform,Text,
+  Platform,
+  Text,
   Dimensions,
 } from 'react-native';
 import {
@@ -28,11 +29,8 @@ import moment from 'moment';
 import Logo from '../assets/logo_header.png';
 import GlobalStyles from '../styles';
 
-import Rhonealpes from '../assets/rhonealpes.svg';
-import Region from '../assets/region.jpg';
-import Ccmv from '../assets/CCMV.png';
-import Alpesisere from '../assets/alpesisere.svg';
-import Isere from '../assets/isere.svg';
+import Cnr from '../assets/CNR.png';
+import Fondation from '../assets/Logo-FONDATION.png';
 
 export class Sponsors extends Component {
   constructor(props) {
@@ -60,53 +58,37 @@ export class Sponsors extends Component {
 
   render() {
     return (
-      <View >
-      <View style={{borderBottomWidth : 1, borderBottomColor : '#DDDDDD', width : Dimensions.get('screen').width-30, marginLeft : 15, marginRight : 10,  marginTop : 0}}></View>
-      <View
-        style={{
-          display: 'flex',
-          flexDirection: 'row',
-          justifyContent: 'space-between',
-          marginTop : 10, 
-          width : '100%',
-          paddingHorizontal : 10,
-          marginBottom : 20
-        }}>
-        <View style={{width : '34%', height : 50}}>
-          <Image
-            source={Region}
-            resizeMethod="resize"
-            resizeMode="contain"
-            style={{height: '100%', width :'100%'}}
-          />
+      <View>
+        <View
+          style={{
+            display: 'flex',
+            flexDirection: 'row',
+            justifyContent: 'space-around',
+            marginTop: 10,
+            width: '100%',
+            paddingHorizontal: 10,
+            marginBottom: 20,
+          }}>
+          <View style={{width: '34%', height: 50}}>
+            <Image
+              source={Cnr}
+              resizeMethod="resize"
+              resizeMode="contain"
+              style={{height: '100%', width: '100%'}}
+            />
+          </View>
+          <View style={{width: '34%', height: 50}}>
+            <Image
+              source={Fondation}
+              resizeMethod="resize"
+              resizeMode="contain"
+              style={{height: '100%', width: '100%'}}
+            />
+          </View>
         </View>
-       
-         
-        <View style={{width : '30%', height : 50}}>
-          <Isere height={'80%'} style={{marginTop : 5}}/>
-        </View>
-
-        <View style={{width : '10%', height : 50, flex : 1, justifyContent :'center', paddingLeft :0}}>
-          <Image
-            source={Ccmv}
-            resizeMethod="resize"
-            resizeMode="contain"
-            style={{height: '70%', width :'100%'}}
-          />
-        </View>
-
-  
-
-        <View style={{width : '10%', height : 50, flex : 1}}>
-          <Alpesisere height={'70%'} style={{marginTop : 7}}/>
-        </View>
-     
-      </View>
       </View>
     );
   }
 }
 
-const styles = StyleSheet.create({
-  
-});
+const styles = StyleSheet.create({});

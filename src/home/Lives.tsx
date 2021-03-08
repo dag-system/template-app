@@ -129,29 +129,26 @@ class Lives extends Component<Props, State> {
     }
   }
   async downloadData() {
-
     this.init();
     await this.getNewVersion();
     await this.getLives(this.props.userData.idUtilisateur);
 
     await this.getinformationStation();
-
-
   }
 
   init = () => {
-
-    RNPusherPushNotifications.setInstanceId('378c58b6-e7b0-43f9-ae64-a3e269a36658');
+    RNPusherPushNotifications.setInstanceId(
+      '378c58b6-e7b0-43f9-ae64-a3e269a36658',
+    );
 
     RNPusherPushNotifications.on('registered', () => {
-      console.log('la')
-      console.log("registred");
-      this.subscribe("debug-"+this.props.userData.idUtilisateur);
+      console.log('la');
+      console.log('registred');
+      this.subscribe('debug-' + this.props.userData.idUtilisateur);
     });
 
     RNPusherPushNotifications.on('notification', this.handleNotification);
     // RNPusherPushNotifications.setOnSubscriptionsChangedListener(this.onSubscriptionsChanged);
- 
   };
 
   subscribe = (interest) => {
@@ -174,7 +171,7 @@ class Lives extends Component<Props, State> {
     } else {
       console.log('CALLBACK: handleNotification (android)');
       console.log(notification);
-      console.log(notification.data)
+      console.log(notification.data);
     }
   };
 
@@ -182,7 +179,6 @@ class Lives extends Component<Props, State> {
     console.log('CALLBACK: onSubscriptionsChanged');
     console.log(interests);
   };
-
 
   onRefresh() {
     this.getLives(this.props.userData.idUtilisateur);
@@ -1046,6 +1042,8 @@ class Lives extends Component<Props, State> {
               }
             </TouchableHighlight>
 
+            <Sponsors />
+
             <Modal
               visible={
                 !this.props.isOkPopupBAttery2 && this.props.isOkPopupBAttery
@@ -1199,6 +1197,7 @@ class Lives extends Component<Props, State> {
                   />
                 </View>
               </Root>
+              <Sponsors />
               {/* ) : null} */}
             </Modal>
           </Container>
@@ -1304,7 +1303,7 @@ const styles = StyleSheet.create({
     // paddingLeft: 18,
     position: 'absolute',
     right: 20,
-    bottom: 20,
+    bottom: 90,
     justifyContent: 'center',
   },
   plusButtonLogo: {

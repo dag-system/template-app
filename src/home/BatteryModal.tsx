@@ -547,6 +547,7 @@ class BatteryModal extends Component {
               ) : null}
               <View style={{marginBottom: 100}} />
             </Content>
+            <Sponsors />
           </Root>
         </Container>
       </Drawer>

@@ -243,6 +243,48 @@ export default class Sidebar extends Component {
 
           <TouchableHighlight
             underlayColor="rgba(255,255,255,1,0.6)"
+            onPress={() => this.onClickNavigate('Partenaires')}
+            style={{
+              width: '100%',
+              backgroundColor:
+                this.props.selected == 'Partenaires'
+                  ? '#E9E9E9'
+                  : 'transparent',
+            }}>
+            <View
+              style={{
+                display: 'flex',
+                flexDirection: 'row',
+                justifyContent: 'flex-start',
+                flexWrap: 'wrap',
+                padding: 10,
+              }}>
+              <Icon
+                name="handshake"
+                type="FontAwesome5"
+                style={[
+                  styles.icon,
+                  {
+                    color:
+                      this.props.selected == 'Partenaires' ? 'black' : 'white',
+                  },
+                ]}
+              />
+              <Text
+                style={[
+                  styles.menuText,
+                  {
+                    color:
+                      this.props.selected == 'Partenaires' ? 'black' : 'white',
+                  },
+                ]}>
+                Partenaires
+              </Text>
+            </View>
+          </TouchableHighlight>
+
+          <TouchableHighlight
+            underlayColor="rgba(255,255,255,1,0.6)"
             onPress={() => this.onClickNavigate('Help')}
             style={{
               width: '100%',

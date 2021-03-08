@@ -2344,7 +2344,9 @@ class SimpleMap extends PureComponent<Props, State> {
                   zIndex: 12,
                   width: '100%',
                   backgroundColor: 'white',
-                }}></View>
+                }}>
+                <Sponsors />
+              </View>
             </View>
           </Root>
           {/* ) : null} */}
