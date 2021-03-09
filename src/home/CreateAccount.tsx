@@ -134,14 +134,14 @@ class CreateAccount extends ValidationComponent {
       ],
       years: [],
       challengeRadioUtilisateur: 'Actifs',
-      equipeUtilisateur: '',
-      equipeChoiceUtilisateur: '',
       fetchClub: [],
       alertClub: false,
       alertEquipe: false,
       alertSexe: false,
       acceptChallengeUtilisateur: false,
       needvtt: false,
+      equipeUtilisateur: '',
+      equipeChoiceUtilisateur: '',
     };
   }
 
@@ -248,6 +248,7 @@ class CreateAccount extends ValidationComponent {
     let allClubs = this.state.fetchClub;
 
     if (selectedClub != '') {
+      console.log('oui');
       clubs.push({club: this.state.equipeChoiceUtilisateur, type: 'RAID'});
     } else {
       let clubExist = allClubs.filter(
@@ -255,12 +256,14 @@ class CreateAccount extends ValidationComponent {
       );
 
       if (clubExist.length > 0) {
+        console.log('oui oui');
         this.setState({alertClub: true});
         this.setState({isLoading: false});
         return false;
       } else {
         clubs.push({club: this.state.equipeUtilisateur, type: 'RAID'});
         this.setState({alertClub: false});
+        this.setState({isLoading: false});
       }
     }
 
@@ -332,10 +335,12 @@ class CreateAccount extends ValidationComponent {
       .then(ApiUtils.checkStatus)
       .then((response) => response.json())
       .then((responseJson) => {
+        console.log('test');
         this.setState({isLoading: false});
         if (responseJson.codeErreur == 'SUCCESS') {
           var action = {type: 'LOGIN', data: responseJson};
           this.props.dispatch(action);
+          console.log('test 2');
 
           this.onClickNavigate('Lives');
         } else {
@@ -385,7 +390,6 @@ class CreateAccount extends ValidationComponent {
       .then((response) => response.json())
       .then((responseJson) => {
         this.setState({fetchClub: responseJson});
-        console.log(this.state.fetchClub);
       })
       .catch((e) => {
         ApiUtils.logError('getCLUBS', e.message);
@@ -413,7 +417,6 @@ class CreateAccount extends ValidationComponent {
   }
 
   onChangeChoiceEquipe(value) {
-    console.log('EQUIPE : ', value);
     this.setState({equipeChoiceUtilisateur: value});
   }
 
@@ -887,15 +890,17 @@ class CreateAccount extends ValidationComponent {
                       borderBottomWidth: 1,
                     }}>
                     <Picker.Item label="Choisissez votre équipe" value="" />
-                    {this.state.fetchClub.map((fetchEquipe, index) => {
-                      return fetchEquipe.nbUsers < 5 ? (
-                        <Picker.Item
-                          label={fetchEquipe.nom}
-                          value={fetchEquipe.nom}
-                          key={index}
-                        />
-                      ) : null;
-                    })}
+                    {this.state.fetchClub
+                      .filter((club) => club.nbUsers < 5)
+                      .map((equipe, index) => {
+                        return (
+                          <Picker.Item
+                            label={equipe.nom}
+                            value={equipe.nom}
+                            key={index}
+                          />
+                        );
+                      })}
                   </Picker>
                 </View>
                 {this.state.alertEquipe == true ? (

@@ -61,7 +61,7 @@ var ApiUtils = {
   },
 
   getAPIUrl() {
-    return 'http://folomi.snowdag.com/api/sportapi.php';
+    return 'htps://folomi.fr.fr/api/sportapi.php';
   },
 
   getAPIAuth() {
@@ -78,12 +78,12 @@ var ApiUtils = {
     } else if (ISDEMO) {
       return 'http://www.folomidemo.fr/live/';
     } else {
-      return 'http://folomi.snowdag.com/live/';
+      return 'htps://folomi.fr.fr/live/';
     }
   },
 
   getGpxUrl(gpxName) {
-    return 'http://folomi.snowdag.com/fichiers/gpxLive/' + gpxName + '.gpx';
+    return 'htps://folomi.fr.fr/fichiers/gpxLive/' + gpxName + '.gpx';
   },
 
   getUrl() {
@@ -92,7 +92,7 @@ var ApiUtils = {
     } else if (ISDEMO) {
       return 'http://www.folomidemo.fr/';
     } else {
-      return 'http://folomi.snowdag.com/';
+      return 'htps://folomi.fr.fr/';
     }
   },
 

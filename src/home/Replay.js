@@ -294,8 +294,7 @@ class Replay extends Component {
       });
   }
   readFile(gpxFile, index) {
-    let filePath =
-      'http://folomi.snowdag.com/fichiers/gpxLive/' + gpxFile + '.gpx';
+    let filePath = 'htps://folomi.fr.fr/fichiers/gpxLive/' + gpxFile + '.gpx';
 
     // var path = this.normalize(filePath);
     let dirs = RNFetchBlob.fs.dirs;
@@ -706,12 +705,12 @@ class Replay extends Component {
 
   validateRunners() {
     // // let gpxLive =
-    // // 'http://folomi.snowdag.com/fichiers/gpxLive/' +
+    // // 'htps://folomi.fr.fr/fichiers/gpxLive/' +
     // // '10354_5ffffc3d6d027' +
     // // '.gpx';
 
     // gpxLive =
-    // 'http://folomi.snowdag.com/fichiers/gpxLive/' +
+    // 'htps://folomi.fr.fr/fichiers/gpxLive/' +
     // '10315_5fff374f5a594' +
     // '.gpx';
 
