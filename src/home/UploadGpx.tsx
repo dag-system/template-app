@@ -62,7 +62,7 @@ class UploadGpx extends Component<Props, State> {
 
     this.state = {
       libelleLive: 'Nouvelle activité importée',
-      selectedSport: "17",
+      selectedSport: '17',
       isLoading: false,
       comments: '',
     };
@@ -240,7 +240,7 @@ class UploadGpx extends Component<Props, State> {
     );
 
     try {
-      let res = await fetch('http://folomi.snowdag.com/api/uploadgpx.php', {
+      let res = await fetch('https://folomi.fr/api/uploadgpx.php', {
         method: 'post',
         body: formData,
         headers: {
