@@ -141,7 +141,8 @@ class CreateAccount extends ValidationComponent {
       enseignantUser: '',
       errorPickers: false,
       errorCNIL: false,
-      acceptChallengeUtilisateur: 0,
+      acceptChallengeNameUtilisateur: false,
+      acceptChallengeUtilisateur: false,
     };
   }
 
@@ -295,7 +296,7 @@ class CreateAccount extends ValidationComponent {
     formData.append('paysUtilisateur', this.state.paysUtilisateur);
     formData.append('organisation', ApiUtils.getOrganisation());
     var acceptChallengeNameUtilisateur = 0;
-    if (this.state.acceptChallengenameUtilisateur) {
+    if (this.state.acceptChallengeNameUtilisateur) {
       acceptChallengeNameUtilisateur = 1;
     }
 
@@ -317,8 +318,7 @@ class CreateAccount extends ValidationComponent {
     formData.append('acceptChallengeUtilisateur', acceptChallengeUtilisateur);
 
     // formData.append('passUtilisateur', md5(this.state.newPassword));
-
-    console.log(formData);
+    return;
 
     fetch(ApiUtils.getAPIUrl(), {
       method: 'POST',
@@ -351,7 +351,7 @@ class CreateAccount extends ValidationComponent {
         // alert('Une erreur est survenue : ' + JSON.stringify(e.message));
 
         Toast.show({
-          text: "Une erreur est survenue, merci de réessayer",
+          text: 'Une erreur est survenue, merci de réessayer',
           buttonText: 'Ok',
           type: 'danger',
           position: 'bottom',
