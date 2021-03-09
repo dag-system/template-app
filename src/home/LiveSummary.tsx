@@ -379,11 +379,11 @@ class LiveSummary extends Component<Props, State> {
 
   shareOldStyle() {
     let url =
-      'https://www.folomi.fr/s/compte/partage-fouleeblanche.php?c=' +
+      'http://folomi.snowdag.com/s/compte/partage-fouleeblanche.php?c=' +
       this.state.live.codeLive;
     if (this.state.live.segmentEfforts.length > 0) {
       url =
-        'https://www.folomi.fr/s/compte/photo-challenge.php?idE=' +
+        'http://folomi.snowdag.com/s/compte/photo-challenge.php?idE=' +
         this.state.live.segmentEfforts[0].idEffort;
     }
 
@@ -401,12 +401,12 @@ class LiveSummary extends Component<Props, State> {
 
   shareImage = () => {
     let url =
-      'https://www.folomi.fr/s/compte/photo-foulee.php?c=' +
+      'http://folomi.snowdag.com/s/compte/photo-foulee.php?c=' +
       this.state.live.codeLive;
 
     if (this.state.live.segmentEfforts.length > 0) {
       url =
-        'https://www.folomi.fr/s/compte/photo-challenge.php?idE=' +
+        'http://folomi.snowdag.com/s/compte/photo-challenge.php?idE=' +
         this.state.live.segmentEfforts[0].idEffort;
     }
 
@@ -427,7 +427,7 @@ class LiveSummary extends Component<Props, State> {
       title: 'Découvrez mon activité DigiRAID Grenoble INP',
       url: base64image,
       message:
-        'https://www.folomi.fr/s/compte/partage-fouleeblanche.php?c=' +
+        'http://folomi.snowdag.com/s/compte/partage-fouleeblanche.php?c=' +
         this.state.live.codeLive,
       subject: 'Découvrez mon activité DigiRAID Grenoble INP',
     };
@@ -440,7 +440,8 @@ class LiveSummary extends Component<Props, State> {
   };
 
   openLink(idLive) {
-    let url = 'https://www.folomi.fr/s/compte/playback.php?idLs[]=' + idLive;
+    let url =
+      'http://folomi.snowdag.com/s/compte/playback.php?idLs[]=' + idLive;
     Linking.canOpenURL(url).then((supported) => {
       if (supported) {
         Linking.openURL(url);
@@ -1347,6 +1348,7 @@ class LiveSummary extends Component<Props, State> {
 
             {/* </View> */}
           </Content>
+          <Sponsors />
           {/******** modal5 : Traces list  *****************/}
           <ModalSmall
             isVisible={this.state.isModalTraceVisible}

@@ -784,20 +784,6 @@ class Preferences extends Component {
                       }}
                     />
                   </TouchableOpacity>
-                  <TouchableOpacity
-                    style={{
-                      display: 'flex',
-                      flexDirection: 'row',
-                      width: '30%',
-                      justifyContent: 'space-around',
-                    }}
-                    onPress={() => this.setState({sexeUtilisateur: 'A'})}>
-                    <Text>Autre</Text>
-                    <Radio
-                      selected={this.state.sexeUtilisateur == 'A'}
-                      onPress={() => this.setState({sexeUtilisateur: 'A'})}
-                    />
-                  </TouchableOpacity>
                 </View>
 
                 {Platform.OS == 'ios' ? (

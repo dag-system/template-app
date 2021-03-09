@@ -42,6 +42,7 @@ import Loading from './Loading';
 import {Modal} from 'react-native';
 import WebviewJetCode from './WebviewJetCode';
 import GlobalStyles from '../styles';
+import {Sponsors} from './Sponsors';
 
 const mapStateToProps = (state) => {
   return {
@@ -692,6 +693,7 @@ class Home extends Component {
 
                 <View style={{marginBottom: 0}} />
               </KeyboardAvoidingView>
+              <Sponsors />
             </Modal>
 
             <Modal
@@ -714,6 +716,11 @@ class Home extends Component {
               <WebviewJetCode uri={'https://google.com'} />
             </Modal>
           </Content>
+          <View style={{backgroundColor: 'white'}}>
+            <Animated.View animation="bounceInUp" delay={200}>
+              <Sponsors />
+            </Animated.View>
+          </View>
         </Container>
       </Root>
     );

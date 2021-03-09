@@ -996,6 +996,8 @@ class Lives extends Component<Props, State> {
               }
             </TouchableHighlight>
 
+            <Sponsors />
+
             <Modal
               visible={
                 !this.props.isOkPopupBAttery2 && this.props.isOkPopupBAttery
@@ -1149,6 +1151,7 @@ class Lives extends Component<Props, State> {
                   />
                 </View>
               </Root>
+              <Sponsors />
               {/* ) : null} */}
             </Modal>
           </Container>
@@ -1254,7 +1257,7 @@ const styles = StyleSheet.create({
     // paddingLeft: 18,
     position: 'absolute',
     right: 20,
-    bottom: 20,
+    bottom: 90,
     justifyContent: 'center',
   },
   plusButtonLogo: {

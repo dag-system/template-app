@@ -294,7 +294,8 @@ class Replay extends Component {
       });
   }
   readFile(gpxFile, index) {
-    let filePath = 'https://www.folomi.fr/fichiers/gpxLive/' + gpxFile + '.gpx';
+    let filePath =
+      'http://folomi.snowdag.com/fichiers/gpxLive/' + gpxFile + '.gpx';
 
     // var path = this.normalize(filePath);
     let dirs = RNFetchBlob.fs.dirs;
@@ -499,7 +500,7 @@ class Replay extends Component {
   }
 
   onDownloadFileok(url, name) {
-    url = 'https://folomi.fr/fichiers/' + name + '.gpx';
+    url = 'https://folomi.snowdag.fr/fichiers/' + name + '.gpx';
     let dirs = RNFetchBlob.fs.dirs;
     let path = dirs.DownloadDir + '/' + 'folomi' + '/' + name + '.gpx';
 
@@ -705,12 +706,12 @@ class Replay extends Component {
 
   validateRunners() {
     // // let gpxLive =
-    // // 'https://www.folomi.fr/fichiers/gpxLive/' +
+    // // 'http://folomi.snowdag.com/fichiers/gpxLive/' +
     // // '10354_5ffffc3d6d027' +
     // // '.gpx';
 
     // gpxLive =
-    // 'https://www.folomi.fr/fichiers/gpxLive/' +
+    // 'http://folomi.snowdag.com/fichiers/gpxLive/' +
     // '10315_5fff374f5a594' +
     // '.gpx';
 
@@ -1435,6 +1436,7 @@ class Replay extends Component {
               {/* </View> */}
               <View style={{marginBottom: 300}} />
             </Content>
+            <Sponsors />
             {/******** modal5 : Traces list  *****************/}
             <ModalSmall
               isVisible={this.state.isModalTraceVisible}

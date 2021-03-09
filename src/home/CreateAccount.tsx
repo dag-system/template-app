@@ -141,16 +141,17 @@ class CreateAccount extends ValidationComponent {
       alertEquipe: false,
       alertSexe: false,
       acceptChallengeUtilisateur: false,
+      needvtt: false,
     };
   }
 
   componentDidMount() {
-    this.getClubs();
     let years = [];
     for (let i = 2021; i > 1930; i--) {
       years.push(i);
     }
     this.setState({years: years});
+    this.getClubs();
   }
 
   ongoHome() {
@@ -175,8 +176,6 @@ class CreateAccount extends ValidationComponent {
       acceptChallengeUtilisateur: {required: true},
       // },
     });
-
-    console.log();
 
     if (isValid) {
       if (
@@ -234,6 +233,7 @@ class CreateAccount extends ValidationComponent {
 
     if (!this.state.sexeUtilisateur) {
       this.setState({alertSexe: true});
+      this.setState({isLoading: true});
       return false;
     } else {
       this.setState({alertSexe: false});
@@ -292,16 +292,14 @@ class CreateAccount extends ValidationComponent {
     var acceptChallengeUtilisateur = 0;
     if (this.state.acceptChallengeUtilisateur == true) {
       acceptChallengeUtilisateur = 1;
-    }
-
-    if (acceptChallengeUtilisateur == 1) {
-      formData.append('acceptChallengeUtilisateur', 1);
+      formData.append('acceptChallengeUtilisateur', acceptChallengeUtilisateur);
       this.setState({errorAutorisationRespons: false});
     } else {
       this.setState({errorAutorisationRespons: true});
       this.setState({isLoading: false});
       return false;
     }
+
     var acceptChallengeNameUtilisateur = 0;
     if (
       this.state.acceptChallengenameUtilisateur ||
@@ -315,7 +313,16 @@ class CreateAccount extends ValidationComponent {
       acceptChallengeNameUtilisateur,
     );
 
+    var extraInfo = '';
+    if (this.state.needvtt) {
+      extraInfo = 'needvtt';
+    }
+
+    formData.append('extraInfo', extraInfo);
+
     formData.append('passUtilisateur', md5(this.state.newPassword));
+
+    console.log(formData);
 
     fetch(ApiUtils.getAPIUrl(), {
       method: 'POST',
@@ -366,7 +373,6 @@ class CreateAccount extends ValidationComponent {
     formData.append('auth', ApiUtils.getAPIAuth());
     formData.append('organisation', 'DIGIRAIDINP');
 
-    //fetch followCode API
     fetch(ApiUtils.getAPIUrl(), {
       method: 'POST',
       headers: {
@@ -378,8 +384,8 @@ class CreateAccount extends ValidationComponent {
       .then(ApiUtils.checkStatus)
       .then((response) => response.json())
       .then((responseJson) => {
-        console.log(responseJson);
         this.setState({fetchClub: responseJson});
+        console.log(this.state.fetchClub);
       })
       .catch((e) => {
         ApiUtils.logError('getCLUBS', e.message);
@@ -407,6 +413,7 @@ class CreateAccount extends ValidationComponent {
   }
 
   onChangeChoiceEquipe(value) {
+    console.log('EQUIPE : ', value);
     this.setState({equipeChoiceUtilisateur: value});
   }
 
@@ -526,28 +533,6 @@ class CreateAccount extends ValidationComponent {
                   ).map((errorMessage) => (
                     <Text style={styles.error}>{errorMessage}</Text>
                   ))}
-
-                <View
-                  style={{
-                    marginTop: 20,
-                    paddingLeft: 10,
-                    width: '80%',
-                    display: 'flex',
-                    flexDirection: 'row',
-                    justifyContent: 'space-between',
-                  }}>
-                  <Switch
-                    style={{paddingTop: 20}}
-                    onValueChange={(text) =>
-                      this.setState({acceptChallengeTelUtilisateur: text})
-                    }
-                    value={this.state.acceptChallengeTelUtilisateur == 1}
-                  />
-                  <Text style={{marginLeft: 10}}>
-                    J’accepte l’utilisation de mon numéro de téléphone pour le
-                    tirage au sort des lots
-                  </Text>
-                </View>
 
                 <Text style={styles.label}>Sexe</Text>
 
@@ -882,7 +867,7 @@ class CreateAccount extends ValidationComponent {
                     iosIcon={<Icon name="chevron-down" type="FontAwesome5" />}
                     style={{marginTop: 0}}
                     selectedValue={this.state.equipeChoiceUtilisateur}
-                    onValueChange={this.onChangeChoiceEquipe.bind(this)}
+                    onValueChange={(value) => this.onChangeChoiceEquipe(value)}
                     placeholder={'Choisissez votre équipe'}
                     placeholderStyle={{
                       color: ApiUtils.getBackgroundColor(),
@@ -901,12 +886,13 @@ class CreateAccount extends ValidationComponent {
                       borderBottomColor: ApiUtils.getBackgroundColor(),
                       borderBottomWidth: 1,
                     }}>
-                    <Picker.Item label="Choisissez votre équipe" value="-1" />
-                    {this.state.fetchClub.map((fetchEquipe) => {
+                    <Picker.Item label="Choisissez votre équipe" value="" />
+                    {this.state.fetchClub.map((fetchEquipe, index) => {
                       return fetchEquipe.nbUsers < 5 ? (
                         <Picker.Item
                           label={fetchEquipe.nom}
                           value={fetchEquipe.nom}
+                          key={index}
                         />
                       ) : null;
                     })}
@@ -986,6 +972,7 @@ class CreateAccount extends ValidationComponent {
                   </Text>
                 </TouchableOpacity>
               </View>
+
               {this.state.errorAutorisationRespons == true ? (
                 <Text
                   style={{
@@ -997,6 +984,31 @@ class CreateAccount extends ValidationComponent {
                   Vous devez accepter le réglement
                 </Text>
               ) : null}
+
+              <View
+                style={{
+                  marginTop: 20,
+                  paddingLeft: 10,
+                  width: '80%',
+                  display: 'flex',
+                  flexDirection: 'row',
+                  justifyContent: 'space-between',
+                }}>
+                <Switch
+                  ref="needvtt"
+                  style={{paddingTop: 20}}
+                  onValueChange={(text) => this.setState({needvtt: text})}
+                  value={this.state.needvtt}
+                />
+                <TouchableOpacity
+                  onPress={() =>
+                    this.setState({
+                      needvtt: !this.state.needvtt,
+                    })
+                  }>
+                  <Text style={{marginLeft: 10}}>Je souhaite louer un VTT</Text>
+                </TouchableOpacity>
+              </View>
 
               {this.state.isLoading ? (
                 <View

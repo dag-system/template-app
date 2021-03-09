@@ -7,8 +7,7 @@ const VersionNumber = '1.0.0';
 const VersionNumberInt = 1;
 
 var ApiUtils = {
-  getOrganisation()
-  {
+  getOrganisation() {
     return 'DIGIRAIDINP';
   },
   ISDEBUG() {
@@ -35,19 +34,15 @@ var ApiUtils = {
     return '#FEAA00';
   },
 
-  green()
-  {
+  green() {
     return '#39F800';
   },
 
-  checkStatus: function(response) {
-  
+  checkStatus: function (response) {
     if (response.ok) {
       return response;
     } else {
-      response.text().then(function(text) {
-      
-      });
+      response.text().then(function (text) {});
 
       let error = new Error(response.statusText);
       error.response = response;
@@ -66,8 +61,7 @@ var ApiUtils = {
   },
 
   getAPIUrl() {
-    // return 'http://folomi.snowdag.com/api/sportapi.php';
-    return 'https://www.folomi.fr/api/sportapi.php';
+    return 'http://folomi.snowdag.com/api/sportapi.php';
   },
 
   getAPIAuth() {
@@ -84,12 +78,12 @@ var ApiUtils = {
     } else if (ISDEMO) {
       return 'http://www.folomidemo.fr/live/';
     } else {
-      return 'http://folomi.fr/live/';
+      return 'http://folomi.snowdag.com/live/';
     }
   },
 
   getGpxUrl(gpxName) {
-    return 'https://www.folomi.fr/fichiers/gpxLive/' + gpxName + '.gpx';
+    return 'http://folomi.snowdag.com/fichiers/gpxLive/' + gpxName + '.gpx';
   },
 
   getUrl() {
@@ -98,7 +92,7 @@ var ApiUtils = {
     } else if (ISDEMO) {
       return 'http://www.folomidemo.fr/';
     } else {
-      return 'http://folomi.fr/';
+      return 'http://folomi.snowdag.com/';
     }
   },
 
@@ -123,12 +117,11 @@ var ApiUtils = {
     }
   },
 
-  logError: function(methodName, message) {
+  logError: function (methodName, message) {
     // alert(message)
     // let formData = new FormData();
     // formData.append('method', 'debug');
     // formData.append('auth', ApiUtils.getAPIAuth());
-
     // var finalMessage =
     //   '----DATE---: ' +
     //   ' ' +
@@ -139,7 +132,6 @@ var ApiUtils = {
     //   methodName +
     //   '---MESSAGE---:  ' +
     //   message;
-
     // formData.append('message', finalMessage);
     // formData.append('type', 0);
     // //fetch followCode API
@@ -152,14 +144,12 @@ var ApiUtils = {
     //   .catch(e => e);
   },
 
-  logStats: function(message) {
+  logStats: function (message) {
     // let formData = new FormData();
     // formData.append('method', 'debug');
     // formData.append('auth', ApiUtils.getAPIAuth());
-
     // formData.append('message', message);
     // formData.append('type', 1);
-
     // //fetch followCode API
     // fetch(ApiUtils.getAPIUrl(), {
     //   method: 'POST',

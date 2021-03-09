@@ -240,7 +240,7 @@ class UploadGpx extends Component<Props, State> {
     );
 
     try {
-      let res = await fetch('https://www.folomi.fr/api/uploadgpx.php', {
+      let res = await fetch('http://folomi.snowdag.com/api/uploadgpx.php', {
         method: 'post',
         body: formData,
         headers: {
@@ -536,7 +536,9 @@ class UploadGpx extends Component<Props, State> {
                 bottom: Platform.OS == 'ios' ? 80 : 50,
                 zIndex: 12,
                 backgroundColor: 'white',
-              }}></View>
+              }}>
+              <Sponsors />
+            </View>
           </Content>
         </Container>
       </Root>
