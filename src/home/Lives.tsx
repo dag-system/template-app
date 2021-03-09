@@ -129,7 +129,7 @@ class Lives extends Component<Props, State> {
     }
   }
   async downloadData() {
-    this.init();
+   // this.init();
     await this.getNewVersion();
     await this.getLives(this.props.userData.idUtilisateur);
 
@@ -282,7 +282,8 @@ class Lives extends Component<Props, State> {
       let currentLive = this.props.lives.filter((l) => l.etatLive == 0)[0];
       this.viewLive(currentLive);
     } else {
-      this.setState({modalChooseSportVisible: true});
+      this.onClickCreateLiveOk();
+     // this.setState({modalChooseSportVisible: true});
     }
   }
 
@@ -293,7 +294,7 @@ class Lives extends Component<Props, State> {
     formData.append('auth', ApiUtils.getAPIAuth());
     formData.append('idUtilisateur', this.props.userData.idUtilisateur);
     formData.append('idversion', ApiUtils.VersionNumberInt().toString());
-    formData.append('idSport', this.state.selectedSport.toString());
+    formData.append('idSport', "17");
     formData.append('os', Platform.OS);
     var libelleLive = this.getLibelleLive();
 
@@ -321,7 +322,7 @@ class Lives extends Component<Props, State> {
             codeLive: responseJson.codeLive,
             libelleLive: responseJson.libelleLive,
             dateCreationLive: responseJson.dateCreationLive,
-            idSport: this.state.selectedSport,
+            idSport: "17",
             invites: [],
             statsInfos: {},
             etatLive: 0,
@@ -1145,7 +1146,7 @@ class Lives extends Component<Props, State> {
                               paddingLeft: 5,
                               fontStyle: 'italic',
                             }}>
-                            Le type de glisse doit être renseigné
+                            Le type de sport doit être renseigné
                           </Text>
                         ) : null}
                       </View>

@@ -62,7 +62,6 @@ var ApiUtils = {
   },
 
   getAPIUrl() {
-    // return 'http://folomi.snowdag.com/api/sportapi.php';
     return 'http://folomi.snowdag.com/api/sportapi.php';
   },
 

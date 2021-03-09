@@ -62,7 +62,7 @@ class UploadGpx extends Component<Props, State> {
 
     this.state = {
       libelleLive: 'Nouvelle activité importée',
-      selectedSport: -1,
+      selectedSport: "17",
       isLoading: false,
       comments: '',
     };
@@ -427,7 +427,7 @@ class UploadGpx extends Component<Props, State> {
                         paddingLeft: 5,
                         fontStyle: 'italic',
                       }}>
-                      Le type de glisse doit être renseigné
+                      Le type de sport doit être renseigné
                     </Text>
                   ) : null}
                   <View

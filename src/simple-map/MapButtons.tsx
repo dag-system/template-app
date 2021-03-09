@@ -668,7 +668,7 @@ class MapButtons extends Component<Props, State> {
                           paddingLeft: 5,
                           fontStyle: 'italic',
                         }}>
-                        Le type de glisse doit être renseigné
+                        Le type de sport doit être renseigné
                       </Text>
                     ) : null}
 

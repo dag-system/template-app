@@ -95,8 +95,6 @@ class ForgotPassword extends ValidationComponent {
         .then(ApiUtils.checkStatus)
         .then((response) => response.json())
         .then((responseJson) => {
-          // alert("success http");
-          //save values in cache
 
           if (responseJson.codeErreur == 'SUCCESS') {
             //SaveData

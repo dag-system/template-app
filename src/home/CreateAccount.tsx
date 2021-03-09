@@ -350,6 +350,14 @@ class CreateAccount extends ValidationComponent {
         ApiUtils.logError('create account', JSON.stringify(e.message));
         // alert('Une erreur est survenue : ' + JSON.stringify(e.message));
 
+        Toast.show({
+          text: "Une erreur est survenue, merci de réessayer",
+          buttonText: 'Ok',
+          type: 'danger',
+          position: 'bottom',
+          duration: 5000,
+        });
+
         if (e.message == 'Timeout' || e.message == 'Network request failed') {
           this.setState({noConnection: true});
 
