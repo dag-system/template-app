@@ -61,7 +61,7 @@ var ApiUtils = {
   },
 
   getAPIUrl() {
-    return 'htps://folomi.fr.fr/api/sportapi.php';
+    return 'https://www.folomi.fr/api/sportapi.php';
   },
 
   getAPIAuth() {
@@ -78,12 +78,12 @@ var ApiUtils = {
     } else if (ISDEMO) {
       return 'http://www.folomidemo.fr/live/';
     } else {
-      return 'htps://folomi.fr.fr/live/';
+      return 'https://www.folomi.fr/api/live/';
     }
   },
 
   getGpxUrl(gpxName) {
-    return 'htps://folomi.fr.fr/fichiers/gpxLive/' + gpxName + '.gpx';
+    return 'https://www.folomi.fr/api/fichiers/gpxLive/' + gpxName + '.gpx';
   },
 
   getUrl() {
@@ -92,7 +92,7 @@ var ApiUtils = {
     } else if (ISDEMO) {
       return 'http://www.folomidemo.fr/';
     } else {
-      return 'htps://folomi.fr.fr/';
+      return 'https://www.folomi.fr/api/';
     }
   },
 

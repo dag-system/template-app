@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {Component} from 'react';
 import {
   StyleSheet,
   View,
@@ -150,6 +150,7 @@ class CreateAccount extends ValidationComponent {
     for (let i = 2021; i > 1930; i--) {
       years.push(i);
     }
+
     this.setState({years: years});
     this.getClubs();
   }
@@ -189,7 +190,6 @@ class CreateAccount extends ValidationComponent {
       }
       this.setState({alertEquipe: false});
       this.onSendRequest();
-      <i class="fa fa-th-list" aria-hidden="true"></i>;
     }
   }
 
@@ -239,7 +239,13 @@ class CreateAccount extends ValidationComponent {
       this.setState({alertSexe: false});
     }
 
-    formData.append('extraInfo', this.state.challengeRadioUtilisateur);
+    let extraInfoUser = {
+      payed: false,
+      type: this.state.challengeRadioUtilisateur,
+      needVtt: this.state.needVtt == 'need' ? true : false,
+    };
+
+    formData.append('extraInfo', JSON.stringify(extraInfoUser));
 
     let clubs = [];
 
@@ -290,7 +296,7 @@ class CreateAccount extends ValidationComponent {
     formData.append('cpUtilisateur', this.state.cpUtilisateur);
     formData.append('villeUtilisateur', this.state.villeUtilisateur);
     formData.append('paysUtilisateur', this.state.paysUtilisateur);
-    formData.append('organisation', ApiUtils.getOrganisation());
+    formData.append('organisation', 'DIGIRAIDINP');
 
     var acceptChallengeUtilisateur = 0;
     if (this.state.acceptChallengeUtilisateur == true) {
@@ -316,13 +322,6 @@ class CreateAccount extends ValidationComponent {
       acceptChallengeNameUtilisateur,
     );
 
-    var extraInfo = '';
-    if (this.state.needvtt) {
-      extraInfo = 'needvtt';
-    }
-
-    formData.append('extraInfo', extraInfo);
-
     formData.append('passUtilisateur', md5(this.state.newPassword));
 
     console.log(formData);
@@ -342,7 +341,7 @@ class CreateAccount extends ValidationComponent {
           this.props.dispatch(action);
           console.log('test 2');
 
-          this.onClickNavigate('Lives');
+          this.onClickNavigate('Paiement');
         } else {
           Toast.show({
             text: responseJson.message,
@@ -376,14 +375,11 @@ class CreateAccount extends ValidationComponent {
     let formData = new FormData();
     formData.append('method', 'getClubs');
     formData.append('auth', ApiUtils.getAPIAuth());
-    formData.append('organisation', 'DIGIRAIDINP');
+    formData.append('organisation', ApiUtils.getOrganisation());
 
     fetch(ApiUtils.getAPIUrl(), {
       method: 'POST',
-      headers: {
-        // Accept: 'application/json',
-        // 'Content-Type': 'application/json',
-      },
+      headers: {},
       body: formData,
     })
       .then(ApiUtils.checkStatus)
@@ -393,6 +389,7 @@ class CreateAccount extends ValidationComponent {
       })
       .catch((e) => {
         ApiUtils.logError('getCLUBS', e.message);
+        console.log(e);
       });
   }
 

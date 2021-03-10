@@ -46,6 +46,10 @@ import Chartreuse from '../assets/chartreuse.jpg';
 import Fondationinp from '../assets/fondationinp.png';
 import Grenobleinp from '../assets/grenobleinp.png';
 import Uga from '../assets/uga.png';
+import gc from '../assets/gc.png';
+import fmlog from '../assets/fmlog.jpg';
+import husky from '../assets/husky.png';
+import segreen from '../assets/segreen.png';
 
 const mapStateToProps = (state) => {
   return {
@@ -228,6 +232,126 @@ class Partenaires extends Component {
                 }}>
                 <Image
                   source={Uga}
+                  resizeMethod="resize"
+                  resizeMode="contain"
+                  style={{
+                    height: '100%',
+                    width: '30%',
+                    alignSelf: 'center',
+                    marginHorizontal: 'auto',
+                  }}
+                />
+              </View>
+              <View
+                style={{
+                  borderBottomWidth: 1,
+                  borderBottomColor: '#DDDDDD',
+                  width: Dimensions.get('screen').width,
+                  marginTop: 0,
+                }}>
+                <Text />
+              </View>
+
+              <View
+                style={{
+                  width: '100%',
+                  height: 100,
+                  flex: 1,
+                  marginTop: 40,
+                  marginBottom: 40,
+                }}>
+                <Image
+                  source={gc}
+                  resizeMethod="resize"
+                  resizeMode="contain"
+                  style={{
+                    height: '100%',
+                    width: '30%',
+                    alignSelf: 'center',
+                    marginHorizontal: 'auto',
+                  }}
+                />
+              </View>
+              <View
+                style={{
+                  borderBottomWidth: 1,
+                  borderBottomColor: '#DDDDDD',
+                  width: Dimensions.get('screen').width,
+                  marginTop: 0,
+                }}>
+                <Text />
+              </View>
+
+              <View
+                style={{
+                  width: '100%',
+                  height: 100,
+                  flex: 1,
+                  marginTop: 40,
+                  marginBottom: 40,
+                }}>
+                <Image
+                  source={fmlog}
+                  resizeMethod="resize"
+                  resizeMode="contain"
+                  style={{
+                    height: '100%',
+                    width: '30%',
+                    alignSelf: 'center',
+                    marginHorizontal: 'auto',
+                  }}
+                />
+              </View>
+              <View
+                style={{
+                  borderBottomWidth: 1,
+                  borderBottomColor: '#DDDDDD',
+                  width: Dimensions.get('screen').width,
+                  marginTop: 0,
+                }}>
+                <Text />
+              </View>
+
+              <View
+                style={{
+                  width: '100%',
+                  height: 100,
+                  flex: 1,
+                  marginTop: 40,
+                  marginBottom: 40,
+                }}>
+                <Image
+                  source={husky}
+                  resizeMethod="resize"
+                  resizeMode="contain"
+                  style={{
+                    height: '100%',
+                    width: '30%',
+                    alignSelf: 'center',
+                    marginHorizontal: 'auto',
+                  }}
+                />
+              </View>
+              <View
+                style={{
+                  borderBottomWidth: 1,
+                  borderBottomColor: '#DDDDDD',
+                  width: Dimensions.get('screen').width,
+                  marginTop: 0,
+                }}>
+                <Text />
+              </View>
+
+              <View
+                style={{
+                  width: '100%',
+                  height: 100,
+                  flex: 1,
+                  marginTop: 40,
+                  marginBottom: 40,
+                }}>
+                <Image
+                  source={segreen}
                   resizeMethod="resize"
                   resizeMode="contain"
                   style={{
