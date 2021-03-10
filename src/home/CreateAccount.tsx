@@ -317,9 +317,6 @@ class CreateAccount extends ValidationComponent {
 
     formData.append('acceptChallengeUtilisateur', acceptChallengeUtilisateur);
 
-    // formData.append('passUtilisateur', md5(this.state.newPassword));
-    return;
-
     fetch(ApiUtils.getAPIUrl(), {
       method: 'POST',
       headers: {},
