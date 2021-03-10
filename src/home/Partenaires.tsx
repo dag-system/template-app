@@ -29,10 +29,12 @@ import moment from 'moment';
 import Logo from '../assets/logo_header.png';
 import GlobalStyles from '../styles';
 
-import Cnr from '../assets/CNR.png';
-import Fondation from '../assets/Logo-FONDATION.png';
-import Dag from '../assets/dag.png';
-
+import dag from '../assets/dag.png';
+import tulle from '../assets/Ville_de_Tulle.jpg';
+import tulleAgglo from '../assets/tulle-aglo-logot.png';
+import tac from '../assets/tac.jpg';
+import mobSuccess from '../assets/mob_success.png';
+import bonMono from '../assets/bonmono.png';
 const mapStateToProps = (state) => {
   return {
     userData: state.userData,
@@ -120,7 +122,67 @@ class Partenaires extends Component {
                   marginBottom: 40,
                 }}>
                 <Image
-                  source={Cnr}
+                  source={tulle}
+                  resizeMethod="resize"
+                  resizeMode="contain"
+                  style={{
+                    height: '100%',
+                    width: '30%',
+                    alignSelf: 'center',
+                    marginHorizontal: 'auto',
+                  }}
+                />
+              </View>
+
+              <View
+                style={{
+                  borderBottomWidth: 1,
+                  borderBottomColor: '#DDDDDD',
+                  width: Dimensions.get('screen').width,
+                  marginTop: 0,
+                }}>
+                <Text />
+              </View>
+              <View
+                style={{
+                  width: '100%',
+                  height: 100,
+                  flex: 1,
+                  marginTop: 40,
+                  marginBottom: 40,
+                }}>
+                <Image
+                  source={tulleAgglo}
+                  resizeMethod="resize"
+                  resizeMode="contain"
+                  style={{
+                    height: '100%',
+                    width: '30%',
+                    alignSelf: 'center',
+                    marginHorizontal: 'auto',
+                  }}
+                />
+              </View>
+
+              <View
+                style={{
+                  borderBottomWidth: 1,
+                  borderBottomColor: '#DDDDDD',
+                  width: Dimensions.get('screen').width,
+                  marginTop: 0,
+                }}>
+                <Text />
+              </View>
+              <View
+                style={{
+                  width: '100%',
+                  height: 100,
+                  flex: 1,
+                  marginTop: 40,
+                  marginBottom: 40,
+                }}>
+                <Image
+                  source={tac}
                   resizeMethod="resize"
                   resizeMode="contain"
                   style={{
@@ -151,7 +213,7 @@ class Partenaires extends Component {
                   marginBottom: 40,
                 }}>
                 <Image
-                  source={Fondation}
+                  source={mobSuccess}
                   resizeMethod="resize"
                   resizeMode="contain"
                   style={{
@@ -182,7 +244,38 @@ class Partenaires extends Component {
                   marginBottom: 40,
                 }}>
                 <Image
-                  source={Dag}
+                  source={bonMono}
+                  resizeMethod="resize"
+                  resizeMode="contain"
+                  style={{
+                    height: '100%',
+                    width: '30%',
+                    alignSelf: 'center',
+                    marginHorizontal: 'auto',
+                  }}
+                />
+              </View>
+
+              <View
+                style={{
+                  borderBottomWidth: 1,
+                  borderBottomColor: '#DDDDDD',
+                  width: Dimensions.get('screen').width,
+                  marginTop: 0,
+                }}>
+                <Text />
+              </View>
+
+              <View
+                style={{
+                  width: '100%',
+                  height: 100,
+                  flex: 1,
+                  marginTop: 40,
+                  marginBottom: 40,
+                }}>
+                <Image
+                  source={dag}
                   resizeMethod="resize"
                   resizeMode="contain"
                   style={{

@@ -389,12 +389,12 @@ class LiveSummary extends Component<Props, State> {
 
     ShareRn.share(
       {
-        message: 'Découvrez mon activité au Cross INSA Lyon  : ' + url,
-        title: 'Découvrez mon activité au Cross INSA Lyon !',
+        message: 'Découvrez mon activité au DIY TAC Run  : ' + url,
+        title: 'Découvrez mon activité au DIY TAC Run !',
       },
       {
         // Android only:
-        dialogTitle: 'Découvrez mon activité au Cross INSA Lyon ! ',
+        dialogTitle: 'Découvrez mon activité au DIY TAC Run ! ',
       },
     );
   }
@@ -424,12 +424,12 @@ class LiveSummary extends Component<Props, State> {
 
   share = (base64image) => {
     let shareOptions = {
-      title: 'Découvrez mon activité au Cross INSA Lyon',
+      title: 'Découvrez mon activité au DIY TAC Run',
       url: base64image,
       message:
         'https://folomi.fr/s/compte/partage-fouleeblanche.php?c=' +
         this.state.live.codeLive,
-      subject: 'Découvrez mon activité au Cross INSA Lyon',
+      subject: 'Découvrez mon activité au DIY TAC Run',
     };
 
     Share.open(shareOptions)
@@ -681,7 +681,7 @@ class LiveSummary extends Component<Props, State> {
                       style={{
                         textAlign: 'center',
                       }}>
-                      Votre challenge Cross INSA Lyon est en cours de calcul.
+                      Votre challenge DIY TAC Run est en cours de calcul.
                     </Text>
                   </TouchableOpacity>
                   <TouchableOpacity
@@ -695,7 +695,7 @@ class LiveSummary extends Component<Props, State> {
                         marginTop: 10,
                       }}>
                       Cliquez ici plus tard pour recevoir un résumé de votre
-                      Challenge Cross INSA Lyon
+                      Challenge DIY TAC Run
                     </Text>
                   </TouchableOpacity>
                   <TouchableOpacity
@@ -725,8 +725,8 @@ class LiveSummary extends Component<Props, State> {
                     <View style={{marginTop: 10}}>
                       <Text
                         style={{textAlign: 'center', paddingHorizontal: 12}}>
-                        Patientez, votre challenge Cross INSA Lyon est toujours
-                        en cours de calcul. Voici en attendant votre activité
+                        Patientez, votre challenge DIY TAC Run est toujours en
+                        cours de calcul. Voici en attendant votre activité
                         globale de votre journée
                       </Text>
                       <TouchableOpacity
@@ -740,7 +740,7 @@ class LiveSummary extends Component<Props, State> {
                             marginTop: 10,
                           }}>
                           Cliquez ici plus tard pour recevoir un résumé de votre
-                          Challenge Cross INSA Lyon
+                          Challenge DIY TAC Run
                         </Text>
                       </TouchableOpacity>
 
@@ -779,7 +779,7 @@ class LiveSummary extends Component<Props, State> {
                           color: ApiUtils.getBackgroundColor(),
                           // backgroundColor: '#E6E6E6',
                         }}>
-                        Challenge Cross INSA Lyon
+                        Challenge DIY TAC Run
                       </Text>
 
                       {this.state.live.segmentEfforts.map((segment) => {
@@ -889,7 +889,7 @@ class LiveSummary extends Component<Props, State> {
                           marginTop: 10,
                           marginBottom: 10,
                         }}>
-                        Aucun challenge "Cross INSA Lyon" détécté
+                        Aucun challenge "DIY TAC Run" détécté
                       </Text>
                     </View>
                   ) : null}

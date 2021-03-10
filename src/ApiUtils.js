@@ -8,7 +8,7 @@ const VersionNumberInt = 1;
 
 var ApiUtils = {
   getOrganisation() {
-    return 'INSALYON';
+    return 'DIYTACRUN';
   },
   ISDEBUG() {
     return ISDEBUG;
@@ -17,7 +17,7 @@ var ApiUtils = {
     return ISDEBUG;
   },
   getBackgroundColor() {
-    return '#4F4D50';
+    return '#3359FF';
   },
   VersionNumber() {
     return VersionNumber;

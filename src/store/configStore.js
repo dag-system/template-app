@@ -4,7 +4,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import reducer from './reducers';
 
 const persistConfig = {
-  key: 'insalyon',
+  key: 'diytacrun',
   storage: AsyncStorage,
   debug: false,
 };

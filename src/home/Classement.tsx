@@ -122,7 +122,7 @@ class Classement extends Component {
                   marginBottom: 10,
                   textTransform: 'uppercase',
                 }}>
-                Classement du challenge Cross INSA Lyon
+                Classement du challenge DIY TAC Run
               </Text>
 
               <TouchableOpacity

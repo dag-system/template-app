@@ -296,7 +296,7 @@ class Home extends Component {
     const formData = new FormData();
     formData.append('method', 'getInformationStation');
     formData.append('auth', ApiUtils.getAPIAuth());
-    formData.append('idStation', '52');
+    formData.append('idStation', '55');
     //fetch followCode API
 
     fetch(ApiUtils.getAPIUrl(), {

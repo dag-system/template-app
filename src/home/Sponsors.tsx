@@ -29,8 +29,10 @@ import moment from 'moment';
 import Logo from '../assets/logo_header.png';
 import GlobalStyles from '../styles';
 
-import Cnr from '../assets/CNR.png';
-import Fondation from '../assets/Logo-FONDATION.png';
+import tulle from '../assets/Ville_de_Tulle.jpg';
+import tulleAgglo from '../assets/tulle-aglo-logot.png';
+import tac from '../assets/tac.jpg';
+import mobSuccess from '../assets/mob_success.png';
 
 export class Sponsors extends Component {
   constructor(props) {
@@ -69,17 +71,33 @@ export class Sponsors extends Component {
             paddingHorizontal: 10,
             marginBottom: 20,
           }}>
-          <View style={{width: '34%', height: 50}}>
+          <View style={{width: '25%', height: 50}}>
             <Image
-              source={Cnr}
+              source={tulle}
               resizeMethod="resize"
               resizeMode="contain"
               style={{height: '100%', width: '100%'}}
             />
           </View>
-          <View style={{width: '34%', height: 50}}>
+          <View style={{width: '25%', height: 50}}>
             <Image
-              source={Fondation}
+              source={tulleAgglo}
+              resizeMethod="resize"
+              resizeMode="contain"
+              style={{height: '100%', width: '100%'}}
+            />
+          </View>
+          <View style={{width: '25%', height: 50}}>
+            <Image
+              source={tac}
+              resizeMethod="resize"
+              resizeMode="contain"
+              style={{height: '100%', width: '100%'}}
+            />
+          </View>
+          <View style={{width: '25%', height: 50}}>
+            <Image
+              source={mobSuccess}
               resizeMethod="resize"
               resizeMode="contain"
               style={{height: '100%', width: '100%'}}

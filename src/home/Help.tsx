@@ -580,7 +580,7 @@ class Help extends Component {
                         localisation :
                       </Text>
                       <Text>1. Ouvrez les paramètres de votre téléphone</Text>
-                      <Text>2. Accédez à "Cross INSA Lyon {'>'} Position"</Text>
+                      <Text>2. Accédez à "DIY TAC Run {'>'} Position"</Text>
                       <Text>
                         3. Sélectionnez “Lorsque l’app est active” et réglez
                         “Position exacte” sur ON (voir capture d'écran
@@ -608,7 +608,7 @@ class Help extends Component {
                         localisation :
                       </Text>
                       <Text>1. Ouvrez les paramètres de votre téléphone</Text>
-                      <Text>2. Accédez à "Cross INSA Lyon {'>'} Position"</Text>
+                      <Text>2. Accédez à "DIY TAC Run {'>'} Position"</Text>
                       <Text>
                         3. Sélectionnez “Lorsque l’app est active” (voir capture
                         d'écran ci-dessous)
