@@ -242,7 +242,7 @@ class CreateAccount extends ValidationComponent {
     let extraInfoUser = {
       payed: false,
       type: this.state.challengeRadioUtilisateur,
-      needVtt: this.state.needVtt == 'need' ? true : false,
+      needVtt: this.state.needVtt == 'needvtt' ? true : false,
     };
 
     formData.append('extraInfo', JSON.stringify(extraInfoUser));
