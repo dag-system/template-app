@@ -95,7 +95,6 @@ class ForgotPassword extends ValidationComponent {
         .then(ApiUtils.checkStatus)
         .then((response) => response.json())
         .then((responseJson) => {
-
           if (responseJson.codeErreur == 'SUCCESS') {
             //SaveData
 
@@ -255,7 +254,7 @@ class ForgotPassword extends ValidationComponent {
                 clearButtonMode="always"
                 value={this.state.emailUtilisateur}
                 onChangeText={(value) =>
-                  this.setState({emailUtilisateur: value})
+                  this.setState({emailUtilisateur: value.trim()})
                 }
               />
             </Item>
@@ -266,28 +265,26 @@ class ForgotPassword extends ValidationComponent {
 
             <View style={{marginTop: 40}}>
               <TouchableOpacity
-                
                 style={[
                   GlobalStyles.button,
                   {
                     width: '100%',
                     elevation: 0,
                     borderColor:
-                    this.isFieldInError('emailUtilisateur') || this.state.emailUtilisateur == ''
+                      this.isFieldInError('emailUtilisateur') ||
+                      this.state.emailUtilisateur == ''
                         ? 'black'
                         : ApiUtils.getBackgroundColor(),
                     borderWidth: 1,
                     padding: 10,
                   },
 
-                  this.isFieldInError('emailUtilisateur') || this.state.emailUtilisateur == ''
+                  this.isFieldInError('emailUtilisateur') ||
+                  this.state.emailUtilisateur == ''
                     ? {backgroundColor: 'transparent'}
                     : {backgroundColor: ApiUtils.getBackgroundColor()},
                 ]}
                 onPress={() => this.onClickSendFollowCode()}
-                disabled={
-                  this.isFieldInError('emailUtilisateur') || this.state.emailUtilisateur == ''
-                }
                 // style={[
                 //   styles.saveButton,
                 //   {
@@ -298,17 +295,18 @@ class ForgotPassword extends ValidationComponent {
                 //   },
                 // ]}
                 onPress={() => this.onClickValidate()}>
-                   <Text
-                        style={{
-                          fontWeight: 'bold',
-                          textAlign: 'center',
-                          color:
-                          this.isFieldInError('emailUtilisateur') || this.state.emailUtilisateur == ''
-                              ? 'black'
-                              : 'white',
-                        }}>
-                        Envoyer
-                      </Text>
+                <Text
+                  style={{
+                    fontWeight: 'bold',
+                    textAlign: 'center',
+                    color:
+                      this.isFieldInError('emailUtilisateur') ||
+                      this.state.emailUtilisateur == ''
+                        ? 'black'
+                        : 'white',
+                  }}>
+                  Envoyer
+                </Text>
               </TouchableOpacity>
             </View>
 
