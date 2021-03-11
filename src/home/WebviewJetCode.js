@@ -9,14 +9,16 @@ import AutoHeightWebView from 'react-native-autoheight-webview'
 const myScript = `
 
 window.addEventListener("message", function(event) {
-  console.log("Received post message", event);
-  window.ReactNativeWebView.postMessage(event.data)
+  alert("Received post message");
+  // console.log("Received post message", event);
+  // window.ReactNativeWebView.postMessage(event.data)
   
 }, false);
 
 document.addEventListener("message", function(event) {
-  console.log("Received post message", event);
-  window.ReactNativeWebView.postMessage(event.data)
+  alert("Received post message");
+  // console.log("Received post message", event);
+  // window.ReactNativeWebView.postMessage(event.data)
   
 }, false);
 true; // note: this is required, or you'll sometimes get silent failures
@@ -103,8 +105,8 @@ class WebViewJetCode extends Component {
       <View style={{flex : 1}}>
         {this.props.uri != null && !this.state.isError ? (
           <AutoHeightWebView
-            userAgent="folomi"
-            style={{ marginTop: 40, minHeight: 500,  width: '100%' }}
+            userAgent="visito"
+            style={{ marginTop: 3, minHeight: 500,  width: '100%' }}
             startInLoadingState={true}
             injectedJavaScript={myScript}
             onError={(syntheticEvent) => {

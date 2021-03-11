@@ -51,7 +51,18 @@ class ForgotPassword extends ValidationComponent {
     };
   }
 
-  componentDidMount() {}
+  componentDidMount() {
+    setTimeout(() => this.checkIsConnected(), 200);
+  }
+
+
+  checkIsConnected = () => {
+    if (this.props.userData != null && ApiUtils.hasPaid(this.props.userData)) {
+
+      this.onClickNavigate('Lives');
+    } else {
+    }
+  };
 
   ongoHome() {
     this.props.navigation.navigate('Home');
@@ -103,8 +114,15 @@ class ForgotPassword extends ValidationComponent {
 
             var action = {type: 'LOGIN', data: responseJson};
             this.props.dispatch(action);
+
+            
             this.setState({isLoading: false});
-            this.onClickNavigate('Lives');
+            if(ApiUtils.hasPaid(responseJson))
+            {
+              this.onClickNavigate('Lives');
+            }else{
+              this.onClickNavigate('Paiement');
+            }
           } else {
             alert("Votre folocode n'est pas valide");
           }

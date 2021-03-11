@@ -6,6 +6,8 @@ const ISDEMO = false;
 const VersionNumber = '1.0.0';
 const VersionNumberInt = 1;
 
+const IdStation = 51;
+
 var ApiUtils = {
   getOrganisation() {
     return 'DIGIRAIDINP';
@@ -48,6 +50,28 @@ var ApiUtils = {
       error.response = response;
       throw response;
     }
+  },
+
+  hasPaid(userData)
+  {
+      let paiementsString = userData.paiements;
+      if(paiementsString == null)
+      {
+        return false;
+      }
+      var paiements = Object.values(paiementsString);
+      console.log(paiements);
+      if(paiements !=null && paiements.length > 0)
+      {
+        if(paiements.filter(p=> p.idStation == IdStation).length >0)
+        {
+          return true;
+        }
+      }else{
+
+        return false;
+      }
+  
   },
 
   getPhotoUrl(idStation, photo) {

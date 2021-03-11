@@ -78,19 +78,18 @@ class Home extends Component {
   componentDidMount() {
     // #stop BackroundGeolocation and remove-listeners when Home Screen is rendered.
     this.setState({selectedFolocode: -1});
-    if (this.props.userData != null) {
-      this.onClickNavigate('Lives');
-    } else {
-      BackgroundGeolocation.stop();
-      BackgroundGeolocation.removeListeners();
-    }
 
     setTimeout(() => this.checkIsConnected(), 200);
     this.getinformationStation();
   }
   checkIsConnected = () => {
-    if (this.props.userData != null) {
+    if (this.props.userData != null && ApiUtils.hasPaid(this.props.userData)) {
+      console.log('test')
       this.onClickNavigate('Lives');
+    } else {
+      console.log('ici')
+      BackgroundGeolocation.stop();
+      BackgroundGeolocation.removeListeners();
     }
   };
 
@@ -203,7 +202,15 @@ class Home extends Component {
 
             this.props.dispatch(action);
             this.setState({isLoading: false});
-            this.onClickNavigate('Lives');
+
+            this.setState({isVisibleModalLogin : false});
+            if(ApiUtils.hasPaid(responseJson))
+            {
+              this.onClickNavigate('Lives');
+            }else{
+              this.onClickNavigate('Paiement');
+            }
+           
           } else {
             alert("Votre folocode n'est pas valide");
           }
@@ -410,7 +417,7 @@ class Home extends Component {
   }
 
   render() {
-    if (this.props.userData != null) {
+    if (this.props.userData != null && ApiUtils.hasPaid(this.props.userData)) {
       return <Loading />;
     }
 
