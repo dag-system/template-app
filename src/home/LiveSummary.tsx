@@ -401,7 +401,7 @@ class LiveSummary extends Component<Props, State> {
 
   shareImage = () => {
     let url =
-      'https://folomi.fr/s/compte/photo-foulee.php?c=' +
+      'https://folomi.fr/s/compte/photo-partage.php?c=' +
       this.state.live.codeLive;
 
     if (this.state.live.segmentEfforts.length > 0) {
@@ -427,8 +427,7 @@ class LiveSummary extends Component<Props, State> {
       title: 'Découvrez mon activité au Cross INSA Lyon',
       url: base64image,
       message:
-        'https://folomi.fr/s/compte/partage-fouleeblanche.php?c=' +
-        this.state.live.codeLive,
+        'https://folomi.fr/s/compte/partage.php?c=' + this.state.live.codeLive,
       subject: 'Découvrez mon activité au Cross INSA Lyon',
     };
 

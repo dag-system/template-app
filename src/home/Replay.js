@@ -851,7 +851,7 @@ class Replay extends Component {
                       borderBottomWidth: 1,
                     }}>
                     <Picker.Item label="Choisissez une épreuve" value="-1" />
-                    <Picker.Item label="Myrtilles" value={49} />
+                    <Picker.Item label="Cross INSA Lyon" value={58} />
                   </Picker>
 
                   {!this.state.isloadingChallenge &&
