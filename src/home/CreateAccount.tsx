@@ -611,7 +611,7 @@ class CreateAccount extends ValidationComponent {
                       label="Choisissez votre département"
                       value="-1"
                     />
-                    <Picker.Item label="Pas concerné" value="AUTRE" />
+                    <Picker.Item label="Personnel INSA" value="AUTRE" />
                     <Picker.Item label="FIMI" value="FIMI" />
                     <Picker.Item label="BIOSCIENCES" value="BIOSCIENCES" />
                     <Picker.Item
