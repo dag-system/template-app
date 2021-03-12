@@ -1197,8 +1197,8 @@ class Replay extends Component {
                   // onPress={(coordinate) => { this.showMapFullSize() }}
                   toolbarEnabled={false}
                   initialRegion={{
-                    latitude: 45.1667, // 44.843884,
-                    longitude: 5.55,
+                    latitude: 45.7832645, // 44.843884,
+                    longitude: 4.8781984,
                     latitudeDelta: LATITUDE_DELTA,
                     longitudeDelta: LONGITUDE_DELTA,
                   }}

@@ -79,7 +79,7 @@ var ApiUtils = {
     } else if (ISDEMO) {
       return 'http://www.folomidemo.fr/live/';
     } else {
-      return 'https://folomi.fr/live/';
+      return 'https://folomi.fr/s/liveFolo/live.php?c=';
     }
   },
 

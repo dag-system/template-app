@@ -179,6 +179,11 @@ class CreateAccount extends ValidationComponent {
   }
 
   onChangeEnseignantUser(value) {
+    this.setState({anneeUser: '0'});
+    this.setState({departementUser: '0'});
+    this.setState({groupeUser: '0'});
+    this.setState({sportUser: '0'});
+    this.setState({asUser: '0'});
     this.setState({enseignantUser: value});
   }
 
