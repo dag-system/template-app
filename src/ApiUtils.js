@@ -12,6 +12,10 @@ var ApiUtils = {
   getOrganisation() {
     return 'DIGIRAIDINP';
   },
+  getIdStation()
+  {
+    return IdStation;
+  },
   ISDEBUG() {
     return ISDEBUG;
   },

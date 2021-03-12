@@ -41,7 +41,17 @@ class Partenaires extends Component {
 
   componentDidMount() {
     this.setState({newPassword: true});
+    setTimeout(() => this.checkIsConnected(), 200);
   }
+
+  checkIsConnected = () => {
+    if (this.props.userData != null && ApiUtils.hasPaid(this.props.userData)) {
+      console.log('test')
+      this.onClickNavigate('Lives');
+    } else {
+      console.log('ici')
+    }
+  };
 
   onClickNavigate(routeName) {
     this.props.navigation.navigate(routeName);
@@ -68,6 +78,7 @@ class Partenaires extends Component {
                 <Right />
               </Header>
         <WebviewJetCode
+        navigation={this.props.navigation}
           uri={
             'http://dag-system.com/externalcontent/inpgrenoble/jetcode_inp.html'
           }
