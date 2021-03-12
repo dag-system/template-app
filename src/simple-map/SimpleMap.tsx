@@ -399,7 +399,7 @@ class SimpleMap extends PureComponent<Props, State> {
       },
       notification: {
         sticky: true,
-        title: 'Cross INSA Lyon',
+        title: 'My Cross',
         text: 'Suivi de votre position en cours',
         channelImportance: BackgroundGeolocation.NOTIFICATION_PRIORITY_LOW,
       },

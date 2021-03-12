@@ -188,13 +188,13 @@ class LiveSummaryFromSegment extends Component {
     Share.share(
       {
         message:
-          'Découvrez mon activité sur Cross INSA Lyon  : ' +
+          'Découvrez mon activité sur My Cross  : ' +
           this.props.currentLive.statsLive.lienPartage,
-        title: 'Découvrez mon activité sur Cross INSA Lyon !',
+        title: 'Découvrez mon activité sur My Cross !',
       },
       {
         // Android only:
-        dialogTitle: 'Découvrez mon activité sur Cross INSA Lyon ! ',
+        dialogTitle: 'Découvrez mon activité sur My Cross ! ',
       },
     );
   }
