@@ -17,7 +17,7 @@ var ApiUtils = {
     return ISDEBUG;
   },
   getBackgroundColor() {
-    return '#4F4D50';
+    return '#FFFFFF';
   },
   VersionNumber() {
     return VersionNumber;

@@ -283,10 +283,7 @@ class CreateAccount extends ValidationComponent {
     formData.append('telUtilisateur', '');
 
     var acceptChallengeTelUtilisateur = 0;
-    if (
-      this.state.acceptChallengeTelUtilisateur ||
-      this.state.acceptChallengeTelUtilisateur
-    ) {
+    if (this.state.acceptChallengeTelUtilisateur) {
       acceptChallengeTelUtilisateur = 1;
     }
 

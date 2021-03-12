@@ -31,6 +31,7 @@ import GlobalStyles from '../styles';
 
 import Cnr from '../assets/CNR.png';
 import Fondation from '../assets/Logo-FONDATION.png';
+import mycross from '../assets/mycross.png';
 
 export class Sponsors extends Component {
   constructor(props) {
@@ -69,7 +70,7 @@ export class Sponsors extends Component {
             paddingHorizontal: 10,
             marginBottom: 20,
           }}>
-          <View style={{width: '34%', height: 50}}>
+          <View style={{width: '30%', height: 50}}>
             <Image
               source={Cnr}
               resizeMethod="resize"
@@ -77,7 +78,15 @@ export class Sponsors extends Component {
               style={{height: '100%', width: '100%'}}
             />
           </View>
-          <View style={{width: '34%', height: 50}}>
+          <View style={{width: '30%', height: 50}}>
+            <Image
+              source={mycross}
+              resizeMethod="resize"
+              resizeMode="contain"
+              style={{height: '100%', width: '100%'}}
+            />
+          </View>
+          <View style={{width: '30%', height: 50}}>
             <Image
               source={Fondation}
               resizeMethod="resize"

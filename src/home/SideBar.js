@@ -88,16 +88,9 @@ export default class Sidebar extends Component {
               <Icon
                 name="skiing-nordic"
                 type="FontAwesome5"
-                style={[
-                  styles.icon,
-                  {color: this.props.selected == 'Lives' ? 'black' : 'white'},
-                ]}
+                style={[styles.icon, {color: 'black'}]}
               />
-              <Text
-                style={[
-                  styles.menuText,
-                  {color: this.props.selected == 'Lives' ? 'black' : 'white'},
-                ]}>
+              <Text style={[styles.menuText, {color: 'black'}]}>
                 Mes activités
               </Text>
             </View>
@@ -149,7 +142,7 @@ export default class Sidebar extends Component {
                   styles.icon,
                   {
                     color:
-                      this.props.selected == 'Preferences' ? 'black' : 'white',
+                      this.props.selected == 'Preferences' ? 'black' : 'black',
                   },
                 ]}
               />
@@ -158,7 +151,7 @@ export default class Sidebar extends Component {
                   styles.menuText,
                   {
                     color:
-                      this.props.selected == 'Preferences' ? 'black' : 'white',
+                      this.props.selected == 'Preferences' ? 'black' : 'black',
                   },
                 ]}>
                 Mon profil
@@ -188,7 +181,7 @@ export default class Sidebar extends Component {
                   styles.icon,
                   {
                     color:
-                      this.props.selected == 'Classement' ? 'black' : 'white',
+                      this.props.selected == 'Classement' ? 'black' : 'black',
                   },
                 ]}
               />
@@ -197,7 +190,7 @@ export default class Sidebar extends Component {
                   styles.menuText,
                   {
                     color:
-                      this.props.selected == 'Classement' ? 'black' : 'white',
+                      this.props.selected == 'Classement' ? 'black' : 'black',
                   },
                 ]}>
                 Classement
@@ -205,6 +198,7 @@ export default class Sidebar extends Component {
             </View>
           </TouchableHighlight>
 
+          {/*
           <TouchableHighlight
             underlayColor="rgba(255,255,255,1,0.6)"
             onPress={() => this.onClickNavigate('Replay')}
@@ -226,20 +220,21 @@ export default class Sidebar extends Component {
                 type="FontAwesome5"
                 style={[
                   styles.icon,
-                  {color: this.props.selected == 'Replay' ? 'black' : 'white'},
+                  {color: this.props.selected == 'Replay' ? 'black' : 'black'},
                 ]}
               />
               <Text
                 style={[
                   styles.menuText,
                   {
-                    color: this.props.selected == 'Replay' ? 'black' : 'white',
+                    color: this.props.selected == 'Replay' ? 'black' : 'black',
                   },
                 ]}>
                 Comparateur
               </Text>
             </View>
           </TouchableHighlight>
+          */}
 
           <TouchableHighlight
             underlayColor="rgba(255,255,255,1,0.6)"
@@ -266,7 +261,7 @@ export default class Sidebar extends Component {
                   styles.icon,
                   {
                     color:
-                      this.props.selected == 'Partenaires' ? 'black' : 'white',
+                      this.props.selected == 'Partenaires' ? 'black' : 'black',
                   },
                 ]}
               />
@@ -275,7 +270,7 @@ export default class Sidebar extends Component {
                   styles.menuText,
                   {
                     color:
-                      this.props.selected == 'Partenaires' ? 'black' : 'white',
+                      this.props.selected == 'Partenaires' ? 'black' : 'black',
                   },
                 ]}>
                 Partenaires
@@ -304,14 +299,14 @@ export default class Sidebar extends Component {
                 type="FontAwesome5"
                 style={[
                   styles.icon,
-                  {color: this.props.selected == 'Help' ? 'black' : 'white'},
+                  {color: this.props.selected == 'Help' ? 'black' : 'black'},
                 ]}
               />
               <Text
                 style={[
                   styles.menuText,
                   {
-                    color: this.props.selected == 'Help' ? 'black' : 'white',
+                    color: this.props.selected == 'Help' ? 'black' : 'black',
                   },
                 ]}>
                 Guide d'utilisation
@@ -333,9 +328,9 @@ export default class Sidebar extends Component {
               <Icon
                 name="power-off"
                 type="FontAwesome5"
-                style={[styles.icon, {color: 'white'}]}
+                style={[styles.icon, {color: 'black'}]}
               />
-              <Text style={[styles.menuText, {color: 'white'}]}>
+              <Text style={[styles.menuText, {color: 'black'}]}>
                 Se déconnecter
               </Text>
             </View>

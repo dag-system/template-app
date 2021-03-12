@@ -462,10 +462,9 @@ class Home extends Component {
                         GlobalStyles.button,
                         {
                           marginTop: 0,
-                          borderColor: 'white',
+                          borderColor: 'black',
                           opacity: 1,
                           width: '80%',
-                          borderColor: 'white',
                           padding: 10,
                         },
                       ]}
@@ -474,7 +473,7 @@ class Home extends Component {
                         style={{
                           textAlign: 'center',
                           fontWeight: 'bold',
-                          color: 'white',
+                          color: 'black',
                           textTransform: 'uppercase',
                         }}>
                         Créer un compte
@@ -493,12 +492,12 @@ class Home extends Component {
                         GlobalStyles.button,
                         {
                           marginTop: 10,
-                          borderColor: 'white',
+                          borderColor: 'black',
                           opacity: 1,
                           width: '80%',
-                          borderColor: 'white',
+                          borderColor: 'black',
                           padding: 10,
-                          backgroundColor: 'white',
+                          backgroundColor: 'black',
                         },
                       ]}
                       onPress={() => this.openModalLogin()}>
@@ -524,10 +523,10 @@ class Home extends Component {
                       style={[
                         {
                           marginTop: 10,
-                          borderColor: 'white',
+                          borderColor: 'black',
                           opacity: 1,
                           width: '80%',
-                          borderColor: 'white',
+                          borderColor: 'black',
                           padding: 2,
                         },
                       ]}
@@ -536,7 +535,7 @@ class Home extends Component {
                         style={{
                           textAlign: 'center',
                           textDecorationLine: 'underline',
-                          color: 'white',
+                          color: 'black',
                           textTransform: 'uppercase',
                         }}>
                         J'ai oublié mon code ?
@@ -659,11 +658,7 @@ class Home extends Component {
                       {
                         width: '80%',
                         elevation: 0,
-                        borderColor:
-                          this.state.followCode == '' &&
-                          this.state.selectedFolocode == -1
-                            ? 'black'
-                            : ApiUtils.getBackgroundColor(),
+                        borderColor: 'black',
                         borderWidth: 1,
                         padding: 10,
                       },
@@ -682,11 +677,7 @@ class Home extends Component {
                       style={{
                         fontWeight: 'bold',
                         textAlign: 'center',
-                        color:
-                          this.state.followCode == '' &&
-                          this.state.selectedFolocode == -1
-                            ? 'black'
-                            : 'white',
+                        color: 'black',
                       }}>
                       CONNEXION
                     </Text>

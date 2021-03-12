@@ -32,6 +32,7 @@ import GlobalStyles from '../styles';
 import Cnr from '../assets/CNR.png';
 import Fondation from '../assets/Logo-FONDATION.png';
 import Dag from '../assets/dag.png';
+import mycross from '../assets/mycross.png';
 
 const mapStateToProps = (state) => {
   return {
@@ -110,6 +111,37 @@ class Partenaires extends Component {
 
             <Content style={{padding: 10, paddingTop: 20}} scrollEnabled={true}>
               <Text style={{fontWeight: 'bold'}}>Nos partenaires</Text>
+
+              <View
+                style={{
+                  width: '100%',
+                  height: 100,
+                  flex: 1,
+                  marginTop: 40,
+                  marginBottom: 40,
+                }}>
+                <Image
+                  source={mycross}
+                  resizeMethod="resize"
+                  resizeMode="contain"
+                  style={{
+                    height: '100%',
+                    width: '30%',
+                    alignSelf: 'center',
+                    marginHorizontal: 'auto',
+                  }}
+                />
+              </View>
+
+              <View
+                style={{
+                  borderBottomWidth: 1,
+                  borderBottomColor: '#DDDDDD',
+                  width: Dimensions.get('screen').width,
+                  marginTop: 0,
+                }}>
+                <Text />
+              </View>
 
               <View
                 style={{

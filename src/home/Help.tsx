@@ -175,76 +175,43 @@ class Help extends Component {
                 Bienvenue sur votre application sportive !
               </Text>
               <Text style={{marginTop: 10}}>
-                Venez pratiquer et comparez vos temps avec ceux de vos amis ou
-                vos familles !
+                Entrainez-vous et affrontez vos amis et collègues au Cross INSA
+                en toute sécurité, et sans jamais vous croiser ! Le Cross est
+                ouvert
               </Text>
               <Text style={{marginTop: 10}}>
-                Faites la course contre des centaines de personne sans jamais
-                vous croiser.
+                Au moment de faire votre course, rendez-vous au départ du
+                parcours, lancez l’application et démarrez votre activité. Ne
+                vous souciez plus de rien, courrez et votre chronomètre
+                s’activera automatiquement en fonction de votre position GPS.
+                Bien sur, vous devrez garder votre smartphone ou montre
+                connectée sur vous. Une fois la course terminée, arrêtez la et
+                enregistrez la.
               </Text>
-              <Text style={{marginTop: 10}}>
-                Pas besoin de choisir son parcours à l’inscription, c’est au
-                départ des parcours que vous ferez votre choix de distance selon
-                votre forme du jour.
-              </Text>
-              <Text style={{marginTop: 10}}>
-                Chaque fois que vous déciderez de faire VOTRE course,
-                rendez-vous au départ des parcours, activez l’application, ne
-                vous souciez plus de rien, prenez le départ et pratiquer, votre
-                chrono se déclenche automatiquement en fonction de votre
-                position GPS. Vous devez bien sûr garder votre smartphone sur
-                vous.
-              </Text>
-              <Text style={{marginTop: 10}}>
-                Lors de votre inscription vous pouvez choisir de participer
-                également à un ou plusieurs challenge(s).
-              </Text>
-              <TouchableOpacity
-                onPress={() => this.openLink('https://www.insa-lyon.fr/')}>
-                <Text
-                  style={{
-                    textAlign: 'center',
-                    marginTop: 10,
-                    textDecorationLine: 'underline',
-                  }}>
-                  https://www.insa-lyon.fr/
-                </Text>
-              </TouchableOpacity>
               <Text style={{marginTop: 10}}>
                 Consultez votre temps sur l'application puis votre classement
                 sera disponible en fin de journée sur le site internet de
                 l’organisateur.
               </Text>
               <Text style={{marginTop: 10}}>
-                <Text
-                  style={{
-                    fontWeight: 'bold',
-                    color: ApiUtils.getBackgroundColor(),
-                  }}>
-                  C’EST GRATUIT, A LA CARTE, ILLIMITE
-                </Text>
-                de quoi améliorer votre résultat à chaque sorti !
-              </Text>
-              <Text
-                style={{
-                  marginTop: 10,
-                  fontWeight: 'bold',
-                  textAlign: 'center',
-                }}>
-                Venez battre vos propres records.
+                Vous pouvez faire le parcours autant de fois que vous le
+                souhaitez pour améliorer votre classement et vos résultats.
               </Text>
               <Text style={{marginTop: 10, fontWeight: 'bold'}}>
-                Pour les infos complètes rendez-vous sur
+                Pour les informations complètes, rendez-vous sur l’intranet du
+                centre des sports :
               </Text>
               <TouchableOpacity
-                onPress={() => this.openLink('https://www.insa-lyon.fr/')}>
+                onPress={() =>
+                  this.openLink('https://intranetcds.insa-lyon.fr')
+                }>
                 <Text
                   style={{
                     textAlign: 'center',
                     marginTop: 10,
                     textDecorationLine: 'underline',
                   }}>
-                  https://www.insa-lyon.fr/
+                  https://intranetcds.insa-lyon.fr
                 </Text>
               </TouchableOpacity>
               <Text
@@ -283,18 +250,22 @@ class Help extends Component {
                 Pour voir la liste des parcours cliquez sur (petit logo carte)
               </Text>
               <Text style={{marginTop: 5}}>
-                Retrouvez les classements sur notre site, mis à jour chaque soir
-                :
+                Retrouvez les classements à cette adresse, mis à jour chaque
+                soir :
               </Text>
               <TouchableOpacity
-                onPress={() => this.openLink('https://www.insa-lyon.fr/')}>
+                onPress={() =>
+                  this.openLink(
+                    'https://folomi.fr/classement/insalyon/classement.html',
+                  )
+                }>
                 <Text
                   style={{
                     textAlign: 'center',
                     marginTop: 10,
                     textDecorationLine: 'underline',
                   }}>
-                  https://www.insa-lyon.fr/
+                  https://folomi.fr/classement/insalyon/classement.html
                 </Text>
               </TouchableOpacity>
               <Text style={{marginTop: 10, fontWeight: 'bold'}}>
@@ -320,7 +291,6 @@ class Help extends Component {
                 Vous retrouverez ces informations dans le menu aide. Bonne
                 course.
               </Text>
-              <Text style={{marginTop: 10}}>« C’EST PARTI »</Text>
 
               <Text style={{marginTop: 10, fontWeight: 'bold'}}>
                 3 – Pour un fonctionnement optimal
@@ -697,7 +667,7 @@ const styles = StyleSheet.create({
     elevation: 0,
   },
   saveText: {
-    color: 'white',
+    color: 'black',
   },
   body: {
     width: '100%',
