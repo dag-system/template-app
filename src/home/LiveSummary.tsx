@@ -55,8 +55,8 @@ const mapStateToProps = (state) => {
   };
 };
 
-const LATITUDE_DELTA = 0.16022;
-const LONGITUDE_DELTA = 0.01221;
+const LATITUDE_DELTA = 0.016022;
+const LONGITUDE_DELTA = 0.001221;
 
 interface Props extends DefaultProps {
   userData: any;
@@ -944,8 +944,8 @@ class LiveSummary extends Component<Props, State> {
                     // onPress={(coordinate) => { this.showMapFullSize() }}
                     toolbarEnabled={false}
                     initialRegion={{
-                      latitude: 45.1667, // 44.843884,
-                      longitude: 5.55,
+                      latitude: 45.78728972333324, // 44.843884,
+                      longitude: 4.874593511376774,
                       latitudeDelta: LATITUDE_DELTA,
                       longitudeDelta: LONGITUDE_DELTA,
                     }}

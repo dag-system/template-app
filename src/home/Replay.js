@@ -50,8 +50,8 @@ const mapStateToProps = (state) => {
   };
 };
 
-const LATITUDE_DELTA = 0.16022;
-const LONGITUDE_DELTA = 0.01221;
+const LATITUDE_DELTA = 0.016022;
+const LONGITUDE_DELTA = 0.001221;
 
 const speed = Platform.OS == 'ios' ? 150 : 600;
 const multiplicator = 1000 / speed;
@@ -1196,8 +1196,8 @@ class Replay extends Component {
                   // onPress={(coordinate) => { this.showMapFullSize() }}
                   toolbarEnabled={false}
                   initialRegion={{
-                    latitude: 45.7832645, // 44.843884,
-                    longitude: 4.8781984,
+                    latitude: 45.78728972333324, // 44.843884,
+                    longitude: 4.874593511376774,
                     latitudeDelta: LATITUDE_DELTA,
                     longitudeDelta: LONGITUDE_DELTA,
                   }}

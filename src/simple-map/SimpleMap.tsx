@@ -1934,8 +1934,8 @@ class SimpleMap extends PureComponent<Props, State> {
             showsScale={false}
             showsTraffic={false}
             initialRegion={{
-              latitude: 45.1667, // 44.843884,
-              longitude: 5.55,
+              latitude: 45.78728972333324, // 44.843884,
+              longitude: 4.874593511376774,
               latitudeDelta: LATITUDE_DELTA,
               longitudeDelta: LONGITUDE_DELTA,
             }}
