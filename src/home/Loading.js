@@ -24,7 +24,7 @@ export default class Loading extends Component {
     return (
 
       <Container>
-        <View style={{ backgroundColor: ApiUtils.getColor(), height: '100%', paddingTop: '30%' }}>
+        <View style={{ backgroundColor: ApiUtils.getBackgroundColor(), height: '100%', paddingTop: '30%' }}>
           <Image resizeMode='contain' source={Logo} style={{
             width: '100%',
             height: 130,

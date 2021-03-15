@@ -578,7 +578,7 @@ class Home extends Component {
                     textTransform: 'uppercase',
                     textAlign: 'center',
                     marginTop: 30,
-                    color: ApiUtils.getBackgroundColor(),
+                    color: ApiUtils.getColor(),
                   }}>
                   Vous avez déjà un compte ?
                 </Text>
@@ -595,20 +595,20 @@ class Home extends Component {
                       onValueChange={this.onValueFolocodeChange.bind(this)}
                       placeholder={'Choisissez le Code'}
                       placeholderStyle={{
-                        color: ApiUtils.getBackgroundColor(),
+                        color: ApiUtils.getColor(),
                       }}
-                      placeholderIconColor={ApiUtils.getBackgroundColor()}
-                      textStyle={{color: ApiUtils.getBackgroundColor()}}
+                      placeholderIconColor={ApiUtils.getColor()}
+                      textStyle={{color: ApiUtils.getColor()}}
                       itemStyle={{
-                        color: ApiUtils.getBackgroundColor(),
+                        color: ApiUtils.getColor(),
                         marginLeft: 0,
                         paddingLeft: 10,
-                        borderBottomColor: ApiUtils.getBackgroundColor(),
+                        borderBottomColor: ApiUtils.getColor(),
                         borderBottomWidth: 1,
                       }}
                       itemTextStyle={{
-                        color: ApiUtils.getBackgroundColor(),
-                        borderBottomColor: ApiUtils.getBackgroundColor(),
+                        color: ApiUtils.getColor(),
+                        borderBottomColor: ApiUtils.getColor(),
                         borderBottomWidth: 1,
                       }}>
                       <Picker.Item label="Choisissez le Code" value={-1} />
@@ -666,7 +666,7 @@ class Home extends Component {
                       this.state.followCode == '' &&
                       this.state.selectedFolocode == -1
                         ? {backgroundColor: 'transparent'}
-                        : {backgroundColor: ApiUtils.getBackgroundColor()},
+                        : {backgroundColor: ApiUtils.getColor()},
                     ]}
                     onPress={() => this.onClickSendFollowCode()}
                     disabled={
@@ -677,7 +677,10 @@ class Home extends Component {
                       style={{
                         fontWeight: 'bold',
                         textAlign: 'center',
-                        color: 'black',
+                        color:
+                          this.state.selectedFolocode == -1
+                            ? 'black'
+                            :'white',
                       }}>
                       CONNEXION
                     </Text>

@@ -790,20 +790,20 @@ class Preferences extends Component {
                           onValueChange={(value) => this.onValueDayddn(value)}
                           placeholder={'Jour'}
                           placeholderStyle={{
-                            color: ApiUtils.getBackgroundColor(),
+                            color: ApiUtils.getColor(),
                           }}
-                          placeholderIconColor={ApiUtils.getBackgroundColor()}
-                          textStyle={{color: ApiUtils.getBackgroundColor()}}
+                          placeholderIconColor={ApiUtils.getColor()}
+                          textStyle={{color: ApiUtils.getColor()}}
                           itemStyle={{
-                            color: ApiUtils.getBackgroundColor(),
+                            color: ApiUtils.getColor(),
                             marginLeft: 0,
                             paddingLeft: 10,
-                            borderBottomColor: ApiUtils.getBackgroundColor(),
+                            borderBottomColor: ApiUtils.getColor(),
                             borderBottomWidth: 1,
                           }}
                           itemTextStyle={{
-                            color: ApiUtils.getBackgroundColor(),
-                            borderBottomColor: ApiUtils.getBackgroundColor(),
+                            color: ApiUtils.getColor(),
+                            borderBottomColor: ApiUtils.getColor(),
                             borderBottomWidth: 1,
                           }}>
                           {this.state.days.map((d) => {
@@ -824,20 +824,20 @@ class Preferences extends Component {
                           onValueChange={(value) => this.onValueMonthddn(value)}
                           placeholder={'Mois'}
                           placeholderStyle={{
-                            color: ApiUtils.getBackgroundColor(),
+                            color: ApiUtils.getColor(),
                           }}
-                          placeholderIconColor={ApiUtils.getBackgroundColor()}
-                          textStyle={{color: ApiUtils.getBackgroundColor()}}
+                          placeholderIconColor={ApiUtils.getColor()}
+                          textStyle={{color: ApiUtils.getColor()}}
                           itemStyle={{
-                            color: ApiUtils.getBackgroundColor(),
+                            color: ApiUtils.getColor(),
                             marginLeft: 0,
                             paddingLeft: 10,
-                            borderBottomColor: ApiUtils.getBackgroundColor(),
+                            borderBottomColor: ApiUtils.getColor(),
                             borderBottomWidth: 1,
                           }}
                           itemTextStyle={{
-                            color: ApiUtils.getBackgroundColor(),
-                            borderBottomColor: ApiUtils.getBackgroundColor(),
+                            color: ApiUtils.getColor(),
+                            borderBottomColor: ApiUtils.getColor(),
                             borderBottomWidth: 1,
                           }}>
                           {this.state.monthsString.map((month, index) => {
@@ -859,20 +859,20 @@ class Preferences extends Component {
                           onValueChange={(value) => this.onValueYearddn(value)}
                           placeholder={'Année'}
                           placeholderStyle={{
-                            color: ApiUtils.getBackgroundColor(),
+                            color: ApiUtils.getColor(),
                           }}
-                          placeholderIconColor={ApiUtils.getBackgroundColor()}
-                          textStyle={{color: ApiUtils.getBackgroundColor()}}
+                          placeholderIconColor={ApiUtils.getColor()}
+                          textStyle={{color: ApiUtils.getColor()}}
                           itemStyle={{
-                            color: ApiUtils.getBackgroundColor(),
+                            color: ApiUtils.getColor(),
                             marginLeft: 0,
                             paddingLeft: 10,
-                            borderBottomColor: ApiUtils.getBackgroundColor(),
+                            borderBottomColor: ApiUtils.getColor(),
                             borderBottomWidth: 1,
                           }}
                           itemTextStyle={{
-                            color: ApiUtils.getBackgroundColor(),
-                            borderBottomColor: ApiUtils.getBackgroundColor(),
+                            color: ApiUtils.getColor(),
+                            borderBottomColor: ApiUtils.getColor(),
                             borderBottomWidth: 1,
                           }}>
                           {this.state.years.map((year) => {

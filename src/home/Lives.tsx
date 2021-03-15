@@ -840,7 +840,7 @@ class Lives extends Component<Props, State> {
                                   <Text
                                     style={{
                                       fontWeight: 'bold',
-                                      color: ApiUtils.getBackgroundColor(),
+                                      color: ApiUtils.getColor(),
                                     }}>
                                     {this.getSport(item.idSport)}
                                   </Text>
@@ -908,13 +908,13 @@ class Lives extends Component<Props, State> {
                                         <Icon
                                           name="trophy"
                                           type="FontAwesome5"
-                                          color={ApiUtils.getBackgroundColor()}
+                                          color={ApiUtils.getColor()}
                                           fontSize={13}
                                           style={{
                                             fontSize: 12,
                                             marginLeft: 10,
                                             alignSelf: 'center',
-                                            color: ApiUtils.getBackgroundColor(),
+                                            color: ApiUtils.getColor(),
                                           }}
                                         />
                                       </View>
@@ -968,7 +968,7 @@ class Lives extends Component<Props, State> {
                                       <Text style={{width: 200}}>
                                         <Text
                                           style={{
-                                            color: ApiUtils.getBackgroundColor(),
+                                            color: ApiUtils.getColor(),
                                             fontWeight: 'bold',
                                           }}>
                                           {this.getSport(item.idSport)}
@@ -1114,20 +1114,20 @@ class Lives extends Component<Props, State> {
                           onValueChange={this.onValueSportChange.bind(this)}
                           placeholder={'Choisissez votre sport'}
                           placeholderStyle={{
-                            color: ApiUtils.getBackgroundColor(),
+                            color: ApiUtils.getColor(),
                           }}
-                          placeholderIconColor={ApiUtils.getBackgroundColor()}
-                          textStyle={{color: ApiUtils.getBackgroundColor()}}
+                          placeholderIconColor={ApiUtils.getColor()}
+                          textStyle={{color: ApiUtils.getColor()}}
                           itemStyle={{
-                            color: ApiUtils.getBackgroundColor(),
+                            color: ApiUtils.getColor(),
                             marginLeft: 0,
                             paddingLeft: 10,
-                            borderBottomColor: ApiUtils.getBackgroundColor(),
+                            borderBottomColor: ApiUtils.getColor(),
                             borderBottomWidth: 1,
                           }}
                           itemTextStyle={{
-                            color: ApiUtils.getBackgroundColor(),
-                            borderBottomColor: ApiUtils.getBackgroundColor(),
+                            color: ApiUtils.getColor(),
+                            borderBottomColor: ApiUtils.getColor(),
                             borderBottomWidth: 1,
                           }}>
                           <Picker.Item
@@ -1159,11 +1159,11 @@ class Lives extends Component<Props, State> {
                           alignSelf: 'center',
                           borderColor: this.isErrorFormCreate()
                             ? 'black'
-                            : ApiUtils.getBackgroundColor(),
+                            : ApiUtils.getColor(),
                           borderWidth: 1,
                           backgroundColor: this.isErrorFormCreate()
                             ? 'transparent'
-                            : ApiUtils.getBackgroundColor(),
+                            : ApiUtils.getColor(),
                         }}
                         onPress={() => this.onClickCreateLiveOk()}
                         disabled={this.isErrorFormCreate()}>
@@ -1296,7 +1296,7 @@ const styles = StyleSheet.create({
 
     width: 60,
     height: 60,
-    backgroundColor: ApiUtils.getBackgroundColor(),
+    backgroundColor: ApiUtils.getColor(),
     borderRadius: 30,
     textAlign: 'center',
     padding: 0,

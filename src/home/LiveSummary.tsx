@@ -774,7 +774,7 @@ class LiveSummary extends Component<Props, State> {
                           marginBottom: 20,
                           marginTop: 20,
                           textAlign: 'center',
-                          color: ApiUtils.getBackgroundColor(),
+                          color: ApiUtils.getColor(),
                           // backgroundColor: '#E6E6E6',
                         }}>
                         Challenge My Cross
@@ -808,7 +808,7 @@ class LiveSummary extends Component<Props, State> {
                                   <Text
                                     style={{
                                       marginBottom: 5,
-                                      color: ApiUtils.getBackgroundColor(),
+                                      color: ApiUtils.getColor(),
                                     }}>
                                     {segment.nomSegment}
                                   </Text>
@@ -860,11 +860,11 @@ class LiveSummary extends Component<Props, State> {
                                     <Text
                                       style={{
                                         padding: 5,
-                                        borderColor: ApiUtils.getBackgroundColor(),
+                                        borderColor: ApiUtils.getColor(),
                                         borderWidth: 2,
                                         // marginTop: -8,
                                         fontWeight: 'bold',
-                                        color: ApiUtils.getBackgroundColor(),
+                                        color: ApiUtils.getColor(),
                                       }}>
                                       Voir
                                     </Text>

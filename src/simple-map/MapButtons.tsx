@@ -639,20 +639,20 @@ class MapButtons extends Component<Props, State> {
                       onValueChange={(value) => this.onValueSportChange(value)}
                       placeholder={'Choisissez votre sport'}
                       placeholderStyle={{
-                        color: ApiUtils.getBackgroundColor(),
+                        color: ApiUtils.getColor(),
                       }}
-                      placeholderIconColor={ApiUtils.getBackgroundColor()}
-                      textStyle={{color: ApiUtils.getBackgroundColor()}}
+                      placeholderIconColor={ApiUtils.getColor()}
+                      textStyle={{color: ApiUtils.getColor()}}
                       itemStyle={{
-                        color: ApiUtils.getBackgroundColor(),
+                        color: ApiUtils.getColor(),
                         marginLeft: 0,
                         paddingLeft: 10,
-                        borderBottomColor: ApiUtils.getBackgroundColor(),
+                        borderBottomColor: ApiUtils.getColor(),
                         borderBottomWidth: 1,
                       }}
                       itemTextStyle={{
-                        color: ApiUtils.getBackgroundColor(),
-                        borderBottomColor: ApiUtils.getBackgroundColor(),
+                        color: ApiUtils.getColor(),
+                        borderBottomColor: ApiUtils.getColor(),
                         borderBottomWidth: 1,
                       }}>
                       <Picker.Item label="Choisissez votre sport" value="-1" />
@@ -752,11 +752,11 @@ class MapButtons extends Component<Props, State> {
                         alignSelf: 'center',
                         borderColor: this.isErrorFormStop()
                           ? 'black'
-                          : ApiUtils.getBackgroundColor(),
+                          : ApiUtils.getColor(),
                         borderWidth: 1,
                         backgroundColor: this.isErrorFormStop()
                           ? 'transparent'
-                          : ApiUtils.getBackgroundColor(),
+                          : ApiUtils.getColor(),
                       }}
                       onPress={() => this.onClickValidateStop()}
                       disabled={this.isErrorFormStop()}>

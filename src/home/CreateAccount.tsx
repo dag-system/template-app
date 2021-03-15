@@ -550,20 +550,20 @@ class CreateAccount extends ValidationComponent {
                     onValueChange={this.onChangeAnneeUser.bind(this)}
                     placeholder={'Choisissez votre année'}
                     placeholderStyle={{
-                      color: ApiUtils.getBackgroundColor(),
+                      color: ApiUtils.getColor(),
                     }}
-                    placeholderIconColor={ApiUtils.getBackgroundColor()}
-                    textStyle={{color: ApiUtils.getBackgroundColor()}}
+                    placeholderIconColor={ApiUtils.getColor()}
+                    textStyle={{color: ApiUtils.getColor()}}
                     itemStyle={{
-                      color: ApiUtils.getBackgroundColor(),
+                      color: ApiUtils.getColor(),
                       marginLeft: 0,
                       paddingLeft: 10,
-                      borderBottomColor: ApiUtils.getBackgroundColor(),
+                      borderBottomColor: ApiUtils.getColor(),
                       borderBottomWidth: 1,
                     }}
                     itemTextStyle={{
-                      color: ApiUtils.getBackgroundColor(),
-                      borderBottomColor: ApiUtils.getBackgroundColor(),
+                      color: ApiUtils.getColor(),
+                      borderBottomColor: ApiUtils.getColor(),
                       borderBottomWidth: 1,
                     }}>
                     <Picker.Item label="Choisissez votre année" value="-1" />
@@ -588,20 +588,20 @@ class CreateAccount extends ValidationComponent {
                     onValueChange={this.onChangeDepartementUser.bind(this)}
                     placeholder={'Choisissez votre département'}
                     placeholderStyle={{
-                      color: ApiUtils.getBackgroundColor(),
+                      color: ApiUtils.getColor(),
                     }}
-                    placeholderIconColor={ApiUtils.getBackgroundColor()}
-                    textStyle={{color: ApiUtils.getBackgroundColor()}}
+                    placeholderIconColor={ApiUtils.getColor()}
+                    textStyle={{color: ApiUtils.getColor()}}
                     itemStyle={{
-                      color: ApiUtils.getBackgroundColor(),
+                      color: ApiUtils.getColor(),
                       marginLeft: 0,
                       paddingLeft: 10,
-                      borderBottomColor: ApiUtils.getBackgroundColor(),
+                      borderBottomColor: ApiUtils.getColor(),
                       borderBottomWidth: 1,
                     }}
                     itemTextStyle={{
-                      color: ApiUtils.getBackgroundColor(),
-                      borderBottomColor: ApiUtils.getBackgroundColor(),
+                      color: ApiUtils.getColor(),
+                      borderBottomColor: ApiUtils.getColor(),
                       borderBottomWidth: 1,
                     }}>
                     <Picker.Item
@@ -658,20 +658,20 @@ class CreateAccount extends ValidationComponent {
                     onValueChange={this.onChangeGroupeUser.bind(this)}
                     placeholder={'Choisissez votre Groupe'}
                     placeholderStyle={{
-                      color: ApiUtils.getBackgroundColor(),
+                      color: ApiUtils.getColor(),
                     }}
-                    placeholderIconColor={ApiUtils.getBackgroundColor()}
-                    textStyle={{color: ApiUtils.getBackgroundColor()}}
+                    placeholderIconColor={ApiUtils.getColor()}
+                    textStyle={{color: ApiUtils.getColor()}}
                     itemStyle={{
-                      color: ApiUtils.getBackgroundColor(),
+                      color: ApiUtils.getColor(),
                       marginLeft: 0,
                       paddingLeft: 10,
-                      borderBottomColor: ApiUtils.getBackgroundColor(),
+                      borderBottomColor: ApiUtils.getColor(),
                       borderBottomWidth: 1,
                     }}
                     itemTextStyle={{
-                      color: ApiUtils.getBackgroundColor(),
-                      borderBottomColor: ApiUtils.getBackgroundColor(),
+                      color: ApiUtils.getColor(),
+                      borderBottomColor: ApiUtils.getColor(),
                       borderBottomWidth: 1,
                     }}>
                     <Picker.Item label="Choisissez votre Groupe" value="-1" />
@@ -716,20 +716,20 @@ class CreateAccount extends ValidationComponent {
                     onValueChange={this.onChangeSportUser.bind(this)}
                     placeholder={'Choisissez votre Créneau Sport'}
                     placeholderStyle={{
-                      color: ApiUtils.getBackgroundColor(),
+                      color: ApiUtils.getColor(),
                     }}
-                    placeholderIconColor={ApiUtils.getBackgroundColor()}
-                    textStyle={{color: ApiUtils.getBackgroundColor()}}
+                    placeholderIconColor={ApiUtils.getColor()}
+                    textStyle={{color: ApiUtils.getColor()}}
                     itemStyle={{
-                      color: ApiUtils.getBackgroundColor(),
+                      color: ApiUtils.getColor(),
                       marginLeft: 0,
                       paddingLeft: 10,
-                      borderBottomColor: ApiUtils.getBackgroundColor(),
+                      borderBottomColor: ApiUtils.getColor(),
                       borderBottomWidth: 1,
                     }}
                     itemTextStyle={{
-                      color: ApiUtils.getBackgroundColor(),
-                      borderBottomColor: ApiUtils.getBackgroundColor(),
+                      color: ApiUtils.getColor(),
+                      borderBottomColor: ApiUtils.getColor(),
                       borderBottomWidth: 1,
                     }}>
                     <Picker.Item
@@ -768,20 +768,20 @@ class CreateAccount extends ValidationComponent {
                     onValueChange={this.onChangeAsUser.bind(this)}
                     placeholder={'Choisissez votre AS'}
                     placeholderStyle={{
-                      color: ApiUtils.getBackgroundColor(),
+                      color: ApiUtils.getColor(),
                     }}
-                    placeholderIconColor={ApiUtils.getBackgroundColor()}
-                    textStyle={{color: ApiUtils.getBackgroundColor()}}
+                    placeholderIconColor={ApiUtils.getColor()}
+                    textStyle={{color: ApiUtils.getColor()}}
                     itemStyle={{
-                      color: ApiUtils.getBackgroundColor(),
+                      color: ApiUtils.getColor(),
                       marginLeft: 0,
                       paddingLeft: 10,
-                      borderBottomColor: ApiUtils.getBackgroundColor(),
+                      borderBottomColor: ApiUtils.getColor(),
                       borderBottomWidth: 1,
                     }}
                     itemTextStyle={{
-                      color: ApiUtils.getBackgroundColor(),
-                      borderBottomColor: ApiUtils.getBackgroundColor(),
+                      color: ApiUtils.getColor(),
+                      borderBottomColor: ApiUtils.getColor(),
                       borderBottomWidth: 1,
                     }}>
                     <Picker.Item label="Choisissez votre AS" value="-1" />
@@ -826,20 +826,20 @@ class CreateAccount extends ValidationComponent {
                     onValueChange={this.onChangeEnseignantUser.bind(this)}
                     placeholder={'Choisissez votre AS'}
                     placeholderStyle={{
-                      color: ApiUtils.getBackgroundColor(),
+                      color: ApiUtils.getColor(),
                     }}
-                    placeholderIconColor={ApiUtils.getBackgroundColor()}
-                    textStyle={{color: ApiUtils.getBackgroundColor()}}
+                    placeholderIconColor={ApiUtils.getColor()}
+                    textStyle={{color: ApiUtils.getColor()}}
                     itemStyle={{
-                      color: ApiUtils.getBackgroundColor(),
+                      color: ApiUtils.getColor(),
                       marginLeft: 0,
                       paddingLeft: 10,
-                      borderBottomColor: ApiUtils.getBackgroundColor(),
+                      borderBottomColor: ApiUtils.getColor(),
                       borderBottomWidth: 1,
                     }}
                     itemTextStyle={{
-                      color: ApiUtils.getBackgroundColor(),
-                      borderBottomColor: ApiUtils.getBackgroundColor(),
+                      color: ApiUtils.getColor(),
+                      borderBottomColor: ApiUtils.getColor(),
                       borderBottomWidth: 1,
                     }}>
                     <Picker.Item
@@ -1025,7 +1025,7 @@ class CreateAccount extends ValidationComponent {
 const styles = StyleSheet.create({
   header: {
     backgroundColor: 'white',
-    // backgroundColor: ApiUtils.getBackgroundColor(),
+    // backgroundColor: ApiUtils.getColor(),
     width: '100%',
   },
   title: {

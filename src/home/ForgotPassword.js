@@ -274,7 +274,7 @@ class ForgotPassword extends ValidationComponent {
                       this.isFieldInError('emailUtilisateur') ||
                       this.state.emailUtilisateur == ''
                         ? 'black'
-                        : ApiUtils.getBackgroundColor(),
+                        : ApiUtils.getColor(),
                     borderWidth: 1,
                     padding: 10,
                   },
@@ -282,7 +282,7 @@ class ForgotPassword extends ValidationComponent {
                   this.isFieldInError('emailUtilisateur') ||
                   this.state.emailUtilisateur == ''
                     ? {backgroundColor: 'transparent'}
-                    : {backgroundColor: ApiUtils.getBackgroundColor()},
+                    : {backgroundColor: ApiUtils.getColor()},
                 ]}
                 onPress={() => this.onClickSendFollowCode()}
                 // style={[
@@ -328,20 +328,20 @@ class ForgotPassword extends ValidationComponent {
                   onValueChange={this.onValueFolocodeChange.bind(this)}
                   placeholder={'Choisissez le Code'}
                   placeholderStyle={{
-                    color: ApiUtils.getBackgroundColor(),
+                    color: ApiUtils.getColor(),
                   }}
-                  placeholderIconColor={ApiUtils.getBackgroundColor()}
-                  textStyle={{color: ApiUtils.getBackgroundColor()}}
+                  placeholderIconColor={ApiUtils.getColor()}
+                  textStyle={{color: ApiUtils.getColor()}}
                   itemStyle={{
-                    color: ApiUtils.getBackgroundColor(),
+                    color: ApiUtils.getColor(),
                     marginLeft: 0,
                     paddingLeft: 10,
-                    borderBottomColor: ApiUtils.getBackgroundColor(),
+                    borderBottomColor: ApiUtils.getColor(),
                     borderBottomWidth: 1,
                   }}
                   itemTextStyle={{
-                    color: ApiUtils.getBackgroundColor(),
-                    borderBottomColor: ApiUtils.getBackgroundColor(),
+                    color: ApiUtils.getColor(),
+                    borderBottomColor: ApiUtils.getColor(),
                     borderBottomWidth: 1,
                   }}>
                   <Picker.Item label="Choisissez le Code" value={-1} />
@@ -381,7 +381,7 @@ class ForgotPassword extends ValidationComponent {
                             this.state.followCode == '' &&
                             this.state.selectedFolocode == -1
                               ? 'black'
-                              : ApiUtils.getBackgroundColor(),
+                              : ApiUtils.getColor(),
                           borderWidth: 1,
                           padding: 10,
                         },
@@ -389,7 +389,7 @@ class ForgotPassword extends ValidationComponent {
                         this.state.followCode == '' &&
                         this.state.selectedFolocode == -1
                           ? {backgroundColor: 'transparent'}
-                          : {backgroundColor: ApiUtils.getBackgroundColor()},
+                          : {backgroundColor: ApiUtils.getColor()},
                       ]}
                       onPress={() => this.onClickSendFollowCode()}
                       disabled={

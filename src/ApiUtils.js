@@ -19,6 +19,17 @@ var ApiUtils = {
   getBackgroundColor() {
     return '#FFFFFF';
   },
+  getSecondColor() {
+    return '#DE084C';
+  },
+  getColor() {
+    let color = this.getBackgroundColor();
+
+    if (this.getBackgroundColor() == '#FFFFFF') {
+      color = this.getSecondColor();
+    }
+    return color;
+  },
   VersionNumber() {
     return VersionNumber;
   },
@@ -55,10 +66,6 @@ var ApiUtils = {
     var url =
       ApiUtils.getUrl() + 'fichiers/interets/' + idStation + '/' + photo;
     return url;
-  },
-
-  getColor() {
-    return ApiUtils.getBackgroundColor();
   },
 
   getAPIUrl() {
