@@ -561,22 +561,10 @@ class MapButtons extends Component<Props, State> {
               }}>
               <Button
                 full
-                style={{
-                  backgroundColor: '#C7C7C9',
-                  width: '50%',
-                  height: '100%',
-                }}
-                onPress={() => this.onTimerPause()}>
-                <Text style={[styles.buttonText, {color: 'black'}]}>
-                  {this.props.isMoving ? 'PAUSE' : 'RELANCER'}
-                </Text>
-              </Button>
-              <Button
-                full
                 onPress={() => this.onStop()}
                 style={{
                   backgroundColor: '#FE3C03',
-                  width: '50%',
+                  width: '100%',
                   height: '100%',
                 }}>
                 <Text style={[styles.buttonText, {color: 'white'}]}>STOP</Text>
