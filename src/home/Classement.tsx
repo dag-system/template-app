@@ -125,9 +125,6 @@ class Classement extends Component {
                 Classement du challenge DIY TAC Run
               </Text>
 
-              <TouchableOpacity
-                onPress={() => this.openLink
-
               {this.state.isPortrait ? (
                 <View>
                   <Image
