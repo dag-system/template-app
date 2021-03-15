@@ -6,20 +6,19 @@ import {
   View,
   ScrollView,
   Platform,
-  TouchableHighlight,Image,
-  ImageBackground,Modal, Linking
+  TouchableHighlight,
+  Image,
+  ImageBackground,
+  Modal,
+  Linking,
 } from 'react-native';
-import {
-  Icon,
-  Text,
-  Button,
-} from 'native-base';
+import {Icon, Text, Button} from 'native-base';
 import {connect} from 'react-redux';
 import MarkerInteret from '../assets/marker.png';
 import MapView, {Marker, Polyline} from 'react-native-maps';
 import {ReactNativeModal as ModalSmall} from 'react-native-modal';
 import {Icon as IconElement} from 'react-native-elements';
-import { isPointInPolygon } from 'geolib';
+import {isPointInPolygon} from 'geolib';
 import BatteryModal from '../home/BatteryModal';
 import DefaultProps from '../models/DefaultProps';
 import ApiUtils from '../ApiUtils';
@@ -30,48 +29,48 @@ const LONGITUDE_DELTA_CLOSE = 0.02421;
 const LATITUDE_DELTA = 0.16022;
 const LONGITUDE_DELTA = 0.01221;
 
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
   return {
     currentMapStyle: state.currentMapStyle,
-    coordinatesString : state.coordinatesString,
+    coordinatesString: state.coordinatesString,
     polylines: state.polylines,
-    currentPosition : state.currentPosition,
-    isGpsNotOk : state.isGpsNotOk,
-    isRecording : state.isRecording,
+    currentPosition: state.currentPosition,
+    isGpsNotOk: state.isGpsNotOk,
+    isRecording: state.isRecording,
     pointsInterets: state.pointsInterets,
   };
 };
 
 interface Props extends DefaultProps {
-  currentMapStyle: string,
-    coordinatesString : string,
-    polylines: any[],
-    currentPosition : any,
-    isGpsNotOk : boolean,
-    isRecording : boolean,
-    pointsInterets : any[]
+  currentMapStyle: string;
+  coordinatesString: string;
+  polylines: any[];
+  currentPosition: any;
+  isGpsNotOk: boolean;
+  isRecording: boolean;
+  pointsInterets: any[];
 }
 
 interface State {
   ismodalBatteryOpen: boolean;
-  isModalTraceVisible : boolean;
-  currentPolyline : any;
-  refresh : boolean;
-  currentInteret : any;
-  isModalInterestVisible : boolean;
+  isModalTraceVisible: boolean;
+  currentPolyline: any;
+  refresh: boolean;
+  currentInteret: any;
+  isModalInterestVisible: boolean;
 }
 
-class Map extends PureComponent<Props,State> {
+class Map extends PureComponent<Props, State> {
   constructor(props) {
     super(props);
 
     this.state = {
-      ismodalBatteryOpen : false,
-      isModalTraceVisible : false,
-      currentPolyline : null,
-      refresh : false,
-      currentInteret : null,
-      isModalInterestVisible : false
+      ismodalBatteryOpen: false,
+      isModalTraceVisible: false,
+      currentPolyline: null,
+      refresh: false,
+      currentInteret: null,
+      isModalInterestVisible: false,
     };
   }
 
@@ -83,9 +82,7 @@ class Map extends PureComponent<Props,State> {
 
     // setTimeout(() => this.setState({ userdata: { ...this.state.userdata, ddnUtilisateur: this.state.userdata.ddnUtilisateur) }} ), 100)
   }
-  didMount() {
-   
-  }
+  didMount() {}
 
   saveCurrentMapStyle() {
     let nextStyle = 'standard';
@@ -157,7 +154,7 @@ class Map extends PureComponent<Props,State> {
   toggleTrace(traceName) {
     var action = {type: 'TOGGLE_TRACE', data: traceName};
     this.props.dispatch(action);
-    this.setState({refresh : !this.state.refresh})
+    this.setState({refresh: !this.state.refresh});
   }
 
   setCenter(coords) {
@@ -173,30 +170,25 @@ class Map extends PureComponent<Props,State> {
     });
   }
 
-  generateLotOfCoordinates()
-  {
-    
-    let data =[];
-    for(let i=0; i <5000; i++)
-    {
+  generateLotOfCoordinates() {
+    let data = [];
+    for (let i = 0; i < 5000; i++) {
       let coord = {
-        latitude : 12,
-        longitude : 12,
-        speed : 3
-      }
+        latitude: 12,
+        longitude: 12,
+        speed: 3,
+      };
       data.push(coord);
     }
     var action = {type: 'SAVE_COORDINATES', data: data};
     this.props.dispatch(action);
   }
 
-
   onClickGetCurrentPosition() {
     if (this.props.currentPosition) {
       this.setCenter(this.props.currentPosition);
     }
   }
-
 
   onClickInterestPoint(marker) {
     this.setState({currentInteret: marker});
@@ -211,12 +203,11 @@ class Map extends PureComponent<Props,State> {
     this.setState({isModalInterestVisible: false});
   }
 
-   onUpdatePosition = (newCoordinate) => {
-
+  onUpdatePosition = (newCoordinate) => {
     if (this.refs.map != null) {
       this.refs.map
         .getMapBoundaries()
-        .then(data => {
+        .then((data) => {
           var isInside = isPointInPolygon(newCoordinate.coords, [
             {
               latitude: data.northEast.latitude,
@@ -234,10 +225,9 @@ class Map extends PureComponent<Props,State> {
             this.setCenter(newCoordinate.coords);
           }
         })
-        .catch(() => {
-        });
+        .catch(() => {});
     }
-  }
+  };
 
   openBatteryModal = () => {
     this.setState({ismodalBatteryOpen: true});
@@ -247,19 +237,16 @@ class Map extends PureComponent<Props,State> {
     this.setState({ismodalBatteryOpen: false});
   };
 
-
   onClickUrlInterest(url) {
-  
-    Linking.canOpenURL(url).then(supported => {
+    Linking.canOpenURL(url).then((supported) => {
       if (supported) {
         Linking.openURL(url);
-      } 
+      }
     });
   }
 
   onClickInterestPhone(phoneNumber, idInteret) {
-
-    Linking.canOpenURL(`tel:${phoneNumber}`).then(supported => {
+    Linking.canOpenURL(`tel:${phoneNumber}`).then((supported) => {
       if (supported) {
         Linking.openURL(`tel:${phoneNumber}`);
       } else {
@@ -275,7 +262,6 @@ class Map extends PureComponent<Props,State> {
   render() {
     return (
       <View style={styles.map}>
-
         <Button
           style={{
             position: 'absolute',
@@ -305,13 +291,12 @@ class Map extends PureComponent<Props,State> {
             elevation: 0,
           }}
           onPress={() => this.saveCurrentMapStyle()}>
-    
-            <Icon
-          style={[styles.title, {fontSize: 19}]}
-              name={this.getFabDefaultLogo()}
-              color="black"
-              type="FontAwesome5"
-            />
+          <Icon
+            style={[styles.title, {fontSize: 19}]}
+            name={this.getFabDefaultLogo()}
+            color="black"
+            type="FontAwesome5"
+          />
         </Button>
 
         <Button
@@ -365,25 +350,24 @@ class Map extends PureComponent<Props,State> {
         ) : null}
 
         {this.props.isGpsNotOk ? (
-          <View 
-          style={{
-            justifyContent: 'center',
-            display: 'flex',
-            flexDirection: 'row',
-            zIndex: 5,
-             width : '100%',
-            position : 'absolute',
-            top: 100,
-            marginLeft : 'auto'
-          }}>
-     
+          <View
+            style={{
+              justifyContent: 'center',
+              display: 'flex',
+              flexDirection: 'row',
+              zIndex: 5,
+              width: '100%',
+              position: 'absolute',
+              top: 100,
+              marginLeft: 'auto',
+            }}>
             <View
               style={[
                 {
                   backgroundColor: '#FE3C03',
                   width: '70%',
-                  marginLeft : 'auto',
-                  marginRight : 'auto',
+                  marginLeft: 'auto',
+                  marginRight: 'auto',
                   paddingVertical: 20,
                   paddingHorizontal: 15,
                   borderRadius: 30,
@@ -396,7 +380,7 @@ class Map extends PureComponent<Props,State> {
                     styles.liveNameText,
                     {color: 'white', textTransform: 'uppercase'},
                   ]}>
-                    {this.props.isGpsNotOk}
+                  {this.props.isGpsNotOk}
                   En attente de l’acquisition du signal GPS, ne partez pas.
                 </Text>
                 <Text
@@ -454,13 +438,14 @@ class Map extends PureComponent<Props,State> {
           </TouchableOpacity>
         ) : null}
 
-            {/* Point d'interet  */}
+        {/* Point d'interet  */}
 
-            <ModalSmall
+        <ModalSmall
           style={{marginTop: 22, paddingTop: 22, borderRadius: 10}}
           isVisible={this.state.isModalInterestVisible}
-          onSwipeComplete={() => this.setState({isModalInterestVisible: false})}
-        >
+          onSwipeComplete={() =>
+            this.setState({isModalInterestVisible: false})
+          }>
           <View
             style={{
               display: 'flex',
@@ -478,10 +463,7 @@ class Map extends PureComponent<Props,State> {
               onPress={() => {
                 this.closeInterestModal();
               }}>
-              <IconElement
-                name="times-circle"
-                type="font-awesome"
-              />
+              <IconElement name="times-circle" type="font-awesome" />
             </Button>
           </View>
           <ScrollView
@@ -546,9 +528,7 @@ class Map extends PureComponent<Props,State> {
                         this.state.currentInteret?.idInteret,
                       )
                     }>
-                    <Text >
-                      {this.state.currentInteret?.telephoneInteret}
-                    </Text>
+                    <Text>{this.state.currentInteret?.telephoneInteret}</Text>
                   </Button>
                 ) : null}
                 {this.state.currentInteret?.lienInteret != '' &&
@@ -566,7 +546,7 @@ class Map extends PureComponent<Props,State> {
                     }}
                     onPress={() =>
                       this.onClickUrlInterest(
-                        this.state.currentInteret?.lienInteret
+                        this.state.currentInteret?.lienInteret,
                       )
                     }>
                     <Text>Lien web</Text>
@@ -587,8 +567,6 @@ class Map extends PureComponent<Props,State> {
           </ScrollView>
         </ModalSmall>
 
-   
-
         <MapView
           ref="map"
           mapType={this.props.currentMapStyle}
@@ -601,15 +579,14 @@ class Map extends PureComponent<Props,State> {
           showsScale={false}
           showsTraffic={false}
           initialRegion={{
-            latitude: 45.78666352,
-            longitude: 4.875329832,
+            latitude: 45.27041566478002,
+            longitude: 1.7567079272737243,
             latitudeDelta: LATITUDE_DELTA_CLOSE,
             longitudeDelta: LONGITUDE_DELTA_CLOSE,
           }}
           toolbarEnabled={false}>
-            {
-              this.props.coordinatesString != "" ?
-              <Polyline
+          {this.props.coordinatesString != '' ? (
+            <Polyline
               key="polyline"
               coordinates={JSON.parse(this.props.coordinatesString)}
               geodesic={true}
@@ -617,9 +594,7 @@ class Map extends PureComponent<Props,State> {
               strokeWidth={6}
               zIndex={0}
             />
-               :null
-            }
-      
+          ) : null}
 
           {/* <MapView.Circle
           key="circle"
@@ -638,7 +613,7 @@ class Map extends PureComponent<Props,State> {
 
           {this.props.polylines != null
             ? this.props.polylines
-                .filter(pol => pol.isActive == true)
+                .filter((pol) => pol.isActive == true)
                 .map((polyline, index) => (
                   <Polyline
                     key={polyline.nomTrace + index}
@@ -665,7 +640,7 @@ class Map extends PureComponent<Props,State> {
         } */}
 
           {this.props.pointsInterets != null
-            ? this.props.pointsInterets.map(marker => (
+            ? this.props.pointsInterets.map((marker) => (
                 <Marker
                   onPress={() => this.onClickInterestPoint(marker)}
                   // onCalloutPress={() => this.onClickInterestPoint(marker)}
@@ -684,8 +659,7 @@ class Map extends PureComponent<Props,State> {
         {/******** modal5 : Traces list  *****************/}
         <ModalSmall
           isVisible={this.state.isModalTraceVisible}
-          onSwipeComplete={() => this.setState({isModalTraceVisible: false})}
-        >
+          onSwipeComplete={() => this.setState({isModalTraceVisible: false})}>
           <View
             style={{
               marginTop: 22,
@@ -827,8 +801,8 @@ class Map extends PureComponent<Props,State> {
             </View>
           </ScrollView>
         </ModalSmall>
-                {/******** modal : Battery modal *****************/}
-                <Modal
+        {/******** modal : Battery modal *****************/}
+        <Modal
           animationType={'none'}
           transparent={false}
           visible={this.state.ismodalBatteryOpen}
@@ -841,7 +815,6 @@ class Map extends PureComponent<Props,State> {
             onclose={this.closeModalBattery}
           />
         </Modal>
-
       </View>
     );
   }
@@ -877,4 +850,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default connect(mapStateToProps,null,null,{ forwardRef: true })(Map);
+export default connect(mapStateToProps, null, null, {forwardRef: true})(Map);

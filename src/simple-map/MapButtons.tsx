@@ -559,6 +559,7 @@ class MapButtons extends Component<Props, State> {
                 paddingLeft: 0,
                 paddingBottom: 0,
               }}>
+              {/*
               <Button
                 full
                 style={{
@@ -570,13 +571,13 @@ class MapButtons extends Component<Props, State> {
                 <Text style={[styles.buttonText, {color: 'black'}]}>
                   {this.props.isMoving ? 'PAUSE' : 'RELANCER'}
                 </Text>
-              </Button>
+              </Button>*/}
               <Button
                 full
                 onPress={() => this.onStop()}
                 style={{
                   backgroundColor: '#FE3C03',
-                  width: '50%',
+                  width: '100%',
                   height: '100%',
                 }}>
                 <Text style={[styles.buttonText, {color: 'white'}]}>STOP</Text>
@@ -656,7 +657,7 @@ class MapButtons extends Component<Props, State> {
                         borderBottomWidth: 1,
                       }}>
                       <Picker.Item label="Choisissez votre sport" value="-1" />
-                      <Picker.Item label={'CROSS'} value="17" />
+                      <Picker.Item label={'Course à Pied'} value="24" />
                     </Picker>
 
                     {this.state.selectedSport == -1 ? (

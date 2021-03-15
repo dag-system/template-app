@@ -1934,8 +1934,8 @@ class SimpleMap extends PureComponent<Props, State> {
             showsScale={false}
             showsTraffic={false}
             initialRegion={{
-              latitude: 45.1667, // 44.843884,
-              longitude: 5.55,
+              latitude: 45.27041566478002, // 44.843884,
+              longitude: 1.7567079272737243,
               latitudeDelta: LATITUDE_DELTA,
               longitudeDelta: LONGITUDE_DELTA,
             }}
@@ -2212,7 +2212,7 @@ class SimpleMap extends PureComponent<Props, State> {
                         borderBottomWidth: 1,
                       }}>
                       <Picker.Item label="Choisissez votre sport" value="-1" />
-                      <Picker.Item label={'CROSS'} value="17" />
+                      <Picker.Item label={'Course à Pied'} value="24" />
                     </Picker>
 
                     {this.state.selectedSport == -1 ? (

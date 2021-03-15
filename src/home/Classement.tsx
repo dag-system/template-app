@@ -126,16 +126,7 @@ class Classement extends Component {
               </Text>
 
               <TouchableOpacity
-                onPress={() => this.openLink('https://www.insa-lyon.fr/')}>
-                <Text
-                  style={{
-                    textAlign: 'center',
-                    color: ApiUtils.getBackgroundColor(),
-                  }}>
-                  Retrouvez tous les classements sur notre site internet : A
-                  RENTRER
-                </Text>
-              </TouchableOpacity>
+                onPress={() => this.openLink
 
               {this.state.isPortrait ? (
                 <View>
@@ -152,7 +143,7 @@ class Classement extends Component {
 
               <AutoHeightWebView
                 source={{
-                  uri: 'https://folomi.fr/classement/insalyon.html',
+                  uri: 'https://folomi.fr/classement/diytacrun/classement.html',
                 }}
                 style={{marginTop: 20, width: '100%'}}
                 startInLoadingState={true}

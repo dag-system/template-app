@@ -851,7 +851,8 @@ class Replay extends Component {
                       borderBottomWidth: 1,
                     }}>
                     <Picker.Item label="Choisissez une épreuve" value="-1" />
-                    <Picker.Item label="Myrtilles" value={49} />
+                    <Picker.Item label="Semi Marathon de Tulle" value={59} />
+                    <Picker.Item label="DIY 10 km" value={60} />
                   </Picker>
 
                   {!this.state.isloadingChallenge &&
@@ -1197,8 +1198,8 @@ class Replay extends Component {
                   // onPress={(coordinate) => { this.showMapFullSize() }}
                   toolbarEnabled={false}
                   initialRegion={{
-                    latitude: 45.1667, // 44.843884,
-                    longitude: 5.55,
+                    latitude: 45.27041566478002, // 44.843884,
+                    longitude: 1.7567079272737243,
                     latitudeDelta: LATITUDE_DELTA,
                     longitudeDelta: LONGITUDE_DELTA,
                   }}

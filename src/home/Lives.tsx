@@ -294,7 +294,7 @@ class Lives extends Component<Props, State> {
     formData.append('auth', ApiUtils.getAPIAuth());
     formData.append('idUtilisateur', this.props.userData.idUtilisateur);
     formData.append('idversion', ApiUtils.VersionNumberInt().toString());
-    formData.append('idSport', '17');
+    formData.append('idSport', '24');
     formData.append('os', Platform.OS);
     var libelleLive = this.getLibelleLive();
 
@@ -322,7 +322,7 @@ class Lives extends Component<Props, State> {
             codeLive: responseJson.codeLive,
             libelleLive: responseJson.libelleLive,
             dateCreationLive: responseJson.dateCreationLive,
-            idSport: '17',
+            idSport: '24',
             invites: [],
             statsInfos: {},
             etatLive: 0,
@@ -693,7 +693,7 @@ class Lives extends Component<Props, State> {
   }
 
   getSport(idSport) {
-    return 'CROSS';
+    return 'Course à Pied';
   }
 
   getnbInvites(live) {

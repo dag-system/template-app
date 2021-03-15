@@ -199,17 +199,6 @@ class Help extends Component {
                 Lors de votre inscription vous pouvez choisir de participer
                 également à un ou plusieurs challenge(s).
               </Text>
-              <TouchableOpacity
-                onPress={() => this.openLink('https://www.insa-lyon.fr/')}>
-                <Text
-                  style={{
-                    textAlign: 'center',
-                    marginTop: 10,
-                    textDecorationLine: 'underline',
-                  }}>
-                  https://www.insa-lyon.fr/
-                </Text>
-              </TouchableOpacity>
               <Text style={{marginTop: 10}}>
                 Consultez votre temps sur l'application puis votre classement
                 sera disponible en fin de journée sur le site internet de
@@ -236,17 +225,6 @@ class Help extends Component {
               <Text style={{marginTop: 10, fontWeight: 'bold'}}>
                 Pour les infos complètes rendez-vous sur
               </Text>
-              <TouchableOpacity
-                onPress={() => this.openLink('https://www.insa-lyon.fr/')}>
-                <Text
-                  style={{
-                    textAlign: 'center',
-                    marginTop: 10,
-                    textDecorationLine: 'underline',
-                  }}>
-                  https://www.insa-lyon.fr/
-                </Text>
-              </TouchableOpacity>
               <Text
                 style={{
                   marginTop: 10,
@@ -286,17 +264,6 @@ class Help extends Component {
                 Retrouvez les classements sur notre site, mis à jour chaque soir
                 :
               </Text>
-              <TouchableOpacity
-                onPress={() => this.openLink('https://www.insa-lyon.fr/')}>
-                <Text
-                  style={{
-                    textAlign: 'center',
-                    marginTop: 10,
-                    textDecorationLine: 'underline',
-                  }}>
-                  https://www.insa-lyon.fr/
-                </Text>
-              </TouchableOpacity>
               <Text style={{marginTop: 10, fontWeight: 'bold'}}>
                 2 - Paramétrez votre téléphone
               </Text>
@@ -305,17 +272,6 @@ class Help extends Component {
                 gestion de la batterie de votre téléphone pour que l’app ne se
                 stoppe pas pendant l’effort
               </Text>
-              <TouchableOpacity
-                onPress={() => this.openLink('https://www.insa-lyon.fr/')}>
-                <Text
-                  style={{
-                    textAlign: 'center',
-                    marginTop: 10,
-                    textDecorationLine: 'underline',
-                  }}>
-                  Suivez nos instructions ici
-                </Text>
-              </TouchableOpacity>
               <Text style={{marginTop: 10}}>
                 Vous retrouverez ces informations dans le menu aide. Bonne
                 course.

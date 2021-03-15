@@ -40,8 +40,7 @@
       </activity>
       <activity android:name="com.facebook.react.devsupport.DevSettingsActivity" />
             <meta-data android:name="com.google.android.geo.API_KEY" android:value="AIzaSyCINS2dyuBipK8MZzOQnzyKdrS2I1_b5I4"/>
-   <meta-data android:name="com.transistorsoft.locationmanager.license" android:value="9d9af77ee60b2e04279cff53666f4e5948335018f6b460db73b6c92f449a0175" />
-      <!-- <meta-data android:name="com.transistorsoft.locationmanager.license" android:value="eb8ee62a24ca51c5d4c87f4fad356fb8660a6ae401b9d95642f7b80e7cc59c06" /> -->
+   <meta-data android:name="com.transistorsoft.locationmanager.license" android:value="d22d015f052cf0d4e18ce6ade962ab29b593066202a62ae02c9e79abcc11c99e" />
       <meta-data android:name="com.transistorsoft.locationmanager.ENCRYPTION_PASSWORD" android:value="transistorsoft" />
 
     </application>

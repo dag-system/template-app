@@ -40,7 +40,7 @@ import moment from 'moment';
 import {Platform} from 'react-native';
 import {Dimensions} from 'react-native';
 
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
   return {
     userData: state.userData,
     userClubs: state.userClubs,
@@ -150,7 +150,7 @@ class Preferences extends Component {
     }
     this.setState({years: years}, () => this.fillDate());
 
-  //  this.getInformations();
+    //  this.getInformations();
     this.setState({userdata: this.props.userData});
     if (this.props.userData.clubUtilisateur == 'NULL') {
       this.props.userData.clubUtilisateur = '';
@@ -160,14 +160,14 @@ class Preferences extends Component {
       this.props.userData.villeUtilisateur = '';
     }
 
-   // this.setClubs(this.props.userClubs);
+    // this.setClubs(this.props.userClubs);
 
     //this.getClubs();
   }
 
   setClubs(clubs) {
     if (clubs != null) {
-      clubs.forEach(c => {
+      clubs.forEach((c) => {
         if (c.typeClub == 'Entreprise') {
           this.setState({clubEntreprise: c.nom});
         }
@@ -187,20 +187,17 @@ class Preferences extends Component {
     if (this.props.userData.ddnUtilisateur != '0000-00-00') {
       this.setState({showDefaultDdn: true});
 
-      console.log(this.props.userData.ddnUtilisateur)
-      if(this.props.userData.ddnUtilisateur!=null)
-      {
+      console.log(this.props.userData.ddnUtilisateur);
+      if (this.props.userData.ddnUtilisateur != null) {
         var day = moment(this.props.userData.ddnUtilisateur).format('DD');
         this.onValueDayddn(day);
-  
+
         var month = moment(this.props.userData.ddnUtilisateur).format('MM');
         this.onValueMonthddn(month);
-  
+
         var year = moment(this.props.userData.ddnUtilisateur).format('YYYY');
         this.onValueYearddn(year);
       }
- 
-  
     } else {
       this.setState({showDefaultDdn: false});
     }
@@ -234,14 +231,14 @@ class Preferences extends Component {
       body: formData,
     })
       .then(ApiUtils.checkStatus)
-      .then(response => response.json())
-      .then(responseJson => {
+      .then((response) => response.json())
+      .then((responseJson) => {
         var action = {type: 'GET_CLUBS', data: responseJson};
         this.props.dispatch(action);
 
         this.setState({isLoading: false});
       })
-      .catch(e => {
+      .catch((e) => {
         this.setState({isLoading: false});
         ApiUtils.logError('getCLUBS', e.message);
       })
@@ -343,16 +340,15 @@ class Preferences extends Component {
       body: formData,
     })
       .then(ApiUtils.checkStatus)
-      .then(response => response.json())
-      .then(responseJson => {
+      .then((response) => response.json())
+      .then((responseJson) => {
         //save values in cache
         if (responseJson.codeErreur == 'SUCCESS') {
-
         } else {
           this.setState({isLoading: false});
         }
       })
-      .catch(e => {
+      .catch((e) => {
         this.setState({isLoading: false});
         console.log(e);
         ApiUtils.logError('login', JSON.stringify(e.message));
@@ -419,8 +415,6 @@ class Preferences extends Component {
     } else {
       var finalDate = moment(this.state.ddnUtilisateur).format('YYYY-MM-DD');
       formData.append('ddnUtilisateur', finalDate);
-
-      
     }
     formData.append('sexeUtilisateur', this.state.userdata.sexeUtilisateur);
 
@@ -432,16 +426,12 @@ class Preferences extends Component {
     formData.append('villeUtilisateur', this.state.userdata.villeUtilisateur);
     formData.append('paysUtilisateur', this.state.userdata.paysUtilisateur);
 
-
     let clubs = [];
 
     formData.append('clubsUtilisateur', JSON.stringify(clubs));
 
     var acceptChallengeNameUtilisateur = 0;
-    if (
-      this.state.userdata.acceptChallengeNameUtilisateur ||
-      this.state.userdata.acceptChallengeNameUtilisateur
-    ) {
+    if (this.state.userdata.acceptChallengeNameUtilisateur) {
       acceptChallengeNameUtilisateur = 1;
     }
 
@@ -460,8 +450,8 @@ class Preferences extends Component {
       body: formData,
     })
       .then(ApiUtils.checkStatus)
-      .then(response => response.json())
-      .then(responseJson => {
+      .then((response) => response.json())
+      .then((responseJson) => {
         if (responseJson.codeErreur == 'SUCCESS') {
           this.setState({isLoading: false});
 
@@ -487,7 +477,7 @@ class Preferences extends Component {
         this.setState({isLoading: false});
       })
 
-      .catch(e => {
+      .catch((e) => {
         this.setState({isLoading: false});
         ApiUtils.logError(
           'Preferences onSendRequest',
@@ -531,7 +521,7 @@ class Preferences extends Component {
 
   hasClub(type) {
     if (this.props.userClubs != null) {
-      let values = this.props.userClubs.filter(c => c.typeClub == type);
+      let values = this.props.userClubs.filter((c) => c.typeClub == type);
       if (values.length > 0) {
         if (type == 'Entreprise') {
           // this.setState({clubEntreprise : values[0].name});
@@ -548,7 +538,7 @@ class Preferences extends Component {
   render() {
     return (
       <Drawer
-        ref={ref => {
+        ref={(ref) => {
           this.drawer = ref;
         }}
         content={
@@ -610,7 +600,7 @@ class Preferences extends Component {
                     returnKeyType="next"
                     clearButtonMode="always"
                     value={this.state.userdata.nomUtilisateur}
-                    onChangeText={phoneNumber =>
+                    onChangeText={(phoneNumber) =>
                       this.setState({
                         userdata: {
                           ...this.state.userdata,
@@ -631,7 +621,7 @@ class Preferences extends Component {
                     returnKeyType="next"
                     clearButtonMode="always"
                     value={this.state.userdata.prenomUtilisateur}
-                    onChangeText={phoneNumber =>
+                    onChangeText={(phoneNumber) =>
                       this.setState({
                         userdata: {
                           ...this.state.userdata,
@@ -654,7 +644,7 @@ class Preferences extends Component {
                     textContentType="emailAddress"
                     keyboardType="email-address"
                     value={this.state.userdata.emailUtilisateur}
-                    onChangeText={phoneNumber =>
+                    onChangeText={(phoneNumber) =>
                       this.setState({
                         userdata: {
                           ...this.state.userdata,
@@ -685,7 +675,7 @@ class Preferences extends Component {
                     autoCompleteType="tel"
                     clearButtonMode="always"
                     value={this.state.userdata.telUtilisateur}
-                    onChangeText={phoneNumber =>
+                    onChangeText={(phoneNumber) =>
                       this.setState({
                         userdata: {
                           ...this.state.userdata,
@@ -695,35 +685,6 @@ class Preferences extends Component {
                     }
                   />
                 </Item>
-
-                <View
-                style={{
-                  marginTop: 20,
-                  paddingLeft: 10,
-                  width: '80%',
-                  display: 'flex',
-                  flexDirection: 'row',
-                  justifyContent: 'space-between',
-                }}>
-                <Switch
-                  tyle={{paddingTop: 20}}
-                  onValueChange={text =>
-                    this.setState({
-                      userdata: {
-                        ...this.state.userdata,
-                        acceptChallengeTelUtilisateur: text,
-                      },
-                    })
-                  }
-                  value={
-                    this.state.userdata.acceptChallengeTelUtilisateur == 1
-                  }
-                />
-                <Text style={{marginLeft: 10}}>
-                  J’accepte l’utilisation de mon numéro de téléphone pour le tirage au sort des lots
-                </Text>
-              </View>
-
 
                 <Text style={styles.label}>Sexe</Text>
 
@@ -826,7 +787,7 @@ class Preferences extends Component {
                             <Icon name="chevron-down" type="FontAwesome5" />
                           }
                           selectedValue={this.state.dayDdn}
-                          onValueChange={value => this.onValueDayddn(value)}
+                          onValueChange={(value) => this.onValueDayddn(value)}
                           placeholder={'Jour'}
                           placeholderStyle={{
                             color: ApiUtils.getBackgroundColor(),
@@ -845,7 +806,7 @@ class Preferences extends Component {
                             borderBottomColor: ApiUtils.getBackgroundColor(),
                             borderBottomWidth: 1,
                           }}>
-                          {this.state.days.map(d => {
+                          {this.state.days.map((d) => {
                             return <Picker.Item label={d} value={d} />;
                           })}
                         </Picker>
@@ -860,7 +821,7 @@ class Preferences extends Component {
                             <Icon name="chevron-down" type="FontAwesome5" />
                           }
                           selectedValue={this.state.monthDdn}
-                          onValueChange={value => this.onValueMonthddn(value)}
+                          onValueChange={(value) => this.onValueMonthddn(value)}
                           placeholder={'Mois'}
                           placeholderStyle={{
                             color: ApiUtils.getBackgroundColor(),
@@ -895,7 +856,7 @@ class Preferences extends Component {
                             <Icon name="chevron-down" type="FontAwesome5" />
                           }
                           selectedValue={this.state.yearDdn}
-                          onValueChange={value => this.onValueYearddn(value)}
+                          onValueChange={(value) => this.onValueYearddn(value)}
                           placeholder={'Année'}
                           placeholderStyle={{
                             color: ApiUtils.getBackgroundColor(),
@@ -914,7 +875,7 @@ class Preferences extends Component {
                             borderBottomColor: ApiUtils.getBackgroundColor(),
                             borderBottomWidth: 1,
                           }}>
-                          {this.state.years.map(year => {
+                          {this.state.years.map((year) => {
                             return (
                               <Picker.Item
                                 label={year}
@@ -957,7 +918,7 @@ class Preferences extends Component {
                           },
                           // ... You can check the source to find the other keys.
                         }}
-                        onDateChange={date => {
+                        onDateChange={(date) => {
                           //  alert(date)
                           this.setState({
                             userdata: {
@@ -994,7 +955,7 @@ class Preferences extends Component {
                       },
                       // ... You can check the source to find the other keys.
                     }}
-                    onDateChange={date => {
+                    onDateChange={(date) => {
                       //  alert(date)
                       this.setState({
                         userdata: {
@@ -1012,7 +973,7 @@ class Preferences extends Component {
                     returnKeyType="next"
                     clearButtonMode="always"
                     value={this.state.userdata.adresseUtilisateur}
-                    onChangeText={phoneNumber =>
+                    onChangeText={(phoneNumber) =>
                       this.setState({
                         userdata: {
                           ...this.state.userdata,
@@ -1033,7 +994,7 @@ class Preferences extends Component {
                     returnKeyType="next"
                     clearButtonMode="always"
                     value={this.state.userdata.cpUtilisateur}
-                    onChangeText={phoneNumber =>
+                    onChangeText={(phoneNumber) =>
                       this.setState({
                         userdata: {
                           ...this.state.userdata,
@@ -1053,7 +1014,7 @@ class Preferences extends Component {
                     returnKeyType="next"
                     clearButtonMode="always"
                     value={this.state.userdata.villeUtilisateur}
-                    onChangeText={phoneNumber =>
+                    onChangeText={(phoneNumber) =>
                       this.setState({
                         userdata: {
                           ...this.state.userdata,
@@ -1075,7 +1036,7 @@ class Preferences extends Component {
                 }}>
                 <Switch
                   tyle={{paddingTop: 20}}
-                  onValueChange={text =>
+                  onValueChange={(text) =>
                     this.setState({
                       userdata: {
                         ...this.state.userdata,
@@ -1092,7 +1053,6 @@ class Preferences extends Component {
                 </Text>
               </View>
 
-        
               {ApiUtils.ISDEBUG() ? (
                 <Text
                   full

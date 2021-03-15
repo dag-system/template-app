@@ -153,8 +153,8 @@ class LiveSummary extends Component<Props, State> {
 
         this.props.dispatch(action);
 
-        let libelleSport = 'CROSS';
-        if (responseJson.idSport == 17) libelleSport = 'CROSS';
+        let libelleSport = 'Course à Pied';
+        if (responseJson.idSport == 24) libelleSport = 'Course à Pied';
 
         this.setState({libelleSport: libelleSport});
 
@@ -698,22 +698,6 @@ class LiveSummary extends Component<Props, State> {
                       Challenge DIY TAC Run
                     </Text>
                   </TouchableOpacity>
-                  <TouchableOpacity
-                    onPress={() =>
-                      Linking.openURL('https://www.insa-lyon.fr/')
-                    }>
-                    <Text style={{textAlign: 'center', marginTop: 10}}>
-                      (Résultats plus complets sur
-                    </Text>
-                    <Text
-                      style={{
-                        textAlign: 'center',
-                        textDecorationLine: 'underline',
-                      }}>
-                      {' '}
-                      https://www.insa-lyon.fr/)
-                    </Text>
-                  </TouchableOpacity>
                 </View>
               ) : null}
 
@@ -741,23 +725,6 @@ class LiveSummary extends Component<Props, State> {
                           }}>
                           Cliquez ici plus tard pour recevoir un résumé de votre
                           Challenge DIY TAC Run
-                        </Text>
-                      </TouchableOpacity>
-
-                      <TouchableOpacity
-                        onPress={() =>
-                          Linking.openURL('https://www.insa-lyon.fr/')
-                        }>
-                        <Text style={{textAlign: 'center', marginTop: 10}}>
-                          (Résultats plus complets sur
-                        </Text>
-                        <Text
-                          style={{
-                            textAlign: 'center',
-                            textDecorationLine: 'underline',
-                          }}>
-                          {' '}
-                          https://www.insa-lyon.fr/)
                         </Text>
                       </TouchableOpacity>
                     </View>
@@ -946,8 +913,8 @@ class LiveSummary extends Component<Props, State> {
                     // onPress={(coordinate) => { this.showMapFullSize() }}
                     toolbarEnabled={false}
                     initialRegion={{
-                      latitude: 45.1667, // 44.843884,
-                      longitude: 5.55,
+                      latitude: 45.27041566478002, // 44.843884,
+                      longitude: 1.7567079272737243,
                       latitudeDelta: LATITUDE_DELTA,
                       longitudeDelta: LONGITUDE_DELTA,
                     }}

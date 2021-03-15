@@ -140,19 +140,19 @@ class CreateAccount extends ValidationComponent {
       acceptChallengeNameUtilisateur: false,
       acceptChallengeUtilisateur: false,
       equipeUtilisateur: '',
-      equipeChoiceUtilisateur: '',
       errorPickers: false,
       errorCNIL: false,
+      dayDdn: '',
     };
   }
 
   componentDidMount() {
-    let years = [];
-    for (let i = 2021; i > 1930; i--) {
-      years.push(i);
+    let yearsAll = [];
+    for (let i = 1930; i < 2021; i++) {
+      yearsAll.push(i.toString());
     }
+    this.setState({years: yearsAll});
 
-    this.setState({years: years});
     this.getClubs();
   }
 
@@ -194,26 +194,21 @@ class CreateAccount extends ValidationComponent {
     formData.append('prenomUtilisateur', this.state.prenomUtilisateur);
 
     // alert(finalDate)
-    if (Platform.OS == 'ios') {
-      if (
-        this.state.yearDdn != undefined &&
-        this.state.monthDdn != undefined &&
-        this.state.dayDdn != undefined
-      ) {
-        formData.append(
-          'ddnUtilisateur',
-          this.state.yearDdn +
-            '-' +
-            this.state.monthDdn +
-            '-' +
-            this.state.dayDdn,
-        );
-      } else {
-        formData.append('ddnUtilisateur', '');
-      }
+    if (
+      this.state.yearDdn != undefined &&
+      this.state.monthDdn != undefined &&
+      this.state.dayDdn != undefined
+    ) {
+      formData.append(
+        'ddnUtilisateur',
+        this.state.yearDdn +
+          '-' +
+          this.state.monthDdn +
+          '-' +
+          this.state.dayDdn,
+      );
     } else {
-      var finalDate = moment(this.state.ddnUtilisateur).format('YYYY-MM-DD');
-      formData.append('ddnUtilisateur', finalDate);
+      formData.append('ddnUtilisateur', '');
     }
 
     // formData.append('ddnUtilisateur', this.state.ddnUtilisateur);
@@ -224,28 +219,8 @@ class CreateAccount extends ValidationComponent {
     let clubs = [];
 
     let nameClub = this.state.equipeUtilisateur;
-    let selectedClub = this.state.equipeChoiceUtilisateur;
-    let allClubs = this.state.fetchClub;
 
-    if (selectedClub != '') {
-      console.log('oui');
-      clubs.push({club: this.state.equipeChoiceUtilisateur, type: 'RAID'});
-    } else {
-      let clubExist = allClubs.filter(
-        (fClub) => fClub.nom.toLowerCase() == nameClub.toLowerCase(),
-      );
-
-      if (clubExist.length > 0) {
-        console.log('oui oui');
-        this.setState({alertClub: true});
-        this.setState({isLoading: false});
-        return false;
-      } else {
-        clubs.push({club: this.state.equipeUtilisateur, type: 'RAID'});
-        this.setState({alertClub: false});
-        this.setState({isLoading: false});
-      }
-    }
+    clubs.push({club: nameClub, type: 'RAID'});
 
     formData.append('clubUtilisateur', JSON.stringify(clubs));
 
@@ -379,14 +354,17 @@ class CreateAccount extends ValidationComponent {
 
   onValueDayddn(value) {
     this.setState({dayDdn: value});
+    console.log(value);
   }
 
   onValueMonthddn(value) {
     this.setState({monthDdn: value});
+    console.log(value);
   }
 
   onValueYearddn(value) {
     this.setState({yearDdn: value});
+    console.log(value);
   }
 
   onChangeChoiceEquipe(value) {
@@ -527,157 +505,104 @@ class CreateAccount extends ValidationComponent {
                   </Text>
                 ) : null}
 
-                {Platform.OS == 'ios' ? (
-                  <Item stackedLabel style={{marginBottom: 5}}>
-                    <Label>Date de naissance</Label>
-                    <Label style={{fontSize: 12}}>
-                      Important pour les classements par catégorie
-                    </Label>
-                    <View style={[GlobalStyles.row]}>
-                      <Picker
-                        style={{width: Dimensions.get('screen').width / 3 - 10}}
-                        mode="dropdown"
-                        accessibilityLabel={'Jour'}
-                        iosHeader={'Jour'}
-                        iosIcon={
-                          <Icon name="chevron-down" type="FontAwesome5" />
-                        }
-                        selectedValue={this.state.dayDdn}
-                        onValueChange={(value) => this.onValueDayddn(value)}
-                        placeholder={'Jour'}
-                        placeholderStyle={{
-                          color: ApiUtils.getBackgroundColor(),
-                        }}
-                        placeholderIconColor={ApiUtils.getBackgroundColor()}
-                        textStyle={{color: ApiUtils.getBackgroundColor()}}
-                        itemStyle={{
-                          color: ApiUtils.getBackgroundColor(),
-                          marginLeft: 0,
-                          paddingLeft: 10,
-                          borderBottomColor: ApiUtils.getBackgroundColor(),
-                          borderBottomWidth: 1,
-                        }}
-                        itemTextStyle={{
-                          color: ApiUtils.getBackgroundColor(),
-                          borderBottomColor: ApiUtils.getBackgroundColor(),
-                          borderBottomWidth: 1,
-                        }}>
-                        {this.state.days.map((d) => {
-                          return <Picker.Item label={d} value={d} />;
-                        })}
-                      </Picker>
-                      <Picker
-                        style={{width: Dimensions.get('screen').width / 3 - 10}}
-                        mode="dropdown"
-                        accessibilityLabel={'Mois'}
-                        iosHeader={'Mois'}
-                        iosIcon={
-                          <Icon name="chevron-down" type="FontAwesome5" />
-                        }
-                        selectedValue={this.state.monthDdn}
-                        onValueChange={(value) => this.onValueMonthddn(value)}
-                        placeholder={'Mois'}
-                        placeholderStyle={{
-                          color: ApiUtils.getBackgroundColor(),
-                        }}
-                        placeholderIconColor={ApiUtils.getBackgroundColor()}
-                        textStyle={{color: ApiUtils.getBackgroundColor()}}
-                        itemStyle={{
-                          color: ApiUtils.getBackgroundColor(),
-                          marginLeft: 0,
-                          paddingLeft: 10,
-                          borderBottomColor: ApiUtils.getBackgroundColor(),
-                          borderBottomWidth: 1,
-                        }}
-                        itemTextStyle={{
-                          color: ApiUtils.getBackgroundColor(),
-                          borderBottomColor: ApiUtils.getBackgroundColor(),
-                          borderBottomWidth: 1,
-                        }}>
-                        {this.state.monthsString.map((month) => {
-                          return <Picker.Item label={month} value={month} />;
-                        })}
-                      </Picker>
-
-                      <Picker
-                        style={{width: Dimensions.get('screen').width / 3 - 10}}
-                        mode="dropdown"
-                        accessibilityLabel={''}
-                        iosHeader={'Année'}
-                        iosIcon={
-                          <Icon name="chevron-down" type="FontAwesome5" />
-                        }
-                        selectedValue={this.state.yearDdn}
-                        onValueChange={(value) => this.onValueYearddn(value)}
-                        placeholder={'Année'}
-                        placeholderStyle={{
-                          color: ApiUtils.getBackgroundColor(),
-                        }}
-                        placeholderIconColor={ApiUtils.getBackgroundColor()}
-                        textStyle={{color: ApiUtils.getBackgroundColor()}}
-                        itemStyle={{
-                          color: ApiUtils.getBackgroundColor(),
-                          marginLeft: 0,
-                          paddingLeft: 10,
-                          borderBottomColor: ApiUtils.getBackgroundColor(),
-                          borderBottomWidth: 1,
-                        }}
-                        itemTextStyle={{
-                          color: ApiUtils.getBackgroundColor(),
-                          borderBottomColor: ApiUtils.getBackgroundColor(),
-                          borderBottomWidth: 1,
-                        }}>
-                        {this.state.years.map((year) => {
-                          return <Picker.Item label={year} value={year} />;
-                        })}
-                      </Picker>
-                    </View>
-                  </Item>
-                ) : (
-                  <View>
-                    <Text style={styles.label}>Date de naissance</Text>
-                    <Text
-                      style={{
-                        paddingHorizontal: 10,
-                        fontSize: 12,
-                        fontStyle: 'italic',
+                <Item stackedLabel style={{marginBottom: 5}}>
+                  <Label>Date de naissance</Label>
+                  <Label style={{fontSize: 12}}>
+                    Important pour les classements par catégorie
+                  </Label>
+                  <View style={[GlobalStyles.row]}>
+                    <Picker
+                      style={{width: Dimensions.get('screen').width / 3 - 10}}
+                      mode="dropdown"
+                      accessibilityLabel={'Jour'}
+                      iosHeader={'Jour'}
+                      iosIcon={<Icon name="chevron-down" type="FontAwesome5" />}
+                      selectedValue={this.state.dayDdn}
+                      onValueChange={(value) => this.onValueDayddn(value)}
+                      placeholder={'Jour'}
+                      placeholderStyle={{
+                        color: ApiUtils.getBackgroundColor(),
+                      }}
+                      placeholderIconColor={ApiUtils.getBackgroundColor()}
+                      textStyle={{color: ApiUtils.getBackgroundColor()}}
+                      itemStyle={{
+                        color: ApiUtils.getBackgroundColor(),
+                        marginLeft: 0,
+                        paddingLeft: 10,
+                        borderBottomColor: ApiUtils.getBackgroundColor(),
+                        borderBottomWidth: 1,
+                      }}
+                      itemTextStyle={{
+                        color: ApiUtils.getBackgroundColor(),
+                        borderBottomColor: ApiUtils.getBackgroundColor(),
+                        borderBottomWidth: 1,
                       }}>
-                      Important pour les classements par catégorie
-                    </Text>
-
-                    {this.state != null && !this.state.showDefaultDdn ? (
-                      <DatePicker
-                        date={new Date(this.state.ddnUtilisateur)}
-                        defaultDate={
-                          new Date(this.props.userData.ddnUtilisateur)
-                        }
-                        placeHolderText="Choisir une date de naissance"
-                        placeHolderTextStyle={{
-                          marginLeft: 30,
-                          fontSize: 17,
-                          color: '#d3d3d3',
-                          fontStyle: 'italic',
-                        }}
-                        confirmBtnText="Valider"
-                        cancelBtnText="Annuler"
-                        customStyles={{
-                          dateIcon: {
-                            position: 'absolute',
-                            left: 0,
-                            top: 4,
-                            marginLeft: 15,
-                          },
-                          dateInput: {
-                            marginLeft: 100,
-                          },
-                        }}
-                        onDateChange={(date) => {
-                          this.setState({ddnUtilisateur: date});
-                        }}
-                      />
-                    ) : null}
+                      {this.state.days.map((d) => {
+                        return <Picker.Item label={d} value={d} />;
+                      })}
+                    </Picker>
+                    <Picker
+                      style={{width: Dimensions.get('screen').width / 3 - 10}}
+                      mode="dropdown"
+                      accessibilityLabel={'Mois'}
+                      iosHeader={'Mois'}
+                      iosIcon={<Icon name="chevron-down" type="FontAwesome5" />}
+                      selectedValue={this.state.monthDdn}
+                      onValueChange={(value) => this.onValueMonthddn(value)}
+                      placeholder={'Mois'}
+                      placeholderStyle={{
+                        color: ApiUtils.getBackgroundColor(),
+                      }}
+                      placeholderIconColor={ApiUtils.getBackgroundColor()}
+                      textStyle={{color: ApiUtils.getBackgroundColor()}}
+                      itemStyle={{
+                        color: ApiUtils.getBackgroundColor(),
+                        marginLeft: 0,
+                        paddingLeft: 10,
+                        borderBottomColor: ApiUtils.getBackgroundColor(),
+                        borderBottomWidth: 1,
+                      }}
+                      itemTextStyle={{
+                        color: ApiUtils.getBackgroundColor(),
+                        borderBottomColor: ApiUtils.getBackgroundColor(),
+                        borderBottomWidth: 1,
+                      }}>
+                      {this.state.monthsString.map((month) => {
+                        return <Picker.Item label={month} value={month} />;
+                      })}
+                    </Picker>
+                    <Picker
+                      style={{width: Dimensions.get('screen').width / 3 - 10}}
+                      mode="dropdown"
+                      accessibilityLabel={'Annee'}
+                      iosHeader={'Année'}
+                      iosIcon={<Icon name="chevron-down" type="FontAwesome5" />}
+                      selectedValue={this.state.yearDdn}
+                      onValueChange={(value) => this.onValueYearddn(value)}
+                      placeholder={'Année'}
+                      placeholderStyle={{
+                        color: ApiUtils.getBackgroundColor(),
+                      }}
+                      placeholderIconColor={ApiUtils.getBackgroundColor()}
+                      textStyle={{color: ApiUtils.getBackgroundColor()}}
+                      itemStyle={{
+                        color: ApiUtils.getBackgroundColor(),
+                        marginLeft: 0,
+                        paddingLeft: 10,
+                        borderBottomColor: ApiUtils.getBackgroundColor(),
+                        borderBottomWidth: 1,
+                      }}
+                      itemTextStyle={{
+                        color: ApiUtils.getBackgroundColor(),
+                        borderBottomColor: ApiUtils.getBackgroundColor(),
+                        borderBottomWidth: 1,
+                      }}>
+                      {this.state.years.map((year) => {
+                        return <Picker.Item label={year} value={year} />;
+                      })}
+                    </Picker>
                   </View>
-                )}
+                </Item>
 
                 <Item stackedLabel style={{marginBottom: 5}}>
                   <Label>Email *</Label>
@@ -736,79 +661,20 @@ class CreateAccount extends ValidationComponent {
                 </Item>
 
                 <Item stackedLabel style={{marginBottom: 20}}>
-                  <Label>Choix de votre équipe</Label>
+                  <Label>Entrez votre Club</Label>
                   <Input
                     ref="equipeUtilisateur"
                     autoCapitalize="characters"
                     returnKeyType="next"
                     textContentType="addressCity"
                     clearButtonMode="always"
-                    placeholder="Créer votre équipe"
+                    placeholder="Entrez votre club"
                     value={this.state.equipeUtilisateur}
                     onChangeText={(value) =>
                       this.setState({equipeUtilisateur: value})
                     }
                   />
                 </Item>
-                {this.state.alertClub == true ? (
-                  <Text
-                    style={{
-                      width: '100%',
-                      textAlign: 'center',
-                      fontSize: 18,
-                      color: 'red',
-                    }}>
-                    Ce club existe déjà, veuillez choisir un autre nom !
-                  </Text>
-                ) : null}
-                {this.state.fetchClub.length > 0 ? (
-                  <View>
-                    <Text style={{width: '100%', textAlign: 'center'}}>Ou</Text>
-                    <View>
-                      <Picker
-                        mode="dropdown"
-                        accessibilityLabel={'Choisissez votre équipe'}
-                        iosHeader={'Choisissez votre équipe'}
-                        iosIcon={
-                          <Icon name="chevron-down" type="FontAwesome5" />
-                        }
-                        style={{marginTop: 0}}
-                        selectedValue={this.state.equipeChoiceUtilisateur}
-                        onValueChange={(value) =>
-                          this.onChangeChoiceEquipe(value)
-                        }
-                        placeholder={'Choisissez votre équipe'}
-                        placeholderStyle={{
-                          color: ApiUtils.getBackgroundColor(),
-                        }}
-                        placeholderIconColor={ApiUtils.getBackgroundColor()}
-                        textStyle={{color: ApiUtils.getBackgroundColor()}}
-                        itemStyle={{
-                          color: ApiUtils.getBackgroundColor(),
-                          marginLeft: 0,
-                          paddingLeft: 10,
-                          borderBottomColor: ApiUtils.getBackgroundColor(),
-                          borderBottomWidth: 1,
-                        }}
-                        itemTextStyle={{
-                          color: ApiUtils.getBackgroundColor(),
-                          borderBottomColor: ApiUtils.getBackgroundColor(),
-                          borderBottomWidth: 1,
-                        }}>
-                        <Picker.Item label="Choisissez votre équipe" value="" />
-                        {this.state.fetchClub.map((equipe, index) => {
-                          return (
-                            <Picker.Item
-                              label={equipe.nom}
-                              value={equipe.nom}
-                              key={index}
-                            />
-                          );
-                        })}
-                      </Picker>
-                    </View>
-                  </View>
-                ) : null}
 
                 <View
                   style={{

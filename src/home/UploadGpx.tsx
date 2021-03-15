@@ -62,7 +62,7 @@ class UploadGpx extends Component<Props, State> {
 
     this.state = {
       libelleLive: 'Nouvelle activité importée',
-      selectedSport: '17',
+      selectedSport: '24',
       isLoading: false,
       comments: '',
     };
@@ -416,7 +416,7 @@ class UploadGpx extends Component<Props, State> {
                       borderBottomWidth: 1,
                     }}>
                     <Picker.Item label="Choisissez votre sport" value="-1" />
-                    <Picker.Item label={'CROSS'} value="17" />
+                    <Picker.Item label={'Course à Pied'} value="24" />
                   </Picker>
                   {this.state.selectedSport == -1 ? (
                     <Text
