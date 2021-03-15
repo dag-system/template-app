@@ -58,6 +58,7 @@ const mapStateToProps = (state) => {
     isOkPopupGps: state.isOkPopupGps,
     isOkPopupBAttery: state.isOkPopupBAttery,
     isOkPopupBAttery2: state.isOkPopupBAttery2,
+    notifications: state.notifications,
   };
 };
 
@@ -70,6 +71,7 @@ interface Props extends DefaultProps {
   isOkPopupGps: boolean;
   isOkPopupBAttery: boolean;
   isOkPopupBAttery2: boolean;
+  notifications: any[];
 }
 
 interface State {
@@ -129,7 +131,7 @@ class Lives extends Component<Props, State> {
     }
   }
   async downloadData() {
-   // this.init();
+    this.init();
     await this.getNewVersion();
     await this.getLives(this.props.userData.idUtilisateur);
 
@@ -138,16 +140,17 @@ class Lives extends Component<Props, State> {
 
   init = () => {
     RNPusherPushNotifications.setInstanceId(
-      '378c58b6-e7b0-43f9-ae64-a3e269a36658',
+      '653e46e5-9ff8-48ae-9591-feaa4054023e',
     );
 
     RNPusherPushNotifications.on('registered', () => {
       console.log('la');
       console.log('registred');
+      this.subscribe('debug-aa');
       this.subscribe('debug-' + this.props.userData.idUtilisateur);
+      RNPusherPushNotifications.on('notification', this.handleNotification);
     });
 
-    RNPusherPushNotifications.on('notification', this.handleNotification);
     // RNPusherPushNotifications.setOnSubscriptionsChangedListener(this.onSubscriptionsChanged);
   };
 
@@ -165,15 +168,60 @@ class Lives extends Component<Props, State> {
   };
 
   handleNotification = (notification) => {
-    console.log(notification);
+    console.log('LALA');
+
     if (Platform.OS === 'ios') {
       console.log('CALLBACK: handleNotification (ios)');
     } else {
-      console.log('CALLBACK: handleNotification (android)');
+      console.log('data: handleNotification (android)');
       console.log(notification);
       console.log(notification.data);
+
+      if (notification.data != '') {
+        let datastring = notification.data.notification;
+        let data = JSON.parse(datastring);
+        console.log(data);
+
+        let idLive = data.idLive;
+
+        let live = {
+          idLive: idLive,
+        };
+
+        var action = {type: 'ADD_NOTIFICATION', data: notification.data.notification};
+
+        if (notification.data.collapse_key != null) {
+          //from notification click
+          if (!this.props.isRecording) {
+            var actionSaveLive = {type: 'SAVE_CURRENT_LIVE', data: live};
+
+            this.props.dispatch(actionSaveLive);
+
+            this.onClickNavigate('LiveSummary');
+          } else {
+            this.props.dispatch(action);
+          }
+        } else {
+          this.props.dispatch(action);
+        }
+      }
     }
   };
+
+  seeNotificationLive = (notif) =>{
+    let live ={
+      idLive : notif.idLive
+    }
+    var actionSaveLive = {type: 'SAVE_CURRENT_LIVE', data: live};
+
+    this.props.dispatch(actionSaveLive);
+
+    var deleteNotif = {type: 'DELETE_NOTIFICATION', data: notif};
+
+    this.props.dispatch(deleteNotif);
+
+    this.onClickNavigate('LiveSummary');
+  }
 
   onSubscriptionsChanged = (interests) => {
     console.log('CALLBACK: onSubscriptionsChanged');
@@ -181,6 +229,7 @@ class Lives extends Component<Props, State> {
   };
 
   onRefresh() {
+    this.init();
     this.getLives(this.props.userData.idUtilisateur);
     this.getNewVersion();
   }
@@ -283,7 +332,7 @@ class Lives extends Component<Props, State> {
       this.viewLive(currentLive);
     } else {
       this.onClickCreateLiveOk();
-     // this.setState({modalChooseSportVisible: true});
+      // this.setState({modalChooseSportVisible: true});
     }
   }
 
@@ -294,7 +343,7 @@ class Lives extends Component<Props, State> {
     formData.append('auth', ApiUtils.getAPIAuth());
     formData.append('idUtilisateur', this.props.userData.idUtilisateur);
     formData.append('idversion', ApiUtils.VersionNumberInt().toString());
-    formData.append('idSport', "17");
+    formData.append('idSport', '17');
     formData.append('os', Platform.OS);
     var libelleLive = this.getLibelleLive();
 
@@ -322,7 +371,7 @@ class Lives extends Component<Props, State> {
             codeLive: responseJson.codeLive,
             libelleLive: responseJson.libelleLive,
             dateCreationLive: responseJson.dateCreationLive,
-            idSport: "17",
+            idSport: '17',
             invites: [],
             statsInfos: {},
             etatLive: 0,
@@ -364,7 +413,7 @@ class Lives extends Component<Props, State> {
         this.goToMap();
       }
     } else {
-      this.props.navigation.navigate('LiveSummary');
+      this.onClickNavigate('LiveSummary');
     }
   }
   goToMap = () => {
@@ -789,6 +838,23 @@ class Lives extends Component<Props, State> {
                   onRefresh={() => this.onRefresh()}
                 />
               }>
+              {this.props.notifications != null ? (
+            
+                  <View>
+                    {this.props.notifications?.map((notification) => {
+                      return (
+                        <TouchableOpacity onPress={(notification)=> this.seeNotificationLive(notification)}>
+                        <View>
+                          <Text>Voir le nouveau temps</Text>
+                        </View>
+                        </TouchableOpacity>
+                      );
+                    })}
+                  </View>
+       
+              ) : null}
+              {/* <Text>{JSON.stringify(this.props.notifications)}</Text> */}
+
               <View style={styles.loginButtonSection}>
                 {this.props.lives == null || this.props.lives.length == 0 ? (
                   <Text

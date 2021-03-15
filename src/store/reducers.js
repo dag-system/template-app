@@ -28,6 +28,7 @@ const initialState = {
   isOkPopupBAttery2: false,
   userClubs: [],
   isGpsNotOk: true,
+  notifications :[]
 };
 
 const initialMockState = {
@@ -60,6 +61,10 @@ const initialMockState = {
   folocodes: [],
   isOkPopupGps: false,
   isOkPopupBAttery: false,
+  notifications :[
+    {type : "newEffort",
+     idLive : 12  }
+  ]
 };
 
 const reducer = (state = initialState, action) => {
@@ -117,6 +122,34 @@ const reducer = (state = initialState, action) => {
       };
       return nextState || state;
     }
+
+    case 'ADD_NOTIFICATION': {
+      let notifs= JSON.parse(JSON.stringify(state.notifications));
+      if(notifs.filter(n=> n.idLive == action.data.idLive).length == 0)
+      {
+        let nextState = {
+          ...state,
+          notifications: [...state.notifications, action.data],
+        };
+        return nextState || state;
+      }else{
+        return state;
+      }
+
+    }
+
+    case 'DELETE_NOTIFICATION': {
+      let notifs= new Object(state.notifications);
+      console.log(notifs);
+      notifs = notifs.filter(n => n.idLive != action.data.idLive);
+      let nextState = {
+        ...state,
+        notifications: notifs,
+      };
+      return nextState || state;
+    }
+
+
 
     case 'VIEW_POPUPAIDE': {
       let nextState = {

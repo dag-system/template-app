@@ -5,10 +5,15 @@ const ISDEMO = false;
 
 const VersionNumber = '1.0.0';
 const VersionNumberInt = 1;
+const pushNotificationInstance = '653e46e5-9ff8-48ae-9591-feaa4054023e';
 
 var ApiUtils = {
   getOrganisation() {
     return 'INSALYON';
+  },
+  getPushNotificationInstance()
+  {
+    return pushNotificationInstance;
   },
   ISDEBUG() {
     return ISDEBUG;

@@ -1,6 +1,8 @@
 package com.dag.insalyon.app;
-
+import com.b8ne.RNPusherPushNotifications.NotificationsMessagingService;
 import com.facebook.react.ReactActivity;
+import com.facebook.react.ReactInstanceManager;
+import android.content.Intent;
 
 public class MainActivity extends ReactActivity {
 
@@ -11,5 +13,20 @@ public class MainActivity extends ReactActivity {
   @Override
   protected String getMainComponentName() {
     return "Folomi";
+  }
+
+  protected void onStart() {
+    super.onStart();
+
+    ReactInstanceManager reactInstanceManager = getReactNativeHost().getReactInstanceManager();
+    NotificationsMessagingService.read(reactInstanceManager, this);
+  }
+
+  @Override
+  public void onNewIntent(Intent intent) {
+    super.onNewIntent(intent);
+    setIntent(intent);
+    ReactInstanceManager reactInstanceManager = getReactNativeHost().getReactInstanceManager();
+    NotificationsMessagingService.read(reactInstanceManager, this);
   }
 }

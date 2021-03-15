@@ -1,33 +1,33 @@
 {
   "project_info": {
-    "project_number": "210165421409",
-    "project_id": "fouleeblanche-f5a4b",
-    "storage_bucket": "fouleeblanche-f5a4b.appspot.com"
+    "project_number": "956733662732",
+    "project_id": "insa-85af9",
+    "storage_bucket": "insa-85af9.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:210165421409:android:f4de031290ac3244bf2120",
+        "mobilesdk_app_id": "1:956733662732:android:3edb558042045bef103029",
         "android_client_info": {
           "package_name": "com.dag.insalyon.app"
         }
       },
       "oauth_client": [
         {
-          "client_id": "210165421409-7o41r5lduaimi88ds5gtku7dg8trbfde.apps.googleusercontent.com",
+          "client_id": "956733662732-tnqi8115lc87eo375hd21gnqfgj8msgk.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyA47wGOI0yX3Z8NY8BbBgJwA_jQYnsmVKs"
+          "current_key": "AIzaSyDx6hF7i-9JW54GLQer6LrtHK08x99ddjg"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "210165421409-7o41r5lduaimi88ds5gtku7dg8trbfde.apps.googleusercontent.com",
+              "client_id": "956733662732-tnqi8115lc87eo375hd21gnqfgj8msgk.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
