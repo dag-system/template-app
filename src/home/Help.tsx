@@ -172,37 +172,25 @@ class Help extends Component {
                   color: ApiUtils.getBackgroundColor(),
                   marginTop: 30,
                 }}>
-                Bienvenue sur votre application sportive !
+              Bienvenue sur l’application officielle du "DIY TAC Run"
+              </Text>
+
+              <Text style={{marginTop: 10}}>Un semi marathon en mars à Tulle : une tradition.</Text>
+              <Text style={{marginTop: 10}}>
+                Malgré la crise sanitaire, le TAC vous propose une version
+                originale du semi Tulliste Une version autonome, connectée mais
+                que vous pouvez parcourir entre amis
               </Text>
               <Text style={{marginTop: 10}}>
-                Venez pratiquer et comparez vos temps avec ceux de vos amis ou
-                vos familles !
+                Enfin un objectif dans votre calendrier et redonner du sens à
+                votre préparation.
               </Text>
               <Text style={{marginTop: 10}}>
-                Faites la course contre des centaines de personne sans jamais
-                vous croiser.
+                Et si vous ne vous sentez pas suffisamment préparé pour un semi,
+                lancez vous pour la boucle de 10km.
               </Text>
               <Text style={{marginTop: 10}}>
-                Pas besoin de choisir son parcours à l’inscription, c’est au
-                départ des parcours que vous ferez votre choix de distance selon
-                votre forme du jour.
-              </Text>
-              <Text style={{marginTop: 10}}>
-                Chaque fois que vous déciderez de faire VOTRE course,
-                rendez-vous au départ des parcours, activez l’application, ne
-                vous souciez plus de rien, prenez le départ et pratiquer, votre
-                chrono se déclenche automatiquement en fonction de votre
-                position GPS. Vous devez bien sûr garder votre smartphone sur
-                vous.
-              </Text>
-              <Text style={{marginTop: 10}}>
-                Lors de votre inscription vous pouvez choisir de participer
-                également à un ou plusieurs challenge(s).
-              </Text>
-              <Text style={{marginTop: 10}}>
-                Consultez votre temps sur l'application puis votre classement
-                sera disponible en fin de journée sur le site internet de
-                l’organisateur.
+                Le départ des 2 courses se fait au Stade Alexandre Cueille.
               </Text>
               <Text style={{marginTop: 10}}>
                 <Text
@@ -210,9 +198,9 @@ class Help extends Component {
                     fontWeight: 'bold',
                     color: ApiUtils.getBackgroundColor(),
                   }}>
-                  C’EST GRATUIT, A LA CARTE, ILLIMITE
+                  C’EST GRATUIT, A LA CARTE, ILLIMITE  &nbsp;
                 </Text>
-                de quoi améliorer votre résultat à chaque sorti !
+                de quoi améliorer votre résultat à chaque sortie !
               </Text>
               <Text
                 style={{
@@ -222,9 +210,11 @@ class Help extends Component {
                 }}>
                 Venez battre vos propres records.
               </Text>
-              <Text style={{marginTop: 10, fontWeight: 'bold'}}>
-                Pour les infos complètes rendez-vous sur
-              </Text>
+              <TouchableOpacity onPress={()=>{this.openLink("http://wordpress.tulleac.fr/")}}>
+              <Text style={{marginTop: 10, fontWeight: 'bold', textAlign : 'center', textDecorationLine :'underline'}} >
+                Pour les infos complètes rendez-vous sur notre http://wordpress.tulleac.fr/
+
+              </Text></TouchableOpacity>
               <Text
                 style={{
                   marginTop: 10,

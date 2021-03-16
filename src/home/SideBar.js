@@ -99,7 +99,7 @@ export default class Sidebar extends Component {
                 padding: 10,
               }}>
               <Icon
-                name="skiing-nordic"
+                name="running"
                 type="FontAwesome5"
                 style={[
                   styles.icon,
@@ -333,6 +333,28 @@ export default class Sidebar extends Component {
             </View>
           </TouchableHighlight>
 
+          <TouchableOpacity
+            onPress={() => this.onStartDonate()}
+            style={{width: '100%' }}
+            >
+            <View
+              style={{
+                display: 'flex',
+                flexDirection: 'row',
+                justifyContent: 'flex-start',
+               padding: 10,
+              }}>
+              <Icon
+                name="hand-holding-medical"
+                type="FontAwesome5"
+                style={[styles.icon, {color: 'white'}]}
+              />
+              <Text style={[styles.menuText, {color: 'white'}]}>
+                Faire un don
+              </Text>
+            </View>
+          </TouchableOpacity>
+
           <TouchableHighlight
             underlayColor="rgba(255,255,255,1,0.6)"
             onPress={() => this.onClickNavigate('Logout')}
@@ -355,27 +377,7 @@ export default class Sidebar extends Component {
             </View>
           </TouchableHighlight>
 
-          <TouchableOpacity
-            onPress={() => this.onStartDonate()}
-            style={{width: '100%',  padding: 10,}}
-            >
-            <View
-              style={{
-                display: 'flex',
-                flexDirection: 'row',
-                justifyContent: 'flex-start',
-               backgroundColor : "red",  padding: 10,
-              }}>
-              <Icon
-                name="hand-holding-medical"
-                type="FontAwesome5"
-                style={[styles.icon, {color: 'white'}]}
-              />
-              <Text style={[styles.menuText, {color: 'white'}]}>
-                Faire un don
-              </Text>
-            </View>
-          </TouchableOpacity>
+   
 
           <Modal
             visible={this.state.isVisibleDonateModal}
