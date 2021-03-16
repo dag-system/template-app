@@ -1369,7 +1369,7 @@ class Lives extends Component<Props, State> {
               {/* ) : null} */}
             </Modal>
             <NotificationModal isVisible={this.state.isVisibleNotifcationModal}
-            // onClose={() => this.onCloseNotificationModal()} 
+            onClose={() => this.onCloseNotificationModal()} 
             navigation={this.props.navigation} />
           </Container>
         </Drawer>

@@ -219,7 +219,7 @@ class CreateAccount extends ValidationComponent {
     formData.append('nomUtilisateur', this.state.nomUtilisateur);
     formData.append('prenomUtilisateur', this.state.prenomUtilisateur);
 
-    var extraInfoUser = {};
+
 
     if (
       this.state.anneeUser == '' ||
@@ -233,18 +233,21 @@ class CreateAccount extends ValidationComponent {
       this.setState({isLoading: false});
       return false;
     } else {
-      extraInfoUser = {
-        anneeUser: this.state.anneeUser,
-        departementUser: this.state.departementUser,
-        groupeUser: this.state.groupeUser,
-        sportUser: this.state.sportUser,
-        asUser: this.state.asUser,
-        enseignantUser: this.state.enseignantUser,
-      };
-      this.setState({errorPickers: false});
-    }
 
-    formData.append('extraInfo', JSON.stringify(extraInfoUser));
+      let extraInfoUser = {
+        challenge: {
+          anneeUser: this.state.anneeUser,
+          departementUser: this.state.departementUser,
+          groupeUser: this.state.groupeUser,
+          sportUser: this.state.sportUser,
+          asUser: this.state.asUser,
+          enseignantUser: this.state.enseignantUser,
+        }
+      };
+
+      this.setState({errorPickers: false});
+      formData.append('extraInfo', JSON.stringify(extraInfoUser));
+    }
 
     // alert(finalDate)
     if (Platform.OS == 'ios') {

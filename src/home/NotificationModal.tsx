@@ -24,6 +24,8 @@ class NotificationModal extends Component {
     var action = {type: 'VIEW_POPUPGPS', data: null};
     this.props.dispatch(action);
 
+    this.onClose();
+
     this.props.navigation.navigate('LiveSummary');
   };
 
