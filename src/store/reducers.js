@@ -139,9 +139,9 @@ const reducer = (state = initialState, action) => {
     }
 
     case 'DELETE_NOTIFICATION': {
-      let notifs= new Object(state.notifications);
+      let notifs= [];
       console.log(notifs);
-      notifs = notifs.filter(n => n.idLive != action.data.idLive);
+      notifs =  state.notifications.filter(n => n.idLive != action.data.idLive);
       let nextState = {
         ...state,
         notifications: notifs,

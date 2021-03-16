@@ -27,6 +27,7 @@ import {
   Button,
   Spinner,
   Picker,
+  H3,
 } from 'native-base';
 import Swipeout from 'react-native-swipeout';
 // import { Icon } from 'react-native-elements';
@@ -48,6 +49,8 @@ import {Alert} from 'react-native';
 import DefaultProps from '../models/DefaultProps';
 import VersionCheck from 'react-native-version-check';
 import RNPusherPushNotifications from 'react-native-pusher-push-notifications';
+import {ReactNativeModal as ModalSmall} from 'react-native-modal';
+import NotificationModal from './NotificationModal';
 const mapStateToProps = (state) => {
   return {
     userData: state.userData,
@@ -90,6 +93,7 @@ interface State {
   lives: any[];
   sports: any[];
   refresh: boolean;
+  isVisibleNotifcationModal : boolean;
 }
 
 class Lives extends Component<Props, State> {
@@ -112,6 +116,7 @@ class Lives extends Component<Props, State> {
       selectedSport: -1,
       sectionID: -1,
       refresh: false,
+      isVisibleNotifcationModal : false
     };
 
     this._unsubscribe = this.props.navigation.addListener('focus', () => {
@@ -188,7 +193,11 @@ class Lives extends Component<Props, State> {
           idLive: idLive,
         };
 
-        var action = {type: 'ADD_NOTIFICATION', data: notification.data.notification};
+        let actionData = JSON.parse(notification.data.notification)
+        var action = {
+          type: 'ADD_NOTIFICATION',
+          data: actionData,
+        };
 
         if (notification.data.collapse_key != null) {
           //from notification click
@@ -202,16 +211,18 @@ class Lives extends Component<Props, State> {
             this.props.dispatch(action);
           }
         } else {
+          this.setState({isVisibleNotifcationModal : true});
           this.props.dispatch(action);
         }
       }
     }
   };
 
-  seeNotificationLive = (notif) =>{
-    let live ={
-      idLive : notif.idLive
-    }
+  seeNotificationLive = (notif) => {
+    console.log(notif);
+    let live = {
+      idLive: notif.idLive,
+    };
     var actionSaveLive = {type: 'SAVE_CURRENT_LIVE', data: live};
 
     this.props.dispatch(actionSaveLive);
@@ -221,7 +232,7 @@ class Lives extends Component<Props, State> {
     this.props.dispatch(deleteNotif);
 
     this.onClickNavigate('LiveSummary');
-  }
+  };
 
   onSubscriptionsChanged = (interests) => {
     console.log('CALLBACK: onSubscriptionsChanged');
@@ -773,6 +784,10 @@ class Lives extends Component<Props, State> {
     this.setState({selectedSport: value});
   };
 
+  onCloseNotificationModal = () =>{
+    this.setState({isVisibleNotifcationModal : false});
+  }
+
   toggleModalChooseSport = () => {
     this.setState({
       modalChooseSportVisible: !this.state.modalChooseSportVisible,
@@ -838,20 +853,106 @@ class Lives extends Component<Props, State> {
                   onRefresh={() => this.onRefresh()}
                 />
               }>
-              {this.props.notifications != null ? (
-            
-                  <View>
-                    {this.props.notifications?.map((notification) => {
-                      return (
-                        <TouchableOpacity onPress={(notification)=> this.seeNotificationLive(notification)}>
-                        <View>
-                          <Text>Voir le nouveau temps</Text>
-                        </View>
+              {this.props.notifications != null && this.props.notifications.length > 0 ? (
+                <View>
+                  <H3 style={{textAlign : 'center', marginTop : 10, marginBottom :10}}>Nouveaux résultats</H3>
+                  {this.props.notifications?.map((notification) => {
+                    return (
+                      <View style={{paddingHorizontal: 10}}>
+                        <TouchableOpacity
+                          onPress={() =>
+                            this.seeNotificationLive(notification)
+                          }>
+                          <View
+                            style={{
+                              width: '100%',
+                              marginBottom: 10,
+                              paddingLeft: 0,
+                              paddingRight: 0,
+                              paddingBottom: 10,
+                              borderBottomColor: '#DDDDDD',
+                              borderBottomWidth: 1,
+                              // display: 'flex',
+                              // flexDirection: 'row',
+                              // justifyContent: 'space-between',
+                            }}>
+                            <View
+                              style={{
+                                display: 'flex',
+                                flexDirection: 'row',
+                                // justifyContent: 'space-evenly',
+                                width: '100%',
+                              }}>
+                              <Text
+                                style={{
+                                  marginBottom: 5,
+                                  color: ApiUtils.getColor(),
+                                }}>
+                                {notification.nomSegment}
+                              </Text>
+                            </View>
+                            <View
+                              style={{
+                                display: 'flex',
+                                flexDirection: 'row',
+                                justifyContent: 'space-between',
+                                width: '100%',
+                              }}>
+                              <View>
+                                <Text
+                                  style={{
+                                    textAlign: 'center',
+                                    alignSelf: 'center',
+                                    marginBottom: 3,
+                                  }}>
+                                  Distance
+                                </Text>
+                                <Text>{notification.distanceSegment} km</Text>
+                              </View>
+
+                              <Text>|</Text>
+                              <View>
+                                <Text
+                                  style={{
+                                    textAlign: 'center',
+                                    marginBottom: 3,
+                                  }}>
+                                  Temps
+                                </Text>
+                                <Text>{notification.tempsSegmentString}</Text>
+                              </View>
+                              <Text>|</Text>
+                              <View>
+                                <Text
+                                  style={{
+                                    textAlign: 'center',
+                                    marginBottom: 3,
+                                  }}>
+                                  Allure
+                                </Text>
+                                <Text>{notification.vitesseMoyenneSegment}/km</Text>
+                              </View>
+                              <View>
+                                <Text
+                                  style={{
+                                    padding: 5,
+                                    borderColor: ApiUtils.getColor(),
+                                    borderWidth: 2,
+                                    // marginTop: -8,
+                                    fontWeight: 'bold',
+                                    color: ApiUtils.getColor(),
+                                  }}>
+                                  Voir
+                                </Text>
+                              </View>
+                            </View>
+                          </View>
                         </TouchableOpacity>
-                      );
-                    })}
-                  </View>
-       
+                      </View>
+                    );
+                  })}
+                       <H3 style={{textAlign : 'center'}}>Mes activités</H3>
+                </View>
               ) : null}
               {/* <Text>{JSON.stringify(this.props.notifications)}</Text> */}
 
@@ -1267,6 +1368,9 @@ class Lives extends Component<Props, State> {
               <Sponsors />
               {/* ) : null} */}
             </Modal>
+            <NotificationModal isVisible={this.state.isVisibleNotifcationModal}
+            // onClose={() => this.onCloseNotificationModal()} 
+            navigation={this.props.navigation} />
           </Container>
         </Drawer>
       </Root>
