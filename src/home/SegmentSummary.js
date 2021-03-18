@@ -25,7 +25,7 @@ import ApiUtils from '../ApiUtils';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {connect} from 'react-redux';
 import Logo from '../assets/logo_header.png';
-import Autrans from '../assets/autrans.svg';
+
 const mapStateToProps = (state) => {
   return {
     userData: state.userData,
@@ -314,16 +314,6 @@ class SegmentSummary extends Component {
           <Body style={{flex: 0}} />
           <Right style={{flex: 1}}>
             <Image resizeMode="contain" source={Logo} style={styles.logo} />
-            <Autrans
-              width={'40%'}
-              height={50}
-              style={{
-                alignSelf: 'center',
-                opacity: 1,
-                marginLeft: 10,
-                marginBottom: 5,
-              }}
-            />
           </Right>
         </Header>
         <View style={styles.loginButtonSection}>
@@ -630,7 +620,7 @@ const styles = StyleSheet.create({
   },
   drawerButton: {
     backgroundColor: 'transparent',
-    width : '100%',
+    width: '100%',
     marginTop: 0,
     paddingTop: 10,
     shadowOffset: {height: 0, width: 0},

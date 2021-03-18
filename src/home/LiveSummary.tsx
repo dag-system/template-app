@@ -37,11 +37,9 @@ import Share from 'react-native-share';
 import Logo from '../assets/logo_header.png';
 import GlobalStyles from '../styles';
 import {Sponsors} from './Sponsors';
-import Autrans from '../assets/autrans.svg';
 import {ReactNativeModal as ModalSmall} from 'react-native-modal';
 import {Icon as IconElement} from 'react-native-elements';
 import {FlatList} from 'react-native';
-import GPXDocument from '../lib/gpx-parse/GPXDocument';
 import {check, request, PERMISSIONS, RESULTS} from 'react-native-permissions';
 import DefaultProps from '../models/DefaultProps';
 

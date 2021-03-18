@@ -11,7 +11,6 @@ import {
   Container,
   Header,
   Body,
-  Toast,
   Root,
   Drawer,
   Icon,
@@ -20,14 +19,9 @@ import {
   Left,
   Right,
 } from 'native-base';
-import md5 from 'md5';
 import ApiUtils from '../ApiUtils';
 import {connect} from 'react-redux';
 import Sidebar from './SideBar';
-import moment from 'moment';
-import Logo from '../assets/logo_header.png';
-import GlobalStyles from '../styles';
-import Autrans from '../assets/autrans.svg';
 import IosReglages from '../assets/iosReglages.png';
 import Ios2 from '../assets/ios2.png';
 import {Sponsors} from './Sponsors';

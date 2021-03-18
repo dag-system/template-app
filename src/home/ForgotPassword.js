@@ -117,6 +117,7 @@ class ForgotPassword extends ValidationComponent {
 
             
             this.setState({isLoading: false});
+            console.log(responseJson);
             if(ApiUtils.hasPaid(responseJson))
             {
               this.onClickNavigate('Lives');

@@ -587,7 +587,7 @@ class Preferences extends Component {
                     <Text
                       style={[
                         styles.saveText,
-                        {color: this.isErrorForm() ? 'gray' : 'black'},
+                        {color: this.isErrorForm() ? 'gray' : 'white'},
                       ]}>
                       ENREGISTRER
                     </Text>

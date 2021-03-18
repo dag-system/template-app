@@ -152,7 +152,7 @@ class Classement extends Component {
 
               <AutoHeightWebView
                 source={{
-                  uri: 'https://www.folomi.fr/api/classement/digiraidinp.html',
+                  uri: 'https://folomi.fr/classement/inpgrenoble/classement.html',
                 }}
                 style={{marginTop: 20, width: '100%'}}
                 startInLoadingState={true}

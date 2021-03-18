@@ -4,15 +4,12 @@ import {
   Image,
   TouchableOpacity,
   View,
-  Linking,
-  Platform,
   Dimensions,
 } from 'react-native';
 import {
   Container,
   Header,
   Body,
-  Toast,
   Root,
   Drawer,
   Icon,
@@ -21,25 +18,9 @@ import {
   Left,
   Right,
 } from 'native-base';
-import md5 from 'md5';
-import ApiUtils from '../ApiUtils';
 import {connect} from 'react-redux';
 import Sidebar from './SideBar';
-import moment from 'moment';
-import Logo from '../assets/logo_header.png';
-import GlobalStyles from '../styles';
 
-import Autrans from '../assets/autrans.svg';
-import Region from '../assets/region.jpg';
-import Ccmv from '../assets/CCMV.png';
-import Alpesisere from '../assets/alpesisere.svg';
-import Isere from '../assets/isere.svg';
-import Grenoble from '../assets/grenoble.png';
-import FranceBleu from '../assets/france-bleu.svg';
-import Dauphine from '../assets/dauphine.png';
-import SkiChrono from '../assets/skichrono.jpg';
-import Rossignol from '../assets/rossignol.jpg';
-import Deva from '../assets/deva.png';
 import Dag from '../assets/dag.png';
 
 import Chartreuse from '../assets/chartreuse.jpg';

@@ -227,10 +227,10 @@ class MapHeader extends Component<Props, State> {
                   paddingRight: 0,
                 }}>
                 <TouchableOpacity
-                  style={styles.goBackButton}
+                  style={[styles.goBackButton, {color : 'white'}]}
                   onPress={() => this.goBack()}>
                   <Icon
-                    style={styles.saveText}
+                    style={[styles.saveText, {color : 'white'}]}
                     name="chevron-left"
                     type="FontAwesome5"
                   />
@@ -240,13 +240,14 @@ class MapHeader extends Component<Props, State> {
                     backgroundColor: 'transparent',
                     elevation: 0,
                     justifyContent: 'center',
+                    color : 'white'
                   }}
                   onPress={() => this.goBack()}>
                   <View style={[GlobalStyles.row]}>
-                    <Text style={{color: 'black'}}>
+                    <Text style={{color: 'white'}}>
                       {this.props.userData.nomUtilisateur}
                     </Text>
-                    <Text style={{color: 'black', marginLeft: 5}}>
+                    <Text style={{color: 'white', marginLeft: 5}}>
                       {this.props.userData.prenomUtilisateur}
                     </Text>
                   </View>
@@ -257,7 +258,7 @@ class MapHeader extends Component<Props, State> {
                   <TouchableOpacity
                     style={[{marginLeft: 10}]}
                     onPress={() => this.onClickShare()}>
-                    <Icon active name="share" type="FontAwesome5" />
+                    <Icon active name="share" type="FontAwesome5" style={{ color : 'white'}}/>
                   </TouchableOpacity>
                 ) : null}
               </View>

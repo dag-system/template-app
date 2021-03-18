@@ -134,8 +134,8 @@ android {
             applicationId "com.dag.digiraidinp.app"
             minSdkVersion rootProject.ext.minSdkVersion
             targetSdkVersion rootProject.ext.targetSdkVersion
-            versionCode 523
-            versionName "1.0.14"
+            versionCode 525
+            versionName "1.0.15"
     }
     splits {
         abi {
@@ -153,7 +153,7 @@ android {
             keyPassword 'android'
         }
         release {
-            storeFile file('my-release-key.keystore')
+            storeFile file('my-upload-key.keystore')
             storePassword 'd@gFolom1'
             keyAlias 'my-key-alias'
             keyPassword 'd@gFolom1'
