@@ -134,8 +134,8 @@ android {
             applicationId "com.dag.insalyon.app"
             minSdkVersion rootProject.ext.minSdkVersion
             targetSdkVersion rootProject.ext.targetSdkVersion
-            versionCode 530
-            versionName "1.0.21"
+            versionCode 533
+            versionName "1.0.23"
     }
     splits {
         abi {

@@ -159,32 +159,81 @@ class CreateAccount extends ValidationComponent {
   }
 
   onChangeAnneeUser(value) {
-    this.setState({anneeUser: value});
+    if (value == '0') {
+      this.setState({anneeUser: '0'});
+      this.setState({departementUser: '0'});
+      this.setState({groupeUser: '0'});
+      this.setState({sportUser: '0'});
+      this.setState({asUser: '0'});
+      this.setState({enseignantUser: '0'});
+    } else {
+      this.setState({anneeUser: value});
+    }
   }
 
   onChangeDepartementUser(value) {
-    this.setState({departementUser: value});
+    if (value == '0') {
+      this.setState({anneeUser: '0'});
+      this.setState({departementUser: '0'});
+      this.setState({groupeUser: '0'});
+      this.setState({sportUser: '0'});
+      this.setState({asUser: '0'});
+      this.setState({enseignantUser: '0'});
+    } else {
+      this.setState({departementUser: value});
+    }
   }
 
   onChangeGroupeUser(value) {
-    this.setState({groupeUser: value});
+    if (value == '0') {
+      this.setState({anneeUser: '0'});
+      this.setState({departementUser: '0'});
+      this.setState({groupeUser: '0'});
+      this.setState({sportUser: '0'});
+      this.setState({asUser: '0'});
+      this.setState({enseignantUser: '0'});
+    } else {
+      this.setState({groupeUser: value});
+    }
   }
 
   onChangeSportUser(value) {
-    this.setState({sportUser: value});
+    if (value == '0') {
+      this.setState({anneeUser: '0'});
+      this.setState({departementUser: '0'});
+      this.setState({groupeUser: '0'});
+      this.setState({sportUser: '0'});
+      this.setState({asUser: '0'});
+      this.setState({enseignantUser: '0'});
+    } else {
+      this.setState({sportUser: value});
+    }
   }
 
   onChangeAsUser(value) {
-    this.setState({asUser: value});
+    if (value == '0') {
+      this.setState({anneeUser: '0'});
+      this.setState({departementUser: '0'});
+      this.setState({groupeUser: '0'});
+      this.setState({sportUser: '0'});
+      this.setState({asUser: '0'});
+      this.setState({enseignantUser: '0'});
+    } else {
+      this.setState({asUser: value});
+    }
   }
 
   onChangeEnseignantUser(value) {
-    this.setState({anneeUser: '0'});
-    this.setState({departementUser: '0'});
-    this.setState({groupeUser: '0'});
-    this.setState({sportUser: '0'});
-    this.setState({asUser: '0'});
-    this.setState({enseignantUser: value});
+    if (value == '0') {
+      this.setState({anneeUser: '0'});
+      this.setState({departementUser: '0'});
+      this.setState({groupeUser: '0'});
+      this.setState({sportUser: '0'});
+      this.setState({asUser: '0'});
+      this.setState({enseignantUser: '0'});
+    } else {
+      this.setState({enseignantUser: value});
+    }
   }
 
   onClickValidate() {
@@ -219,8 +268,6 @@ class CreateAccount extends ValidationComponent {
     formData.append('nomUtilisateur', this.state.nomUtilisateur);
     formData.append('prenomUtilisateur', this.state.prenomUtilisateur);
 
-
-
     if (
       this.state.anneeUser == '' ||
       this.state.departementUser == '' ||
@@ -233,16 +280,15 @@ class CreateAccount extends ValidationComponent {
       this.setState({isLoading: false});
       return false;
     } else {
-
       let extraInfoUser = {
         challenge: {
           anneeUser: this.state.anneeUser,
-          departementUser: this.state.departementUser,
-          groupeUser: this.state.groupeUser,
-          sportUser: this.state.sportUser,
-          asUser: this.state.asUser,
-          enseignantUser: this.state.enseignantUser,
-        }
+          departementUser: ApiUtils.removeAccents(this.state.departementUser),
+          groupeUser: ApiUtils.removeAccents(this.state.groupeUser),
+          sportUser: ApiUtils.removeAccents(this.state.sportUser),
+          asUser: ApiUtils.removeAccents(this.state.asUser),
+          enseignantUser: ApiUtils.removeAccents(this.state.enseignantUser),
+        },
       };
 
       this.setState({errorPickers: false});
@@ -570,7 +616,7 @@ class CreateAccount extends ValidationComponent {
                       borderBottomWidth: 1,
                     }}>
                     <Picker.Item label="Choisissez votre année" value="-1" />
-                    <Picker.Item label="Pas concerné" value="AUTRE" />
+                    <Picker.Item label="Pas concerné" value="0" />
                     <Picker.Item label="1" value="1" />
                     <Picker.Item label="2" value="2" />
                     <Picker.Item label="3" value="3" />
@@ -611,7 +657,7 @@ class CreateAccount extends ValidationComponent {
                       label="Choisissez votre département"
                       value="-1"
                     />
-                    <Picker.Item label="Personnel INSA" value="AUTRE" />
+                    <Picker.Item label="Personnel INSA" value="0" />
                     <Picker.Item label="FIMI" value="FIMI" />
                     <Picker.Item label="BIOSCIENCES" value="BIOSCIENCES" />
                     <Picker.Item
@@ -739,7 +785,7 @@ class CreateAccount extends ValidationComponent {
                       label="Choisissez votre Créneau Sport"
                       value="-1"
                     />
-                    <Picker.Item label="Pas concerné" value="AUTRE" />
+                    <Picker.Item label="Pas concerné" value="0" />
                     <Picker.Item label="L8" value="L8" />
                     <Picker.Item label="L10" value="L10" />
                     <Picker.Item label="L14" value="L14" />
@@ -788,7 +834,7 @@ class CreateAccount extends ValidationComponent {
                       borderBottomWidth: 1,
                     }}>
                     <Picker.Item label="Choisissez votre AS" value="-1" />
-                    <Picker.Item label="Pas concerné" value="Autre" />
+                    <Picker.Item label="Pas concerné" value="0" />
                     <Picker.Item label="Athlétisme" value="Athlétisme" />
                     <Picker.Item label="Aviron" value="Aviron" />
                     <Picker.Item label="Badminton" value="Badminton" />
@@ -827,7 +873,7 @@ class CreateAccount extends ValidationComponent {
                     style={{marginTop: 0}}
                     selectedValue={this.state.enseignantUser}
                     onValueChange={this.onChangeEnseignantUser.bind(this)}
-                    placeholder={'Choisissez votre AS'}
+                    placeholder={'Choisissez votre Enseignant'}
                     placeholderStyle={{
                       color: ApiUtils.getColor(),
                     }}
@@ -849,7 +895,7 @@ class CreateAccount extends ValidationComponent {
                       label="Choisissez votre Enseignant"
                       value="-1"
                     />
-                    <Picker.Item label="Pas concerné" value="Autre" />
+                    <Picker.Item label="Pas concerné" value="0" />
                     <Picker.Item label="Agneray" value="Agneray" />
                     <Picker.Item label="Barraud" value="Barraud" />
                     <Picker.Item label="Bessac" value="Bessac" />
@@ -1050,7 +1096,7 @@ const styles = StyleSheet.create({
   },
   drawerButton: {
     backgroundColor: 'transparent',
-    width: 120,
+    width: '100%',
     marginTop: 0,
     paddingTop: 10,
     shadowOffset: {height: 0, width: 0},
