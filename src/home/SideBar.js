@@ -53,6 +53,16 @@ export default class Sidebar extends Component {
     this.props.navigation.navigate(routeName);
   }
 
+  openLink(url) {
+    Linking.canOpenURL(url).then((supported) => {
+      if (supported) {
+        Linking.openURL(url);
+      } else {
+        ApiUtils.logError('Home openLink', 'Dont know how to open URI: ' + url);
+      }
+    });
+  }
+
   render() {
     return (
       <Container>
@@ -86,7 +96,7 @@ export default class Sidebar extends Component {
                 padding: 10,
               }}>
               <Icon
-                name="skiing-nordic"
+                name="running"
                 type="FontAwesome5"
                 style={[styles.icon, {color: 'black'}]}
               />
@@ -95,28 +105,6 @@ export default class Sidebar extends Component {
               </Text>
             </View>
           </TouchableHighlight>
-
-          {/* <TouchableHighlight
-            underlayColor="rgba(255,255,255,1,0.6)"
-            onPress={() => this.onClickNavigate('CreateNewLive')}
-            style={{width: '100%'}}>
-            <View
-              style={{
-                display: 'flex',
-                flexDirection: 'row',
-                justifyContent: 'flex-start',
-                padding: 10,
-              }}>
-               <Icon
-                name="plus-circle"
-                type="FontAwesome5"
-                style={[styles.icon, {color: 'white'}]}
-              />
-              <Text style={[styles.menuText, {color: 'white'}]}>
-                Ajouter une activité
-              </Text>
-            </View>
-          </TouchableHighlight> */}
 
           <TouchableHighlight
             underlayColor="rgba(255,255,255,1,0.6)"
@@ -197,44 +185,6 @@ export default class Sidebar extends Component {
               </Text>
             </View>
           </TouchableHighlight>
-
-          {/*
-          <TouchableHighlight
-            underlayColor="rgba(255,255,255,1,0.6)"
-            onPress={() => this.onClickNavigate('Replay')}
-            style={{
-              width: '100%',
-              backgroundColor:
-                this.props.selected == 'Replay' ? '#E9E9E9' : 'transparent',
-            }}>
-            <View
-              style={{
-                display: 'flex',
-                flexDirection: 'row',
-                justifyContent: 'flex-start',
-                flexWrap: 'wrap',
-                padding: 10,
-              }}>
-              <Icon
-                name="chart-line"
-                type="FontAwesome5"
-                style={[
-                  styles.icon,
-                  {color: this.props.selected == 'Replay' ? 'black' : 'black'},
-                ]}
-              />
-              <Text
-                style={[
-                  styles.menuText,
-                  {
-                    color: this.props.selected == 'Replay' ? 'black' : 'black',
-                  },
-                ]}>
-                Comparateur
-              </Text>
-            </View>
-          </TouchableHighlight>
-          */}
 
           <TouchableHighlight
             underlayColor="rgba(255,255,255,1,0.6)"
@@ -334,6 +284,31 @@ export default class Sidebar extends Component {
                 Se déconnecter
               </Text>
             </View>
+          </TouchableHighlight>
+
+          <TouchableHighlight
+            underlayColor="rgba(255,255,255,1,0.6)"
+            onPress={() => this.openLink('https://www.dag-system.com/')}
+            style={{width: '100%', position: 'absolute', bottom: 30}}>
+            {/* <View
+              style={{
+                display: 'flex',
+                flexDirection: 'row',
+                justifyContent: 'center',
+                padding: 0,
+              }}> */}
+              {/* <Icon
+                name="power-off"
+                type="FontAwesome5"
+                style={[styles.icon, {color: 'black'}]}
+              /> */}
+              <Text
+                style={[
+                  {color: 'black', textDecorationLine: 'underline', textAlign :'center'},
+                ]}>
+                Powered by DAG System
+              </Text>
+            {/* </View> */}
           </TouchableHighlight>
         </Body>
       </Container>
