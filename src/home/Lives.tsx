@@ -20,26 +20,19 @@ import {
   Text,
   Icon,
   Drawer,
-  H1,
   Toast,
   Root,
-  Fab,
   Button,
-  Spinner,
   Picker,
   H3,
 } from 'native-base';
 import Swipeout from 'react-native-swipeout';
-// import { Icon } from 'react-native-elements';
 import ApiUtils from '../ApiUtils';
 import Logo from '../assets/logo_header.png';
-import Autrans from '../assets/autrans.svg';
 import Sidebar from './SideBar';
-// import Geolocation from 'react-native-geolocation-service';
 import {connect} from 'react-redux';
 import GlobalStyles from '../styles';
 import {Modal} from 'react-native';
-import Help from './Help';
 import BatteryModal from './BatteryModal';
 import {Sponsors} from './Sponsors';
 import UploadGpx from './UploadGpx';
@@ -49,7 +42,6 @@ import {Alert} from 'react-native';
 import DefaultProps from '../models/DefaultProps';
 import VersionCheck from 'react-native-version-check';
 import RNPusherPushNotifications from 'react-native-pusher-push-notifications';
-import {ReactNativeModal as ModalSmall} from 'react-native-modal';
 import NotificationModal from './NotificationModal';
 const mapStateToProps = (state) => {
   return {
@@ -93,7 +85,8 @@ interface State {
   lives: any[];
   sports: any[];
   refresh: boolean;
-  isVisibleNotifcationModal : boolean;
+  isVisibleNotifcationModal: boolean;
+  idLiveNotif: number;
 }
 
 class Lives extends Component<Props, State> {
@@ -116,7 +109,8 @@ class Lives extends Component<Props, State> {
       selectedSport: -1,
       sectionID: -1,
       refresh: false,
-      isVisibleNotifcationModal : false
+      isVisibleNotifcationModal: false,
+      idLiveNotif: -1,
     };
 
     this._unsubscribe = this.props.navigation.addListener('focus', () => {
@@ -149,14 +143,9 @@ class Lives extends Component<Props, State> {
     );
 
     RNPusherPushNotifications.on('registered', () => {
-      console.log('la');
-      console.log('registred');
-      this.subscribe('debug-aa');
       this.subscribe('debug-' + this.props.userData.idUtilisateur);
       RNPusherPushNotifications.on('notification', this.handleNotification);
     });
-
-    // RNPusherPushNotifications.setOnSubscriptionsChangedListener(this.onSubscriptionsChanged);
   };
 
   subscribe = (interest) => {
@@ -175,25 +164,68 @@ class Lives extends Component<Props, State> {
   handleNotification = (notification) => {
     console.log('LALA');
 
-    if (Platform.OS === 'ios') {
-      console.log('CALLBACK: handleNotification (ios)');
+    console.log(notification);
+    if (Platform.OS == 'ios') {
+      console.log(notification.userInfo.data.notification);
+      let actionData = notification.userInfo.data.notification;
+      var action = {
+        type: 'ADD_NOTIFICATION',
+        data: actionData,
+      };
+      let idLive = actionData.idLive;
+
+      let live = {
+        idLive: idLive,
+      };
+
+
+      switch (notification.appState) {
+        case 'inactive':
+          console.log('inactive')
+          // this.props.dispatch(action);
+          // var actionSaveLive = {type: 'SAVE_CURRENT_LIVE', data: live};
+
+          // this.props.dispatch(actionSaveLive);
+
+          // this.onClickNavigate('LiveSummary');
+
+          this.setState({
+            isVisibleNotifcationModal: true,
+            idLiveNotif: actionData.idLive,
+          });
+          this.props.dispatch(action);
+
+          
+
+        // inactive: App came in foreground by clicking on notification.
+        //           Use notification.userInfo for redirecting to specific view controller
+        case 'background':
+        // background: App is in background and notification is received.
+        //             You can fetch required data here don't do anything with UI
+        case 'active':
+          console.log('active')
+        // App is foreground and notification is received. Show a alert or something.
+        this.setState({
+          isVisibleNotifcationModal: true,
+          idLiveNotif: actionData.idLive,
+        });
+        this.props.dispatch(action);
+        default:
+          break;
+      }
     } else {
       console.log('data: handleNotification (android)');
-      console.log(notification);
-      console.log(notification.data);
 
       if (notification.data != '') {
         let datastring = notification.data.notification;
         let data = JSON.parse(datastring);
-        console.log(data);
 
         let idLive = data.idLive;
-
         let live = {
           idLive: idLive,
         };
 
-        let actionData = JSON.parse(notification.data.notification)
+        let actionData = JSON.parse(notification.data.notification);
         var action = {
           type: 'ADD_NOTIFICATION',
           data: actionData,
@@ -211,7 +243,10 @@ class Lives extends Component<Props, State> {
             this.props.dispatch(action);
           }
         } else {
-          this.setState({isVisibleNotifcationModal : true});
+          this.setState({
+            isVisibleNotifcationModal: true,
+            idLiveNotif: data.idLive,
+          });
           this.props.dispatch(action);
         }
       }
@@ -227,7 +262,7 @@ class Lives extends Component<Props, State> {
 
     this.props.dispatch(actionSaveLive);
 
-    var deleteNotif = {type: 'DELETE_NOTIFICATION', data: notif};
+    var deleteNotif = {type: 'DELETE_NOTIFICATION', data: notif.idLive};
 
     this.props.dispatch(deleteNotif);
 
@@ -784,9 +819,9 @@ class Lives extends Component<Props, State> {
     this.setState({selectedSport: value});
   };
 
-  onCloseNotificationModal = () =>{
-    this.setState({isVisibleNotifcationModal : false});
-  }
+  onCloseNotificationModal = () => {
+    this.setState({isVisibleNotifcationModal: false});
+  };
 
   toggleModalChooseSport = () => {
     this.setState({
@@ -828,7 +863,7 @@ class Lives extends Component<Props, State> {
           }>
           <Container>
             <Header style={styles.header}>
-              <Left style={{flex: 1, width: '20%'}}>
+              <Left style={{flex: 1, width: '30%'}}>
                 <TouchableOpacity
                   style={styles.drawerButton}
                   onPress={() => this.onDrawer()}>
@@ -853,9 +888,17 @@ class Lives extends Component<Props, State> {
                   onRefresh={() => this.onRefresh()}
                 />
               }>
-              {this.props.notifications != null && this.props.notifications.length > 0 ? (
+              {this.props.notifications != null &&
+              this.props.notifications.length > 0 ? (
                 <View>
-                  <H3 style={{textAlign : 'center', marginTop : 10, marginBottom :10}}>Nouveaux résultats</H3>
+                  <H3
+                    style={{
+                      textAlign: 'center',
+                      marginTop: 10,
+                      marginBottom: 10,
+                    }}>
+                    Nouveaux résultats
+                  </H3>
                   {this.props.notifications?.map((notification) => {
                     return (
                       <View style={{paddingHorizontal: 10}}>
@@ -930,7 +973,9 @@ class Lives extends Component<Props, State> {
                                   }}>
                                   Allure
                                 </Text>
-                                <Text>{notification.vitesseMoyenneSegment}/km</Text>
+                                <Text>
+                                  {notification.vitesseMoyenneSegment}/km
+                                </Text>
                               </View>
                               <View>
                                 <Text
@@ -951,11 +996,12 @@ class Lives extends Component<Props, State> {
                       </View>
                     );
                   })}
-                       <H3 style={{textAlign : 'center'}}>Mes activités</H3>
                 </View>
               ) : null}
               {/* <Text>{JSON.stringify(this.props.notifications)}</Text> */}
-
+              <H3 style={{textAlign: 'center', marginTop: 10}}>
+                Mes activités
+              </H3>
               <View style={styles.loginButtonSection}>
                 {this.props.lives == null || this.props.lives.length == 0 ? (
                   <Text
@@ -1368,9 +1414,13 @@ class Lives extends Component<Props, State> {
               <Sponsors />
               {/* ) : null} */}
             </Modal>
-            <NotificationModal isVisible={this.state.isVisibleNotifcationModal}
-            onClose={() => this.onCloseNotificationModal()} 
-            navigation={this.props.navigation} />
+            <NotificationModal
+              isVisible={this.state.isVisibleNotifcationModal}
+              idLive={this.state.idLiveNotif}
+              onClose={() => this.onCloseNotificationModal()}
+              navigation={this.props.navigation}
+              dispatch={this.props.dispatch}
+            />
           </Container>
         </Drawer>
       </Root>
@@ -1397,6 +1447,7 @@ const styles = StyleSheet.create({
   },
   drawerButton: {
     backgroundColor: 'transparent',
+    width : '100%',
     // width: '10%',
     // marginTop: 0,
     // paddingTop: 0,

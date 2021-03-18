@@ -19,10 +19,19 @@ class NotificationModal extends Component {
     };
   }
 
-  onAcceptGps = () => {
+  seeNotificationLive = () => {
     // this.getFirstLocation();
-    var action = {type: 'VIEW_POPUPGPS', data: null};
-    this.props.dispatch(action);
+    console.log(this.props.idLive)
+    let live = {
+      idLive: this.props.idLive,
+    };
+    var actionSaveLive = {type: 'SAVE_CURRENT_LIVE', data: live};
+
+    this.props.dispatch(actionSaveLive);
+
+    var deleteNotif = {type: 'DELETE_NOTIFICATION', data: this.props.idLive};
+
+    this.props.dispatch(deleteNotif);
 
     this.onClose();
 
@@ -60,7 +69,7 @@ class NotificationModal extends Component {
 
       
           <TouchableOpacity
-            onPress={this.onAcceptGps}
+            onPress={this.seeNotificationLive}
             style={{justifyContent: 'flex-end', marginTop: 30}}>
             <Text style={{textAlign: 'right'}}>Voir</Text>
           </TouchableOpacity>

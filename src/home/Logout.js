@@ -1,69 +1,50 @@
-import React, { Component } from 'react';
-import {
-  Platform,
-  StyleSheet,
-  Alert,
-  Linking,
-  View,
-  TextInput,
-  Image, ScrollView
-} from 'react-native';
+import {Component} from 'react';
+import {StyleSheet} from 'react-native';
 import ApiUtils from '../ApiUtils';
-import Logo from '../assets/logo.png';
-import { connect } from 'react-redux'
-
+import {connect} from 'react-redux';
+import RNPusherPushNotifications from 'react-native-pusher-push-notifications';
 
 const mapStateToProps = (state) => {
   return {
     userData: state.userData,
-  }
-}
+  };
+};
 
-
- class Logout extends Component {
+class Logout extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-    }
+    this.state = {};
   }
 
-  // static navigationOptions = {
-  //   drawerLabel: 'Déconnexion',
-  //   drawerIcon: ({ tintColor }) => (
-  //     <Image
-  //       source={require('../assets/deconnexion.png')}
-  //       style={[styles.icon, { tintColor: tintColor }]}
-  //     />
-  //   ),
-  // };
-
-
-
   componentDidMount() {
-
-    var action = { type: 'LOGOUT', data: null }
+    this.unSubscribe('debug-' + this.props.userData.idUtilisateur);
+    var action = {type: 'LOGOUT', data: null};
 
     this.props.dispatch(action);
 
     this.onClickNavigate('Home');
+  }
 
-  //   ApiUtils.setLoggedOut().then((res) => {
-  //    // alert(res);
-  //     this.onClickNavigate('Home');
-  // });
-}
+  unSubscribe = (interest) => {
+    console.log(`Subscribing to "${interest}"`);
+    RNPusherPushNotifications.unsubscribe(
+      interest,
+      (statusCode, response) => {
+        console.error(statusCode, response);
+      },
+      () => {
+        console.log(`CALLBACK: unsubscribed to ${interest}`);
+      },
+    );
+  };
 
-onClickNavigate(routeName) {
+  onClickNavigate(routeName) {
+    this.props.navigation.navigate('Home');
+  }
 
-  this.props.navigation.navigate("Home");
-}
-
-
-render() {
-  return (
-    null
-  );
-}
+  render() {
+    return null;
+  }
 }
 
 const styles = StyleSheet.create({
@@ -76,13 +57,12 @@ const styles = StyleSheet.create({
     // fontFamily: 'roboto'
   },
   text: {
-    fontFamily: 'Roboto'
+    fontFamily: 'Roboto',
   },
   body: {
     width: '100%',
     backgroundColor: '#DADADA',
     //  justifyContent: 'center',
-
   },
   logo: {
     width: '80%',
@@ -90,8 +70,7 @@ const styles = StyleSheet.create({
     marginLeft: 25,
     marginRight: 25,
     marginTop: 50,
-    marginBottom: 50
-
+    marginBottom: 50,
   },
   loginButtonSection: {
     width: '100%',
@@ -102,13 +81,11 @@ const styles = StyleSheet.create({
   },
 
   followCodeLoginSection: {
-
     backgroundColor: '#DADADA',
     width: '100%',
     justifyContent: 'center',
     alignItems: 'center',
     paddingTop: 30,
-
   },
 
   inputCode: {
@@ -118,15 +95,15 @@ const styles = StyleSheet.create({
     height: 30,
     padding: 0,
     marginBottom: 20,
-    marginTop: 20
+    marginTop: 20,
   },
   p: {
     fontSize: 12,
-    marginBottom: 5
+    marginBottom: 5,
   },
   url: {
     fontSize: 12,
-    textAlign: 'center'
+    textAlign: 'center',
   },
   textLink: {
     color: '#5D8BE6',
@@ -151,11 +128,11 @@ const styles = StyleSheet.create({
     backgroundColor: '#DADADA',
   },
   footer: {
-    backgroundColor: "transparent",
-    height: 215
+    backgroundColor: 'transparent',
+    height: 215,
   },
   userInfo: {
-    padding: 10
+    padding: 10,
   },
   icon: {
     width: 24,

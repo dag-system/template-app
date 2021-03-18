@@ -1403,7 +1403,7 @@ class LiveSummary extends Component<Props, State> {
                       style={{fontWeight: 'bold'}}
                       numberOfLines={1}
                       ellipsizeMode="tail">
-                      {this.props.currentLive.libelleLive}
+                      {this.props.currentLive?.libelleLive}
                     </Text>
                     <Text
                       style={{fontSize: 14}}
@@ -1587,7 +1587,7 @@ const styles = StyleSheet.create({
   },
   drawerButton: {
     backgroundColor: 'transparent',
-    width: 120,
+    width : '100%',
     marginTop: 0,
     paddingTop: 10,
     shadowOffset: {height: 0, width: 0},
