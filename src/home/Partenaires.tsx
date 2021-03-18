@@ -32,6 +32,10 @@ import fmlog from '../assets/fmlog.jpg';
 import husky from '../assets/husky.png';
 import segreen from '../assets/segreen.png';
 
+import tag from '../assets/tag.png';
+import crous from '../assets/crous.png';
+import citroen from '../assets/citroen.png';
+
 const mapStateToProps = (state) => {
   return {
     userData: state.userData,
@@ -323,6 +327,8 @@ class Partenaires extends Component {
                 <Text />
               </View>
 
+           
+
               <View
                 style={{
                   width: '100%',
@@ -343,7 +349,105 @@ class Partenaires extends Component {
                   }}
                 />
               </View>
+              <View
+                style={{
+                  borderBottomWidth: 1,
+                  borderBottomColor: '#DDDDDD',
+                  width: Dimensions.get('screen').width,
+                  marginTop: 0,
+                }}>
+                <Text />
+              </View>
 
+
+              <View
+                style={{
+                  width: '100%',
+                  height: 100,
+                  flex: 1,
+                  marginTop: 40,
+                  marginBottom: 40,
+                }}>
+                <Image
+                  source={citroen}
+                  resizeMethod="resize"
+                  resizeMode="contain"
+                  style={{
+                    height: '100%',
+                    width: '30%',
+                    alignSelf: 'center',
+                    marginHorizontal: 'auto',
+                  }}
+                />
+              </View>
+
+             
+
+              <View
+                style={{
+                  borderBottomWidth: 1,
+                  borderBottomColor: '#DDDDDD',
+                  width: Dimensions.get('screen').width,
+                  marginTop: 0,
+                }}>
+                <Text />
+              </View>
+              
+              <View
+                style={{
+                  width: '100%',
+                  height: 100,
+                  flex: 1,
+                  marginTop: 40,
+                  marginBottom: 40,
+                }}>
+                <Image
+                  source={crous}
+                  resizeMethod="resize"
+                  resizeMode="contain"
+                  style={{
+                    height: '100%',
+                    width: '30%',
+                    alignSelf: 'center',
+                    marginHorizontal: 'auto',
+                  }}
+                />
+              </View>
+
+          
+              <View
+                style={{
+                  borderBottomWidth: 1,
+                  borderBottomColor: '#DDDDDD',
+                  width: Dimensions.get('screen').width,
+                  marginTop: 0,
+                }}>
+                <Text />
+              </View>
+
+
+              <View
+                style={{
+                  width: '100%',
+                  height: 100,
+                  flex: 1,
+                  marginTop: 40,
+                  marginBottom: 40,
+                }}>
+                <Image
+                  source={tag}
+                  resizeMethod="resize"
+                  resizeMode="contain"
+                  style={{
+                    height: '100%',
+                    width: '30%',
+                    alignSelf: 'center',
+                    marginHorizontal: 'auto',
+                  }}
+                />
+              </View>
+
+          
               <View
                 style={{
                   borderBottomWidth: 1,
