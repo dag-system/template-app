@@ -133,6 +133,7 @@ class CreateAccount extends ValidationComponent {
         '12',
       ],
       years: [],
+      groups: [],
       anneeUser: '',
       departementUser: '',
       groupeUser: '',
@@ -152,6 +153,12 @@ class CreateAccount extends ValidationComponent {
       years.push(i);
     }
     this.setState({years: years});
+
+    let groups = [];
+    for (let i = 1; i < 151; i++) {
+      groups.push(i);
+    }
+    this.setState({groups: groups});
   }
 
   ongoHome() {
@@ -172,7 +179,7 @@ class CreateAccount extends ValidationComponent {
   }
 
   onChangeDepartementUser(value) {
-    if (value == '0' || value =="CNR") {
+    if (value == '0' || value == 'CNR') {
       this.setState({anneeUser: '0'});
       this.setState({departementUser: '0'});
       this.setState({groupeUser: '0'});
@@ -284,7 +291,7 @@ class CreateAccount extends ValidationComponent {
         challenge: {
           anneeUser: this.state.anneeUser,
           departementUser: ApiUtils.removeAccents(this.state.departementUser),
-          groupeUser: ApiUtils.removeAccents(this.state.groupeUser),
+          groupeUser: this.state.groupeUser,
           sportUser: ApiUtils.removeAccents(this.state.sportUser),
           asUser: ApiUtils.removeAccents(this.state.asUser),
           enseignantUser: ApiUtils.removeAccents(this.state.enseignantUser),
@@ -722,7 +729,11 @@ class CreateAccount extends ValidationComponent {
                     }}>
                     <Picker.Item label="Choisissez votre Groupe" value="-1" />
                     <Picker.Item label="Pas concerné" value="0" />
-                    <Picker.Item label="1" value="1" />
+
+                    {this.state.groups.map((g) => {
+                     return <Picker.Item label={g.toString()} value={g.toString()} />
+                    })}
+                    {/* <Picker.Item label="1" value="1" />
                     <Picker.Item label="2" value="2" />
                     <Picker.Item label="3" value="3" />
                     <Picker.Item label="4" value="4" />
@@ -747,7 +758,7 @@ class CreateAccount extends ValidationComponent {
                     <Picker.Item label="21" value="21" />
                     <Picker.Item label="22" value="22" />
                     <Picker.Item label="23" value="23" />
-                    <Picker.Item label="24" value="24" />
+                    <Picker.Item label="24" value="24" /> */}
                   </Picker>
                 </View>
 
