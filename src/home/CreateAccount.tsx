@@ -172,7 +172,7 @@ class CreateAccount extends ValidationComponent {
   }
 
   onChangeDepartementUser(value) {
-    if (value == '0') {
+    if (value == '0' || value =="CNR") {
       this.setState({anneeUser: '0'});
       this.setState({departementUser: '0'});
       this.setState({groupeUser: '0'});
@@ -658,6 +658,7 @@ class CreateAccount extends ValidationComponent {
                       value="-1"
                     />
                     <Picker.Item label="Personnel INSA" value="0" />
+                    <Picker.Item label="CNR" value="CNR" />
                     <Picker.Item label="FIMI" value="FIMI" />
                     <Picker.Item label="BIOSCIENCES" value="BIOSCIENCES" />
                     <Picker.Item
@@ -688,10 +689,6 @@ class CreateAccount extends ValidationComponent {
                     <Picker.Item
                       label="TÉLÉCOMMUNICATIONS, SERVICES, USAGES"
                       value="TÉLÉCOMMUNICATIONS, SERVICES, USAGES"
-                    />
-                    <Picker.Item
-                      label="PERSONNEL INSA"
-                      value="PERSONNEL INSA"
                     />
                   </Picker>
                 </View>

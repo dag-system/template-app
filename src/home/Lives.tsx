@@ -721,6 +721,7 @@ class Lives extends Component<Props, State> {
               finalTraceArray.push(finalTrace);
             });
           }
+     
           if (result.interets != null && result.interets.length != 0) {
             var interestArray = Object.values(result.interets);
             var count = 0;

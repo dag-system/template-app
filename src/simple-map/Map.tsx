@@ -646,7 +646,7 @@ class Map extends PureComponent<Props, State> {
                   // onCalloutPress={() => this.onClickInterestPoint(marker)}
                   key={marker.id}
                   coordinate={marker.coordinates}
-                  tracksViewChanges={false}>
+                  tracksViewChanges={true}>
                   <ImageBackground
                     style={{height: 25, width: 20}}
                     source={MarkerInteret}>
