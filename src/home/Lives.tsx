@@ -529,7 +529,7 @@ class Lives extends Component<Props, State> {
     let url =
       Platform.OS === 'android'
         ? 'https://play.google.com/store/apps/details?id=com.dag.digiraidinp.app'
-        : 'https://apps.apple.com/fr/app/la-foul%C3%A9e-blanche/id1546257921';
+        : 'https://apps.apple.com/fr/app/digiraid-grenoble-inp/id1558429847';
     Linking.openURL(url);
   }
 
