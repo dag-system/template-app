@@ -5,6 +5,7 @@
   "scripts": {
     "android-debug": "npx react-native run-android",
     "android-d": "npx react-native run-android",
+    "custom" : "git fetch && git pull && npm ci && npm run pods && npx react-native-fix-image",
     "ios": "npx react-native run-ios",
     "android": "cd android && ./gradlew clean && ./gradlew assembleRelease && cd ..",
     "android:windows": "cd android && gradlew clean && gradlew assembleRelease && cd ..",
