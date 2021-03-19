@@ -66,6 +66,17 @@ export default class Sidebar extends Component {
     this.setState({isVisibleDonateModal: false});
   };
 
+  openLink(url) {
+    Linking.canOpenURL(url).then((supported) => {
+      if (supported) {
+        Linking.openURL(url);
+      } else {
+        ApiUtils.logError('Home openLink', 'Dont know how to open URI: ' + url);
+      }
+    });
+  }
+
+
   render() {
     return (
       <Container>
@@ -345,7 +356,7 @@ export default class Sidebar extends Component {
                padding: 10,
               }}>
               <Icon
-                name="hand-holding-medical"
+                name="euro-sign"
                 type="FontAwesome5"
                 style={[styles.icon, {color: 'white'}]}
               />
@@ -376,6 +387,32 @@ export default class Sidebar extends Component {
               </Text>
             </View>
           </TouchableHighlight>
+
+          <TouchableHighlight
+            underlayColor="rgba(255,255,255,1,0.6)"
+            onPress={() => this.openLink('https://www.dag-system.com/')}
+            style={{width: '100%', position: 'absolute', bottom: 30}}>
+            {/* <View
+              style={{
+                display: 'flex',
+                flexDirection: 'row',
+                justifyContent: 'center',
+                padding: 0,
+              }}> */}
+              {/* <Icon
+                name="power-off"
+                type="FontAwesome5"
+                style={[styles.icon, {color: 'black'}]}
+              /> */}
+              <Text
+                style={[
+                  {color: 'white', textDecorationLine: 'underline', textAlign :'center'},
+                ]}>
+                Powered by DAG System
+              </Text>
+            {/* </View> */}
+          </TouchableHighlight>
+
 
    
 

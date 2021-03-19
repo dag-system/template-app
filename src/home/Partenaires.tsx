@@ -206,12 +206,43 @@ class Partenaires extends Component {
                   marginBottom: 40,
                 }}>
                 <Image
-                  source={mobSuccess}
+                  source={Logo_planmyrun}
                   resizeMethod="resize"
                   resizeMode="contain"
                   style={{
                     height: '100%',
                     width: '30%',
+                    alignSelf: 'center',
+                    marginHorizontal: 'auto',
+                  }}
+                />
+              </View>
+
+              <View
+                style={{
+                  borderBottomWidth: 1,
+                  borderBottomColor: '#DDDDDD',
+                  width: Dimensions.get('screen').width,
+                  marginTop: 0,
+                }}>
+                <Text />
+              </View>
+              
+              <View
+                style={{
+                  width: '100%',
+                  height: 100,
+                  flex: 1,
+                  marginTop: 40,
+                  marginBottom: 40,
+                }}>
+                <Image
+                  source={mobSuccess}
+                  resizeMethod="resize"
+                  resizeMode="contain"
+                  style={{
+                    height: '100%',
+                    width: '50%',
                     alignSelf: 'center',
                     marginHorizontal: 'auto',
                   }}
@@ -259,36 +290,7 @@ class Partenaires extends Component {
                 <Text />
               </View>
 
-              <View
-                style={{
-                  width: '100%',
-                  height: 100,
-                  flex: 1,
-                  marginTop: 40,
-                  marginBottom: 40,
-                }}>
-                <Image
-                  source={Logo_planmyrun}
-                  resizeMethod="resize"
-                  resizeMode="contain"
-                  style={{
-                    height: '100%',
-                    width: '30%',
-                    alignSelf: 'center',
-                    marginHorizontal: 'auto',
-                  }}
-                />
-              </View>
-
-              <View
-                style={{
-                  borderBottomWidth: 1,
-                  borderBottomColor: '#DDDDDD',
-                  width: Dimensions.get('screen').width,
-                  marginTop: 0,
-                }}>
-                <Text />
-              </View>
+          
 
               <View
                 style={{
