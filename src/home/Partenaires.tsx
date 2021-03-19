@@ -4,15 +4,12 @@ import {
   Image,
   TouchableOpacity,
   View,
-  Linking,
-  Platform,
   Dimensions,
 } from 'react-native';
 import {
   Container,
   Header,
   Body,
-  Toast,
   Root,
   Drawer,
   Icon,
@@ -21,13 +18,8 @@ import {
   Left,
   Right,
 } from 'native-base';
-import md5 from 'md5';
-import ApiUtils from '../ApiUtils';
 import {connect} from 'react-redux';
 import Sidebar from './SideBar';
-import moment from 'moment';
-import Logo from '../assets/logo_header.png';
-import GlobalStyles from '../styles';
 
 import dag from '../assets/dag.png';
 import tulle from '../assets/Ville_de_Tulle.jpg';
@@ -35,6 +27,7 @@ import tulleAgglo from '../assets/tulle-aglo-logot.png';
 import tac from '../assets/tac.jpg';
 import mobSuccess from '../assets/mob_success.png';
 import bonMono from '../assets/bonmono.png';
+import Logo_planmyrun from '../assets/Logo_planmyrun.png';
 const mapStateToProps = (state) => {
   return {
     userData: state.userData,
@@ -245,6 +238,37 @@ class Partenaires extends Component {
                 }}>
                 <Image
                   source={bonMono}
+                  resizeMethod="resize"
+                  resizeMode="contain"
+                  style={{
+                    height: '100%',
+                    width: '30%',
+                    alignSelf: 'center',
+                    marginHorizontal: 'auto',
+                  }}
+                />
+              </View>
+
+              <View
+                style={{
+                  borderBottomWidth: 1,
+                  borderBottomColor: '#DDDDDD',
+                  width: Dimensions.get('screen').width,
+                  marginTop: 0,
+                }}>
+                <Text />
+              </View>
+
+              <View
+                style={{
+                  width: '100%',
+                  height: 100,
+                  flex: 1,
+                  marginTop: 40,
+                  marginBottom: 40,
+                }}>
+                <Image
+                  source={Logo_planmyrun}
                   resizeMethod="resize"
                   resizeMode="contain"
                   style={{

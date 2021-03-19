@@ -576,7 +576,7 @@ class Lives extends Component<Props, State> {
     let url =
       Platform.OS === 'android'
         ? 'https://play.google.com/store/apps/details?id=com.dag.diytacrun.app'
-        : 'https://apps.apple.com/fr/app/la-foul%C3%A9e-blanche/id1546257921';
+        : 'https://apps.apple.com/fr/app/diy-tac-run/id1558699356';
     Linking.openURL(url);
   }
 
