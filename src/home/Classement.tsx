@@ -152,7 +152,7 @@ class Classement extends Component {
 
               <AutoHeightWebView
                 source={{
-                  uri: 'https://folomi.fr/classement/insalyon.html',
+                  uri: 'https://folomi.fr/classement/tracechallenge.html',
                 }}
                 style={{marginTop: 20, width: '100%'}}
                 startInLoadingState={true}

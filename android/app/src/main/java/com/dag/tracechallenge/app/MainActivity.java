@@ -1,4 +1,4 @@
-package com.dag.insalyon.app;
+package com.dag.tracechallenge.app;
 
 import com.facebook.react.ReactActivity;
 

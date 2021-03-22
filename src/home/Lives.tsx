@@ -129,7 +129,7 @@ class Lives extends Component<Props, State> {
     }
   }
   async downloadData() {
-   // this.init();
+    // this.init();
     await this.getNewVersion();
     await this.getLives(this.props.userData.idUtilisateur);
 
@@ -283,7 +283,7 @@ class Lives extends Component<Props, State> {
       this.viewLive(currentLive);
     } else {
       this.onClickCreateLiveOk();
-     // this.setState({modalChooseSportVisible: true});
+      // this.setState({modalChooseSportVisible: true});
     }
   }
 
@@ -294,7 +294,7 @@ class Lives extends Component<Props, State> {
     formData.append('auth', ApiUtils.getAPIAuth());
     formData.append('idUtilisateur', this.props.userData.idUtilisateur);
     formData.append('idversion', ApiUtils.VersionNumberInt().toString());
-    formData.append('idSport', "17");
+    formData.append('idSport', '17');
     formData.append('os', Platform.OS);
     var libelleLive = this.getLibelleLive();
 
@@ -322,7 +322,7 @@ class Lives extends Component<Props, State> {
             codeLive: responseJson.codeLive,
             libelleLive: responseJson.libelleLive,
             dateCreationLive: responseJson.dateCreationLive,
-            idSport: "17",
+            idSport: '17',
             invites: [],
             statsInfos: {},
             etatLive: 0,
@@ -575,7 +575,7 @@ class Lives extends Component<Props, State> {
   openStorePage() {
     let url =
       Platform.OS === 'android'
-        ? 'https://play.google.com/store/apps/details?id=com.dag.insalyon.app'
+        ? 'https://play.google.com/store/apps/details?id=com.dag.tracechallenge.app'
         : 'https://apps.apple.com/fr/app/la-foul%C3%A9e-blanche/id1546257921';
     Linking.openURL(url);
   }

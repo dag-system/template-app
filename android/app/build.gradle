@@ -131,7 +131,7 @@ android {
     }
 
     defaultConfig {
-            applicationId "com.dag.insalyon.app"
+            applicationId "com.dag.tracechallenge.app"
             minSdkVersion rootProject.ext.minSdkVersion
             targetSdkVersion rootProject.ext.targetSdkVersion
             versionCode 525
