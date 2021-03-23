@@ -32,12 +32,12 @@ import * as Animated from 'react-native-animatable';
 import md5 from 'md5';
 import BackgroundGeolocation from 'react-native-background-geolocation';
 import {connect} from 'react-redux';
+import DeviceInfo from 'react-native-device-info';
 
 import ApiUtils from '../ApiUtils';
 // import Logo from '../assets/logoHome.svg';
 import Logo from '../assets/logoHome.svg';
 import LogoHeader from '../assets/logo_header.png';
-import Titre from '../assets/titre.svg';
 import Loading from './Loading';
 import {Modal} from 'react-native';
 import WebviewJetCode from './WebviewJetCode';
@@ -75,7 +75,42 @@ class Home extends Component {
     );
   }
 
+  getPhoneData() {
+
+    let brand = DeviceInfo.getBrand();
+
+
+    let androidId = DeviceInfo.getAndroidIdSync();
+    let systemVersion = DeviceInfo.getSystemVersion();
+    let deviceId = DeviceInfo.getDeviceId();
+
+    let device = DeviceInfo.getDeviceSync();
+
+    let model = DeviceInfo.getModel();
+
+    let manufacturer = DeviceInfo.getManufacturerSync();
+    let hardware = DeviceInfo.getHardwareSync();
+    let apiLevel = DeviceInfo.getApiLevelSync();
+
+    let data ={
+      brand : brand,
+      androidId : androidId,
+      systemVersion : systemVersion,
+      deviceId : deviceId,
+      device : device,
+      model : model,
+      manufacturer : manufacturer,
+      hardware : hardware,
+      apiLevel : apiLevel
+    }
+
+    var action = {type: 'UPDATE_PHONE_DATA', data: data};
+    this.props.dispatch(action);
+
+  }
+
   componentDidMount() {
+    this.getPhoneData();
     // #stop BackroundGeolocation and remove-listeners when Home Screen is rendered.
     this.setState({selectedFolocode: -1});
 
@@ -678,9 +713,7 @@ class Home extends Component {
                         fontWeight: 'bold',
                         textAlign: 'center',
                         color:
-                          this.state.selectedFolocode == -1
-                            ? 'black'
-                            :'white',
+                          this.state.selectedFolocode == -1 ? 'black' : 'white',
                       }}>
                       CONNEXION
                     </Text>

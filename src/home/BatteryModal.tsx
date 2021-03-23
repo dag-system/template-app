@@ -247,7 +247,7 @@ class BatteryModal extends Component {
                 style={{
                   textAlign: 'center',
                   fontWeight: 'bold',
-                  color: ApiUtils.getBackgroundColor(),
+                  color: ApiUtils.getColor(),
                   textDecorationLine: 'underline',
                   marginTop: 30,
                 }}>
@@ -271,17 +271,7 @@ class BatteryModal extends Component {
                 activité :
               </Text>
 
-              <Text style={{marginTop: 10}}>
-                Les applications qui utilisent des systèmes de messagerie, type
-                mails par exemple ont un besoin minime en ressources. Ce n’est
-                pas le cas de notre application qui pour fonctionner
-                efficacement a besoin de ressources.
-              </Text>
-              <Text style={{marginTop: 10}}>
-                Qui dit “ressources”, dit “batterie” ! Et vous l’aurez compris,
-                l’utilisation de la batterie de votre téléphone est fonction des
-                données transmises par l’application que l’on utilise.
-              </Text>
+       
               <Text style={{marginTop: 10}}>
                 Selon certaines marques ou modèles, les systèmes d’économie de
                 batterie ferment intempestivement soit l’application, soit
@@ -292,9 +282,10 @@ class BatteryModal extends Component {
 
               <Text
                 style={{
+                  
                   textAlign: 'center',
                   fontWeight: 'bold',
-                  color: ApiUtils.getBackgroundColor(),
+                  color: ApiUtils.getColor(),
                   textDecorationLine: 'underline',
                   marginTop: 30,
                 }}>
@@ -324,18 +315,6 @@ class BatteryModal extends Component {
                   <Text>
                     5. Cliquer sur OK en vérifiant que tout soit activé
                   </Text>
-
-                  <Text style={{fontWeight: 'bold', marginTop: 10}}>
-                    SAMSUNG (Galaxy S8 et inférieur : Galaxy A5, Galaxy S7,
-                    Galaxy J5, ...)
-                  </Text>
-                  <Text style={{marginTop: 10}} />
-                  <Text> 1. Aller dans "Paramètres"</Text>
-                  <Text> 2. Cliquer sur "Maintenance de l'appareil"</Text>
-                  <Text> 3. Cliquer sur "Batterie"</Text>
-                  <Text> 5. Cliquer sur "Ajouter des applications"</Text>
-                  <Text>6.Sélectionner l’appli « My Cross »</Text>
-                  <Text>Cliquer sur "Terminé"</Text>
 
                   <Text style={{fontWeight: 'bold', marginTop: 10}}>
                     SAMSUNG (Galaxy S8 et inférieur : Galaxy A5, Galaxy S7,
@@ -518,9 +497,7 @@ class BatteryModal extends Component {
                   Vous retrouverez ces informations dans le menu d'aide
                 </Text>
               ) : null}
-              <Text style={{textAlign: 'center', marginTop: 10}}>
-                Bon ski !
-              </Text>
+          
               {this.props.noHeader && !this.props.onMap ? (
                 <TouchableOpacity
                   onPress={() => this.onPopupOk()}
@@ -528,8 +505,8 @@ class BatteryModal extends Component {
                     // paddingBottom: 200,
                     marginTop: 10,
                     justifyContent: 'center',
-                    borderColor: ApiUtils.getBackgroundColor(),
-                    backgroundColor: ApiUtils.getBackgroundColor(),
+                    borderColor: ApiUtils.getColor(),
+                    backgroundColor: ApiUtils.getColor(),
                     padding: 10,
                     borderWidth: 1,
                   }}>

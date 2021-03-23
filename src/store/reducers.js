@@ -28,6 +28,7 @@ const initialState = {
   isOkPopupBAttery2: false,
   userClubs: [],
   isGpsNotOk: true,
+  phoneData : null,
   notifications :[]
 };
 
@@ -145,6 +146,14 @@ const reducer = (state = initialState, action) => {
       let nextState = {
         ...state,
         notifications: notifs,
+      };
+      return nextState || state;
+    }
+
+    case 'UPDATE_PHONE_DATA': {
+      let nextState = {
+        ...state,
+        phoneData: action.data,
       };
       return nextState || state;
     }

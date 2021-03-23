@@ -18,7 +18,6 @@ export default class App extends Component {
 
     var HeadlessTask = async (event) => {
       let params = event.params;
-
       switch (event.name) {
         case 'location':
           var location = params;
@@ -26,8 +25,10 @@ export default class App extends Component {
             latitude: location.coords.latitude,
             longitude: location.coords.longitude,
             timestamp: location.timestamp,
-            speed : location.coords.speed
+            speed : location.coords.speed, 
+            headless : true
           };
+
       
           var action = { type: 'ADD_COORDINATE', data: coordinate }
           store.dispatch(action);

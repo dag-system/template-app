@@ -169,7 +169,7 @@ class Help extends Component {
                 style={{
                   textAlign: 'center',
                   fontWeight: 'bold',
-                  color: ApiUtils.getBackgroundColor(),
+                  color: ApiUtils.getColor(),
                   marginTop: 30,
                 }}>
                 Bienvenue sur votre application sportive !
@@ -218,7 +218,7 @@ class Help extends Component {
                 style={{
                   marginTop: 10,
                   fontWeight: 'bold',
-                  color: ApiUtils.getBackgroundColor(),
+                  color: ApiUtils.getColor(),
                   textDecorationLine: 'underline',
                   textTransform: 'uppercase',
                 }}>
@@ -341,18 +341,18 @@ class Help extends Component {
                     activité :
                   </Text>
 
-                  <Text style={{marginTop: 10}}>
+                  {/* <Text style={{marginTop: 10}}>
                     Les applications qui utilisent des systèmes de messagerie,
                     type mails par exemple ont un besoin minime en ressources.
                     Ce n’est pas le cas de notre application qui pour
                     fonctionner efficacement a besoin de ressources.
-                  </Text>
-                  <Text style={{marginTop: 10}}>
+                  </Text> */}
+                  {/* <Text style={{marginTop: 10}}>
                     Qui dit “ressources”, dit “batterie” ! Et vous l’aurez
                     compris, l’utilisation de la batterie de votre téléphone est
                     fonction des données transmises par l’application que l’on
                     utilise.
-                  </Text>
+                  </Text> */}
                   <Text style={{marginTop: 10}}>
                     Selon certaines marques ou modèles, les systèmes d’économie
                     de batterie ferment intempestivement soit l’application,
@@ -366,7 +366,7 @@ class Help extends Component {
                     style={{
                       textAlign: 'center',
                       fontWeight: 'bold',
-                      color: ApiUtils.getBackgroundColor(),
+                      color: ApiUtils.getColor(),
                       textDecorationLine: 'underline',
                       marginTop: 30,
                     }}>
@@ -615,8 +615,8 @@ class Help extends Component {
                     // paddingBottom: 200,
                     marginTop: 10,
                     justifyContent: 'center',
-                    borderColor: ApiUtils.getBackgroundColor(),
-                    backgroundColor: ApiUtils.getBackgroundColor(),
+                    borderColor: ApiUtils.getColor(),
+                    backgroundColor: ApiUtils.getColor(),
                     padding: 10,
                     borderWidth: 1,
                   }}>

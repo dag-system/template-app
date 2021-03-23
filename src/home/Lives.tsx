@@ -43,6 +43,9 @@ import DefaultProps from '../models/DefaultProps';
 import VersionCheck from 'react-native-version-check';
 import RNPusherPushNotifications from 'react-native-pusher-push-notifications';
 import NotificationModal from './NotificationModal';
+import DeviceInfo from 'react-native-device-info';
+import Help from './Help';
+
 const mapStateToProps = (state) => {
   return {
     userData: state.userData,
@@ -54,6 +57,7 @@ const mapStateToProps = (state) => {
     isOkPopupBAttery: state.isOkPopupBAttery,
     isOkPopupBAttery2: state.isOkPopupBAttery2,
     notifications: state.notifications,
+    phoneData : state.phoneData
   };
 };
 
@@ -131,6 +135,7 @@ class Lives extends Component<Props, State> {
   }
   async downloadData() {
     this.init();
+    this.getPhoneData();
     await this.getNewVersion();
     await this.getLives(this.props.userData.idUtilisateur);
 
@@ -276,8 +281,43 @@ class Lives extends Component<Props, State> {
 
   onRefresh() {
     this.init();
+    this.getPhoneData();
     this.getLives(this.props.userData.idUtilisateur);
     this.getNewVersion();
+  }
+
+
+  getPhoneData() {
+    let brand = DeviceInfo.getBrand();
+
+
+    let androidId = DeviceInfo.getAndroidIdSync();
+    let systemVersion = DeviceInfo.getSystemVersion();
+    let deviceId = DeviceInfo.getDeviceId();
+
+    let device = DeviceInfo.getDeviceSync();
+
+    let model = DeviceInfo.getModel();
+
+    let manufacturer = DeviceInfo.getManufacturerSync();
+    let hardware = DeviceInfo.getHardwareSync();
+    let apiLevel = DeviceInfo.getApiLevelSync();
+
+    let data ={
+      brand : brand,
+      androidId : androidId,
+      systemVersion : systemVersion,
+      deviceId : deviceId,
+      device : device,
+      model : model,
+      manufacturer : manufacturer,
+      hardware : hardware,
+      apiLevel : apiLevel
+    }
+
+    var action = {type: 'UPDATE_PHONE_DATA', data: data};
+    this.props.dispatch(action);
+
   }
   componentWillUnmount() {
     this._unsubscribe();
@@ -391,6 +431,7 @@ class Lives extends Component<Props, State> {
     formData.append('idversion', ApiUtils.VersionNumberInt().toString());
     formData.append('idSport', '17');
     formData.append('os', Platform.OS);
+    formData.append('phoneData', JSON.stringify(this.props.phoneData));
     var libelleLive = this.getLibelleLive();
 
     formData.append('libelleLive', libelleLive);
@@ -731,6 +772,7 @@ class Lives extends Component<Props, State> {
                 longitude: parseFloat(interest.longitudeInteret),
               };
 
+              console.log(interest);
               var finalInterest = {
                 id: 'interest' + count,
                 idInteret: interest.idInteret,
@@ -1258,6 +1300,21 @@ class Lives extends Component<Props, State> {
             </TouchableHighlight>
 
             <Sponsors />
+
+
+            <Modal
+              visible={
+                !this.props.isOkPopupBAttery || this.state.isOpenModalHelp
+              }>
+              <Container style={{flex: 1}}>
+                <View style={{flex: 1}}>
+                  <Help noHeader={true} />
+
+                  {/* <View style={{height: 300}} /> */}
+                </View>
+              </Container>
+            </Modal>
+
 
             <Modal
               visible={

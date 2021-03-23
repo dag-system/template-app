@@ -5,7 +5,7 @@
 import {AppRegistry} from 'react-native';
 import App from './src/App';
 import {name as appName} from './app.json';
-// import * as Sentry from '@sentry/react-native';
+import * as Sentry from '@sentry/react-native';
 // import React from 'react';
 
 if (__DEV__) {
@@ -20,18 +20,17 @@ if (__DEV__) {
 }
 
 
-// Sentry.init({
-//   dsn:
-//     'https://5e000efaa3f243ce824b6769a066455e@o507293.ingest.sentry.io/5598177',
-//     debug: false,
-//     deactivateStacktraceMerging: true
+Sentry.init({
+  dsn:
+    'https://d455e5c5cf5548f89d42e2f9582469f7@o556570.ingest.sentry.io/5687721',
+    debug: true,
+    deactivateStacktraceMerging: true
 
-// });
-
+});
 
 AppRegistry.registerComponent(appName, () => App);
 
-console.disableYellowBox = false;
+console.disableYellowBox = true;
 
 // Define a simple "HeadlessTask" with an async function.
 // This function will receive all events from the BackgroundGeolocation plugin

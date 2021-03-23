@@ -486,17 +486,16 @@ class Map extends PureComponent<Props, State> {
               </Text>
 
               {this.state.currentInteret?.photoInteret != null &&
-              this.state.currentInteret?.photoInteret != '' &&
-              this.state.currentInteret?.photoInteret.length > 0 ? (
-                <Image
-                  style={{height: 200, width: '100%'}}
-                  source={{
-                    uri: ApiUtils.getPhotoUrl(
-                      this.state.currentInteret?.idStation,
-                      this.state.currentInteret?.photoInteret,
-                    ),
-                  }}
-                />
+              this.state.currentInteret?.photoInteret != '' ?
+          
+
+                (<Image 
+                style={{height: 200, width: '100%'}}
+                source={{
+                  uri: `data:image/png;base64,${this.state.currentInteret?.photoInteret}`,
+               }} /> 
+
+
               ) : null}
 
               <View
