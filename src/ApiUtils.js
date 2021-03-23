@@ -9,29 +9,28 @@ const pushNotificationInstance = '653e46e5-9ff8-48ae-9591-feaa4054023e';
 
 var ApiUtils = {
   getOrganisation() {
-    return 'INSALYON';
+    return 'TemplateOrganisation';
   },
-  getPushNotificationInstance()
-  {
+  getPushNotificationInstance() {
     return pushNotificationInstance;
   },
   removeAccents(str) {
-    let accents = 'ÀÁÂÃÄÅàáâãäåßÒÓÔÕÕÖØòóôõöøÈÉÊËèéêëðÇçÐÌÍÎÏìíîïÙÚÛÜùúûüÑñŠšŸÿýŽž';
-    let accentsOut = "AAAAAAaaaaaaBOOOOOOOooooooEEEEeeeeeCcDIIIIiiiiUUUUuuuuNnSsYyyZz";
-    if(str != null)
-    {
+    let accents =
+      'ÀÁÂÃÄÅàáâãäåßÒÓÔÕÕÖØòóôõöøÈÉÊËèéêëðÇçÐÌÍÎÏìíîïÙÚÛÜùúûüÑñŠšŸÿýŽž';
+    let accentsOut =
+      'AAAAAAaaaaaaBOOOOOOOooooooEEEEeeeeeCcDIIIIiiiiUUUUuuuuNnSsYyyZz';
+    if (str != null) {
       str = str.split('');
       str.forEach((letter, index) => {
         let i = accents.indexOf(letter);
         if (i != -1) {
           str[index] = accentsOut[i];
         }
-      })
+      });
       return str.join('');
-    }else{
+    } else {
       return str;
     }
-   
   },
   ISDEBUG() {
     return ISDEBUG;
@@ -40,7 +39,7 @@ var ApiUtils = {
     return ISDEBUG;
   },
   getBackgroundColor() {
-    return '#FFFFFF';
+    return '#TemplateColor';
   },
   getSecondColor() {
     return '#DE084C';

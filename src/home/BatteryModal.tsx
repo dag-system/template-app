@@ -11,7 +11,6 @@ import {
   Container,
   Header,
   Body,
-  Toast,
   Root,
   Drawer,
   Icon,
@@ -20,14 +19,9 @@ import {
   Left,
   Right,
 } from 'native-base';
-import md5 from 'md5';
 import ApiUtils from '../ApiUtils';
 import {connect} from 'react-redux';
 import Sidebar from './SideBar';
-import moment from 'moment';
-import Logo from '../assets/logo_header.png';
-import GlobalStyles from '../styles';
-import Autrans from '../assets/autrans.svg';
 import IosReglages from '../assets/iosReglages.png';
 import Ios2 from '../assets/ios2.png';
 import {Sponsors} from './Sponsors';
@@ -63,15 +57,7 @@ class BatteryModal extends Component {
     };
   }
 
-  componentDidMount() {
-    setTimeout(() => this.didMount(), 300);
-
-    // alert(this.props.userData.ddnUtilisateur)
-    //   alert(new Date(this.props.userData.ddnUtilisateur))
-
-    // setTimeout(() => this.setState({ userdata: { ...this.state.userdata, ddnUtilisateur: this.state.userdata.ddnUtilisateur) }} ), 100)
-  }
-  didMount() {}
+  componentDidMount() {}
 
   closeDrawer = () => {
     this.drawer._root.close();
@@ -99,22 +85,6 @@ class BatteryModal extends Component {
     if (!this.validateEmail(this.state.userdata.emailUtilisateur)) {
       isError = true;
     }
-
-    // if (this.state.userdata.telUtilisateur == '') {
-    //   isError = true;
-    // }
-
-    // if (this.state.userdata.adresseUtilisateur == '') {
-    //   isError = true;
-    // }
-
-    // if (this.state.userdata.cpUtilisateur == '') {
-    //   isError = true;
-    // }
-
-    // if (this.state.userdata.villeUtilisateur == '') {
-    //   isError = true;
-    // }
 
     if (!!this.state.newPassword && this.state.newPassword != '') {
       if (this.state.newPasswordConfirmation != this.state.newPassword) {
@@ -271,7 +241,6 @@ class BatteryModal extends Component {
                 activité :
               </Text>
 
-       
               <Text style={{marginTop: 10}}>
                 Selon certaines marques ou modèles, les systèmes d’économie de
                 batterie ferment intempestivement soit l’application, soit
@@ -282,7 +251,6 @@ class BatteryModal extends Component {
 
               <Text
                 style={{
-                  
                   textAlign: 'center',
                   fontWeight: 'bold',
                   color: ApiUtils.getColor(),
@@ -497,7 +465,7 @@ class BatteryModal extends Component {
                   Vous retrouverez ces informations dans le menu d'aide
                 </Text>
               ) : null}
-          
+
               {this.props.noHeader && !this.props.onMap ? (
                 <TouchableOpacity
                   onPress={() => this.onPopupOk()}

@@ -126,7 +126,7 @@ class Classement extends Component {
               </Text>
 
               <TouchableOpacity
-                onPress={() => this.openLink('https://www.insa-lyon.fr/')}>
+                onPress={() => this.openLink('TemplateSiteLink')}>
                 <Text
                   style={{
                     textAlign: 'center',
@@ -152,7 +152,8 @@ class Classement extends Component {
 
               <AutoHeightWebView
                 source={{
-                  uri: 'https://folomi.fr/classement/insalyon/classement.html',
+                  uri:
+                    'https://folomi.fr/classement/TemplateAppName/classement.html',
                 }}
                 style={{marginTop: 20, width: '100%'}}
                 startInLoadingState={true}

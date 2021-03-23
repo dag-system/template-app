@@ -19,7 +19,6 @@ import {
   Input,
   Toast,
   Icon,
-  DatePicker,
   Content,
   Radio,
   Left,
@@ -27,17 +26,13 @@ import {
   Root,
   Picker,
 } from 'native-base';
-import md5 from 'md5';
 import ApiUtils from '../ApiUtils';
-import moment from 'moment';
 import Logo from '../assets/logo_header.png';
 import ValidationComponent from 'react-native-form-validator';
 import defaultMessages from './defaultMessages';
 import {connect} from 'react-redux';
-import {KeyboardAvoidingView} from 'react-native';
+import {KeyboardAvoidingView, Dimensions} from 'react-native';
 import GlobalStyles from '../styles';
-import {Platform} from 'react-native';
-import {Dimensions} from 'react-native';
 const mapStateToProps = (state) => {
   return {
     userData: state,
@@ -56,21 +51,6 @@ class CreateAccount extends ValidationComponent {
     this.deviceLocale = 'fr';
 
     this.state = {
-      nomUtilisateur: '',
-      prenomUtilisateur: '',
-      telUtilisateur: '',
-      clubUtilisateur: '',
-      villeUtilisateur: '',
-      cpUtilisateur: '',
-      adresseUtilisateur: '',
-      newPassword: '',
-      newPasswordConfirmation: '',
-      emailUtilisateur: '',
-      acceptChallengeUnss: false,
-      clubEntreprise: '',
-      clubFamille: '',
-      clubUniversite: '',
-      unss: '',
       days: [
         '01',
         '02',
@@ -133,38 +113,59 @@ class CreateAccount extends ValidationComponent {
         '12',
       ],
       years: [],
-      groups: [],
-      anneeUser: '',
-      departementUser: '',
-      groupeUser: '',
-      sportUser: '',
-      asUser: '',
-      enseignantUser: '',
-      errorPickers: false,
       errorCNIL: false,
+      isNameAsk: TemplateNameAsk,
+      nomUtilisateur: '',
+      isFirstNameAsk: TemplateFirstNameAsk,
+      prenomUtilisateur: '',
+      isSexeAsk: TemplateSexeAsk,
+      sexeUtilisateur: '',
+      isDdnAsk: TemplateDdnAsk,
+      dayDdn: '',
+      monthDdn: '',
+      yearDdn: '',
+      isMailAsk: TemplateMailAsk,
+      emailUtilisateur: '',
+      isTelAsk: TemplateTelAsk,
+      telUtilisateur: '',
+      isAdressAsk: TemplateAdressAsk,
+      adresseUtilisateur: '',
+      isPostalAsk: TemplatePostalAsk,
+      cpUtilisateur: '',
+      isCityAsk: TemplateCityAsk,
+      villeUtilisateur: '',
+      isCountryAsk: TemplateCountryAsk,
+      paysUtilisateur: '',
+      isTelVerifAsked: TemplateTelVerifAsk,
+      acceptChallengeTelUtilisateur: false,
+      isChallengeEntrepriseAsk: TemplateChallengeEntreprise,
+      clubEntreprise: '',
+      isChallengeClubAsk: TemplateChallengeClub,
+      clubClub: '',
+      isChallengeFamilleAsk: TemplateChallengeFamille,
+      clubFamille: '',
+      isChallengeAutreAsk: TemplateChallengeAutre,
+      clubAutre: '',
       acceptChallengeNameUtilisateur: false,
       acceptChallengeUtilisateur: false,
     };
   }
 
   componentDidMount() {
-    let years = [];
-    for (let i = 2021; i > 1930; i--) {
-      years.push(i);
+    let yearsAll = [];
+    for (let i = 1930; i < 2021; i++) {
+      yearsAll.push(i.toString());
     }
-    this.setState({years: years});
-
-    let groups = [];
-    for (let i = 1; i < 151; i++) {
-      groups.push(i);
-    }
-    this.setState({groups: groups});
+    this.setState({years: yearsAll});
   }
 
   ongoHome() {
     this.props.navigation.navigate('Home');
   }
 
+  /*
+  //  SPECIFIQUE INSA
+  //
   onChangeAnneeUser(value) {
     this.setState({anneeUser: value});
   }
@@ -187,7 +188,7 @@ class CreateAccount extends ValidationComponent {
 
   onChangeEnseignantUser(value) {
     this.setState({enseignantUser: value});
-  }
+  }*/
 
   onClickValidate() {
     var isValid = this.validate({
@@ -217,109 +218,99 @@ class CreateAccount extends ValidationComponent {
     let formData = new FormData();
     formData.append('method', 'createUtilisateur');
     formData.append('auth', ApiUtils.getAPIAuth());
+    formData.append('organisation', ApiUtils.getOrganisation());
 
-    formData.append('nomUtilisateur', this.state.nomUtilisateur);
-    formData.append('prenomUtilisateur', this.state.prenomUtilisateur);
-
-    if (
-      this.state.anneeUser == '' ||
-      this.state.departementUser == '' ||
-      this.state.groupeUser == '' ||
-      this.state.sportUser == '' ||
-      this.state.asUser == '' ||
-      this.state.enseignantUser == ''
-    ) {
-      this.setState({errorPickers: true});
-      this.setState({isLoading: false});
-      return false;
-    } else {
-      let extraInfoUser = {
-        challenge: {
-          anneeUser: this.state.anneeUser,
-          departementUser: ApiUtils.removeAccents(this.state.departementUser),
-          groupeUser: this.state.groupeUser,
-          sportUser: ApiUtils.removeAccents(this.state.sportUser),
-          asUser: ApiUtils.removeAccents(this.state.asUser),
-          enseignantUser: ApiUtils.removeAccents(this.state.enseignantUser),
-        },
-      };
-
-      this.setState({errorPickers: false});
-      formData.append('extraInfo', JSON.stringify(extraInfoUser));
+    if (this.state.isNameAsk) {
+      formData.append('nomUtilisateur', this.state.nomUtilisateur);
     }
 
-    // alert(finalDate)
-    if (Platform.OS == 'ios') {
-      if (
-        this.state.yearDdn != undefined &&
-        this.state.monthDdn != undefined &&
-        this.state.dayDdn != undefined
-      ) {
-        formData.append(
-          'ddnUtilisateur',
-          this.state.yearDdn +
-            '-' +
-            this.state.monthDdn +
-            '-' +
-            this.state.dayDdn,
-        );
-      } else {
-        formData.append('ddnUtilisateur', '');
-      }
-    } else {
-      var finalDate = moment(this.state.ddnUtilisateur).format('YYYY-MM-DD');
-      formData.append('ddnUtilisateur', finalDate);
+    if (this.state.isFirstNameAsk) {
+      formData.append('prenomUtilisateur', this.state.prenomUtilisateur);
     }
 
-    // formData.append('ddnUtilisateur', this.state.ddnUtilisateur);
+    if (this.state.isSexeAsk) {
+      formData.append('sexeUtilisateur', this.state.sexeUtilisateur);
+    }
 
-    //alert(this.state.sexeUtilisateur);
-    formData.append('sexeUtilisateur', this.state.sexeUtilisateur);
+    if (this.state.isDdnAsk) {
+      formData.append(
+        'ddnUtilisateur',
+        this.state.yearDdn +
+          '-' +
+          this.state.monthDdn +
+          '-' +
+          this.state.dayDdn,
+      );
+    }
+
+    if (this.state.isMailAsk) {
+      formData.append('emailUtilisateur', this.state.emailUtilisateur);
+    }
+
+    if (this.state.isTelAsk) {
+      formData.append('telUtilisateur', '');
+    }
+
+    if (this.state.isAdressAsk) {
+      formData.append('adresseUtilisateur', this.state.adresseUtilisateur);
+    }
+
+    if (this.state.isPostalAsk) {
+      formData.append('cpUtilisateur', this.state.cpUtilisateur);
+    }
+
+    if (this.state.isCityAsk) {
+      formData.append('villeUtilisateur', this.state.villeUtilisateur);
+    }
+
+    if (this.state.isCountryAsk) {
+      formData.append('paysUtilisateur', this.state.paysUtilisateur);
+    }
 
     let clubs = [];
-
+    if (this.state.isChallengeEntrepriseAsk) {
+      clubs.push({
+        name: this.state.clubEntreprise,
+        type: 'ENTREPRISE',
+      });
+    }
+    if (this.state.isChallengeClubAsk) {
+      clubs.push({
+        name: this.state.clubClub,
+        type: 'CLUB',
+      });
+    }
+    if (this.state.isChallengeFamilleAsk) {
+      clubs.push({
+        name: this.state.clubFamille,
+        type: 'FAMILLE',
+      });
+    }
+    if (this.state.isChallengeAutreAsk) {
+      clubs.push({
+        name: this.state.clubAutre,
+        type: 'AUTRE',
+      });
+    }
     formData.append('clubUtilisateur', JSON.stringify(clubs));
 
-    formData.append('emailUtilisateur', this.state.emailUtilisateur);
-
-    formData.append('telUtilisateur', '');
-
-    var acceptChallengeTelUtilisateur = 0;
     if (this.state.acceptChallengeTelUtilisateur) {
-      acceptChallengeTelUtilisateur = 1;
-    }
-
-    formData.append(
-      'acceptChallengeTelUtilisateur',
-      acceptChallengeTelUtilisateur,
-    );
-
-    formData.append('adresseUtilisateur', this.state.adresseUtilisateur);
-    formData.append('cpUtilisateur', this.state.cpUtilisateur);
-    formData.append('villeUtilisateur', this.state.villeUtilisateur);
-    formData.append('paysUtilisateur', this.state.paysUtilisateur);
-    formData.append('organisation', ApiUtils.getOrganisation());
-    var acceptChallengeNameUtilisateur = 0;
-    if (this.state.acceptChallengeNameUtilisateur) {
-      acceptChallengeNameUtilisateur = 1;
-    }
-
-    formData.append(
-      'acceptChallengeNameUtilisateur',
-      acceptChallengeNameUtilisateur,
-    );
-
-    var acceptChallengeUtilisateur = 0;
-    if (this.state.acceptChallengeUtilisateur) {
-      acceptChallengeUtilisateur = 1;
-      this.setState({errorCNIL: false});
+      formData.append('acceptChallengeTelUtilisateur', 1);
     } else {
-      this.setState({errorCNIL: true});
-      this.setState({isLoading: false});
-      return false;
+      formData.append('acceptChallengeTelUtilisateur', 0);
     }
 
-    formData.append('acceptChallengeUtilisateur', acceptChallengeUtilisateur);
+    if (this.state.acceptChallengeNameUtilisateur) {
+      formData.append('acceptChallengeNameUtilisateur', 1);
+    } else {
+      formData.append('acceptChallengeNameUtilisateur', 0);
+    }
+
+    if (this.state.acceptChallengeUtilisateur) {
+      formData.append('acceptChallengeUtilisateur', 1);
+    } else {
+      formData.append('acceptChallengeUtilisateur', 0);
+    }
 
     fetch(ApiUtils.getAPIUrl(), {
       method: 'POST',
@@ -417,482 +408,417 @@ class CreateAccount extends ValidationComponent {
           <Content>
             <KeyboardAvoidingView>
               <Form>
-                <Item stackedLabel style={{marginBottom: 5}}>
-                  <Label>Nom *</Label>
-                  <Input
-                    //  autoCapitalize="characters"
-                    ref="nomUtilisateur"
-                    returnKeyType="next"
-                    textContentType="familyName"
-                    clearButtonMode="always"
-                    value={this.state.nomUtilisateur}
-                    onChangeText={(value) =>
-                      this.setState({nomUtilisateur: value})
-                    }
-                  />
-                </Item>
+                {this.state.isNameAsk ? (
+                  <Item stackedLabel style={{marginBottom: 5}}>
+                    <Label>Nom *</Label>
+                    <Input
+                      //  autoCapitalize="characters"
+                      ref="nomUtilisateur"
+                      returnKeyType="next"
+                      textContentType="familyName"
+                      clearButtonMode="always"
+                      value={this.state.nomUtilisateur}
+                      onChangeText={(value) =>
+                        this.setState({nomUtilisateur: value})
+                      }
+                    />
+                  </Item>
+                ) : null}
+
                 {this.isFieldInError('nomUtilisateur') &&
+                  this.state.isNameAsk &&
                   this.getErrorsInField(
                     'nomUtilisateur',
                   ).map((errorMessage) => (
                     <Text style={styles.error}>{errorMessage}</Text>
                   ))}
 
-                {/* // <ErrorMessage value={this.state.nomUtilisateur} message="Le nom doit être renseigné" /> */}
-
-                <Item stackedLabel style={{marginBottom: 5}}>
-                  <Label>Prénom *</Label>
-                  <Input
-                    //  autoCapitalize="characters"
-                    ref="prenomUtilisateur"
-                    returnKeyType="next"
-                    textContentType="name"
-                    clearButtonMode="always"
-                    value={this.state.prenomUtilisateur}
-                    onChangeText={(value) =>
-                      this.setState({prenomUtilisateur: value})
-                    }
-                  />
-                </Item>
+                {this.state.isFirstNameAsk ? (
+                  <Item stackedLabel style={{marginBottom: 5}}>
+                    <Label>Prénom *</Label>
+                    <Input
+                      //  autoCapitalize="characters"
+                      ref="prenomUtilisateur"
+                      returnKeyType="next"
+                      textContentType="name"
+                      clearButtonMode="always"
+                      value={this.state.prenomUtilisateur}
+                      onChangeText={(value) =>
+                        this.setState({prenomUtilisateur: value})
+                      }
+                    />
+                  </Item>
+                ) : null}
                 {this.isFieldInError('prenomUtilisateur') &&
+                  this.state.isFirstNameAsk &&
                   this.getErrorsInField(
                     'prenomUtilisateur',
                   ).map((errorMessage) => (
                     <Text style={styles.error}>{errorMessage}</Text>
                   ))}
 
-                <Item stackedLabel style={{marginBottom: 5}}>
-                  <Label>Email *</Label>
-                  <Input
-                    ref="emailUtilisateur"
-                    autoCompleteType="email"
-                    returnKeyType="next"
-                    textContentType="emailAddress"
-                    keyboardType="email-address"
-                    // autoCapitalize="characters"
-                    clearButtonMode="always"
-                    value={this.state.emailUtilisateur}
-                    onChangeText={(value) =>
-                      this.setState({
-                        emailUtilisateur: value.replace(/\s+/g, ''),
-                      })
-                    }
-                  />
-                </Item>
+                {this.state.isMailAfk ? (
+                  <Item stackedLabel style={{marginBottom: 5}}>
+                    <Label>Email *</Label>
+                    <Input
+                      ref="emailUtilisateur"
+                      autoCompleteType="email"
+                      returnKeyType="next"
+                      textContentType="emailAddress"
+                      keyboardType="email-address"
+                      // autoCapitalize="characters"
+                      clearButtonMode="always"
+                      value={this.state.emailUtilisateur}
+                      onChangeText={(value) =>
+                        this.setState({
+                          emailUtilisateur: value.replace(/\s+/g, ''),
+                        })
+                      }
+                    />
+                  </Item>
+                ) : null}
+
                 {this.isFieldInError('emailUtilisateur') &&
+                  this.state.isMailAfk &&
                   this.getErrorsInField(
                     'emailUtilisateur',
                   ).map((errorMessage) => (
                     <Text style={styles.error}>{errorMessage}</Text>
                   ))}
 
-                <Text style={styles.label}>Sexe</Text>
+                {this.state.isSexeAsk ? (
+                  <View>
+                    <Text style={styles.label}>Sexe</Text>
 
-                <View
-                  style={{
-                    display: 'flex',
-                    flexDirection: 'row',
-                    width: '80%',
-                    justifyContent: 'space-between',
-                    alignSelf: 'center',
-                  }}>
-                  <TouchableOpacity
-                    style={{
-                      display: 'flex',
-                      flexDirection: 'row',
-                      width: '30%',
-                      justifyContent: 'space-around',
-                    }}
-                    onPress={() => this.setState({sexeUtilisateur: 'F'})}>
-                    <Text>Femme</Text>
-                    <Radio
-                      selected={this.state.sexeUtilisateur == 'F'}
-                      onPress={() => this.setState({sexeUtilisateur: 'F'})}
-                    />
-                  </TouchableOpacity>
-                  <TouchableOpacity
-                    style={{
-                      display: 'flex',
-                      flexDirection: 'row',
-                      width: '30%',
-                      justifyContent: 'space-around',
-                    }}
-                    onPress={() => this.setState({sexeUtilisateur: 'H'})}>
-                    <Text>Homme</Text>
-                    <Radio
-                      selected={this.state.sexeUtilisateur == 'H'}
-                      onPress={() => this.setState({sexeUtilisateur: 'H'})}
-                    />
-                  </TouchableOpacity>
-
-                  <TouchableOpacity
-                    style={{
-                      display: 'flex',
-                      flexDirection: 'row',
-                      width: '30%',
-                      justifyContent: 'space-around',
-                    }}
-                    onPress={() => this.setState({sexeUtilisateur: 'A'})}>
-                    <Text>Autre</Text>
-                    <Radio
-                      selected={this.state.sexeUtilisateur == 'A'}
-                      onPress={() => this.setState({sexeUtilisateur: 'A'})}
-                    />
-                  </TouchableOpacity>
-                </View>
-
-                <View>
-                  <Picker
-                    mode="dropdown"
-                    accessibilityLabel={'Choisissez votre année'}
-                    iosHeader={'Choisissez votre année'}
-                    iosIcon={<Icon name="chevron-down" type="FontAwesome5" />}
-                    style={{marginTop: 0}}
-                    selectedValue={this.state.anneeUser}
-                    onValueChange={this.onChangeAnneeUser.bind(this)}
-                    placeholder={'Choisissez votre année'}
-                    placeholderStyle={{
-                      color: ApiUtils.getColor(),
-                    }}
-                    placeholderIconColor={ApiUtils.getColor()}
-                    textStyle={{color: ApiUtils.getColor()}}
-                    itemStyle={{
-                      color: ApiUtils.getColor(),
-                      marginLeft: 0,
-                      paddingLeft: 10,
-                      borderBottomColor: ApiUtils.getColor(),
-                      borderBottomWidth: 1,
-                    }}
-                    itemTextStyle={{
-                      color: ApiUtils.getColor(),
-                      borderBottomColor: ApiUtils.getColor(),
-                      borderBottomWidth: 1,
-                    }}>
-                    <Picker.Item label="Choisissez votre année" value="-1" />
-                    <Picker.Item label="Pas concerné" value="0" />
-                    <Picker.Item label="1" value="1" />
-                    <Picker.Item label="2" value="2" />
-                    <Picker.Item label="3" value="3" />
-                    <Picker.Item label="4" value="4" />
-                    <Picker.Item label="5" value="5" />
-                    <Picker.Item label="5+" value="5+" />
-                  </Picker>
-                </View>
-
-                <View>
-                  <Picker
-                    mode="dropdown"
-                    accessibilityLabel={'Choisissez votre département'}
-                    iosHeader={'Choisissez votre département'}
-                    iosIcon={<Icon name="chevron-down" type="FontAwesome5" />}
-                    style={{marginTop: 0}}
-                    selectedValue={this.state.departementUser}
-                    onValueChange={this.onChangeDepartementUser.bind(this)}
-                    placeholder={'Choisissez votre département'}
-                    placeholderStyle={{
-                      color: ApiUtils.getColor(),
-                    }}
-                    placeholderIconColor={ApiUtils.getColor()}
-                    textStyle={{color: ApiUtils.getColor()}}
-                    itemStyle={{
-                      color: ApiUtils.getColor(),
-                      marginLeft: 0,
-                      paddingLeft: 10,
-                      borderBottomColor: ApiUtils.getColor(),
-                      borderBottomWidth: 1,
-                    }}
-                    itemTextStyle={{
-                      color: ApiUtils.getColor(),
-                      borderBottomColor: ApiUtils.getColor(),
-                      borderBottomWidth: 1,
-                    }}>
-                    <Picker.Item
-                      label="Choisissez votre département"
-                      value="-1"
-                    />
-                    <Picker.Item label="Personnel INSA" value="0" />
-                    <Picker.Item label="CNR" value="CNR" />
-                    <Picker.Item label="FIMI" value="FIMI" />
-                    <Picker.Item label="BIOSCIENCES" value="BIOSCIENCES" />
-                    <Picker.Item
-                      label="GÉNIE ÉLECTRIQUE"
-                      value="GÉNIE ÉLECTRIQUE"
-                    />
-                    <Picker.Item
-                      label="GÉNIE INDUSTRIEL"
-                      value="GÉNIE INDUSTRIEL"
-                    />
-                    <Picker.Item
-                      label="GÉNIE CIVIL ET URBANISME"
-                      value="GÉNIE CIVIL ET URBANISME"
-                    />
-                    <Picker.Item
-                      label="GÉNIE ÉNERGÉTIQUE ET ENVIRONNEMENT"
-                      value="GÉNIE ÉNERGÉTIQUE ET ENVIRONNEMENT"
-                    />
-                    <Picker.Item label="INFORMATIQUE" value="INFORMATIQUE" />
-                    <Picker.Item
-                      label="GÉNIE MÉCANIQUE"
-                      value="GÉNIE MÉCANIQUE"
-                    />
-                    <Picker.Item
-                      label="SCIENCE ET GÉNIE DES MATÉRIAUX"
-                      value="SCIENCE ET GÉNIE DES MATÉRIAUX"
-                    />
-                    <Picker.Item
-                      label="TÉLÉCOMMUNICATIONS, SERVICES, USAGES"
-                      value="TÉLÉCOMMUNICATIONS, SERVICES, USAGES"
-                    />
-                  </Picker>
-                </View>
-
-                <View>
-                  <Picker
-                    mode="dropdown"
-                    accessibilityLabel={'Choisissez votre Groupe'}
-                    iosHeader={'Choisissez votre Groupe'}
-                    iosIcon={<Icon name="chevron-down" type="FontAwesome5" />}
-                    style={{marginTop: 0}}
-                    selectedValue={this.state.groupeUser}
-                    onValueChange={this.onChangeGroupeUser.bind(this)}
-                    placeholder={'Choisissez votre Groupe'}
-                    placeholderStyle={{
-                      color: ApiUtils.getColor(),
-                    }}
-                    placeholderIconColor={ApiUtils.getColor()}
-                    textStyle={{color: ApiUtils.getColor()}}
-                    itemStyle={{
-                      color: ApiUtils.getColor(),
-                      marginLeft: 0,
-                      paddingLeft: 10,
-                      borderBottomColor: ApiUtils.getColor(),
-                      borderBottomWidth: 1,
-                    }}
-                    itemTextStyle={{
-                      color: ApiUtils.getColor(),
-                      borderBottomColor: ApiUtils.getColor(),
-                      borderBottomWidth: 1,
-                    }}>
-                    <Picker.Item label="Choisissez votre Groupe" value="-1" />
-                    <Picker.Item label="Pas concerné" value="0" />
-
-                    {this.state.groups.map((g) => {
-                      return (
-                        <Picker.Item
-                          label={g.toString()}
-                          value={g.toString()}
-                        />
-                      );
-                    })}
-                    {/* <Picker.Item label="1" value="1" />
-                    <Picker.Item label="2" value="2" />
-                    <Picker.Item label="3" value="3" />
-                    <Picker.Item label="4" value="4" />
-                    <Picker.Item label="5" value="5" />
-                    <Picker.Item label="6" value="6" />
-                    <Picker.Item label="7" value="7" />
-                    <Picker.Item label="8" value="8" />
-                    <Picker.Item label="10" value="10" />
-                    <Picker.Item label="11" value="11" />
-                    <Picker.Item label="12" value="12" />
-                    <Picker.Item label="13" value="13" />
-                    <Picker.Item label="14" value="14" />
-                    <Picker.Item label="15" value="15" />
-                    <Picker.Item label="16" value="16" />
-                    <Picker.Item label="17" value="17" />
-                    <Picker.Item label="18" value="18" />
-                    <Picker.Item label="16" value="16" />
-                    <Picker.Item label="17" value="17" />
-                    <Picker.Item label="18" value="18" />
-                    <Picker.Item label="19" value="19" />
-                    <Picker.Item label="20" value="20" />
-                    <Picker.Item label="21" value="21" />
-                    <Picker.Item label="22" value="22" />
-                    <Picker.Item label="23" value="23" />
-                    <Picker.Item label="24" value="24" /> */}
-                  </Picker>
-                </View>
-
-                <View>
-                  <Picker
-                    mode="dropdown"
-                    accessibilityLabel={'Choisissez votre Créneau Sport'}
-                    iosHeader={'Choisissez votre Créneau Sport'}
-                    iosIcon={<Icon name="chevron-down" type="FontAwesome5" />}
-                    style={{marginTop: 0}}
-                    selectedValue={this.state.sportUser}
-                    onValueChange={this.onChangeSportUser.bind(this)}
-                    placeholder={'Choisissez votre Créneau Sport'}
-                    placeholderStyle={{
-                      color: ApiUtils.getColor(),
-                    }}
-                    placeholderIconColor={ApiUtils.getColor()}
-                    textStyle={{color: ApiUtils.getColor()}}
-                    itemStyle={{
-                      color: ApiUtils.getColor(),
-                      marginLeft: 0,
-                      paddingLeft: 10,
-                      borderBottomColor: ApiUtils.getColor(),
-                      borderBottomWidth: 1,
-                    }}
-                    itemTextStyle={{
-                      color: ApiUtils.getColor(),
-                      borderBottomColor: ApiUtils.getColor(),
-                      borderBottomWidth: 1,
-                    }}>
-                    <Picker.Item
-                      label="Choisissez votre Créneau Sport"
-                      value="-1"
-                    />
-                    <Picker.Item label="Pas concerné" value="0" />
-                    <Picker.Item label="L8" value="L8" />
-                    <Picker.Item label="L10" value="L10" />
-                    <Picker.Item label="L14" value="L14" />
-                    <Picker.Item label="L16" value="L16" />
-                    <Picker.Item label="M8" value="M8" />
-                    <Picker.Item label="M10" value="M10" />
-                    <Picker.Item label="M14" value="M14" />
-                    <Picker.Item label="M16" value="M16" />
-                    <Picker.Item label="Me8" value="Me8" />
-                    <Picker.Item label="Me10" value="Me10" />
-                    <Picker.Item label="Me14" value="Me14" />
-                    <Picker.Item label="Me16" value="Me16" />
-                    <Picker.Item label="J8" value="J8" />
-                    <Picker.Item label="V8" value="V8" />
-                    <Picker.Item label="V10" value="V10" />
-                    <Picker.Item label="V14" value="V14" />
-                    <Picker.Item label="V16" value="V16" />
-                  </Picker>
-                </View>
-
-                <View>
-                  <Picker
-                    mode="dropdown"
-                    accessibilityLabel={'Choisissez votre AS'}
-                    iosHeader={'Choisissez votre AS'}
-                    iosIcon={<Icon name="chevron-down" type="FontAwesome5" />}
-                    style={{marginTop: 0}}
-                    selectedValue={this.state.asUser}
-                    onValueChange={this.onChangeAsUser.bind(this)}
-                    placeholder={'Choisissez votre AS'}
-                    placeholderStyle={{
-                      color: ApiUtils.getColor(),
-                    }}
-                    placeholderIconColor={ApiUtils.getColor()}
-                    textStyle={{color: ApiUtils.getColor()}}
-                    itemStyle={{
-                      color: ApiUtils.getColor(),
-                      marginLeft: 0,
-                      paddingLeft: 10,
-                      borderBottomColor: ApiUtils.getColor(),
-                      borderBottomWidth: 1,
-                    }}
-                    itemTextStyle={{
-                      color: ApiUtils.getColor(),
-                      borderBottomColor: ApiUtils.getColor(),
-                      borderBottomWidth: 1,
-                    }}>
-                    <Picker.Item label="Choisissez votre AS" value="-1" />
-                    <Picker.Item label="Pas concerné" value="0" />
-                    <Picker.Item label="Athlétisme" value="Athlétisme" />
-                    <Picker.Item label="Aviron" value="Aviron" />
-                    <Picker.Item label="Badminton" value="Badminton" />
-                    <Picker.Item label="Basket" value="Basket" />
-                    <Picker.Item
-                      label="Boxe Francaise"
-                      value="Boxe Francaise"
-                    />
-                    <Picker.Item label="Danse" value="Danse" />
-                    <Picker.Item label="Equitation" value="Equitation" />
-                    <Picker.Item label="Escalade" value="Escalade" />
-                    <Picker.Item label="Foot" value="Foot" />
-                    <Picker.Item label="Gymnastique" value="Gymnastique" />
-                    <Picker.Item label="Hand-Ball" value="Hand-Ball" />
-                    <Picker.Item label="Judo" value="Judo" />
-                    <Picker.Item label="Natation" value="Natation" />
-                    <Picker.Item label="Rugby" value="Rugby" />
-                    <Picker.Item label="Squash" value="Squash" />
-                    <Picker.Item label="Tennis" value="Tennis" />
-                    <Picker.Item
-                      label="Tennis de Table"
-                      value="Tennis de Table"
-                    />
-                    <Picker.Item label="Tir à l'arc" value="Tir à l'arc" />
-                    <Picker.Item label="Volley-Ball" value="Volley-Ball" />
-                    <Picker.Item label="Water-Polo" value="Water-Polo" />
-                  </Picker>
-                </View>
-
-                <View>
-                  <Picker
-                    mode="dropdown"
-                    accessibilityLabel={'Choisissez votre Enseignant'}
-                    iosHeader={'Choisissez votre Enseignant'}
-                    iosIcon={<Icon name="chevron-down" type="FontAwesome5" />}
-                    style={{marginTop: 0}}
-                    selectedValue={this.state.enseignantUser}
-                    onValueChange={this.onChangeEnseignantUser.bind(this)}
-                    placeholder={'Choisissez votre Enseignant'}
-                    placeholderStyle={{
-                      color: ApiUtils.getColor(),
-                    }}
-                    placeholderIconColor={ApiUtils.getColor()}
-                    textStyle={{color: ApiUtils.getColor()}}
-                    itemStyle={{
-                      color: ApiUtils.getColor(),
-                      marginLeft: 0,
-                      paddingLeft: 10,
-                      borderBottomColor: ApiUtils.getColor(),
-                      borderBottomWidth: 1,
-                    }}
-                    itemTextStyle={{
-                      color: ApiUtils.getColor(),
-                      borderBottomColor: ApiUtils.getColor(),
-                      borderBottomWidth: 1,
-                    }}>
-                    <Picker.Item
-                      label="Choisissez votre Enseignant"
-                      value="-1"
-                    />
-                    <Picker.Item label="Pas concerné" value="0" />
-                    <Picker.Item label="Agneray" value="Agneray" />
-                    <Picker.Item label="Barraud" value="Barraud" />
-                    <Picker.Item label="Bessac" value="Bessac" />
-                    <Picker.Item label="Bizzoto" value="Bizzoto" />
-                    <Picker.Item label="Cornuau" value="Cornuau" />
-                    <Picker.Item label="Chazallet" value="Chazallet" />
-                    <Picker.Item label="Comte" value="Comte" />
-                    <Picker.Item label="Dumont" value="Dumont" />
-                    <Picker.Item label="Delay" value="Delay" />
-                    <Picker.Item label="Fleuret" value="Fleuret" />
-                    <Picker.Item label="Fronton" value="Fronton" />
-                    <Picker.Item label="Jars" value="Jars" />
-                    <Picker.Item label="Jaussaud" value="Jaussaud" />
-                    <Picker.Item label="Jellef" value="Jellef" />
-                    <Picker.Item label="Jal" value="Jal" />
-                    <Picker.Item label="Maillet" value="Maillet" />
-                    <Picker.Item label="Pelegrin" value="Pelegrin" />
-                    <Picker.Item label="Mignard" value="Mignard" />
-                    <Picker.Item label="Perrier" value="Perrier" />
-                    <Picker.Item label="Regis" value="Regis" />
-                    <Picker.Item label="Savel" value="Savel" />
-                    <Picker.Item label="Thomas" value="Thomas" />
-                    <Picker.Item label="Roig-Pons" value="Roig-Pons" />
-                    <Picker.Item label="Villeminot" value="Villeminot" />
-                  </Picker>
-
-                  {this.state.errorPickers ? (
-                    <Text
+                    <View
                       style={{
-                        width: '100%',
-                        textAlign: 'center',
-                        fontSize: 18,
-                        color: 'red',
+                        display: 'flex',
+                        flexDirection: 'row',
+                        width: '80%',
+                        justifyContent: 'space-between',
+                        alignSelf: 'center',
                       }}>
-                      Vous n'avez pas rempli tous les champs !
+                      <TouchableOpacity
+                        style={{
+                          display: 'flex',
+                          flexDirection: 'row',
+                          width: '30%',
+                          justifyContent: 'space-around',
+                        }}
+                        onPress={() => this.setState({sexeUtilisateur: 'F'})}>
+                        <Text>Femme</Text>
+                        <Radio
+                          selected={this.state.sexeUtilisateur == 'F'}
+                          onPress={() => this.setState({sexeUtilisateur: 'F'})}
+                        />
+                      </TouchableOpacity>
+                      <TouchableOpacity
+                        style={{
+                          display: 'flex',
+                          flexDirection: 'row',
+                          width: '30%',
+                          justifyContent: 'space-around',
+                        }}
+                        onPress={() => this.setState({sexeUtilisateur: 'H'})}>
+                        <Text>Homme</Text>
+                        <Radio
+                          selected={this.state.sexeUtilisateur == 'H'}
+                          onPress={() => this.setState({sexeUtilisateur: 'H'})}
+                        />
+                      </TouchableOpacity>
+
+                      <TouchableOpacity
+                        style={{
+                          display: 'flex',
+                          flexDirection: 'row',
+                          width: '30%',
+                          justifyContent: 'space-around',
+                        }}
+                        onPress={() => this.setState({sexeUtilisateur: 'A'})}>
+                        <Text>Autre</Text>
+                        <Radio
+                          selected={this.state.sexeUtilisateur == 'A'}
+                          onPress={() => this.setState({sexeUtilisateur: 'A'})}
+                        />
+                      </TouchableOpacity>
+                    </View>
+                  </View>
+                ) : null}
+
+                {this.state.isDdnAsk ? (
+                  <Item stackedLabel style={{marginBottom: 5}}>
+                    <Label>Date de naissance</Label>
+                    <Label style={{fontSize: 12}}>
+                      Important pour les classements par catégorie
+                    </Label>
+                    <View style={[GlobalStyles.row]}>
+                      <Picker
+                        style={{width: Dimensions.get('screen').width / 3 - 10}}
+                        mode="dropdown"
+                        accessibilityLabel={'Jour'}
+                        iosHeader={'Jour'}
+                        iosIcon={
+                          <Icon name="chevron-down" type="FontAwesome5" />
+                        }
+                        selectedValue={this.state.dayDdn}
+                        onValueChange={(value) => this.onValueDayddn(value)}
+                        placeholder={'Jour'}
+                        placeholderStyle={{
+                          color: ApiUtils.getBackgroundColor(),
+                        }}
+                        placeholderIconColor={ApiUtils.getBackgroundColor()}
+                        textStyle={{color: ApiUtils.getBackgroundColor()}}
+                        itemStyle={{
+                          color: ApiUtils.getBackgroundColor(),
+                          marginLeft: 0,
+                          paddingLeft: 10,
+                          borderBottomColor: ApiUtils.getBackgroundColor(),
+                          borderBottomWidth: 1,
+                        }}
+                        itemTextStyle={{
+                          color: ApiUtils.getBackgroundColor(),
+                          borderBottomColor: ApiUtils.getBackgroundColor(),
+                          borderBottomWidth: 1,
+                        }}>
+                        {this.state.days.map((d) => {
+                          return <Picker.Item label={d} value={d} />;
+                        })}
+                      </Picker>
+                      <Picker
+                        style={{width: Dimensions.get('screen').width / 3 - 10}}
+                        mode="dropdown"
+                        accessibilityLabel={'Mois'}
+                        iosHeader={'Mois'}
+                        iosIcon={
+                          <Icon name="chevron-down" type="FontAwesome5" />
+                        }
+                        selectedValue={this.state.monthDdn}
+                        onValueChange={(value) => this.onValueMonthddn(value)}
+                        placeholder={'Mois'}
+                        placeholderStyle={{
+                          color: ApiUtils.getBackgroundColor(),
+                        }}
+                        placeholderIconColor={ApiUtils.getBackgroundColor()}
+                        textStyle={{color: ApiUtils.getBackgroundColor()}}
+                        itemStyle={{
+                          color: ApiUtils.getBackgroundColor(),
+                          marginLeft: 0,
+                          paddingLeft: 10,
+                          borderBottomColor: ApiUtils.getBackgroundColor(),
+                          borderBottomWidth: 1,
+                        }}
+                        itemTextStyle={{
+                          color: ApiUtils.getBackgroundColor(),
+                          borderBottomColor: ApiUtils.getBackgroundColor(),
+                          borderBottomWidth: 1,
+                        }}>
+                        {this.state.monthsString.map((month) => {
+                          return <Picker.Item label={month} value={month} />;
+                        })}
+                      </Picker>
+
+                      <Picker
+                        style={{width: Dimensions.get('screen').width / 3 - 10}}
+                        mode="dropdown"
+                        accessibilityLabel={''}
+                        iosHeader={'Année'}
+                        iosIcon={
+                          <Icon name="chevron-down" type="FontAwesome5" />
+                        }
+                        selectedValue={this.state.yearDdn}
+                        onValueChange={(value) => this.onValueYearddn(value)}
+                        placeholder={'Année'}
+                        placeholderStyle={{
+                          color: ApiUtils.getBackgroundColor(),
+                        }}
+                        placeholderIconColor={ApiUtils.getBackgroundColor()}
+                        textStyle={{color: ApiUtils.getBackgroundColor()}}
+                        itemStyle={{
+                          color: ApiUtils.getBackgroundColor(),
+                          marginLeft: 0,
+                          paddingLeft: 10,
+                          borderBottomColor: ApiUtils.getBackgroundColor(),
+                          borderBottomWidth: 1,
+                        }}
+                        itemTextStyle={{
+                          color: ApiUtils.getBackgroundColor(),
+                          borderBottomColor: ApiUtils.getBackgroundColor(),
+                          borderBottomWidth: 1,
+                        }}>
+                        {this.state.years.map((year) => {
+                          return <Picker.Item label={year} value={year} />;
+                        })}
+                      </Picker>
+                    </View>
+                  </Item>
+                ) : null}
+
+                {this.state.isTelAsk ? (
+                  <Item stackedLabel style={{marginBottom: 5}}>
+                    <Label>Numéro de télephone * </Label>
+                    <Input
+                      returnKeyType="next"
+                      ref="telUtilisateur"
+                      keyboardType="phone-pad"
+                      autoCompleteType="tel"
+                      clearButtonMode="always"
+                      value={this.state.telUtilisateur}
+                      onChangeText={(phoneNumber) =>
+                        this.setState({
+                          telUtilisateur: phoneNumber,
+                        })
+                      }
+                    />
+                  </Item>
+                ) : null}
+
+                {this.state.isTelVerifAsk ? (
+                  <View
+                    style={{
+                      marginTop: 20,
+                      paddingLeft: 10,
+                      width: '80%',
+                      display: 'flex',
+                      flexDirection: 'row',
+                      justifyContent: 'space-between',
+                    }}>
+                    <Switch
+                      style={{paddingTop: 20}}
+                      onValueChange={(text) =>
+                        this.setState({acceptChallengeTelUtilisateur: text})
+                      }
+                      value={this.state.acceptChallengeTelUtilisateur == 1}
+                    />
+                    <Text style={{marginLeft: 10}}>
+                      J’accepte l’utilisation de mon numéro de téléphone pour le
+                      tirage au sort des lots
                     </Text>
-                  ) : null}
-                </View>
+                  </View>
+                ) : null}
+
+                {this.state.isAdressAsk ? (
+                  <Item stackedLabel style={{marginBottom: 5}}>
+                    <Label>Adresse</Label>
+                    <Input
+                      returnKeyType="next"
+                      clearButtonMode="always"
+                      textContentType="fullStreetAddress"
+                      value={this.state.adresseUtilisateur}
+                      onChangeText={(value) =>
+                        this.setState({adresseUtilisateur: value})
+                      }
+                    />
+                  </Item>
+                ) : null}
+
+                {this.state.isPostalAsk ? (
+                  <Item stackedLabel style={{marginBottom: 5}}>
+                    <Label>Code Postal</Label>
+                    <Input
+                      returnKeyType="next"
+                      clearButtonMode="always"
+                      textContentType="postalCode"
+                      value={this.state.cpUtilisateur}
+                      onChangeText={(value) =>
+                        this.setState({cpUtilisateur: value})
+                      }
+                    />
+                  </Item>
+                ) : null}
+
+                {this.state.isCityAsk ? (
+                  <Item stackedLabel style={{marginBottom: 5}}>
+                    <Label>Ville</Label>
+                    <Input
+                      autoCapitalize="characters"
+                      returnKeyType="next"
+                      textContentType="addressCity"
+                      clearButtonMode="always"
+                      value={this.state.villeUtilisateur}
+                      onChangeText={(value) =>
+                        this.setState({villeUtilisateur: value})
+                      }
+                    />
+                  </Item>
+                ) : null}
+
+                {this.state.isCountyAsk ? (
+                  <Item stackedLabel style={{marginBottom: 5}}>
+                    <Label>Ville</Label>
+                    <Input
+                      autoCapitalize="characters"
+                      returnKeyType="next"
+                      textContentType="countryName"
+                      clearButtonMode="always"
+                      value={this.state.paysUtilisateur}
+                      onChangeText={(value) =>
+                        this.setState({paysUtilisateur: value})
+                      }
+                    />
+                  </Item>
+                ) : null}
+
+                {this.state.isChallengeEntrepriseAsk ? (
+                  <Item stackedLabel style={{marginBottom: 5}}>
+                    <Label>Challenge Entreprise</Label>
+                    <Input
+                      autoCapitalize="characters"
+                      returnKeyType="next"
+                      textContentType="none"
+                      clearButtonMode="always"
+                      value={this.state.clubEntreprise}
+                      onChangeText={(value) =>
+                        this.setState({clubEntreprise: value})
+                      }
+                    />
+                  </Item>
+                ) : null}
+
+                {this.state.isChallengeClubAsk ? (
+                  <Item stackedLabel style={{marginBottom: 5}}>
+                    <Label>Challenge Club</Label>
+                    <Input
+                      autoCapitalize="characters"
+                      returnKeyType="next"
+                      textContentType="none"
+                      clearButtonMode="always"
+                      value={this.state.clubClub}
+                      onChangeText={(value) => this.setState({clubClub: value})}
+                    />
+                  </Item>
+                ) : null}
+
+                {this.state.isChallengeFamilleAsk ? (
+                  <Item stackedLabel style={{marginBottom: 5}}>
+                    <Label>Challenge Famille</Label>
+                    <Input
+                      autoCapitalize="characters"
+                      returnKeyType="next"
+                      textContentType="none"
+                      clearButtonMode="always"
+                      value={this.state.clubFamille}
+                      onChangeText={(value) =>
+                        this.setState({clubFamille: value})
+                      }
+                    />
+                  </Item>
+                ) : null}
+
+                {this.state.isChallengeAutreAsk ? (
+                  <Item stackedLabel style={{marginBottom: 5}}>
+                    <Label>TemplateChallengeAutreName</Label>
+                    <Input
+                      autoCapitalize="characters"
+                      returnKeyType="next"
+                      textContentType="none"
+                      clearButtonMode="always"
+                      value={this.state.clubAutre}
+                      onChangeText={(value) =>
+                        this.setState({clubAutre: value})
+                      }
+                    />
+                  </Item>
+                ) : null}
 
                 <View
                   style={{

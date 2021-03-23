@@ -28,7 +28,6 @@ import ApiUtils from '../ApiUtils';
 import {connect} from 'react-redux';
 import Logo from '../assets/logo_header.png';
 import {Sponsors} from './Sponsors';
-import Autrans from '../assets/autrans.svg';
 import ErrorMessage from './ErrorMessage';
 import {TextInput} from 'react-native-gesture-handler';
 import DocumentPicker from 'react-native-document-picker';
@@ -572,7 +571,7 @@ const styles = StyleSheet.create({
   },
   drawerButton: {
     backgroundColor: 'transparent',
-    width : '100%',
+    width: '100%',
     marginTop: 0,
     paddingTop: 10,
     shadowOffset: {height: 0, width: 0},

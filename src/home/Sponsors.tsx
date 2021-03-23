@@ -1,58 +1,16 @@
 import React, {Component} from 'react';
-import {
-  StyleSheet,
-  Image,
-  TouchableOpacity,
-  View,
-  Linking,
-  Platform,
-  Text,
-  Dimensions,
-} from 'react-native';
-import {
-  Container,
-  Header,
-  Body,
-  Toast,
-  Root,
-  Drawer,
-  Icon,
-  Content,
-  Left,
-  Right,
-} from 'native-base';
-import md5 from 'md5';
-import ApiUtils from '../ApiUtils';
-import {connect} from 'react-redux';
-import Sidebar from './SideBar';
-import moment from 'moment';
-import Logo from '../assets/logo_header.png';
-import GlobalStyles from '../styles';
+import {Image, View} from 'react-native';
 
-import Cnr from '../assets/CNR.png';
-import Fondation from '../assets/Logo-FONDATION.png';
-import mycross from '../assets/mycross.png';
+import partOne from '../assets/partenaire_one.png';
+import partTwo from '../assets/partenaire_two.png';
+import partThree from '../assets/partenaire_three.png';
+import partFour from '../assets/partenaire_four.png';
 
 export class Sponsors extends Component {
   constructor(props) {
     super(props);
 
-    this.state = {
-      userdata: {
-        nomUtilisateur: '',
-        prenomUtilisateur: '',
-        telUtilisateur: '',
-        folocodeUtilisateur: '',
-        idUtilisateur: '',
-      },
-      newPassword: '',
-      newPasswordConfirmation: '',
-      isErrorName: false,
-      lives: [],
-      isLoading: false,
-      toasterMessage: '',
-      showDefaultDdn: false,
-    };
+    this.state = {};
   }
 
   componentDidMount() {}
@@ -70,25 +28,33 @@ export class Sponsors extends Component {
             paddingHorizontal: 10,
             marginBottom: 20,
           }}>
-          <View style={{width: '30%', height: 50}}>
+          <View style={{width: '25%', height: 50}}>
             <Image
-              source={Cnr}
+              source={partOne}
               resizeMethod="resize"
               resizeMode="contain"
               style={{height: '100%', width: '100%'}}
             />
           </View>
-          <View style={{width: '30%', height: 50}}>
+          <View style={{width: '25%', height: 50}}>
             <Image
-              source={mycross}
+              source={partTwo}
               resizeMethod="resize"
               resizeMode="contain"
               style={{height: '100%', width: '100%'}}
             />
           </View>
-          <View style={{width: '30%', height: 50}}>
+          <View style={{width: '25%', height: 50}}>
             <Image
-              source={Fondation}
+              source={partThree}
+              resizeMethod="resize"
+              resizeMode="contain"
+              style={{height: '100%', width: '100%'}}
+            />
+          </View>
+          <View style={{width: '25%', height: 50}}>
+            <Image
+              source={partFour}
               resizeMethod="resize"
               resizeMode="contain"
               style={{height: '100%', width: '100%'}}
@@ -99,5 +65,3 @@ export class Sponsors extends Component {
     );
   }
 }
-
-const styles = StyleSheet.create({});
