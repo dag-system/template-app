@@ -166,81 +166,27 @@ class CreateAccount extends ValidationComponent {
   }
 
   onChangeAnneeUser(value) {
-    if (value == '0') {
-      this.setState({anneeUser: '0'});
-      this.setState({departementUser: '0'});
-      this.setState({groupeUser: '0'});
-      this.setState({sportUser: '0'});
-      this.setState({asUser: '0'});
-      this.setState({enseignantUser: '0'});
-    } else {
-      this.setState({anneeUser: value});
-    }
+    this.setState({anneeUser: value});
   }
 
   onChangeDepartementUser(value) {
-    if (value == '0' || value == 'CNR') {
-      this.setState({anneeUser: '0'});
-      this.setState({departementUser: '0'});
-      this.setState({groupeUser: '0'});
-      this.setState({sportUser: '0'});
-      this.setState({asUser: '0'});
-      this.setState({enseignantUser: '0'});
-    } else {
-      this.setState({departementUser: value});
-    }
+    this.setState({departementUser: value});
   }
 
   onChangeGroupeUser(value) {
-    if (value == '0') {
-      this.setState({anneeUser: '0'});
-      this.setState({departementUser: '0'});
-      this.setState({groupeUser: '0'});
-      this.setState({sportUser: '0'});
-      this.setState({asUser: '0'});
-      this.setState({enseignantUser: '0'});
-    } else {
-      this.setState({groupeUser: value});
-    }
+    this.setState({groupeUser: value});
   }
 
   onChangeSportUser(value) {
-    if (value == '0') {
-      this.setState({anneeUser: '0'});
-      this.setState({departementUser: '0'});
-      this.setState({groupeUser: '0'});
-      this.setState({sportUser: '0'});
-      this.setState({asUser: '0'});
-      this.setState({enseignantUser: '0'});
-    } else {
-      this.setState({sportUser: value});
-    }
+    this.setState({sportUser: value});
   }
 
   onChangeAsUser(value) {
-    if (value == '0') {
-      this.setState({anneeUser: '0'});
-      this.setState({departementUser: '0'});
-      this.setState({groupeUser: '0'});
-      this.setState({sportUser: '0'});
-      this.setState({asUser: '0'});
-      this.setState({enseignantUser: '0'});
-    } else {
-      this.setState({asUser: value});
-    }
+    this.setState({asUser: value});
   }
 
   onChangeEnseignantUser(value) {
-    if (value == '0') {
-      this.setState({anneeUser: '0'});
-      this.setState({departementUser: '0'});
-      this.setState({groupeUser: '0'});
-      this.setState({sportUser: '0'});
-      this.setState({asUser: '0'});
-      this.setState({enseignantUser: '0'});
-    } else {
-      this.setState({enseignantUser: value});
-    }
+    this.setState({enseignantUser: value});
   }
 
   onClickValidate() {
@@ -731,7 +677,12 @@ class CreateAccount extends ValidationComponent {
                     <Picker.Item label="Pas concerné" value="0" />
 
                     {this.state.groups.map((g) => {
-                     return <Picker.Item label={g.toString()} value={g.toString()} />
+                      return (
+                        <Picker.Item
+                          label={g.toString()}
+                          value={g.toString()}
+                        />
+                      );
                     })}
                     {/* <Picker.Item label="1" value="1" />
                     <Picker.Item label="2" value="2" />
