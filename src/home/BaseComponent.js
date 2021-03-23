@@ -19,7 +19,7 @@ import {
   Title, Spinner,
   Form, Item, Input, Label, H3
 } from 'native-base';
-import ApiUtils from '../ApiUtils';
+export default connect(mapStateToProps)(BatteryModal);
 
 
 export default class BaseComponent extends Component {

@@ -10,6 +10,9 @@ import {
   TouchableOpacity,
   ScrollView,
 } from 'react-native';
+import BackgroundGeolocation, {
+  DeviceSettingsRequest,
+} from 'react-native-background-geolocation';
 import {
   Container,
   Header,
@@ -276,11 +279,11 @@ class Lives extends Component<Props, State> {
 
   onSubscriptionsChanged = (interests) => {
     console.log('CALLBACK: onSubscriptionsChanged');
-    console.log(interests);
   };
 
   onRefresh() {
     this.init();
+    this.checkBatteryOptimisation();
     this.getPhoneData();
     this.getLives(this.props.userData.idUtilisateur);
     this.getNewVersion();
@@ -708,6 +711,67 @@ class Lives extends Component<Props, State> {
     });
   }
 
+  async checkBatteryOptimisation() {
+    // Is Android device ignoring battery optimizations?
+    let isIgnoring = await BackgroundGeolocation.deviceSettings.isIgnoringBatteryOptimizations();
+    if (!isIgnoring) {
+      BackgroundGeolocation.deviceSettings
+        .showIgnoreBatteryOptimizations()
+        .then((request: DeviceSettingsRequest) => {
+          console.log(`- Screen seen? ${request.seen} ${request.lastSeenAt}`);
+          console.log(
+            `- Device: ${request.manufacturer} ${request.model} ${request.version}`,
+          );
+
+          this.onPressGoBatterySettings(request)
+          // If we've already shown this screen to the user, we don't want to annoy them.
+          if (request.seen) {
+            console.log("seen")
+            return;
+          }
+
+
+          this.onPressGoBatterySettings(request)
+          // It's your responsibility to instruct the user what exactly
+          // to do here, perhaps with a Confirm Dialog:
+          // Alert.alert({
+          //   title: 'Settings request',
+          //   text: 'Please disable battery optimizations for your device',
+          // }).then((confirmed) => {
+          //   if (confirmed) {
+          //     // User clicked [Confirm] button.  Execute the redirect to settings screen:
+             
+          //   }
+          // });
+        })
+        .catch((error) => {
+          // Depending on Manufacturer/Model/OS Version, a Device may not implement
+          // a particular Settings screen.
+          console.warn(error);
+        });
+    }else{
+      console.log('not ignoring');
+    }
+  }
+
+  onPressGoBatterySettings = (request) => {
+    Alert.alert(
+      "Desactiver l'economiseur de batterie",
+      "Veuillez desactiver l'economiseur de batterie",
+      [
+        {
+          text: 'Annuler',
+          style: 'cancel',
+        },
+        {
+          text: 'Desactiver',
+          onPress: () =>   BackgroundGeolocation.deviceSettings.show(request),
+        },
+      ],
+      {cancelable: false},
+    );
+  };
+
   openStorePage() {
     let url =
       Platform.OS === 'android'
@@ -772,7 +836,6 @@ class Lives extends Component<Props, State> {
                 longitude: parseFloat(interest.longitudeInteret),
               };
 
-              console.log(interest);
               var finalInterest = {
                 id: 'interest' + count,
                 idInteret: interest.idInteret,
