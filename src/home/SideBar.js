@@ -1,45 +1,22 @@
 import React, {Component} from 'react';
 import {
-  Platform,
   StyleSheet,
-  Alert,
   Linking,
   View,
-  TextInput,
   Image,
-  ScrollView,
   TouchableHighlight,
 } from 'react-native';
-import {
-  Container,
-  Header,
-  Content,
-  Footer,
-  Left,
-  Body,
-  Right,
-  Card,
-  CardItem,
-  Text,
-  H1,
-  Button,
-  Icon,
-  Title,
-  Form,
-  Item,
-  Input,
-  Label,
-  H3,
-} from 'native-base';
+import {Container, Body, Text, Icon} from 'native-base';
 import ApiUtils from '../ApiUtils';
-import {colors} from 'react-native-elements';
 
 export default class Sidebar extends Component {
   constructor(props) {
     super(props);
 
     let navigation = props.navigation;
-    this.state = {};
+    this.state = {
+      hasAppDonnation: TemplateHasAppDonation,
+    };
   }
 
   componentDidMount() {}
@@ -297,17 +274,21 @@ export default class Sidebar extends Component {
                 justifyContent: 'center',
                 padding: 0,
               }}> */}
-              {/* <Icon
+            {/* <Icon
                 name="power-off"
                 type="FontAwesome5"
                 style={[styles.icon, {color: 'black'}]}
               /> */}
-              <Text
-                style={[
-                  {color: 'black', textDecorationLine: 'underline', textAlign :'center'},
-                ]}>
-                Powered by DAG System
-              </Text>
+            <Text
+              style={[
+                {
+                  color: 'black',
+                  textDecorationLine: 'underline',
+                  textAlign: 'center',
+                },
+              ]}>
+              Powered by DAG System
+            </Text>
             {/* </View> */}
           </TouchableHighlight>
         </Body>

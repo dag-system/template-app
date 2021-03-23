@@ -21,18 +21,10 @@ import {
   Left,
   Right,
 } from 'native-base';
-import md5 from 'md5';
-import ApiUtils from '../ApiUtils';
 import {connect} from 'react-redux';
 import Sidebar from './SideBar';
-import moment from 'moment';
-import Logo from '../assets/logo_header.png';
-import GlobalStyles from '../styles';
 
-import Cnr from '../assets/CNR.png';
-import Fondation from '../assets/Logo-FONDATION.png';
-import Dag from '../assets/dag.png';
-import mycross from '../assets/mycross.png';
+const partenairesImages = TemplateArrayImagesPartenairesPath;
 
 const mapStateToProps = (state) => {
   return {
@@ -112,119 +104,42 @@ class Partenaires extends Component {
             <Content style={{padding: 10, paddingTop: 20}} scrollEnabled={true}>
               <Text style={{fontWeight: 'bold'}}>Nos partenaires</Text>
 
-              <View
-                style={{
-                  width: '100%',
-                  height: 100,
-                  flex: 1,
-                  marginTop: 40,
-                  marginBottom: 40,
-                }}>
-                <Image
-                  source={mycross}
-                  resizeMethod="resize"
-                  resizeMode="contain"
-                  style={{
-                    height: '100%',
-                    width: '30%',
-                    alignSelf: 'center',
-                    marginHorizontal: 'auto',
-                  }}
-                />
-              </View>
+              {partenairesImages.map((image) => {
+                return (
+                  <View>
+                    <View
+                      style={{
+                        width: '100%',
+                        height: 100,
+                        flex: 1,
+                        marginTop: 40,
+                        marginBottom: 40,
+                      }}>
+                      <Image
+                        source={image}
+                        resizeMethod="resize"
+                        resizeMode="contain"
+                        style={{
+                          height: '100%',
+                          width: '30%',
+                          alignSelf: 'center',
+                          marginHorizontal: 'auto',
+                        }}
+                      />
+                    </View>
 
-              <View
-                style={{
-                  borderBottomWidth: 1,
-                  borderBottomColor: '#DDDDDD',
-                  width: Dimensions.get('screen').width,
-                  marginTop: 0,
-                }}>
-                <Text />
-              </View>
-
-              <View
-                style={{
-                  width: '100%',
-                  height: 100,
-                  flex: 1,
-                  marginTop: 40,
-                  marginBottom: 40,
-                }}>
-                <Image
-                  source={Cnr}
-                  resizeMethod="resize"
-                  resizeMode="contain"
-                  style={{
-                    height: '100%',
-                    width: '30%',
-                    alignSelf: 'center',
-                    marginHorizontal: 'auto',
-                  }}
-                />
-              </View>
-
-              <View
-                style={{
-                  borderBottomWidth: 1,
-                  borderBottomColor: '#DDDDDD',
-                  width: Dimensions.get('screen').width,
-                  marginTop: 0,
-                }}>
-                <Text />
-              </View>
-
-              <View
-                style={{
-                  width: '100%',
-                  height: 100,
-                  flex: 1,
-                  marginTop: 40,
-                  marginBottom: 40,
-                }}>
-                <Image
-                  source={Fondation}
-                  resizeMethod="resize"
-                  resizeMode="contain"
-                  style={{
-                    height: '100%',
-                    width: '30%',
-                    alignSelf: 'center',
-                    marginHorizontal: 'auto',
-                  }}
-                />
-              </View>
-
-              <View
-                style={{
-                  borderBottomWidth: 1,
-                  borderBottomColor: '#DDDDDD',
-                  width: Dimensions.get('screen').width,
-                  marginTop: 0,
-                }}>
-                <Text />
-              </View>
-
-              <View
-                style={{
-                  width: '100%',
-                  height: 100,
-                  flex: 1,
-                  marginTop: 40,
-                  marginBottom: 40,
-                }}>
-                <Image
-                  source={Dag}
-                  resizeMethod="resize"
-                  resizeMode="contain"
-                  style={{
-                    height: '100%',
-                    width: '30%',
-                    alignSelf: 'center',
-                    marginHorizontal: 'auto',
-                  }}
-                />
-              </View>
+                    <View
+                      style={{
+                        borderBottomWidth: 1,
+                        borderBottomColor: '#DDDDDD',
+                        width: Dimensions.get('screen').width,
+                        marginTop: 0,
+                      }}>
+                      <Text />
+                    </View>
+                  </View>
+                );
+              })}
 
               <View style={{marginBottom: 100}} />
             </Content>
@@ -255,7 +170,7 @@ const styles = StyleSheet.create({
   drawerButton: {
     backgroundColor: 'transparent',
     // width: 100,
-    width : '100%',
+    width: '100%',
     marginTop: 0,
     paddingTop: 0,
     shadowOffset: {height: 0, width: 0},

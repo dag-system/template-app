@@ -153,8 +153,14 @@ class LiveSummary extends Component<Props, State> {
 
         this.props.dispatch(action);
 
-        let libelleSport = 'CROSS';
-        if (responseJson.idSport == 17) libelleSport = 'CROSS';
+        let libelleSport = '';
+        const jsonSport = TemplateSportLive;
+
+        for (let i = 0; i < jsonSport.length; i++) {
+          if (jsonSport[i].idSport == responseJson.idSport) {
+            libelleSport = jsonSport[i].SportName;
+          }
+        }
 
         this.setState({libelleSport: libelleSport});
 
@@ -1587,7 +1593,7 @@ const styles = StyleSheet.create({
   },
   drawerButton: {
     backgroundColor: 'transparent',
-    width : '100%',
+    width: '100%',
     marginTop: 0,
     paddingTop: 10,
     shadowOffset: {height: 0, width: 0},

@@ -49,10 +49,15 @@ interface Props extends DefaultProps {
 }
 
 interface State {
-  selectedSport: number;
+  selectedSport: string;
   libelleLive: string;
   comments: string;
   isLoading: boolean;
+
+  listSport: {
+    idSport: number;
+    sportName: string;
+  }[];
 }
 
 class UploadGpx extends Component<Props, State> {
@@ -61,9 +66,10 @@ class UploadGpx extends Component<Props, State> {
 
     this.state = {
       libelleLive: 'Nouvelle activité importée',
-      selectedSport: '17',
+      selectedSport: '',
       isLoading: false,
       comments: '',
+      listSport: TemplateSportLive,
     };
   }
 
@@ -405,7 +411,15 @@ class UploadGpx extends Component<Props, State> {
                       borderBottomWidth: 1,
                     }}>
                     <Picker.Item label="Choisissez votre sport" value="-1" />
-                    <Picker.Item label={'CROSS'} value="17" />
+                    {this.state.listSport.map((sport, index) => {
+                      return (
+                        <Picker.Item
+                          label={sport.sportName}
+                          value={sport.idSport}
+                          key={index}
+                        />
+                      );
+                    })}
                   </Picker>
                   {this.state.selectedSport == -1 ? (
                     <Text

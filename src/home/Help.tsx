@@ -197,23 +197,6 @@ class Help extends Component {
                 Vous pouvez faire le parcours autant de fois que vous le
                 souhaitez pour améliorer votre classement et vos résultats.
               </Text>
-              <Text style={{marginTop: 10, fontWeight: 'bold'}}>
-                Pour les informations complètes, rendez-vous sur l’intranet du
-                centre des sports :
-              </Text>
-              <TouchableOpacity
-                onPress={() =>
-                  this.openLink('https://intranetcds.insa-lyon.fr')
-                }>
-                <Text
-                  style={{
-                    textAlign: 'center',
-                    marginTop: 10,
-                    textDecorationLine: 'underline',
-                  }}>
-                  https://intranetcds.insa-lyon.fr
-                </Text>
-              </TouchableOpacity>
               <Text
                 style={{
                   marginTop: 10,
@@ -256,7 +239,7 @@ class Help extends Component {
               <TouchableOpacity
                 onPress={() =>
                   this.openLink(
-                    'https://folomi.fr/classement/insalyon/classement.html',
+                    'https://folomi.fr/classement/TemplateAppName/classement.html',
                   )
                 }>
                 <Text
@@ -265,7 +248,7 @@ class Help extends Component {
                     marginTop: 10,
                     textDecorationLine: 'underline',
                   }}>
-                  https://folomi.fr/classement/insalyon/classement.html
+                  https://folomi.fr/classement/TemplateAppName/classement.html
                 </Text>
               </TouchableOpacity>
               <Text style={{marginTop: 10, fontWeight: 'bold'}}>
@@ -276,17 +259,6 @@ class Help extends Component {
                 gestion de la batterie de votre téléphone pour que l’app ne se
                 stoppe pas pendant l’effort
               </Text>
-              <TouchableOpacity
-                onPress={() => this.openLink('https://www.insa-lyon.fr/')}>
-                <Text
-                  style={{
-                    textAlign: 'center',
-                    marginTop: 10,
-                    textDecorationLine: 'underline',
-                  }}>
-                  Suivez nos instructions ici
-                </Text>
-              </TouchableOpacity>
               <Text style={{marginTop: 10}}>
                 Vous retrouverez ces informations dans le menu aide. Bonne
                 course.

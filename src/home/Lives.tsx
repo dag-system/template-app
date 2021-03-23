@@ -57,7 +57,7 @@ const mapStateToProps = (state) => {
     isOkPopupBAttery: state.isOkPopupBAttery,
     isOkPopupBAttery2: state.isOkPopupBAttery2,
     notifications: state.notifications,
-    phoneData : state.phoneData
+    phoneData: state.phoneData,
   };
 };
 
@@ -91,6 +91,11 @@ interface State {
   refresh: boolean;
   isVisibleNotifcationModal: boolean;
   idLiveNotif: number;
+
+  listSport: {
+    idSport: number;
+    sportName: string;
+  }[];
 }
 
 class Lives extends Component<Props, State> {
@@ -115,6 +120,7 @@ class Lives extends Component<Props, State> {
       refresh: false,
       isVisibleNotifcationModal: false,
       idLiveNotif: -1,
+      listSport: TemplateSportLive,
     };
 
     this._unsubscribe = this.props.navigation.addListener('focus', () => {
@@ -183,10 +189,9 @@ class Lives extends Component<Props, State> {
         idLive: idLive,
       };
 
-
       switch (notification.appState) {
         case 'inactive':
-          console.log('inactive')
+          console.log('inactive');
           // this.props.dispatch(action);
           // var actionSaveLive = {type: 'SAVE_CURRENT_LIVE', data: live};
 
@@ -200,21 +205,19 @@ class Lives extends Component<Props, State> {
           });
           this.props.dispatch(action);
 
-          
-
         // inactive: App came in foreground by clicking on notification.
         //           Use notification.userInfo for redirecting to specific view controller
         case 'background':
         // background: App is in background and notification is received.
         //             You can fetch required data here don't do anything with UI
         case 'active':
-          console.log('active')
-        // App is foreground and notification is received. Show a alert or something.
-        this.setState({
-          isVisibleNotifcationModal: true,
-          idLiveNotif: actionData.idLive,
-        });
-        this.props.dispatch(action);
+          console.log('active');
+          // App is foreground and notification is received. Show a alert or something.
+          this.setState({
+            isVisibleNotifcationModal: true,
+            idLiveNotif: actionData.idLive,
+          });
+          this.props.dispatch(action);
         default:
           break;
       }
@@ -286,10 +289,8 @@ class Lives extends Component<Props, State> {
     this.getNewVersion();
   }
 
-
   getPhoneData() {
     let brand = DeviceInfo.getBrand();
-
 
     let androidId = DeviceInfo.getAndroidIdSync();
     let systemVersion = DeviceInfo.getSystemVersion();
@@ -303,21 +304,20 @@ class Lives extends Component<Props, State> {
     let hardware = DeviceInfo.getHardwareSync();
     let apiLevel = DeviceInfo.getApiLevelSync();
 
-    let data ={
-      brand : brand,
-      androidId : androidId,
-      systemVersion : systemVersion,
-      deviceId : deviceId,
-      device : device,
-      model : model,
-      manufacturer : manufacturer,
-      hardware : hardware,
-      apiLevel : apiLevel
-    }
+    let data = {
+      brand: brand,
+      androidId: androidId,
+      systemVersion: systemVersion,
+      deviceId: deviceId,
+      device: device,
+      model: model,
+      manufacturer: manufacturer,
+      hardware: hardware,
+      apiLevel: apiLevel,
+    };
 
     var action = {type: 'UPDATE_PHONE_DATA', data: data};
     this.props.dispatch(action);
-
   }
   componentWillUnmount() {
     this._unsubscribe();
@@ -429,7 +429,7 @@ class Lives extends Component<Props, State> {
     formData.append('auth', ApiUtils.getAPIAuth());
     formData.append('idUtilisateur', this.props.userData.idUtilisateur);
     formData.append('idversion', ApiUtils.VersionNumberInt().toString());
-    formData.append('idSport', '17');
+    formData.append('idSport', this.state.selectedSport);
     formData.append('os', Platform.OS);
     formData.append('phoneData', JSON.stringify(this.props.phoneData));
     var libelleLive = this.getLibelleLive();
@@ -458,7 +458,7 @@ class Lives extends Component<Props, State> {
             codeLive: responseJson.codeLive,
             libelleLive: responseJson.libelleLive,
             dateCreationLive: responseJson.dateCreationLive,
-            idSport: '17',
+            idSport: this.state.selectedSport,
             invites: [],
             statsInfos: {},
             etatLive: 0,
@@ -711,7 +711,7 @@ class Lives extends Component<Props, State> {
   openStorePage() {
     let url =
       Platform.OS === 'android'
-        ? 'https://play.google.com/store/apps/details?id=com.dag.insalyon.app'
+        ? 'https://play.google.com/store/apps/details?id=com.dag.templateAppName.app'
         : 'https://apps.apple.com/fr/app/my-cross/id1557933183';
     Linking.openURL(url);
   }
@@ -762,7 +762,7 @@ class Lives extends Component<Props, State> {
               finalTraceArray.push(finalTrace);
             });
           }
-     
+
           if (result.interets != null && result.interets.length != 0) {
             var interestArray = Object.values(result.interets);
             var count = 0;
@@ -831,7 +831,12 @@ class Lives extends Component<Props, State> {
   }
 
   getSport(idSport) {
-    return 'CROSS';
+    const jsonSport = this.state.listSport;
+    for (let i = 0; i < jsonSport.length; i++) {
+      if (idSport == jsonSport[i].idSport) {
+        return jsonSport[i].SportName;
+      }
+    }
   }
 
   getnbInvites(live) {
@@ -1301,7 +1306,6 @@ class Lives extends Component<Props, State> {
 
             <Sponsors />
 
-
             <Modal
               visible={
                 !this.props.isOkPopupBAttery || this.state.isOpenModalHelp
@@ -1314,7 +1318,6 @@ class Lives extends Component<Props, State> {
                 </View>
               </Container>
             </Modal>
-
 
             <Modal
               visible={
@@ -1405,7 +1408,15 @@ class Lives extends Component<Props, State> {
                             label="Choisissez votre sport"
                             value="-1"
                           />
-                          <Picker.Item label={'CROSS'} value="17" />
+                          {this.state.listSport.map((sport, index) => {
+                            return (
+                              <Picker.Item
+                                label={sport.sportName}
+                                value={sport.idSport}
+                                key={index}
+                              />
+                            );
+                          })}
                         </Picker>
 
                         {this.state.selectedSport == -1 ? (
@@ -1505,7 +1516,7 @@ const styles = StyleSheet.create({
   },
   drawerButton: {
     backgroundColor: 'transparent',
-    width : '100%',
+    width: '100%',
     // width: '10%',
     // marginTop: 0,
     // paddingTop: 0,
