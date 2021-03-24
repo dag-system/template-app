@@ -61,6 +61,7 @@
     "react-native-toaster": "^1.2.2",
     "react-native-vector-icons": "^8.1.0",
     "react-native-version-check": "^3.4.2",
+    "react-native-video": "^5.1.1",
     "react-native-webview": "^11.2.3",
     "react-native-xml2js": "^1.0.3",
     "react-redux": "^7.2.1",

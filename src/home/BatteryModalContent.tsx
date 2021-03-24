@@ -8,7 +8,8 @@ import BackgroundGeolocation, {
   DeviceSettingsRequest,
 } from 'react-native-background-geolocation';
 import {Dimensions} from 'react-native';
-import { connect } from 'react-redux';
+import {connect} from 'react-redux';
+import * as Sentry from '@sentry/react-native';
 
 const mapStateToProps = (state) => {
   return {
@@ -47,12 +48,14 @@ class BatteryModalContent extends Component {
     // setTimeout(() => this.setState({ userdata: { ...this.state.userdata, ddnUtilisateur: this.state.userdata.ddnUtilisateur) }} ), 100)
   }
   didMount() {
-    this.showPowerManager();
+    this.checkPowerManager();
+    this.checkBatteryOptimisation();
   }
 
-  async checkBatteryOptimisation() {
+  async openBatteryOptimisation() {
     // Is Android device ignoring battery optimizations?
     let isIgnoring = await BackgroundGeolocation.deviceSettings.isIgnoringBatteryOptimizations();
+    this.setState({isStep2Validated: isIgnoring});
     if (!isIgnoring) {
       BackgroundGeolocation.deviceSettings
         .showIgnoreBatteryOptimizations()
@@ -68,18 +71,6 @@ class BatteryModalContent extends Component {
             console.log('seen');
             return;
           }
-
-          // It's your responsibility to instruct the user what exactly
-          // to do here, perhaps with a Confirm Dialog:
-          // Alert.alert({
-          //   title: 'Settings request',
-          //   text: 'Please disable battery optimizations for your device',
-          // }).then((confirmed) => {
-          //   if (confirmed) {
-          //     // User clicked [Confirm] button.  Execute the redirect to settings screen:
-
-          //   }
-          // });
         })
         .catch((error) => {
           // Depending on Manufacturer/Model/OS Version, a Device may not implement
@@ -91,25 +82,20 @@ class BatteryModalContent extends Component {
     }
   }
 
-  showPowerManager() {
+  async checkBatteryOptimisation() {
+    // Is Android device ignoring battery optimizations?
+    let isIgnoring = await BackgroundGeolocation.deviceSettings.isIgnoringBatteryOptimizations();
+    this.setState({isStep2Validated: isIgnoring});
+  }
+  checkPowerManager() {
     BackgroundGeolocation.deviceSettings
       .showPowerManager()
       .then((request: DeviceSettingsRequest) => {
-        console.log(`- Screen seen? ${request.seen} ${request.lastSeenAt}`);
-        console.log(
-          `- Device: ${request.manufacturer} ${request.model} ${request.version}`,
-        );
-
-        // If we've already shown this screen to the user, we don't want to annoy them.
-        // if (request.seen) {
-        //   return;
-        // }
         this.setState({hasDeviceSettingsAvailable: true});
-        // User clicked [Confirm] button.  Execute the redirect to settings screen:
       })
       .catch((error) => {
-        // Depending on Manufacturer/Model/OS Version, a Device may not implement
-        // a particular Settings screen.
+        Sentry.captureMessage(JSON.stringify(error));
+        this.setState({hasDeviceSettingsAvailable: false});
         console.log(error);
       });
   }
@@ -132,6 +118,7 @@ class BatteryModalContent extends Component {
         // User clicked [Confirm] button.  Execute the redirect to settings screen:
       })
       .catch((error) => {
+     
         // Depending on Manufacturer/Model/OS Version, a Device may not implement
         // a particular Settings screen.
         console.log(error);
@@ -238,7 +225,7 @@ class BatteryModalContent extends Component {
                   flexDirection: 'row',
                   justifyContent: 'space-between',
                 }}>
-                <H2>Etape 1</H2>
+                <H2 style={{marginTop : 5}}>Etape 1</H2>
                 <Icon
                   name={
                     this.state.isVisibleStep1 ? 'chevron-up' : 'chevron-down'
@@ -287,6 +274,7 @@ class BatteryModalContent extends Component {
                 <Text> 3. Cliquer sur "Lancement d'application"</Text>
                 <Text>4. Rechercher et désactiver l’appli « My Cross »</Text>
                 <Text>5. Cliquer sur OK en vérifiant que tout soit activé</Text>
+                <Text>6. Retourner dans les reglages batterie et désactiver l'économiseur de batterie</Text>
 
                 <Text style={{fontWeight: 'bold', marginTop: 10}}>
                   SAMSUNG (Galaxy S8 et inférieur : Galaxy A5, Galaxy S7, Galaxy
@@ -336,6 +324,7 @@ class BatteryModalContent extends Component {
                 <Text style={{fontWeight: 'bold', marginTop: 10}}>
                   HONOR (8, 9, 10, …)
                 </Text>
+
                 <Text>1. Aller dans “Réglages”</Text>
                 <Text>2. Cliquer sur “Batterie”</Text>
                 <Text>3. Cliquer sur “Lancement d'application”</Text>
@@ -344,6 +333,7 @@ class BatteryModalContent extends Component {
                 <Text>
                   5. Sélectionner les 3 champs qui vont s'afficher en popup
                 </Text>
+                <Text>6. Retourner dans les reglages batterie et désactiver l'économiseur de batterie</Text>
 
                 <Text style={{fontWeight: 'bold', marginTop: 10}}>
                   {' '}
@@ -426,26 +416,40 @@ class BatteryModalContent extends Component {
                   l'app puis cliquez sur "Ne pas optimiser"
                 </Text>
 
-                <TouchableOpacity
-                  onPress={() => this.checkBatteryOptimisation()}
-                  style={{
-                    // paddingBottom: 200,
-                    marginTop: 10,
-                    justifyContent: 'center',
-                    borderColor: ApiUtils.getColor(),
-                    backgroundColor: ApiUtils.getColor(),
-                    padding: 10,
-                    borderWidth: 1,
-                  }}>
-                  <Text
+                {!this.state.isStep2Validated ? (
+                  <TouchableOpacity
+                    onPress={() => this.openBatteryOptimisation()}
                     style={{
-                      textAlign: 'center',
-                      textTransform: 'uppercase',
-                      color: 'white',
+                      // paddingBottom: 200,
+                      marginTop: 10,
+                      justifyContent: 'center',
+                      borderColor: ApiUtils.getColor(),
+                      backgroundColor: ApiUtils.getColor(),
+                      padding: 10,
+                      borderWidth: 1,
                     }}>
-                    Désactiver l'optimisation de la batterie
+                    <Text
+                      style={{
+                        textAlign: 'center',
+                        textTransform: 'uppercase',
+                        color: 'white',
+                      }}>
+                      Désactiver l'optimisation de la batterie
+                    </Text>
+                  </TouchableOpacity>
+                ) : (
+                  <Text style={{color: 'green'}}>
+                    L'optimisation de la batterie est bien désactivée  &nbsp;
+                    <Icon
+                      name="check"
+                      type="FontAwesome5"
+                      style={{
+                        fontSize: 16,
+                        paddingLeft: 12,
+                        color: 'green',
+                      }}></Icon>
                   </Text>
-                </TouchableOpacity>
+                )}
               </View>
             ) : null}
           </View>

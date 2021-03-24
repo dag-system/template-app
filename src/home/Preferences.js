@@ -768,7 +768,7 @@ class Preferences extends Component {
                   </TouchableOpacity>
                 </View>
 
-                {Platform.OS == 'ios' ? (
+                {/* {Platform.OS == 'ios' ? (
                   <View>
                     <Item stackedLabel style={{marginBottom: 5}}>
                       <Label>Date de naissance</Label>
@@ -930,7 +930,7 @@ class Preferences extends Component {
                       />
                     ) : null}
                   </View>
-                )}
+                )} */}
 
                 {this.state.userdata != null && this.state.showDefaultDdn ? (
                   <DatePicker

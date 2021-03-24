@@ -4,15 +4,14 @@ import {
   Image,
   TouchableOpacity,
   View,
-  Dimensions,
   Linking,
+  Modal,
   Platform,
 } from 'react-native';
 import {
   Container,
   Header,
   Body,
-  Toast,
   Root,
   Drawer,
   Icon,
@@ -21,19 +20,16 @@ import {
   Left,
   Right,
 } from 'native-base';
-import md5 from 'md5';
 import ApiUtils from '../ApiUtils';
 import {connect} from 'react-redux';
 import Sidebar from './SideBar';
-import moment from 'moment';
 import Logo from '../assets/logo_header.png';
 import GlobalStyles from '../styles';
-import Autrans from '../assets/autrans.svg';
 import {Sponsors} from './Sponsors';
-import IosReglages from '../assets/iosReglages.png';
-import Ios2 from '../assets/ios2.png';
-import BatteryModal from './BatteryModal';
 import BatteryModalContent from './BatteryModalContent';
+import VideoModal from './VideoModal';
+import Video from 'react-native-video';
+import VideoPrez from '../assets/tuto.mp4';
 
 const mapStateToProps = (state) => {
   return {
@@ -61,6 +57,7 @@ class Help extends Component {
       isLoading: false,
       toasterMessage: '',
       showDefaultDdn: false,
+      isVideoFullScreen: false,
     };
   }
 
@@ -130,6 +127,14 @@ class Help extends Component {
       }
     });
   }
+
+  openVideo() {
+    this.setState({isVideoFullScreen: true});
+  }
+
+  closeVideo = () => {
+    this.setState({isVideoFullScreen: false});
+  };
   render() {
     return (
       <Drawer
@@ -163,7 +168,7 @@ class Help extends Component {
               </Header>
             )}
 
-            <Content style={{padding: 10, paddingTop: 20}} scrollEnabled={true}>
+            <Content style={{padding: 5, paddingTop: 20}} scrollEnabled={true}>
               <View style={[GlobalStyles.row, {justifyContent: 'center'}]}>
                 <Image resizeMode="contain" source={Logo} style={styles.logo} />
               </View>
@@ -172,16 +177,85 @@ class Help extends Component {
                   textAlign: 'center',
                   fontWeight: 'bold',
                   color: ApiUtils.getColor(),
-                  marginTop: 30,
+                  marginTop: 10,
                 }}>
                 Bienvenue sur votre application sportive !
               </Text>
+
               <Text style={{marginTop: 10}}>
                 Entrainez-vous et affrontez vos amis et collègues au Cross INSA
-                en toute sécurité, et sans jamais vous croiser ! Le Cross est
-                ouvert
+                en toute sécurité, et sans jamais vous croiser !
               </Text>
+
               <Text style={{marginTop: 10}}>
+                Découvrez le fonctionnement de l'application dans la vidéo
+                ci-dessous :
+              </Text>
+
+              <Modal visible={this.state.isVideoFullScreen} style={{flex: 1}}>
+                <TouchableOpacity
+                  style={{
+                    position: 'absolute',
+                    top: Platform.OS == 'ios' ? 90 : 20,
+                    zIndex: 30,
+                  }}
+                  onPress={() => this.closeVideo()}>
+                  <Icon
+                    name="times"
+                    type="FontAwesome5"
+                    style={{color: 'white', marginLeft: 15}}
+                  />
+                </TouchableOpacity>
+
+                <VideoModal />
+              </Modal>
+
+              <TouchableOpacity
+                style={{
+                  position: 'relative',
+                  top: Platform.OS == 'ios' ? 60 : 40,
+                  zIndex: 100,
+                  marginLeft: 10,
+                }}
+                onPress={() => this.openVideo()}>
+                <View
+                  style={{
+                    display: 'flex',
+                    flexDirection: 'row',
+                  }}>
+                  <Icon
+                    style={{marginTop: -5, color: 'white'}}
+                    name="expand-alt"
+                    type="FontAwesome5"
+                  />
+                  <Text style={{textAlign: 'center', color: 'white'}}>
+                    {' '}
+                    Voir en grand
+                  </Text>
+                </View>
+              </TouchableOpacity>
+
+              {!this.state.isVideoFullScreen ? (
+                <Video
+                  source={VideoPrez} // Can be a URL or a local file.
+                  ref={(ref) => {
+                    this.player = ref;
+                  }} // Store reference
+                  repeat={true}
+                  onBuffer={this.onBuffer} // Callback when remote video is buffering
+                  onError={this.videoError} // Callback when video cannot be loaded
+                  style={[styles.video, {}]}
+                  // style={[this.state.isFullScreen ? styles.video : styles.fullScreenVideo,{height : 10}]}
+                />
+              ) : null}
+
+              {/* <Text style={{marginTop: 10}}>
+                Entrainez-vous et affrontez vos amis et collègues au Cross INSA
+                en toute sécurité, et sans jamais vous croiser ! Le Cross est
+                ouvert à tous
+              </Text> */}
+
+              {/* <Text style={{marginTop: 10}}>
                 Au moment de faire votre course, rendez-vous au départ du
                 parcours, lancez l’application et démarrez votre activité. Ne
                 vous souciez plus de rien, courrez et votre chronomètre
@@ -198,7 +272,7 @@ class Help extends Component {
               <Text style={{marginTop: 10}}>
                 Vous pouvez faire le parcours autant de fois que vous le
                 souhaitez pour améliorer votre classement et vos résultats.
-              </Text>
+              </Text> */}
               <Text style={{marginTop: 10, fontWeight: 'bold'}}>
                 Pour les informations complètes, rendez-vous sur l’intranet du
                 centre des sports :
@@ -216,7 +290,7 @@ class Help extends Component {
                   https://intranetcds.insa-lyon.fr
                 </Text>
               </TouchableOpacity>
-              <Text
+              {/* <Text
                 style={{
                   marginTop: 10,
                   fontWeight: 'bold',
@@ -226,6 +300,7 @@ class Help extends Component {
                 }}>
                 Manuel à lire avant de lancer une activité :
               </Text>
+
               <Text style={{marginTop: 10, fontWeight: 'bold'}}>
                 1 - Enregistrer vos activités
               </Text>
@@ -278,7 +353,7 @@ class Help extends Component {
                 gestion de la batterie de votre téléphone pour que l’app ne se
                 stoppe pas pendant l’effort
               </Text>
-         
+
               <Text style={{marginTop: 10}}>
                 Vous retrouverez ces informations dans le menu aide.
               </Text>
@@ -311,13 +386,14 @@ class Help extends Component {
               <Text>
                 - Enregistrer son activité lorsque nous sommes couverts par le
                 réseau afin que le classement soit mis à jour automatiquement
-              </Text>
+              </Text> */}
 
               {/* {!this.props.noHeader ? ( */}
-                {!this.props.noHeader ? (
-              <View style={{height : '100%'}}>
-                <BatteryModalContent noHeader={false} isInline={true} />
-              </View> ) : null}
+              {!this.props.noHeader ? (
+                <View style={{height: '100%'}}>
+                  <BatteryModalContent noHeader={false} isInline={true} />
+                </View>
+              ) : null}
 
               {/* // ) : null} */}
 
@@ -453,6 +529,20 @@ const styles = StyleSheet.create({
     width: '60%',
     height: 50,
     alignSelf: 'center',
+  },
+
+  video: {
+    width: '100%',
+    height: 750,
+  },
+
+  fullScreenVideo: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    bottom: 0,
+    right: 0,
+    zIndex: 1,
   },
 });
 
