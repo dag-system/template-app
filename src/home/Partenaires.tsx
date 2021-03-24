@@ -24,7 +24,7 @@ import {
 import {connect} from 'react-redux';
 import Sidebar from './SideBar';
 
-const partenairesImages = TemplateArrayImagesPartenairesPath;
+import {TemplateArrayImagesPartenairesPath} from './../globalsModifs';
 
 const mapStateToProps = (state) => {
   return {
@@ -104,7 +104,7 @@ class Partenaires extends Component {
             <Content style={{padding: 10, paddingTop: 20}} scrollEnabled={true}>
               <Text style={{fontWeight: 'bold'}}>Nos partenaires</Text>
 
-              {partenairesImages.map((image) => {
+              {TemplateArrayImagesPartenairesPath.map((image) => {
                 return (
                   <View>
                     <View

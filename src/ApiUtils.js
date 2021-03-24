@@ -1,5 +1,7 @@
 // ApiUtils.js
 
+import {TemplateBackgroundColor, TemplateOrganisation} from './globalsModifs';
+
 const ISDEBUG = false;
 const ISDEMO = false;
 
@@ -9,7 +11,7 @@ const pushNotificationInstance = '653e46e5-9ff8-48ae-9591-feaa4054023e';
 
 var ApiUtils = {
   getOrganisation() {
-    return 'TemplateOrganisation';
+    return TemplateOrganisation;
   },
   getPushNotificationInstance() {
     return pushNotificationInstance;
@@ -39,7 +41,7 @@ var ApiUtils = {
     return ISDEBUG;
   },
   getBackgroundColor() {
-    return '#TemplateColor';
+    return TemplateBackgroundColor;
   },
   getSecondColor() {
     return '#DE084C';

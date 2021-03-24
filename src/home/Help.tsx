@@ -33,6 +33,8 @@ import {Sponsors} from './Sponsors';
 import IosReglages from '../assets/iosReglages.png';
 import Ios2 from '../assets/ios2.png';
 
+import {TemplateAppName} from './../globalsModifs';
+
 const mapStateToProps = (state) => {
   return {
     userData: state.userData,
@@ -239,7 +241,9 @@ class Help extends Component {
               <TouchableOpacity
                 onPress={() =>
                   this.openLink(
-                    'https://folomi.fr/classement/TemplateAppName/classement.html',
+                    'https://folomi.fr/classement/' +
+                      {TemplateAppName} +
+                      '/classement.html',
                   )
                 }>
                 <Text
@@ -248,7 +252,7 @@ class Help extends Component {
                     marginTop: 10,
                     textDecorationLine: 'underline',
                   }}>
-                  https://folomi.fr/classement/TemplateAppName/classement.html
+                  https://folomi.fr/classement/{TemplateAppName}/classement.html
                 </Text>
               </TouchableOpacity>
               <Text style={{marginTop: 10, fontWeight: 'bold'}}>

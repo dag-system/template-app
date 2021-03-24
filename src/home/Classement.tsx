@@ -24,8 +24,10 @@ import {connect} from 'react-redux';
 import Sidebar from './SideBar';
 import Logo from '../assets/logo_header.png';
 import Rotate from '../assets/rotate.png';
-
 import AutoHeightWebView from 'react-native-autoheight-webview';
+
+import {TemplateAppName, TemplateSiteLink} from './../globalsModifs';
+
 const mapStateToProps = () => {
   return {};
 };
@@ -125,8 +127,7 @@ class Classement extends Component {
                 Classement du challenge My Cross
               </Text>
 
-              <TouchableOpacity
-                onPress={() => this.openLink('TemplateSiteLink')}>
+              <TouchableOpacity onPress={() => this.openLink(TemplateSiteLink)}>
                 <Text
                   style={{
                     textAlign: 'center',
@@ -153,7 +154,9 @@ class Classement extends Component {
               <AutoHeightWebView
                 source={{
                   uri:
-                    'https://folomi.fr/classement/TemplateAppName/classement.html',
+                    'https://folomi.fr/classement/' +
+                    {TemplateAppName} +
+                    '/classement.html',
                 }}
                 style={{marginTop: 20, width: '100%'}}
                 startInLoadingState={true}

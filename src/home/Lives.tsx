@@ -46,6 +46,8 @@ import NotificationModal from './NotificationModal';
 import DeviceInfo from 'react-native-device-info';
 import Help from './Help';
 
+import {TemplateAppName, TemplateSportLive} from './../globalsModifs';
+
 const mapStateToProps = (state) => {
   return {
     userData: state.userData,
@@ -711,7 +713,9 @@ class Lives extends Component<Props, State> {
   openStorePage() {
     let url =
       Platform.OS === 'android'
-        ? 'https://play.google.com/store/apps/details?id=com.dag.templateAppName.app'
+        ? 'https://play.google.com/store/apps/details?id=com.dag.' +
+          {TemplateAppName} +
+          '.app'
         : 'https://apps.apple.com/fr/app/my-cross/id1557933183';
     Linking.openURL(url);
   }

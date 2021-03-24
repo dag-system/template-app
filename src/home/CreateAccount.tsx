@@ -33,6 +33,26 @@ import defaultMessages from './defaultMessages';
 import {connect} from 'react-redux';
 import {KeyboardAvoidingView, Dimensions} from 'react-native';
 import GlobalStyles from '../styles';
+
+import {
+  TemplateNameAsk,
+  TemplateFirstNameAsk,
+  TemplateSexeAsk,
+  TemplateDdnAsk,
+  TemplateMailAsk,
+  TemplateTelAsk,
+  TemplateAdressAsk,
+  TemplatePostalAsk,
+  TemplateCityAsk,
+  TemplateCountryAsk,
+  TemplateTelVerifAsk,
+  TemplateChallengeClub,
+  TemplateChallengeFamille,
+  TemplateChallengeAutre,
+  TemplateChallengeEntreprise,
+  TemplateChallengeAutreName,
+} from './../globalsModifs';
+
 const mapStateToProps = (state) => {
   return {
     userData: state,
@@ -806,7 +826,7 @@ class CreateAccount extends ValidationComponent {
 
                 {this.state.isChallengeAutreAsk ? (
                   <Item stackedLabel style={{marginBottom: 5}}>
-                    <Label>TemplateChallengeAutreName</Label>
+                    <Label>{TemplateChallengeAutreName}</Label>
                     <Input
                       autoCapitalize="characters"
                       returnKeyType="next"

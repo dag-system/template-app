@@ -45,6 +45,8 @@ import GPXDocument from '../lib/gpx-parse/GPXDocument';
 import {check, request, PERMISSIONS, RESULTS} from 'react-native-permissions';
 import DefaultProps from '../models/DefaultProps';
 
+import {TemplateSportLive} from './../globalsModifs';
+
 const mapStateToProps = (state) => {
   return {
     userData: state.userData,
