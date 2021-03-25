@@ -1,6 +1,6 @@
 export const TemplateDisplayName = 'Template Test';
 
-export const TemplateAppName = removeAccents(
+export const TemplateAppName = purgeString(
   TemplateDisplayName.trim().toLowerCase(),
 );
 
@@ -33,16 +33,10 @@ export const TemplateSportLive = [
   {idSport: 2, sportName: 'Marche'},
 ];
 
-export const TemplateArrayImagesSponsorPath = [
-  './src/assets/spons1.jpg',
-  './src/assets/spons2.jpg',
-];
-export const TemplateArrayImagesPartenairesPath = [
-  './src/assets/part1.jpg',
-  './src/assets/part2.jpg',
-];
+export const TemplateArrayImagesSponsorPath = [];
+export const TemplateArrayImagesPartenairesPath = [];
 
-function removeAccents(str) {
+function purgeString(str) {
   const accents =
     "ÀÁÂÃÄÅàáâãäåÒÓÔÕÕÖØòóôõöøÈÉÊËèéêëðÇçÐÌÍÎÏìíîïÙÚÛÜùúûüÑñŠšŸÿýŽž' ";
   const accentsOut =
