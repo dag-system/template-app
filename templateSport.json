@@ -1,0 +1,181 @@
+[
+  {
+    "action": "REPLACE_TEXT",
+    "filePath": "./app.json",
+    "source": "TemplateDisplayName",
+    "cible": "$valueReplace",
+    "datasource": "table.colonne"
+  },
+  {
+    "action": "REPLACE_IMAGE",
+    "filePath": "./src/assets/",
+    "name": "logo.png",
+    "datasource": "file.colonne"
+  },
+  {
+    "action": "REPLACE_IMAGE",
+    "filePath": "./src/assets/",
+    "name": "logo_header.png",
+    "datasource": "file.colonne"
+  },
+  {
+    "action": "REPLACE_IMAGE",
+    "filePath": "./src/assets/",
+    "name": "logoHome.svg",
+    "datasource": "file.colonne"
+  },
+  {
+    "action": "REPLACE_TEXT",
+    "filePath": "./src/globalsModifs.js",
+    "source": "export const TemplateDisplayName = 'Template Test';",
+    "cible": "export const TemplateDisplayName = '$valueReplace';",
+    "datasource": "table.colonne"
+  },
+  {
+    "action": "REPLACE_TEXT",
+    "filePath": "./src/globalsModifs.js",
+    "source": "export const TemplateOrganisation = 'TEMPLATETEST';",
+    "cible": "export const TemplateOrganisation = '$valueReplace';",
+    "datasource": "table.colonne"
+  },
+  {
+    "action": "REPLACE_TEXT",
+    "filePath": "./src/globalsModifs.js",
+    "source": "export const TemplateBackgroundColor = '#FFFFFF';",
+    "cible": "export const TemplateBackgroundColor = '$valueReplace';",
+    "datasource": "table.colonne"
+  },
+
+  {
+    "action": "REPLACE_TEXT",
+    "filePath": "./src/globalsModifs.js",
+    "source": "export const TemplateSiteLink = 'www.dag-system.com';",
+    "cible": "export const TemplateSiteLink = '$valueReplace';",
+    "datasource": "table.colonne"
+  },
+  {
+    "action": "REPLACE_TEXT",
+    "filePath": "./src/globalsModifs.js",
+    "source": "export const TemplateNameAsk = true;",
+    "cible": "export const TemplateNameAsk = $valueReplace;",
+    "datasource": "table.colonne"
+  },
+  {
+    "action": "REPLACE_TEXT",
+    "filePath": "./src/globalsModifs.js",
+    "source": "export const TemplateFirstNameAsk = true;",
+    "cible": "export const TemplateFirstNameAsk = $valueReplace;",
+    "datasource": "table.colonne"
+  },
+  {
+    "action": "REPLACE_TEXT",
+    "filePath": "./src/globalsModifs.js",
+    "source": "export const TemplateSexeAsk = true;",
+    "cible": "export const TemplateSexeAsk = $valueReplace;",
+    "datasource": "table.colonne"
+  },
+  {
+    "action": "REPLACE_TEXT",
+    "filePath": "./src/globalsModifs.js",
+    "source": "export const TemplateDdnAsk = true;",
+    "cible": "export const TemplateDdnAsk = $valueReplace;",
+    "datasource": "table.colonne"
+  },
+  {
+    "action": "REPLACE_TEXT",
+    "filePath": "./src/globalsModifs.js",
+    "source": "export const TemplateMailAsk = true;",
+    "cible": "export const TemplateMailAsk = $valueReplace;",
+    "datasource": "table.colonne"
+  },
+  {
+    "action": "REPLACE_TEXT",
+    "filePath": "./src/globalsModifs.js",
+    "source": "export const TemplateTelAsk = true;",
+    "cible": "export const TemplateTelAsk = $valueReplace;",
+    "datasource": "table.colonne"
+  },
+  {
+    "action": "REPLACE_TEXT",
+    "filePath": "./src/globalsModifs.js",
+    "source": "export const TemplateAdressAsk = true;",
+    "cible": "export const TemplateAdressAsk = $valueReplace;",
+    "datasource": "table.colonne"
+  },
+  {
+    "action": "REPLACE_TEXT",
+    "filePath": "./src/globalsModifs.js",
+    "source": "export const TemplatePostalAsk = true;",
+    "cible": "export const TemplatePostalAsk = $valueReplace;",
+    "datasource": "table.colonne"
+  },
+  {
+    "action": "REPLACE_TEXT",
+    "filePath": "./src/globalsModifs.js",
+    "source": "export const TemplateCityAsk = true;",
+    "cible": "export const TemplateCityAsk = $valueReplace;",
+    "datasource": "table.colonne"
+  },
+  {
+    "action": "REPLACE_TEXT",
+    "filePath": "./src/globalsModifs.js",
+    "source": "export const TemplateCountryAsk = true;",
+    "cible": "export const TemplateCountryAsk = $valueReplace;",
+    "datasource": "table.colonne"
+  },
+  {
+    "action": "REPLACE_TEXT",
+    "filePath": "./src/globalsModifs.js",
+    "source": "export const TemplateTelVerifAsk = true;",
+    "cible": "export const TemplateTelVerifAsk = $valueReplace;",
+    "datasource": "table.colonne"
+  },
+  {
+    "action": "REPLACE_TEXT",
+    "filePath": "./src/globalsModifs.js",
+    "source": "export const TemplateChallengeClub = true;",
+    "cible": "export const TemplateChallengeClub = $valueReplace;",
+    "datasource": "table.colonne"
+  },
+  {
+    "action": "REPLACE_TEXT",
+    "filePath": "./src/globalsModifs.js",
+    "source": "export const TemplateChallengeFamille = true;",
+    "cible": "export const TemplateChallengeFamille = $valueReplace;",
+    "datasource": "table.colonne"
+  },
+  {
+    "action": "REPLACE_TEXT",
+    "filePath": "./src/globalsModifs.js",
+    "source": "export const TemplateChallengeAutre = true;",
+    "cible": "export const TemplateChallengeAutre = $valueReplace;",
+    "datasource": "table.colonne"
+  },
+  {
+    "action": "REPLACE_TEXT",
+    "filePath": "./src/globalsModifs.js",
+    "source": "export const TemplateChallengeEntreprise = true;",
+    "cible": "export const TemplateChallengeEntreprise = $valueReplace;",
+    "datasource": "table.colonne"
+  },
+  {
+    "action": "REPLACE_TEXT",
+    "filePath": "./src/globalsModifs.js",
+    "source": "export const TemplateChallengeAutreName = 'Template Test Autre';",
+    "cible": "export const TemplateChallengeAutreName = '$valueReplace';",
+    "datasource": "table.colonne"
+  },
+  {
+    "action": "REPLACE_TABLE_SPONSORS",
+    "filePath": "./src/globalsModifs.js",
+    "source": "export const TemplateArrayImagesSponsorPath = [];",
+    "datasource": "table.colonne"
+  },
+  {
+    "action": "REPLACE_TABLE_PARTENAIRES",
+    "filePath": "./src/globalsModifs.js",
+    "source": "export const TemplateArrayImagesPartenairesPath = [];",
+    "datasource": "table.colonne"
+  }
+]
+  

@@ -34,20 +34,19 @@ export const TemplateSportLive = [
 ];
 
 export const TemplateArrayImagesSponsorPath = [
-  './assets/bonmono.png',
-  './assets/mob_success.png',
+  './src/assets/spons1.jpg',
+  './src/assets/spons2.jpg',
 ];
 export const TemplateArrayImagesPartenairesPath = [
-  './assets/bonmono.png',
-  './assets/mob_success.png',
-  './assets/dag.png',
+  './src/assets/part1.jpg',
+  './src/assets/part2.jpg',
 ];
 
 function removeAccents(str) {
   const accents =
-    "ÀÁÂÃÄÅàáâãäåÒÓÔÕÕÖØòóôõöøÈÉÊËèéêëðÇçÐÌÍÎÏìíîïÙÚÛÜùúûüÑñŠšŸÿýŽž'";
+    "ÀÁÂÃÄÅàáâãäåÒÓÔÕÕÖØòóôõöøÈÉÊËèéêëðÇçÐÌÍÎÏìíîïÙÚÛÜùúûüÑñŠšŸÿýŽž' ";
   const accentsOut =
-    'AAAAAAaaaaaaOOOOOOOooooooEEEEeeeeeCcDIIIIiiiiUUUUuuuuNnSsYyyZz ';
+    'AAAAAAaaaaaaOOOOOOOooooooEEEEeeeeeCcDIIIIiiiiUUUUuuuuNnSsYyyZz';
   str = str.split('');
   const strLen = str.length;
   let i, x;
