@@ -266,19 +266,19 @@ class CreateAccount extends ValidationComponent {
       this.state.clubEntreprise != ''
     ) {
       clubs.push({
-        name: this.state.clubEntreprise,
+        club: this.state.clubEntreprise,
         type: 'ENTREPRISE',
       });
     }
     if (this.state.isChallengeClubAsk && this.state.clubClub != '') {
       clubs.push({
-        name: this.state.clubClub,
+        club: this.state.clubClub,
         type: 'CLUB',
       });
     }
     if (this.state.isChallengeFamilleAsk && this.state.clubFamille != '') {
       clubs.push({
-        name: this.state.clubFamille,
+        club: this.state.clubFamille,
         type: 'FAMILLE',
       });
     }
