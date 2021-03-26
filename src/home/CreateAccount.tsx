@@ -141,9 +141,9 @@ class CreateAccount extends ValidationComponent {
       isSexeAsk: TemplateSexeAsk,
       sexeUtilisateur: '',
       isDdnAsk: TemplateDdnAsk,
-      dayDdn: '',
-      monthDdn: '',
-      yearDdn: '',
+      dayDdn: '01',
+      monthDdn: '01',
+      yearDdn: '1980',
       isMailAsk: TemplateMailAsk,
       emailUtilisateur: '',
       isTelAsk: TemplateTelAsk,
@@ -182,33 +182,6 @@ class CreateAccount extends ValidationComponent {
   ongoHome() {
     this.props.navigation.navigate('Home');
   }
-
-  /*
-  //  SPECIFIQUE INSA
-  //
-  onChangeAnneeUser(value) {
-    this.setState({anneeUser: value});
-  }
-
-  onChangeDepartementUser(value) {
-    this.setState({departementUser: value});
-  }
-
-  onChangeGroupeUser(value) {
-    this.setState({groupeUser: value});
-  }
-
-  onChangeSportUser(value) {
-    this.setState({sportUser: value});
-  }
-
-  onChangeAsUser(value) {
-    this.setState({asUser: value});
-  }
-
-  onChangeEnseignantUser(value) {
-    this.setState({enseignantUser: value});
-  }*/
 
   onClickValidate() {
     var isValid = this.validate({
@@ -288,25 +261,28 @@ class CreateAccount extends ValidationComponent {
     }
 
     let clubs = [];
-    if (this.state.isChallengeEntrepriseAsk) {
+    if (
+      this.state.isChallengeEntrepriseAsk &&
+      this.state.clubEntreprise != ''
+    ) {
       clubs.push({
         name: this.state.clubEntreprise,
         type: 'ENTREPRISE',
       });
     }
-    if (this.state.isChallengeClubAsk) {
+    if (this.state.isChallengeClubAsk && this.state.clubClub != '') {
       clubs.push({
         name: this.state.clubClub,
         type: 'CLUB',
       });
     }
-    if (this.state.isChallengeFamilleAsk) {
+    if (this.state.isChallengeFamilleAsk && this.state.clubFamille != '') {
       clubs.push({
         name: this.state.clubFamille,
         type: 'FAMILLE',
       });
     }
-    if (this.state.isChallengeAutreAsk) {
+    if (this.state.isChallengeAutreAsk && this.state.clubAutre != '') {
       clubs.push({
         name: this.state.clubAutre,
         type: 'AUTRE',
@@ -337,7 +313,7 @@ class CreateAccount extends ValidationComponent {
       headers: {},
       body: formData,
     })
-      .then(ApiUtils.checkStatus)
+      .then((res) => ApiUtils.checkStatus(res))
       .then((response) => response.json())
       .then((responseJson) => {
         console.log('LOOOOG FOLOMI : ', responseJson);
@@ -358,8 +334,8 @@ class CreateAccount extends ValidationComponent {
       })
       .catch((e) => {
         this.setState({isLoading: false});
-        console.log(e);
-        ApiUtils.logError('create account', JSON.stringify(e.message));
+        console.log('Message :', JSON.stringify(e.message));
+        // ApiUtils.logError('create account', JSON.stringify(e.message));
         // alert('Une erreur est survenue : ' + JSON.stringify(e.message));
 
         Toast.show({
@@ -477,7 +453,7 @@ class CreateAccount extends ValidationComponent {
                     <Text style={styles.error}>{errorMessage}</Text>
                   ))}
 
-                {this.state.isMailAfk ? (
+                {this.state.isMailAsk ? (
                   <Item stackedLabel style={{marginBottom: 5}}>
                     <Label>Email *</Label>
                     <Input
@@ -486,7 +462,6 @@ class CreateAccount extends ValidationComponent {
                       returnKeyType="next"
                       textContentType="emailAddress"
                       keyboardType="email-address"
-                      // autoCapitalize="characters"
                       clearButtonMode="always"
                       value={this.state.emailUtilisateur}
                       onChangeText={(value) =>
@@ -499,7 +474,7 @@ class CreateAccount extends ValidationComponent {
                 ) : null}
 
                 {this.isFieldInError('emailUtilisateur') &&
-                  this.state.isMailAfk &&
+                  this.state.isMailAsk &&
                   this.getErrorsInField(
                     'emailUtilisateur',
                   ).map((errorMessage) => (

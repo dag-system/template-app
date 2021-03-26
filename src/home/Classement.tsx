@@ -124,7 +124,7 @@ class Classement extends Component {
                   marginBottom: 10,
                   textTransform: 'uppercase',
                 }}>
-                Classement du challenge My Cross
+                Classement du challenge de votre application
               </Text>
 
               <TouchableOpacity onPress={() => this.openLink(TemplateSiteLink)}>

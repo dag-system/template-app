@@ -236,13 +236,12 @@ class SegmentSummary extends Component {
     Share.share(
       {
         message:
-          'Découvrez mon activité au My Cross  : ' +
-          this.state.statsLive.lienPartage,
-        title: 'Découvrez mon activité  au My Cross!',
+          'Découvrez mon activité au  : ' + this.state.statsLive.lienPartage,
+        title: 'Découvrez mon activité !',
       },
       {
         // Android only:
-        dialogTitle: 'Découvrez mon activité au My Cross! ',
+        dialogTitle: 'Découvrez mon activité !',
       },
     );
   }

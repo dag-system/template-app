@@ -54,6 +54,8 @@ import {Dimensions} from 'react-native';
 import BatteryModal from '../home/BatteryModal';
 import DefaultProps from '../models/DefaultProps';
 
+import {TemplateDisplayName, TemplateSportLive} from './../globalsModifs';
+
 const LATITUDE_DELTA = 0.00922;
 const LONGITUDE_DELTA = 0.00421;
 // const LATITUDE_DELTA = 0.16022;
@@ -154,6 +156,11 @@ interface State {
   time: number;
   libelleLive: string;
   coordinates: any[];
+
+  listSport: {
+    idSport: number;
+    sportName: string;
+  }[];
 }
 
 class SimpleMap extends PureComponent<Props, State> {
@@ -206,6 +213,7 @@ class SimpleMap extends PureComponent<Props, State> {
       currentPolyline: null,
       isGpsNotOk: true,
       time: 0,
+      listSport: TemplateSportLive,
     };
 
     this._unsubscribe = this.props.navigation.addListener('focus', () => {
@@ -399,7 +407,7 @@ class SimpleMap extends PureComponent<Props, State> {
       },
       notification: {
         sticky: true,
-        title: 'My Cross',
+        title: TemplateDisplayName,
         text: 'Suivi de votre position en cours',
         channelImportance: BackgroundGeolocation.NOTIFICATION_PRIORITY_LOW,
       },
@@ -2212,7 +2220,15 @@ class SimpleMap extends PureComponent<Props, State> {
                         borderBottomWidth: 1,
                       }}>
                       <Picker.Item label="Choisissez votre sport" value="-1" />
-                      <Picker.Item label={'CROSS'} value="17" />
+                      {this.state.listSport.map((sport, index) => {
+                        return (
+                          <Picker.Item
+                            label={sport.sportName}
+                            value={sport.idSport}
+                            key={index}
+                          />
+                        );
+                      })}
                     </Picker>
 
                     {this.state.selectedSport == -1 ? (
@@ -2866,7 +2882,7 @@ var styles = StyleSheet.create({
   },
   drawerButton: {
     backgroundColor: 'transparent',
-    width : '100%',
+    width: '100%',
     marginTop: 0,
     paddingTop: 10,
     shadowOffset: {height: 0, width: 0},

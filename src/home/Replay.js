@@ -41,6 +41,8 @@ import Sidebar from './SideBar';
 
 import {isPointInPolygon} from 'geolib';
 
+import {TemplateReplayTrace} from './../globalsModifs';
+
 const haversine = require('haversine');
 const mapStateToProps = (state) => {
   return {
@@ -850,7 +852,13 @@ class Replay extends Component {
                       borderBottomWidth: 1,
                     }}>
                     <Picker.Item label="Choisissez une épreuve" value="-1" />
-                    <Picker.Item label="My Cross" value={58} />
+                    {TemplateReplayTrace.map((cours, index) => {
+                      <Picker.Item
+                        label={cours.label}
+                        value={cours.id}
+                        key={index}
+                      />;
+                    })}
                   </Picker>
 
                   {!this.state.isloadingChallenge &&
@@ -1511,7 +1519,7 @@ const styles = StyleSheet.create({
   },
   drawerButton: {
     backgroundColor: 'transparent',
-    width : '100%',
+    width: '100%',
     marginTop: 0,
     paddingTop: 10,
     shadowOffset: {height: 0, width: 0},

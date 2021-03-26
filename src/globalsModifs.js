@@ -25,12 +25,18 @@ export const TemplateChallengeClub = true;
 export const TemplateChallengeFamille = true;
 export const TemplateChallengeAutre = true;
 export const TemplateChallengeEntreprise = true;
+export const TemplateHasAppDonation = false;
 
 export const TemplateChallengeAutreName = 'Template Test Autre';
 
 export const TemplateSportLive = [
   {idSport: 1, sportName: 'Course'},
   {idSport: 2, sportName: 'Marche'},
+];
+
+export const TemplateReplayTrace = [
+  {label: 'Course Test', id: 58},
+  {label: 'Course Test', id: 58},
 ];
 
 export const TemplateArrayImagesSponsorPath = [];

@@ -188,13 +188,13 @@ class LiveSummaryFromSegment extends Component {
     Share.share(
       {
         message:
-          'Découvrez mon activité sur My Cross  : ' +
+          'Découvrez mon activité sur  : ' +
           this.props.currentLive.statsLive.lienPartage,
-        title: 'Découvrez mon activité sur My Cross !',
+        title: 'Découvrez mon activité sur !',
       },
       {
         // Android only:
-        dialogTitle: 'Découvrez mon activité sur My Cross ! ',
+        dialogTitle: 'Découvrez mon activité sur ! ',
       },
     );
   }

@@ -9,6 +9,8 @@ import {
 import {Container, Body, Text, Icon} from 'native-base';
 import ApiUtils from '../ApiUtils';
 
+import {TemplateHasAppDonation} from './../globalsModifs';
+
 export default class Sidebar extends Component {
   constructor(props) {
     super(props);

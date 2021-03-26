@@ -8,6 +8,8 @@ import {check, request, PERMISSIONS, RESULTS} from 'react-native-permissions';
 const haversine = require('haversine');
 import DefaultProps from '../models/DefaultProps';
 
+import {TemplateDisplayName} from './../globalsModifs';
+
 const mapStateToProps = (state) => {
   return {
     isRecording: state.isRecording,
@@ -149,7 +151,7 @@ class GeolocComponent extends Component<Props, State> {
       },
       notification: {
         sticky: true,
-        title: 'My Cross',
+        title: TemplateDisplayName,
         text: 'Suivi de votre position en cours',
         channelImportance: BackgroundGeolocation.NOTIFICATION_PRIORITY_LOW,
       },

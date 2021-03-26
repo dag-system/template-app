@@ -32,6 +32,8 @@ import DefaultProps from '../models/DefaultProps';
 import {buildGPX, GarminBuilder} from 'gpx-builder';
 import {Point} from 'gpx-builder/dist/builder/BaseBuilder/models';
 
+import {TemplateSportLive} from './../globalsModifs';
+
 const mapStateToProps = (state) => {
   return {
     isRecording: state.isRecording,
@@ -58,6 +60,11 @@ interface State {
   spinner: boolean;
   libelleLiveIsModified: boolean;
   acceptChallengeNameUtilisateur: boolean;
+
+  listSport: {
+    idSport: number;
+    sportName: string;
+  }[];
 }
 
 class MapButtons extends Component<Props, State> {
@@ -72,6 +79,7 @@ class MapButtons extends Component<Props, State> {
       libelleLiveIsModified: false,
       spinner: false,
       acceptChallengeNameUtilisateur: false,
+      listSport: TemplateSportLive,
     };
   }
 
@@ -644,7 +652,15 @@ class MapButtons extends Component<Props, State> {
                         borderBottomWidth: 1,
                       }}>
                       <Picker.Item label="Choisissez votre sport" value="-1" />
-                      <Picker.Item label={'CROSS'} value="17" />
+                      {this.state.listSport.map((sport, index) => {
+                        return (
+                          <Picker.Item
+                            label={sport.sportName}
+                            value={sport.idSport}
+                            key={index}
+                          />
+                        );
+                      })}
                     </Picker>
 
                     {this.state.selectedSport == -1 ? (
@@ -804,7 +820,7 @@ const styles = StyleSheet.create({
   },
   drawerButton: {
     backgroundColor: 'transparent',
-    width : '100%',
+    width: '100%',
     marginTop: 0,
     paddingTop: 10,
     shadowOffset: {height: 0, width: 0},

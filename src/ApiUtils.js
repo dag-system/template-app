@@ -78,7 +78,7 @@ var ApiUtils = {
       return response;
     } else {
       response.text().then(function (text) {
-        console.log(text);
+        console.log('Check status error : ', text);
       });
       let error = new Error(response.statusText);
       error.response = response;
@@ -93,7 +93,7 @@ var ApiUtils = {
   },
 
   getAPIUrl() {
-    return 'https://folomi.fr/api/sportapi.php';
+    return 'https://folomi.fr/api/sportapi_dev.php';
   },
 
   getAPIAuth() {
@@ -150,7 +150,7 @@ var ApiUtils = {
   },
 
   logError: function (methodName, message) {
-    // alert(message)
+    // alert(message);
     // let formData = new FormData();
     // formData.append('method', 'debug');
     // formData.append('auth', ApiUtils.getAPIAuth());
@@ -173,7 +173,7 @@ var ApiUtils = {
     //   body: formData,
     // })
     //   .then(ApiUtils.checkStatus)
-    //   .catch(e => e);
+    //   .catch((e) => e);
   },
 
   logStats: function (message) {
