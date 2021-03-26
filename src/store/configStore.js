@@ -3,8 +3,10 @@ import {persistStore, persistReducer} from 'redux-persist';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import reducer from './reducers';
 
+import {TemplateAppName} from './../globalsModifs';
+
 const persistConfig = {
-  key: 'insalyon',
+  key: TemplateAppName,
   storage: AsyncStorage,
   debug: false,
 };

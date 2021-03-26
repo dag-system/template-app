@@ -25,7 +25,6 @@ import ApiUtils from '../ApiUtils';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {connect} from 'react-redux';
 import Logo from '../assets/logo_header.png';
-import Autrans from '../assets/autrans.svg';
 const mapStateToProps = (state) => {
   return {
     userData: state.userData,
@@ -620,7 +619,7 @@ const styles = StyleSheet.create({
   },
   drawerButton: {
     backgroundColor: 'transparent',
-    width : '100%',
+    width: '100%',
     marginTop: 0,
     paddingTop: 10,
     shadowOffset: {height: 0, width: 0},
