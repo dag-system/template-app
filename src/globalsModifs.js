@@ -1,33 +1,33 @@
-export const TemplateDisplayName = 'Template Test';
+export const TemplateDisplayName = '$valueReplace';
 
 export const TemplateAppName = purgeString(
   TemplateDisplayName.trim().toLowerCase(),
 );
 
-export const TemplateOrganisation = 'TEMPLATETEST';
+export const TemplateOrganisation = '$valueReplace';
 
-export const TemplateBackgroundColor = '#FFFFFF';
+export const TemplateBackgroundColor = '$valueReplace';
 
-export const TemplateSiteLink = 'www.dag-system.com';
+export const TemplateSiteLink = '$valueReplace';
 
-export const TemplateNameAsk = true;
-export const TemplateFirstNameAsk = true;
-export const TemplateSexeAsk = true;
-export const TemplateDdnAsk = true;
-export const TemplateMailAsk = true;
-export const TemplateTelAsk = true;
-export const TemplateAdressAsk = true;
-export const TemplatePostalAsk = true;
-export const TemplateCityAsk = true;
-export const TemplateCountryAsk = true;
-export const TemplateTelVerifAsk = true;
-export const TemplateChallengeClub = true;
-export const TemplateChallengeFamille = true;
-export const TemplateChallengeAutre = true;
-export const TemplateChallengeEntreprise = true;
+export const TemplateNameAsk = $valueReplace;
+export const TemplateFirstNameAsk = $valueReplace;
+export const TemplateSexeAsk = $valueReplace;
+export const TemplateDdnAsk = $valueReplace;
+export const TemplateMailAsk = $valueReplace;
+export const TemplateTelAsk = $valueReplace;
+export const TemplateAdressAsk = $valueReplace;
+export const TemplatePostalAsk = $valueReplace;
+export const TemplateCityAsk = $valueReplace;
+export const TemplateCountryAsk = $valueReplace;
+export const TemplateTelVerifAsk = $valueReplace;
+export const TemplateChallengeClub = $valueReplace;
+export const TemplateChallengeFamille = $valueReplace;
+export const TemplateChallengeAutre = $valueReplace;
+export const TemplateChallengeEntreprise = $valueReplace;
 export const TemplateHasAppDonation = false;
 
-export const TemplateChallengeAutreName = 'Template Test Autre';
+export const TemplateChallengeAutreName = '$valueReplace';
 
 export const TemplateSportLive = [
   {idSport: 1, sportName: 'Course'},
@@ -40,7 +40,7 @@ export const TemplateReplayTrace = [
 ];
 
 export const TemplateArrayImagesSponsorPath = [];
-export const TemplateArrayImagesPartenairesPath = [];
+export const TemplateArrayImagesPartenairesPath = ["./src/assets/part1.jpg","./src/assets/part2.jpg"];
 
 function purgeString(str) {
   const accents =
@@ -57,3 +57,4 @@ function purgeString(str) {
   }
   return str.join('');
 }
+
