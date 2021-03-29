@@ -98,9 +98,16 @@ export default class Sidebar extends Component {
               <Icon
                 name="running"
                 type="FontAwesome5"
-                style={[styles.icon, {color:  this.props.selected == 'Lives' ? 'black' : 'white'}]}
+                style={[
+                  styles.icon,
+                  {color: this.props.selected == 'Lives' ? 'black' : 'white'},
+                ]}
               />
-              <Text style={[styles.menuText, {color:  this.props.selected == 'Lives' ? 'black' : 'white'}]}>
+              <Text
+                style={[
+                  styles.menuText,
+                  {color: this.props.selected == 'Lives' ? 'black' : 'white'},
+                ]}>
                 Mes activités
               </Text>
             </View>
@@ -185,12 +192,8 @@ export default class Sidebar extends Component {
                 Classement
               </Text>
             </View>
-<<<<<<< HEAD
           </TouchableHighlight>
               */}
-=======
-          </TouchableHighlight> */}
->>>>>>> cd508be202edb096c29fcf94834509df764dd687
 
           <TouchableHighlight
             underlayColor="rgba(255,255,255,1,0.6)"
@@ -303,17 +306,21 @@ export default class Sidebar extends Component {
                 justifyContent: 'center',
                 padding: 0,
               }}> */}
-              {/* <Icon
+            {/* <Icon
                 name="power-off"
                 type="FontAwesome5"
                 style={[styles.icon, {color: 'black'}]}
               /> */}
-              <Text
-                style={[
-                  {color: 'white', textDecorationLine: 'underline', textAlign :'center'},
-                ]}>
-                Powered by DAG System
-              </Text>
+            <Text
+              style={[
+                {
+                  color: 'white',
+                  textDecorationLine: 'underline',
+                  textAlign: 'center',
+                },
+              ]}>
+              Powered by DAG System
+            </Text>
             {/* </View> */}
           </TouchableHighlight>
         </Body>
