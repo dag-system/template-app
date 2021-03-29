@@ -28,7 +28,6 @@ import ApiUtils from '../ApiUtils';
 import {connect} from 'react-redux';
 import Logo from '../assets/logo_header.png';
 import {Sponsors} from './Sponsors';
-import Autrans from '../assets/autrans.svg';
 import ErrorMessage from './ErrorMessage';
 import {TextInput} from 'react-native-gesture-handler';
 import DocumentPicker from 'react-native-document-picker';
@@ -298,33 +297,26 @@ class UploadGpx extends Component<Props, State> {
       <Root>
         <Container>
           <Header style={styles.header}>
-            <Left style={{flex: 1}}>
-              <View
-                style={{
-                  flexDirection: 'row',
-                  justifyContent: 'flex-start',
-                  width: '100%',
-                  paddingRight: 0,
-                  paddingLeft: 0,
-                  marginTop: 20,
-                  marginBottom: 20,
-                }}>
-                <Button
-                  style={styles.drawerButton}
-                  onPress={() => this.onGoBack()}>
-                  <Icon
-                    style={styles.saveText}
-                    name="chevron-left"
-                    type="FontAwesome5"
-                  />
-                  {/* <Text style={styles.saveText}>Précedent</Text> */}
-                </Button>
-              </View>
+          <Left style={{flex: 1, width: '10%'}}>
+              <Button
+                style={styles.drawerButton}
+                onPress={() => this.onGoBack()}>
+                <Icon
+                  style={styles.saveText}
+                  name="chevron-left"
+                  type="FontAwesome5"
+                />
+                {/* <Text style={styles.saveText}>Précedent</Text> */}
+              </Button>
             </Left>
-            <Body style={{flex: 0}} />
-            <Right style={{flex: 1}}>
+            <Body>
               <Image resizeMode="contain" source={Logo} style={styles.logo} />
+<<<<<<< HEAD
             </Right>
+=======
+            </Body>
+            <Right />
+>>>>>>> cd508be202edb096c29fcf94834509df764dd687
           </Header>
           <Content style={styles.body} scrollEnabled={true}>
             <ScrollView scrollEnabled={true}>
@@ -567,15 +559,15 @@ const styles = StyleSheet.create({
   },
   logo: {
     width: '100%',
-    height: 50,
-    alignSelf: 'center',
+    height: 100,
+    //marginRight: '50%',
   },
   bold: {
     fontWeight: 'bold',
   },
   drawerButton: {
     backgroundColor: 'transparent',
-    width: 120,
+    width: '100%',
     marginTop: 0,
     paddingTop: 10,
     shadowOffset: {height: 0, width: 0},

@@ -32,13 +32,11 @@ import Swipeout from 'react-native-swipeout';
 // import { Icon } from 'react-native-elements';
 import ApiUtils from '../ApiUtils';
 import Logo from '../assets/logo_header.png';
-import Autrans from '../assets/autrans.svg';
 import Sidebar from './SideBar';
 // import Geolocation from 'react-native-geolocation-service';
 import {connect} from 'react-redux';
 import GlobalStyles from '../styles';
 import {Modal} from 'react-native';
-import Help from './Help';
 import BatteryModal from './BatteryModal';
 import {Sponsors} from './Sponsors';
 import UploadGpx from './UploadGpx';
@@ -47,6 +45,8 @@ import {Linking} from 'react-native';
 import {Alert} from 'react-native';
 import DefaultProps from '../models/DefaultProps';
 import VersionCheck from 'react-native-version-check';
+
+
 const mapStateToProps = (state) => {
   return {
     userData: state.userData,
@@ -247,7 +247,7 @@ class Lives extends Component<Props, State> {
     formData.append('auth', ApiUtils.getAPIAuth());
     formData.append('idUtilisateur', this.props.userData.idUtilisateur);
     formData.append('idversion', ApiUtils.VersionNumberInt().toString());
-    formData.append('idSport', this.state.selectedSport.toString());
+    formData.append('idSport', "16");
     formData.append('os', Platform.OS);
     var libelleLive = this.getLibelleLive();
 
@@ -275,7 +275,7 @@ class Lives extends Component<Props, State> {
             codeLive: responseJson.codeLive,
             libelleLive: responseJson.libelleLive,
             dateCreationLive: responseJson.dateCreationLive,
-            idSport: this.state.selectedSport,
+            idSport: "16",
             invites: [],
             statsInfos: {},
             etatLive: 0,
@@ -529,7 +529,7 @@ class Lives extends Component<Props, State> {
     let url =
       Platform.OS === 'android'
         ? 'https://play.google.com/store/apps/details?id=com.dag.digiraidinp.app'
-        : 'https://apps.apple.com/fr/app/la-foul%C3%A9e-blanche/id1546257921';
+        : 'https://apps.apple.com/fr/app/digiraid-grenoble-inp/id1558429847';
     Linking.openURL(url);
   }
 
@@ -1063,7 +1063,7 @@ class Lives extends Component<Props, State> {
                             <Icon name="chevron-down" type="FontAwesome5" />
                           }
                           style={{marginTop: 0}}
-                          selectedValue={this.state.selectedSport}
+                          selectedValue={"16"}
                           onValueChange={this.onValueSportChange.bind(this)}
                           placeholder={"Choisissez le type d'activité"}
                           placeholderStyle={{
@@ -1083,13 +1083,9 @@ class Lives extends Component<Props, State> {
                             borderBottomColor: ApiUtils.getBackgroundColor(),
                             borderBottomWidth: 1,
                           }}>
-                          <Picker.Item
-                            label="Choisissez le type d'activité"
-                            value="-1"
-                          />
                           <Picker.Item label={'RAID'} value="16" />
                         </Picker>
-
+{/* 
                         {this.state.selectedSport == -1 ? (
                           <Text
                             style={{
@@ -1101,7 +1097,7 @@ class Lives extends Component<Props, State> {
                             }}>
                             Le type d'activité doit être renseigné
                           </Text>
-                        ) : null}
+                        ) : null} */}
                       </View>
 
                       <Button
@@ -1110,19 +1106,17 @@ class Lives extends Component<Props, State> {
                           paddingHorizontal: 50,
                           elevation: 0,
                           alignSelf: 'center',
-                          borderColor: this.isErrorFormCreate()
-                            ? 'black'
-                            : ApiUtils.getBackgroundColor(),
+                          borderColor:
+                             ApiUtils.getBackgroundColor(),
                           borderWidth: 1,
-                          backgroundColor: this.isErrorFormCreate()
-                            ? 'transparent'
-                            : ApiUtils.getBackgroundColor(),
+                          backgroundColor:
+                             ApiUtils.getBackgroundColor(),
                         }}
                         onPress={() => this.onClickCreateLiveOk()}
-                        disabled={this.isErrorFormCreate()}>
+                        >
                         <Text
                           style={{
-                            color: this.isErrorFormCreate() ? 'black' : 'white',
+                            color: 'white',
                           }}>
                           C'est parti
                         </Text>
@@ -1180,7 +1174,7 @@ const styles = StyleSheet.create({
   },
   drawerButton: {
     backgroundColor: 'transparent',
-    // width: '10%',
+    width: '100%',
     // marginTop: 0,
     // paddingTop: 0,
     shadowOffset: {height: 0, width: 0},

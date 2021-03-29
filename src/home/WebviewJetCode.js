@@ -9,13 +9,15 @@ import AutoHeightWebView from 'react-native-autoheight-webview'
 const myScript = `
 
 window.addEventListener("message", function(event) {
-  console.log("Received post message", event);
+ // alert("Received post message");
+  // console.log("Received post message", event);
   window.ReactNativeWebView.postMessage(event.data)
   
 }, false);
 
 document.addEventListener("message", function(event) {
-  console.log("Received post message", event);
+  //alert("Received post message");
+  // console.log("Received post message", event);
   window.ReactNativeWebView.postMessage(event.data)
   
 }, false);
@@ -23,7 +25,9 @@ true; // note: this is required, or you'll sometimes get silent failures
 `;
 
 const mapStateToProps = (state) => {
-  return {};
+  return {
+    userData: state.userData,
+  };
 };
 
 class WebViewJetCode extends Component {
@@ -40,10 +44,11 @@ class WebViewJetCode extends Component {
   componentWillUnmount() {}
 
   getWebViewMessage(event) {
-    console.log(event.nativeEvent.data);
+    console.log("event")
+    console.log(event);
 
     var eventData = JSON.parse(event.nativeEvent.data);
-    console.log(eventData)
+    // console.log(eventData)
     if (eventData.type == 'resize_height') {
       let height = eventData.height;
       // console.log('heigth', eventData.height);
@@ -69,11 +74,114 @@ class WebViewJetCode extends Component {
     }
   }
 
+
+  setPaiementOk(idUtilisateur, amount, idStation){
+    let formData = new FormData();
+    formData.append('method', 'addpaiement');
+    formData.append('auth', ApiUtils.getAPIAuth());
+    formData.append('idStation', idStation);
+    formData.append('idUtilisateur', idUtilisateur);
+    formData.append('totalAmount', amount);
+    
+
+    //fetch followCode API
+    fetch(ApiUtils.getAPIUrl(), {
+      method: 'POST',
+      headers: {
+        // Accept: 'application/json',
+        // 'Content-Type': 'application/json',
+      },
+      body: formData,
+    })
+      .then(ApiUtils.checkStatus)
+      .then((response) => response.json())
+      .then((responseJson) => {
+      
+        console.log(responseJson);
+        this.onLogin(idUtilisateur);
+
+      })
+      .catch((e) => {
+        alert(e);
+        ApiUtils.logError('simpleMap onClickCreateInvite', e.message);
+      })
+      .then
+      // (e) => alert("erreur : " + e.message),
+      //  this.onClickNavigate('SimpleMap'));
+      //alert("error gettingData"+ e.message)
+      ();
+  }
+
+  onClickNavigate(routeName) {
+    this.props.navigation.navigate(routeName);
+  }
+
+
+  onLogin(idUser) {
+    this.setState({isLoading: true});
+    let formData = new FormData();
+    formData.append('method', 'getInformationsUtilisateur');
+    formData.append('organisation', ApiUtils.getOrganisation());
+    formData.append('auth', ApiUtils.getAPIAuth());
+    formData.append('idUtilisateur', idUser);
+
+    //fetch followCode API
+
+    fetch(ApiUtils.getAPIUrl(), {
+      method: 'POST',
+      headers: {
+        // Accept: 'application/json',
+        // 'Content-Type': 'application/json',
+      },
+      body: formData,
+    })
+      .then(ApiUtils.checkStatus)
+      .then((response) => response.json())
+      .then((responseJson) => {
+        //save values in cache
+        if (responseJson.codeErreur == 'SUCCESS') {
+          //SaveData
+          this.setState({email: '', password: ''});
+
+          var action = {type: 'LOGIN', data: responseJson};
+          this.props.dispatch(action);
+          this.setState({isLoading: false});
+          this.onClickNavigate('Lives');
+
+          // ApiUtils.setLogged().then(this.saveUserInfo(responseJson, false));
+        } else {
+          alert(responseJson.message);
+          this.setState({isLoading: false});
+        }
+      })
+      .catch((e) => {
+        this.setState({isLoading: false});
+        console.log(e);
+        ApiUtils.logError('login', JSON.stringify(e.message));
+        // alert('Une erreur est survenue : ' + JSON.stringify(e.message));
+
+        if (e.message == 'Timeout' || e.message == 'Network request failed') {
+          this.setState({noConnection: true});
+
+          Toast.show({
+            text: "Vous n'avez pas de connection internet, merci de réessayer",
+            buttonText: 'Ok',
+            type: 'danger',
+            position: 'bottom',
+            duration: 5000,
+          });
+        }
+      });
+  }
+
+
+
   reload() {
     this.setState({ isError: false });
   }
 
   downloadPayResult(purchase) {
+    console.log
     console.log(purchase.customerId);
     fetch(purchase.url, {
       method: 'POST',
@@ -89,7 +197,16 @@ class WebViewJetCode extends Component {
       .then(ApiUtils.checkStatus)
       .then((response) => response.json())
       .then((responseJson) => {
+        console.log("downloadpurchase")
         console.log(responseJson);
+
+        // {"basketDate": "2021-03-12T07:31:35.000Z", "basketId": "2211", 
+        // "customerId": "776658443961493556553761556878454f4669356a42622b",
+        //  "invoiceFile": ["https://www.dag-system.com:8080/files/20_AR%20Commande%20n%C2%B0366321.pdf"], 
+        //  "order": [{"amount": 0, "customerParamList": "A;A;mangoPayUserAccount;{\"mangoPayUserId\":\"1468907711\",\"walletId\":\"1468907715\"}", "invoiceNumber": "2021-00009", "orderAlias": "S-591-210312083134-366321-P-2211", "orderDate": "2021-03-12T07:31:35.000Z", "orderId": 366321, "resort": "INP Grenoble"}], "orderId": ["366321"], "waitingPayment": false}
+
+        this.setPaiementOk(this.props.userData.idUtilisateur,responseJson.order[0].amount,ApiUtils.getIdStation());
+
         var action = { type: 'UPDATE_PAY_RESULT', data: responseJson };
         this.props.dispatch(action);
       })
@@ -102,9 +219,9 @@ class WebViewJetCode extends Component {
     return (
       <View style={{flex : 1}}>
         {this.props.uri != null && !this.state.isError ? (
-          <AutoHeightWebView
-            userAgent="folomi"
-            style={{ marginTop: 40, minHeight: 500,  width: '100%' }}
+          <WebView
+            userAgent="visito"
+            style={{ marginTop: 3, minHeight: 500,  width: '100%' }}
             startInLoadingState={true}
             injectedJavaScript={myScript}
             onError={(syntheticEvent) => {

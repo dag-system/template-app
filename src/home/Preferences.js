@@ -587,7 +587,7 @@ class Preferences extends Component {
                     <Text
                       style={[
                         styles.saveText,
-                        {color: this.isErrorForm() ? 'gray' : 'black'},
+                        {color: this.isErrorForm() ? 'gray' : 'white'},
                       ]}>
                       ENREGISTRER
                     </Text>
@@ -1122,7 +1122,7 @@ const styles = StyleSheet.create({
   },
   drawerButton: {
     backgroundColor: 'transparent',
-    // width: 100,
+    width : '100%',
     marginTop: 0,
     paddingTop: 0,
     shadowOffset: {height: 0, width: 0},

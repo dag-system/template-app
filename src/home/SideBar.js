@@ -53,6 +53,16 @@ export default class Sidebar extends Component {
     this.props.navigation.navigate(routeName);
   }
 
+  openLink(url) {
+    Linking.canOpenURL(url).then((supported) => {
+      if (supported) {
+        Linking.openURL(url);
+      } else {
+        ApiUtils.logError('Home openLink', 'Dont know how to open URI: ' + url);
+      }
+    });
+  }
+
   render() {
     return (
       <Container>
@@ -88,42 +98,13 @@ export default class Sidebar extends Component {
               <Icon
                 name="running"
                 type="FontAwesome5"
-                style={[
-                  styles.icon,
-                  {color: this.props.selected == 'Lives' ? 'black' : 'white'},
-                ]}
+                style={[styles.icon, {color:  this.props.selected == 'Lives' ? 'black' : 'white'}]}
               />
-              <Text
-                style={[
-                  styles.menuText,
-                  {color: this.props.selected == 'Lives' ? 'black' : 'white'},
-                ]}>
+              <Text style={[styles.menuText, {color:  this.props.selected == 'Lives' ? 'black' : 'white'}]}>
                 Mes activités
               </Text>
             </View>
           </TouchableHighlight>
-
-          {/* <TouchableHighlight
-            underlayColor="rgba(255,255,255,1,0.6)"
-            onPress={() => this.onClickNavigate('CreateNewLive')}
-            style={{width: '100%'}}>
-            <View
-              style={{
-                display: 'flex',
-                flexDirection: 'row',
-                justifyContent: 'flex-start',
-                padding: 10,
-              }}>
-               <Icon
-                name="plus-circle"
-                type="FontAwesome5"
-                style={[styles.icon, {color: 'white'}]}
-              />
-              <Text style={[styles.menuText, {color: 'white'}]}>
-                Ajouter une activité
-              </Text>
-            </View>
-          </TouchableHighlight> */}
 
           <TouchableHighlight
             underlayColor="rgba(255,255,255,1,0.6)"
@@ -204,16 +185,22 @@ export default class Sidebar extends Component {
                 Classement
               </Text>
             </View>
+<<<<<<< HEAD
           </TouchableHighlight>
               */}
+=======
+          </TouchableHighlight> */}
+>>>>>>> cd508be202edb096c29fcf94834509df764dd687
 
           <TouchableHighlight
             underlayColor="rgba(255,255,255,1,0.6)"
-            onPress={() => this.onClickNavigate('Replay')}
+            onPress={() => this.onClickNavigate('Partenaires')}
             style={{
               width: '100%',
               backgroundColor:
-                this.props.selected == 'Replay' ? '#E9E9E9' : 'transparent',
+                this.props.selected == 'Partenaires'
+                  ? '#E9E9E9'
+                  : 'transparent',
             }}>
             <View
               style={{
@@ -224,21 +211,25 @@ export default class Sidebar extends Component {
                 padding: 10,
               }}>
               <Icon
-                name="chart-line"
+                name="handshake"
                 type="FontAwesome5"
                 style={[
                   styles.icon,
-                  {color: this.props.selected == 'Replay' ? 'black' : 'white'},
+                  {
+                    color:
+                      this.props.selected == 'Partenaires' ? 'black' : 'white',
+                  },
                 ]}
               />
               <Text
                 style={[
                   styles.menuText,
                   {
-                    color: this.props.selected == 'Replay' ? 'black' : 'white',
+                    color:
+                      this.props.selected == 'Partenaires' ? 'black' : 'white',
                   },
                 ]}>
-                Comparateur
+                Partenaires
               </Text>
             </View>
           </TouchableHighlight>
@@ -281,48 +272,6 @@ export default class Sidebar extends Component {
 
           <TouchableHighlight
             underlayColor="rgba(255,255,255,1,0.6)"
-            onPress={() => this.onClickNavigate('Partenaires')}
-            style={{
-              width: '100%',
-              backgroundColor:
-                this.props.selected == 'Partenaires'
-                  ? '#E9E9E9'
-                  : 'transparent',
-            }}>
-            <View
-              style={{
-                display: 'flex',
-                flexDirection: 'row',
-                justifyContent: 'flex-start',
-                flexWrap: 'wrap',
-                padding: 10,
-              }}>
-              <Icon
-                name="handshake"
-                type="FontAwesome5"
-                style={[
-                  styles.icon,
-                  {
-                    color:
-                      this.props.selected == 'Partenaires' ? 'black' : 'white',
-                  },
-                ]}
-              />
-              <Text
-                style={[
-                  styles.menuText,
-                  {
-                    color:
-                      this.props.selected == 'Partenaires' ? 'black' : 'white',
-                  },
-                ]}>
-                Nos Partenaires
-              </Text>
-            </View>
-          </TouchableHighlight>
-
-          <TouchableHighlight
-            underlayColor="rgba(255,255,255,1,0.6)"
             onPress={() => this.onClickNavigate('Logout')}
             style={{width: '100%'}}>
             <View
@@ -342,6 +291,31 @@ export default class Sidebar extends Component {
               </Text>
             </View>
           </TouchableHighlight>
+
+          <TouchableHighlight
+            underlayColor="rgba(255,255,255,1,0.6)"
+            onPress={() => this.openLink('https://www.dag-system.com/')}
+            style={{width: '100%', position: 'absolute', bottom: 30}}>
+            {/* <View
+              style={{
+                display: 'flex',
+                flexDirection: 'row',
+                justifyContent: 'center',
+                padding: 0,
+              }}> */}
+              {/* <Icon
+                name="power-off"
+                type="FontAwesome5"
+                style={[styles.icon, {color: 'black'}]}
+              /> */}
+              <Text
+                style={[
+                  {color: 'white', textDecorationLine: 'underline', textAlign :'center'},
+                ]}>
+                Powered by DAG System
+              </Text>
+            {/* </View> */}
+          </TouchableHighlight>
         </Body>
       </Container>
     );
@@ -358,7 +332,7 @@ const styles = StyleSheet.create({
   },
   logo: {
     width: '50%',
-    height: 120,
+    height: 80,
     marginLeft: 25,
     marginRight: 25,
     marginBottom: 20,

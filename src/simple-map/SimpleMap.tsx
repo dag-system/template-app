@@ -2869,7 +2869,7 @@ var styles = StyleSheet.create({
   },
   drawerButton: {
     backgroundColor: 'transparent',
-    width: 120,
+    width : '100%',
     marginTop: 0,
     paddingTop: 10,
     shadowOffset: {height: 0, width: 0},

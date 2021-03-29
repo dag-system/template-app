@@ -186,7 +186,6 @@ class CreateAccount extends ValidationComponent {
         this.state.equipeChoiceUtilisateur == ''
       ) {
         this.setState({alertEquipe: true});
-        return false;
       }
       this.setState({alertEquipe: false});
       this.onSendRequest();
@@ -233,7 +232,7 @@ class CreateAccount extends ValidationComponent {
 
     if (!this.state.sexeUtilisateur) {
       this.setState({alertSexe: true});
-      this.setState({isLoading: true});
+      this.setState({isLoading: false});
       return false;
     } else {
       this.setState({alertSexe: false});
@@ -343,7 +342,13 @@ class CreateAccount extends ValidationComponent {
         if (responseJson.codeErreur == 'SUCCESS') {
           var action = {type: 'LOGIN', data: responseJson};
           this.props.dispatch(action);
-          console.log('test 2');
+
+          Toast.show({
+            text: "Formulaire ok. Vous devez maintenant payer l'inscription",
+            buttonText: 'Ok',
+            type: 'success',
+            position: 'top',
+          });
 
           this.onClickNavigate('Paiement');
         } else {
@@ -437,10 +442,10 @@ class CreateAccount extends ValidationComponent {
                 />
               </Button>
             </Left>
-            <Body style={{flex: 0}} />
-            <Right style={{flex: 1}}>
-              <Image resizeMode="contain" source={Logo} style={styles.logo} />
-            </Right>
+            <Body style={{flex: 1}}>
+              <Image resizeMode="cover" source={Logo} style={styles.logo} />
+            </Body>
+            <Right  />
           </Header>
           <Content>
             <KeyboardAvoidingView>
@@ -994,15 +999,16 @@ class CreateAccount extends ValidationComponent {
               <View
                 style={{
                   marginTop: 20,
-                  paddingLeft: 10,
-                  width: '80%',
+                  paddingLeft: 0,
+                  width: '100%',
                   display: 'flex',
                   flexDirection: 'row',
-                  justifyContent: 'space-between',
+                  // justifyContent: 'space-between',
                 }}>
                 <Switch
                   ref="needvtt"
-                  style={{paddingTop: 20}}
+           
+                  style={{paddingTop: 0}}
                   onValueChange={(text) => this.setState({needvtt: text})}
                   value={this.state.needvtt}
                 />
@@ -1012,7 +1018,7 @@ class CreateAccount extends ValidationComponent {
                       needvtt: !this.state.needvtt,
                     })
                   }>
-                  <Text style={{marginLeft: 10}}>Je souhaite louer un VTT</Text>
+                  <Text style={{marginLeft: 20}}>Je souhaite louer un VTT</Text>
                 </TouchableOpacity>
               </View>
 
@@ -1086,8 +1092,8 @@ const styles = StyleSheet.create({
     width: '25%',
   },
   logo: {
-    width: '100%',
-    height: 50,
+    width: 100,
+    height: '100%',
     alignSelf: 'center',
   },
   saveButton: {
@@ -1101,13 +1107,14 @@ const styles = StyleSheet.create({
   },
   drawerButton: {
     backgroundColor: 'transparent',
-    width: 120,
+    width: 60,
     marginTop: 0,
     paddingTop: 10,
     shadowOffset: {height: 0, width: 0},
     shadowOpacity: 0,
     elevation: 0,
     paddingLeft: 0,
+    flex : 1
   },
   saveText: {
     color: 'white',

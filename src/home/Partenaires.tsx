@@ -4,15 +4,12 @@ import {
   Image,
   TouchableOpacity,
   View,
-  Linking,
-  Platform,
   Dimensions,
 } from 'react-native';
 import {
   Container,
   Header,
   Body,
-  Toast,
   Root,
   Drawer,
   Icon,
@@ -21,25 +18,9 @@ import {
   Left,
   Right,
 } from 'native-base';
-import md5 from 'md5';
-import ApiUtils from '../ApiUtils';
 import {connect} from 'react-redux';
 import Sidebar from './SideBar';
-import moment from 'moment';
-import Logo from '../assets/logo_header.png';
-import GlobalStyles from '../styles';
 
-import Autrans from '../assets/autrans.svg';
-import Region from '../assets/region.jpg';
-import Ccmv from '../assets/CCMV.png';
-import Alpesisere from '../assets/alpesisere.svg';
-import Isere from '../assets/isere.svg';
-import Grenoble from '../assets/grenoble.png';
-import FranceBleu from '../assets/france-bleu.svg';
-import Dauphine from '../assets/dauphine.png';
-import SkiChrono from '../assets/skichrono.jpg';
-import Rossignol from '../assets/rossignol.jpg';
-import Deva from '../assets/deva.png';
 import Dag from '../assets/dag.png';
 
 import Chartreuse from '../assets/chartreuse.jpg';
@@ -50,6 +31,10 @@ import gc from '../assets/gc.png';
 import fmlog from '../assets/fmlog.jpg';
 import husky from '../assets/husky.png';
 import segreen from '../assets/segreen.png';
+
+import tag from '../assets/tag.png';
+import crous from '../assets/crous.png';
+import citroen from '../assets/citroen.png';
 
 const mapStateToProps = (state) => {
   return {
@@ -342,6 +327,8 @@ class Partenaires extends Component {
                 <Text />
               </View>
 
+           
+
               <View
                 style={{
                   width: '100%',
@@ -362,7 +349,105 @@ class Partenaires extends Component {
                   }}
                 />
               </View>
+              <View
+                style={{
+                  borderBottomWidth: 1,
+                  borderBottomColor: '#DDDDDD',
+                  width: Dimensions.get('screen').width,
+                  marginTop: 0,
+                }}>
+                <Text />
+              </View>
 
+
+              <View
+                style={{
+                  width: '100%',
+                  height: 100,
+                  flex: 1,
+                  marginTop: 40,
+                  marginBottom: 40,
+                }}>
+                <Image
+                  source={citroen}
+                  resizeMethod="resize"
+                  resizeMode="contain"
+                  style={{
+                    height: '100%',
+                    width: '30%',
+                    alignSelf: 'center',
+                    marginHorizontal: 'auto',
+                  }}
+                />
+              </View>
+
+             
+
+              <View
+                style={{
+                  borderBottomWidth: 1,
+                  borderBottomColor: '#DDDDDD',
+                  width: Dimensions.get('screen').width,
+                  marginTop: 0,
+                }}>
+                <Text />
+              </View>
+              
+              <View
+                style={{
+                  width: '100%',
+                  height: 100,
+                  flex: 1,
+                  marginTop: 40,
+                  marginBottom: 40,
+                }}>
+                <Image
+                  source={crous}
+                  resizeMethod="resize"
+                  resizeMode="contain"
+                  style={{
+                    height: '100%',
+                    width: '30%',
+                    alignSelf: 'center',
+                    marginHorizontal: 'auto',
+                  }}
+                />
+              </View>
+
+          
+              <View
+                style={{
+                  borderBottomWidth: 1,
+                  borderBottomColor: '#DDDDDD',
+                  width: Dimensions.get('screen').width,
+                  marginTop: 0,
+                }}>
+                <Text />
+              </View>
+
+
+              <View
+                style={{
+                  width: '100%',
+                  height: 100,
+                  flex: 1,
+                  marginTop: 40,
+                  marginBottom: 40,
+                }}>
+                <Image
+                  source={tag}
+                  resizeMethod="resize"
+                  resizeMode="contain"
+                  style={{
+                    height: '100%',
+                    width: '30%',
+                    alignSelf: 'center',
+                    marginHorizontal: 'auto',
+                  }}
+                />
+              </View>
+
+          
               <View
                 style={{
                   borderBottomWidth: 1,
@@ -423,6 +508,7 @@ const styles = StyleSheet.create({
   drawerButton: {
     backgroundColor: 'transparent',
     // width: 100,
+    width : '100%',
     marginTop: 0,
     paddingTop: 0,
     shadowOffset: {height: 0, width: 0},
