@@ -297,7 +297,7 @@ class UploadGpx extends Component<Props, State> {
       <Root>
         <Container>
           <Header style={styles.header}>
-          <Left style={{flex: 1, width: '10%'}}>
+            <Left style={{flex: 1, width: '10%'}}>
               <Button
                 style={styles.drawerButton}
                 onPress={() => this.onGoBack()}>
@@ -311,12 +311,8 @@ class UploadGpx extends Component<Props, State> {
             </Left>
             <Body>
               <Image resizeMode="contain" source={Logo} style={styles.logo} />
-<<<<<<< HEAD
-            </Right>
-=======
             </Body>
             <Right />
->>>>>>> cd508be202edb096c29fcf94834509df764dd687
           </Header>
           <Content style={styles.body} scrollEnabled={true}>
             <ScrollView scrollEnabled={true}>
