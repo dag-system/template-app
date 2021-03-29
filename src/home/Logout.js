@@ -1,17 +1,9 @@
 import React, {Component} from 'react';
-import {
-  Platform,
-  StyleSheet,
-  Alert,
-  Linking,
-  View,
-  TextInput,
-  Image,
-  ScrollView,
-} from 'react-native';
+import {StyleSheet, View, Text, Image, TouchableOpacity} from 'react-native';
 import ApiUtils from '../ApiUtils';
-import Logo from '../assets/logo.png';
 import {connect} from 'react-redux';
+import RNPusherPushNotifications from 'react-native-pusher-push-notifications';
+import Logo from '../assets/logo.png';
 
 const mapStateToProps = (state) => {
   return {
@@ -25,42 +17,104 @@ class Logout extends Component {
     this.state = {};
   }
 
-  // static navigationOptions = {
-  //   drawerLabel: 'Déconnexion',
-  //   drawerIcon: ({ tintColor }) => (
-  //     <Image
-  //       source={require('../assets/deconnexion.png')}
-  //       style={[styles.icon, { tintColor: tintColor }]}
-  //     />
-  //   ),
-  // };
+  componentDidMount() {}
 
-  componentDidMount() {
-    var action = {type: 'LOGOUT', data: null};
-
-    this.props.dispatch(action);
-
-    this.onClickNavigate('Home');
-
-    //   ApiUtils.setLoggedOut().then((res) => {
-    //    // alert(res);
-    //     this.onClickNavigate('Home');
-    // });
-  }
+  unSubscribe = (interest) => {
+    console.log(`Subscribing to "${interest}"`);
+    RNPusherPushNotifications.unsubscribe(
+      interest,
+      (statusCode, response) => {
+        console.error(statusCode, response);
+      },
+      () => {
+        console.log(`CALLBACK: unsubscribed to ${interest}`);
+      },
+    );
+  };
 
   onClickNavigate(routeName) {
     this.props.navigation.navigate('Home');
   }
 
+  disconnect = () => {
+    this.unSubscribe('debug-' + this.props.userData.idUtilisateur);
+    var action = {type: 'LOGOUT', data: null};
+    this.props.dispatch(action);
+
+    this.onClickNavigate('Home');
+  };
+
   render() {
-    return null;
+    return (
+      <View
+        style={{
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'center',
+          alignItems: 'center',
+          flex: 1,
+          padding: 15,
+          backgroundColor: 'white',
+        }}>
+        <Image
+          style={{
+            height: 150,
+            marginBottom: 100,
+          }}
+          source={Logo}
+          resizeMode="contain"
+        />
+        <View>
+          <Text
+            style={{
+              width: '100%',
+              fontSize: 21,
+              marginBottom: 15,
+            }}>
+            Vous vous êtes déconnecté.
+          </Text>
+        </View>
+        <View>
+          <Text
+            style={{
+              fontSize: 17,
+              textAlign: 'center',
+            }}>
+            Vous vous êtes bien déconnecté, vous pouvez vous reconnecter sur un
+            autre compte si vous les souhaitez.
+          </Text>
+        </View>
+        <TouchableOpacity
+          onPress={() => this.disconnect()}
+          style={{
+            width: '80%',
+            height: 45,
+            backgroundColor: ApiUtils.getSecondColor(),
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            marginTop: 50,
+            marginBottom: 150,
+            borderColor: 'black',
+            borderWidth: 1,
+          }}>
+          <Text
+            style={{
+              fontSize: 17,
+              color: 'white',
+            }}>
+            Retourner sur la page d'accueil
+          </Text>
+        </TouchableOpacity>
+      </View>
+    );
   }
 }
 
 const styles = StyleSheet.create({
   header: {
     //Ò  backgroundColor: ApiUtils.getBackgroundColor()
-    backgroundColor: '#2B3990',
+    backgroundColor: '#DADADA',
   },
   title: {
     color: '#000',

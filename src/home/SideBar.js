@@ -166,6 +166,7 @@ export default class Sidebar extends Component {
             </View>
           </TouchableHighlight>
 
+          {/*
           <TouchableHighlight
             underlayColor="rgba(255,255,255,1,0.6)"
             onPress={() => this.onClickNavigate('Classement')}
@@ -204,6 +205,7 @@ export default class Sidebar extends Component {
               </Text>
             </View>
           </TouchableHighlight>
+              */}
 
           <TouchableHighlight
             underlayColor="rgba(255,255,255,1,0.6)"

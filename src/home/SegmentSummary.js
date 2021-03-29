@@ -314,16 +314,6 @@ class SegmentSummary extends Component {
           <Body style={{flex: 0}} />
           <Right style={{flex: 1}}>
             <Image resizeMode="contain" source={Logo} style={styles.logo} />
-            <Autrans
-              width={'40%'}
-              height={50}
-              style={{
-                alignSelf: 'center',
-                opacity: 1,
-                marginLeft: 10,
-                marginBottom: 5,
-              }}
-            />
           </Right>
         </Header>
         <View style={styles.loginButtonSection}>
