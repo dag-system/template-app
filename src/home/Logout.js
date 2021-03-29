@@ -1,8 +1,9 @@
-import {Component} from 'react';
-import {StyleSheet} from 'react-native';
+import React, {Component} from 'react';
+import {StyleSheet, View, Text, Image, TouchableOpacity} from 'react-native';
 import ApiUtils from '../ApiUtils';
 import {connect} from 'react-redux';
 import RNPusherPushNotifications from 'react-native-pusher-push-notifications';
+import Logo from '../assets/logo.png';
 
 const mapStateToProps = (state) => {
   return {
@@ -16,14 +17,7 @@ class Logout extends Component {
     this.state = {};
   }
 
-  componentDidMount() {
-    this.unSubscribe('debug-' + this.props.userData.idUtilisateur);
-    var action = {type: 'LOGOUT', data: null};
-
-    this.props.dispatch(action);
-
-    this.onClickNavigate('Home');
-  }
+  componentDidMount() {}
 
   unSubscribe = (interest) => {
     console.log(`Subscribing to "${interest}"`);
@@ -42,8 +36,78 @@ class Logout extends Component {
     this.props.navigation.navigate('Home');
   }
 
+  disconnect = () => {
+    this.unSubscribe('debug-' + this.props.userData.idUtilisateur);
+    var action = {type: 'LOGOUT', data: null};
+    this.props.dispatch(action);
+
+    this.onClickNavigate('Home');
+  };
+
   render() {
-    return null;
+    return (
+      <View
+        style={{
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'center',
+          alignItems: 'center',
+          flex: 1,
+          padding: 15,
+          backgroundColor: 'white',
+        }}>
+        <Image
+          style={{
+            height: 150,
+            marginBottom: 100,
+          }}
+          source={Logo}
+          resizeMode="contain"
+        />
+        <View>
+          <Text
+            style={{
+              width: '100%',
+              fontSize: 21,
+              marginBottom: 15,
+            }}>
+            Vous vous êtes déconnecté.
+          </Text>
+        </View>
+        <View>
+          <Text
+            style={{
+              fontSize: 17,
+              textAlign: 'center',
+            }}>
+            Vous vous êtes bien déconnecté, vous pouvez vous reconnecter sur un
+            autre compte si vous les souhaitez.
+          </Text>
+        </View>
+        <TouchableOpacity
+          onPress={() => this.disconnect()}
+          style={{
+            width: '80%',
+            height: 45,
+            backgroundColor: ApiUtils.getSecondColor(),
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            marginTop: 50,
+            marginBottom: 150,
+            borderColor: 'black',
+            borderWidth: 1,
+          }}>
+          <Text
+            style={{
+              fontSize: 17,
+              color: 'white',
+            }}>
+            Retourner sur la page d'accueil
+          </Text>
+        </TouchableOpacity>
+      </View>
+    );
   }
 }
 
