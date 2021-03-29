@@ -531,7 +531,7 @@ class SegmentSummary extends Component {
                     </Text>
 
                     <FlatList
-                      style={{height: '85%', width: '100%'}}
+                      style={{height: '125%', width: '100%'}}
                       data={this.state.segment.classement}
                       renderItem={({item}) =>
                         item.idUtilisateur ==

@@ -15,6 +15,7 @@ import {
 import {Icon, Text, Button} from 'native-base';
 import {connect} from 'react-redux';
 import MarkerInteret from '../assets/marker.png';
+import Right from '../assets/right.png';
 import MapView, {Marker, Polyline} from 'react-native-maps';
 import {ReactNativeModal as ModalSmall} from 'react-native-modal';
 import {Icon as IconElement} from 'react-native-elements';
@@ -486,16 +487,13 @@ class Map extends PureComponent<Props, State> {
               </Text>
 
               {this.state.currentInteret?.photoInteret != null &&
-              this.state.currentInteret?.photoInteret != '' ?
-          
-
-                (<Image 
-                style={{height: 200, width: '100%'}}
-                source={{
-                  uri: `data:image/png;base64,${this.state.currentInteret?.photoInteret}`,
-               }} /> 
-
-
+              this.state.currentInteret?.photoInteret != '' ? (
+                <Image
+                  style={{height: 200, width: '100%'}}
+                  source={{
+                    uri: `data:image/png;base64,${this.state.currentInteret?.photoInteret}`,
+                  }}
+                />
               ) : null}
 
               <View
@@ -594,7 +592,6 @@ class Map extends PureComponent<Props, State> {
               zIndex={0}
             />
           ) : null}
-
           {/* <MapView.Circle
           key="circle"
           center={{
@@ -609,7 +606,6 @@ class Map extends PureComponent<Props, State> {
           tracksViewChanges={false}
           zIndex={0}
         /> */}
-
           {this.props.polylines != null
             ? this.props.polylines
                 .filter((pol) => pol.isActive == true)
@@ -637,6 +633,77 @@ class Map extends PureComponent<Props, State> {
             <View style={[styles.markerIcon]}></View>
           </MapView.Marker>))
         } */}
+          <Marker
+            // onCalloutPress={() => this.onClickInterestPoint(marker)}
+            key={'1'}
+            coordinate={{
+              latitude:  45.78867732604313 ,
+              longitude: 4.877905157240417,
+            }}
+            tracksViewChanges={true}>
+            <View>
+              <Icon
+                name="arrow-right"
+                type="FontAwesome5"
+                color={'white'}
+                style={{color: 'black',fontSize : 16}}
+              />
+            </View>
+          </Marker>
+          <Marker
+            // onCalloutPress={() => this.onClickInterestPoint(marker)}
+            key={'2'}
+            coordinate={{
+              latitude:  45.79004221660561,
+              longitude: 4.883379387467017,
+            }}
+            tracksViewChanges={true}>
+            <View>
+              <Icon
+                name="arrow-down"
+                type="FontAwesome5"
+                color={'white'}
+                style={{color: 'black',fontSize : 16}}
+              />
+            </View>
+          </Marker>
+
+          <Marker
+            // onCalloutPress={() => this.onClickInterestPoint(marker)}
+            key={'3'}
+            coordinate={{
+              latitude:  45.78458003775824,
+              longitude: 4.86908902265729,
+            }}
+            tracksViewChanges={true}>
+            <View>
+              <Icon
+                name="arrow-left"
+                type="FontAwesome5"
+                color={'white'}
+                style={{color: 'black',fontSize : 16}}
+              />
+            </View>
+          </Marker>
+
+          <Marker
+            // onCalloutPress={() => this.onClickInterestPoint(marker)}
+            key={'4'}
+            coordinate={{
+              latitude:  45.78722447162104,
+              longitude: 4.867673605366597,
+            }}
+            tracksViewChanges={true}>
+            <View>
+              <Icon
+                name="arrow-right"
+                type="FontAwesome5"
+                color={'white'}
+                style={{color: 'black',fontSize : 16}}
+              />
+            </View>
+          </Marker>
+
 
           {this.props.pointsInterets != null
             ? this.props.pointsInterets.map((marker) => (
