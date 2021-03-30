@@ -113,30 +113,6 @@ class Classement extends Component {
             )}
 
             <Content style={{padding: 10, paddingTop: 20}} scrollEnabled={true}>
-              <Text
-                style={{
-                  fontWeight: 'bold',
-                  textAlign: 'center',
-                  color: ApiUtils.getBackgroundColor(),
-                  fontSize: 20,
-                  marginBottom: 10,
-                  textTransform: 'uppercase',
-                }}>
-                Classement du challenge My Cross
-              </Text>
-
-              <TouchableOpacity
-                onPress={() => this.openLink('https://www.insa-lyon.fr/')}>
-                <Text
-                  style={{
-                    textAlign: 'center',
-                    color: ApiUtils.getBackgroundColor(),
-                  }}>
-                  Retrouvez tous les classements sur notre site internet : A
-                  RENTRER
-                </Text>
-              </TouchableOpacity>
-
               {this.state.isPortrait ? (
                 <View>
                   <Image

@@ -9,6 +9,7 @@ import {
   FlatList,
   TouchableHighlight,
   ActivityIndicator,
+  TouchableOpacity,
 } from 'react-native';
 import {
   Container,
@@ -385,7 +386,7 @@ class SegmentSummary extends Component {
                       key="polyline"
                       coordinates={this.state.coordinates}
                       geodesic={true}
-                      strokeColor="rgba(63,170,239, 1)"
+                      strokeColor={ApiUtils.getSecondColor()}
                       strokeWidth={3}
                       zIndex={0}
                     />
@@ -519,64 +520,28 @@ class SegmentSummary extends Component {
                   </View>
                 ) : null}
 
-                {this.state.segment.classement != null ? (
-                  <View style={{justifyContent: 'center'}}>
-                    <Text
-                      style={{
-                        padding: 10,
-                        textAlign: 'center',
-                        color: ApiUtils.getBackgroundColor(),
-                      }}>
-                      CLASSEMENT
-                    </Text>
-
-                    <FlatList
-                      style={{height: '125%', width: '100%'}}
-                      data={this.state.segment.classement}
-                      renderItem={({item}) =>
-                        item.idUtilisateur ==
-                        this.props.userData.idUtilisateur ? (
-                          <View style={styles.rowContainer}>
-                            <Text />
-                            <View>
-                              <Text style={{fontWeight: 'bold'}}>
-                                {item.classement}
-                              </Text>
-                            </View>
-                            <View>
-                              <Text
-                                style={{fontWeight: 'bold', textAlign: 'left'}}>
-                                {item.prenomUtilisateur} {item.nomUtilisateur}
-                              </Text>
-                            </View>
-                            <View>
-                              <Text style={{fontWeight: 'bold'}}>
-                                {item.tempsEffort} - le {item.dateEffort}
-                              </Text>
-                            </View>
-                          </View>
-                        ) : (
-                          <View style={styles.rowContainer}>
-                            <View>
-                              <Text>{item.classement}</Text>
-                            </View>
-                            <View>
-                              <Text style={{textAlign: 'left'}}>
-                                {item.prenomUtilisateur} {item.nomUtilisateur}
-                              </Text>
-                            </View>
-                            <View>
-                              <Text>
-                                {item.tempsEffort} - le {item.dateEffort}
-                              </Text>
-                            </View>
-                          </View>
-                        )
-                      }
-                      keyExtractor={(item, index) => index.toString()}
-                    />
-                  </View>
-                ) : null}
+                <TouchableOpacity
+                  onPress={() => this.onClickNavigate('Classement')}
+                  style={{
+                    width: '80%',
+                    height: 45,
+                    marginTop: 15,
+                    backgroundColor: ApiUtils.getSecondColor(),
+                    borderWidth: 1,
+                    borderColor: 'black',
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    marginLeft: 'auto',
+                    marginRight: 'auto',
+                  }}>
+                  <Text
+                    style={{
+                      color: 'white',
+                    }}>
+                    Accédez au classement
+                  </Text>
+                </TouchableOpacity>
               </View>
             </View>
             <View style={{marginBottom: 200}} />
@@ -620,7 +585,7 @@ const styles = StyleSheet.create({
   },
   drawerButton: {
     backgroundColor: 'transparent',
-    width : '100%',
+    width: '100%',
     marginTop: 0,
     paddingTop: 10,
     shadowOffset: {height: 0, width: 0},
