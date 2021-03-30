@@ -40,7 +40,6 @@ import {Sponsors} from './Sponsors';
 import {ReactNativeModal as ModalSmall} from 'react-native-modal';
 import {Icon as IconElement} from 'react-native-elements';
 import {FlatList} from 'react-native';
-import GPXDocument from '../lib/gpx-parse/GPXDocument';
 import {check, request, PERMISSIONS, RESULTS} from 'react-native-permissions';
 import DefaultProps from '../models/DefaultProps';
 
@@ -494,8 +493,6 @@ class LiveSummary extends Component<Props, State> {
             break;
           case RESULTS.DENIED:
             this.askMediaLibraryPermission(url, name);
-            break;
-          case RESULTS.LIMITED:
             break;
           case RESULTS.GRANTED:
             this.onDownloadFileok(url, name);

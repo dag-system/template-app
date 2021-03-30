@@ -51,6 +51,7 @@ import {
   TemplateChallengeAutre,
   TemplateChallengeEntreprise,
   TemplateChallengeAutreName,
+  TemplateIsPaying,
 } from './../globalsModifs';
 
 const mapStateToProps = (state) => {
@@ -322,7 +323,11 @@ class CreateAccount extends ValidationComponent {
           var action = {type: 'LOGIN', data: responseJson};
           this.props.dispatch(action);
 
-          this.onClickNavigate('Lives');
+          if (TemplateIsPaying) {
+            this.onClickNavigate('Paiement');
+          } else {
+            this.onClickNavigate('Lives');
+          }
         } else {
           Toast.show({
             text: responseJson.message,

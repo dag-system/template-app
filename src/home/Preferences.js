@@ -1,13 +1,5 @@
 import React, {Component} from 'react';
-import {
-  StyleSheet,
-  View,
-  TextInput,
-  Image,
-  ScrollView,
-  Switch,
-  TouchableOpacity,
-} from 'react-native';
+import {StyleSheet, View, Switch, TouchableOpacity} from 'react-native';
 import {
   Container,
   Header,
@@ -137,12 +129,8 @@ class Preferences extends Component {
 
   componentDidMount() {
     setTimeout(() => this.didMount(), 300);
-
-    // alert(this.props.userData.ddnUtilisateur)
-    //   alert(new Date(this.props.userData.ddnUtilisateur))
-
-    // setTimeout(() => this.setState({ userdata: { ...this.state.userdata, ddnUtilisateur: this.state.userdata.ddnUtilisateur) }} ), 100)
   }
+
   didMount() {
     let years = [];
     for (let i = 2021; i > 1930; i--) {
@@ -159,10 +147,6 @@ class Preferences extends Component {
     if (this.props.userData.villeUtilisateur == 'NULL') {
       this.props.userData.villeUtilisateur = '';
     }
-
-    // this.setClubs(this.props.userClubs);
-
-    //this.getClubs();
   }
 
   setClubs(clubs) {
@@ -267,26 +251,6 @@ class Preferences extends Component {
     if (this.state.userdata.telUtilisateur == '') {
       isError = true;
     }
-
-    // if (this.state.userdata.adresseUtilisateur == '') {
-    //   isError = true;
-    // }
-
-    // if (this.state.userdata.cpUtilisateur == '') {
-    //   isError = true;
-    // }
-
-    // if (this.state.userdata.villeUtilisateur == '') {
-    //   isError = true;
-    // }
-
-    // if (!!this.state.newPassword && this.state.newPassword != '') {
-    //   if (this.state.newPasswordConfirmation != this.state.newPassword) {
-    //     isError = true;
-    //   } else {
-    //     withPassword = true;
-    //   }
-    // }
 
     return isError;
   }
@@ -900,10 +864,6 @@ class Preferences extends Component {
                             ? new Date(this.props.userData.ddnUtilisateur)
                             : null
                         }
-                        //  placeHolderText="Choisir une date de naissance"
-                        //  placeHolderTextStyle={{ marginLeft: 30, fontSize: 14, color: "#d3d3d3", fontStyle: 'italic' }}
-                        // format="YYYY-MM-DD"
-                        // locale={"fr"}
                         confirmBtnText="Valider"
                         cancelBtnText="Annuler"
                         customStyles={{
@@ -916,7 +876,6 @@ class Preferences extends Component {
                           dateInput: {
                             marginLeft: 100,
                           },
-                          // ... You can check the source to find the other keys.
                         }}
                         onDateChange={(date) => {
                           //  alert(date)
@@ -937,10 +896,6 @@ class Preferences extends Component {
                     style={{marginLeft: 20}}
                     date={new Date(this.state.userdata.ddnUtilisateur)}
                     defaultDate={new Date(this.props.userData.ddnUtilisateur)}
-                    //  placeHolderText="Choisir une date de naissance"
-                    //  placeHolderTextStyle={{ marginLeft: 30, fontSize: 14, color: "#d3d3d3", fontStyle: 'italic' }}
-                    // format="YYYY-MM-DD"
-                    // locale={"fr"}
                     confirmBtnText="Valider"
                     cancelBtnText="Annuler"
                     customStyles={{
@@ -984,10 +939,6 @@ class Preferences extends Component {
                   />
                 </Item>
 
-                {/* <Text style={styles.label}>Adresse</Text>
-                <TextInput style={styles.inputCode} clearButtonMode='always' placeholder="Adresse" value={this.state.userdata.adresseUtilisateur} onChangeText={(phoneNumber) => this.setState({ userdata: { ...this.state.userdata, adresseUtilisateur: phoneNumber } })} />
-               */}
-
                 <Item stackedLabel style={{marginBottom: 5}}>
                   <Label>Code Postal</Label>
                   <Input
@@ -1004,9 +955,6 @@ class Preferences extends Component {
                     }
                   />
                 </Item>
-
-                {/* <Text style={styles.label}>Code Postal</Text>
-                <TextInput style={styles.inputCode} clearButtonMode='always' placeholder="Code postal" value={this.state.userdata.cpUtilisateur} onChangeText={(phoneNumber) => this.setState({ userdata: { ...this.state.userdata, cpUtilisateur: phoneNumber } })} /> */}
 
                 <Item stackedLabel style={{marginBottom: 5}}>
                   <Label>Ville</Label>
@@ -1088,14 +1036,12 @@ class Preferences extends Component {
 const styles = StyleSheet.create({
   header: {
     backgroundColor: 'white',
-    // width: '100%'
   },
   title: {
     width: '25%',
   },
   saveButton: {
     backgroundColor: 'transparent',
-    // width: '100%',
     marginTop: 0,
     paddingTop: 0,
     shadowOffset: {height: 0, width: 0},
@@ -1104,7 +1050,7 @@ const styles = StyleSheet.create({
   },
   drawerButton: {
     backgroundColor: 'transparent',
-    width : '100%',
+    width: '100%',
     marginTop: 0,
     paddingTop: 0,
     shadowOffset: {height: 0, width: 0},
@@ -1144,7 +1090,6 @@ const styles = StyleSheet.create({
   },
   url: {
     fontSize: 12,
-    //  textAlign: 'center'
   },
   button: {
     marginBottom: 10,

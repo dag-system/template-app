@@ -3,13 +3,30 @@ import {View, TouchableOpacity} from 'react-native';
 import {Text} from 'native-base';
 import {connect} from 'react-redux';
 import {ReactNativeModal as ModalSmall} from 'react-native-modal';
-const mapStateToProps = state => {
+import {Dispatch} from 'redux';
+const mapStateToProps = (state) => {
   return {
     isOkPopupGps: state.isOkPopupGps,
   };
 };
 
-class NotificationModal extends Component {
+interface Props {
+  dispatch: Dispatch;
+  navigation: any;
+  onclose: Function;
+  onMap: boolean;
+  noHeader: boolean;
+  idLive: number;
+  onClose: Function;
+  isVisible: boolean;
+}
+
+interface State {
+  spinner: boolean;
+  isOpenModal: boolean;
+}
+
+class NotificationModal extends Component<Props, State> {
   constructor(props) {
     super(props);
 
@@ -21,7 +38,7 @@ class NotificationModal extends Component {
 
   seeNotificationLive = () => {
     // this.getFirstLocation();
-    console.log(this.props.idLive)
+    console.log(this.props.idLive);
     let live = {
       idLive: this.props.idLive,
     };
@@ -38,8 +55,7 @@ class NotificationModal extends Component {
     this.props.navigation.navigate('LiveSummary');
   };
 
-
-  onClose= () => {
+  onClose = () => {
     this.props.onClose();
   };
 
@@ -57,23 +73,25 @@ class NotificationModal extends Component {
             Bravo ! Un nouvel effort vient d'être calculé
           </Text>
           <Text style={{textAlign: 'justify'}}>
-           Retrouvez votre chrono sur le résumé de l'activité 
+            Retrouvez votre chrono sur le résumé de l'activité
           </Text>
-          <View style={{display : 'flex', flexDirection :'row', justifyContent :'space-between'}} >
+          <View
+            style={{
+              display: 'flex',
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+            }}>
+            <TouchableOpacity
+              onPress={this.onClose}
+              style={{justifyContent: 'flex-end', marginTop: 30}}>
+              <Text style={{textAlign: 'right'}}>Fermer</Text>
+            </TouchableOpacity>
 
-          <TouchableOpacity
-            onPress={this.onClose}
-            style={{justifyContent: 'flex-end', marginTop: 30}}>
-            <Text style={{textAlign: 'right'}}>Fermer</Text>
-          </TouchableOpacity>
-
-      
-          <TouchableOpacity
-            onPress={this.seeNotificationLive}
-            style={{justifyContent: 'flex-end', marginTop: 30}}>
-            <Text style={{textAlign: 'right'}}>Voir</Text>
-          </TouchableOpacity>
-
+            <TouchableOpacity
+              onPress={this.seeNotificationLive}
+              style={{justifyContent: 'flex-end', marginTop: 30}}>
+              <Text style={{textAlign: 'right'}}>Voir</Text>
+            </TouchableOpacity>
           </View>
         </View>
       </ModalSmall>

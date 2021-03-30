@@ -31,7 +31,17 @@ import {TemplateAppName, TemplateSiteLink} from './../globalsModifs';
 const mapStateToProps = () => {
   return {};
 };
-class Classement extends Component {
+
+interface Props {
+  navigation: any;
+  noHeader: boolean;
+}
+
+interface State {
+  isPortrait: boolean;
+}
+
+class Classement extends Component<Props, State> {
   constructor(props) {
     super(props);
 
@@ -49,9 +59,9 @@ class Classement extends Component {
     });
   }
 
-  componentDidMount() {
-    this.setState({newPassword: true});
-  }
+  drawer;
+
+  componentDidMount() {}
 
   closeDrawer = () => {
     this.drawer._root.close();

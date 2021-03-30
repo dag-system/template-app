@@ -26,6 +26,7 @@ export const TemplateChallengeFamille = true;
 export const TemplateChallengeAutre = true;
 export const TemplateChallengeEntreprise = true;
 export const TemplateHasAppDonation = false;
+export const TemplateIsPaying = false;
 
 export const TemplateChallengeAutreName = 'Template Test Autre';
 

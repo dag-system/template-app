@@ -20,6 +20,7 @@ import Classement from './home/Classement';
 import Replay from './home/Replay';
 import MapContainer from './simple-map/MapContainer';
 import AskGpsModal from './home/AskGpsModal';
+import Paiement from './home/Paiement';
 
 export default class Navigator extends Component {
   componentDidMount() {}
@@ -79,6 +80,13 @@ export default class Navigator extends Component {
           <Stack.Screen
             name="LiveSummary"
             component={LiveSummary}
+            options={{
+              animationEnabled: false,
+            }}
+          />
+          <Stack.Screen
+            name="Paiement"
+            component={Paiement}
             options={{
               animationEnabled: false,
             }}

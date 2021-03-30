@@ -12,7 +12,6 @@ import {
   Container,
   Header,
   Body,
-  Toast,
   Root,
   Drawer,
   Icon,
@@ -21,11 +20,9 @@ import {
   Left,
   Right,
 } from 'native-base';
-import md5 from 'md5';
 import ApiUtils from '../ApiUtils';
 import {connect} from 'react-redux';
 import Sidebar from './SideBar';
-import moment from 'moment';
 import Logo from '../assets/logo_header.png';
 import GlobalStyles from '../styles';
 import {Sponsors} from './Sponsors';
@@ -33,6 +30,7 @@ import IosReglages from '../assets/iosReglages.png';
 import Ios2 from '../assets/ios2.png';
 
 import {TemplateAppName} from './../globalsModifs';
+import {Dispatch} from 'redux';
 
 const mapStateToProps = (state) => {
   return {
@@ -40,7 +38,15 @@ const mapStateToProps = (state) => {
   };
 };
 
-class Help extends Component {
+interface Props {
+  dispatch: Dispatch;
+  navigation: any;
+  noHeader: boolean;
+}
+
+interface State {}
+
+class Help extends Component<Props, State> {
   drawer: any;
   constructor(props) {
     super(props);
@@ -316,18 +322,6 @@ class Help extends Component {
                     activité :
                   </Text>
 
-                  {/* <Text style={{marginTop: 10}}>
-                    Les applications qui utilisent des systèmes de messagerie,
-                    type mails par exemple ont un besoin minime en ressources.
-                    Ce n’est pas le cas de notre application qui pour
-                    fonctionner efficacement a besoin de ressources.
-                  </Text> */}
-                  {/* <Text style={{marginTop: 10}}>
-                    Qui dit “ressources”, dit “batterie” ! Et vous l’aurez
-                    compris, l’utilisation de la batterie de votre téléphone est
-                    fonction des données transmises par l’application que l’on
-                    utilise.
-                  </Text> */}
                   <Text style={{marginTop: 10}}>
                     Selon certaines marques ou modèles, les systèmes d’économie
                     de batterie ferment intempestivement soit l’application,

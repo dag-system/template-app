@@ -1,10 +1,10 @@
-import React, { Component } from 'react';
-import { Platform, StyleSheet, Text, View } from 'react-native';
-import { WebView } from 'react-native-webview';
-import { Button, Spinner } from 'native-base';
-import { connect } from 'react-redux';
+import React, {Component} from 'react';
+import {Platform, StyleSheet, Text, View} from 'react-native';
+import {WebView} from 'react-native-webview';
+import {Button, Spinner} from 'native-base';
+import {connect} from 'react-redux';
 import ApiUtils from '../ApiUtils';
-import AutoHeightWebView from 'react-native-autoheight-webview'
+import AutoHeightWebView from 'react-native-autoheight-webview';
 
 const myScript = `
 
@@ -43,26 +43,15 @@ class WebViewJetCode extends Component {
     console.log(event.nativeEvent.data);
 
     var eventData = JSON.parse(event.nativeEvent.data);
-    console.log(eventData)
+    console.log(eventData);
     if (eventData.type == 'resize_height') {
       let height = eventData.height;
       // console.log('heigth', eventData.height);
-      this.setState({ webviewHeight: height });
+      this.setState({webviewHeight: height});
     }
 
     if (eventData.type == 'payResult') {
-
-      // {"customerID":"347977635867476d69645030767248352f47634643336963",
-      // "sessionID":"yBghbwrItve4RFzu-MPYB0rMxQOEP7TU",
-      // "jetcodeType":"payinresult","basketId":482,
-      // "type":"payResult",
-      // "url":"https://test.dag-system.com:8081/getBasketInfos/482"}
-
-      // let data = {
-      //   url: eventData.url,
-      //   basketId: eventData.basketId,
-      // };
-      var action = { type: 'ADD_PAYRESULT', data: eventData };
+      var action = {type: 'ADD_PAYRESULT', data: eventData};
       this.props.dispatch(action);
 
       this.downloadPayResult(eventData);
@@ -70,7 +59,7 @@ class WebViewJetCode extends Component {
   }
 
   reload() {
-    this.setState({ isError: false });
+    this.setState({isError: false});
   }
 
   downloadPayResult(purchase) {
@@ -90,7 +79,7 @@ class WebViewJetCode extends Component {
       .then((response) => response.json())
       .then((responseJson) => {
         console.log(responseJson);
-        var action = { type: 'UPDATE_PAY_RESULT', data: responseJson };
+        var action = {type: 'UPDATE_PAY_RESULT', data: responseJson};
         this.props.dispatch(action);
       })
       .catch((e) => {
@@ -100,20 +89,22 @@ class WebViewJetCode extends Component {
 
   render() {
     return (
-      <View style={{flex : 1}}>
+      <View style={{flex: 1}}>
         {this.props.uri != null && !this.state.isError ? (
           <AutoHeightWebView
             userAgent="folomi"
-            style={{ marginTop: 40, minHeight: 500,  width: '100%' }}
+            style={{marginTop: 40, minHeight: 500, width: '100%'}}
             startInLoadingState={true}
             injectedJavaScript={myScript}
             onError={(syntheticEvent) => {
-              const { nativeEvent } = syntheticEvent;
-              this.setState({ isError: true });
+              const {nativeEvent} = syntheticEvent;
+              this.setState({isError: true});
               console.log('WebView error: ', nativeEvent);
             }}
             onMessage={(data) => this.getWebViewMessage(data)}
-            renderLoading={() => <Spinner style={{ marginTop: -900 }} color="black" />}
+            renderLoading={() => (
+              <Spinner style={{marginTop: -900}} color="black" />
+            )}
             source={{
               uri: this.props.uri,
             }}
@@ -122,10 +113,18 @@ class WebViewJetCode extends Component {
           />
         ) : null}
         {this.state.isError ? (
-          <View style={{ justifyContent: 'center', flex: 1 }}>
-            <Text style={{ textAlign: 'center', marginBottom: 10 }}>{ApiUtils.translate('webview.error')}</Text>
+          <View style={{justifyContent: 'center', flex: 1}}>
+            <Text style={{textAlign: 'center', marginBottom: 10}}>
+              {ApiUtils.translate('webview.error')}
+            </Text>
 
-            <View style={{ alignSelf: 'center', justifyContent: 'center', textAlign: 'center', flex: 1 }}>
+            <View
+              style={{
+                alignSelf: 'center',
+                justifyContent: 'center',
+                textAlign: 'center',
+                flex: 1,
+              }}>
               <Button
                 rounded
                 small
@@ -139,13 +138,14 @@ class WebViewJetCode extends Component {
                   paddingBottom: 6,
                 }}
                 onPress={() => this.reload()}>
-                <TText style={{ fontSize: 18, color: 'white' }}>{ApiUtils.translate('webview.reload')}</TText>
+                <TText style={{fontSize: 18, color: 'white'}}>
+                  {ApiUtils.translate('webview.reload')}
+                </TText>
               </Button>
             </View>
           </View>
         ) : null}
-        </View>
-   
+      </View>
     );
   }
 }

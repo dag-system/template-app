@@ -100,15 +100,6 @@ class SegmentSummary extends Component {
     this.props.dispatch(action);
 
     this.onClickNavigate('LiveSummaryFromSegment');
-
-    // var live = {
-    //   idLive: idLive
-    // };
-    // try {
-    //   AsyncStorage.setItem('@followme:currentLiveFromSegment', JSON.stringify(live)).then(this.onClickNavigate('LiveSummaryFromSegment'));
-    // } catch (error) {
-    //   alert("error saving " + error.message);
-    // }
   }
   onClickNavigate(routeName) {
     this.props.navigation.navigate(routeName);
@@ -120,16 +111,11 @@ class SegmentSummary extends Component {
     formData.append('auth', ApiUtils.getAPIAuth());
     formData.append('idSegment', idSegment);
     formData.append('idUtilisateur', this.props.userData.idUtilisateur);
-    // formData.append('idLive', idLive);//to do
-    // formData.append('positions', 1);
 
     //fetch followCode API
     fetch(ApiUtils.getAPIUrl(), {
       method: 'POST',
-      headers: {
-        // Accept: 'application/json',
-        // 'Content-Type': 'application/json',
-      },
+      headers: {},
       body: formData,
     })
       .then(ApiUtils.checkStatus)
@@ -149,7 +135,6 @@ class SegmentSummary extends Component {
       .catch((e) => {
         this.setState({isloading: false});
         ApiUtils.logError('get segment', JSON.stringify(e.message));
-        // alert('Une erreur est survenue : ' + JSON.stringify(e.message));
         console.log(e);
         if (e.message == 'Timeout' || e.message == 'Network request failed') {
           this.setState({noConnection: true});
@@ -317,10 +302,6 @@ class SegmentSummary extends Component {
         <View style={styles.loginButtonSection}>
           <ScrollView contentContainerStyle={styles.loginButtonSection}>
             <View style={styles.loginButtonSection}>
-              {/* <View style={{ paddingLeft: 10, paddingRight: 5, marginBottom: 10 }}>
-                  <Text style={styles.bold}>{this.state.segment.nomSegment}</Text>
-                </View> */}
-
               <Button
                 onPress={this.centerMap.bind(this)}
                 style={{
@@ -356,12 +337,6 @@ class SegmentSummary extends Component {
                 </Text>
               </View>
 
-              {/* <View style={{ flexDirection: 'row', justifyContent: 'space-between', width: '100%', paddingRight: 10, paddingLeft: 10, marginTop: 0, marginBottom: 20 }}>
-                    <View style={styles.resultCol}><Text>Distance</Text><Text style={styles.resultNumber}>{this.state.segment.distanceSegment} km</Text></View>
-                    <View style={styles.resultCol}><Text>Denivelé +</Text><Text style={styles.resultNumber}>{this.state.segment.denivelePlusSegment} m</Text></View>
-                    <View style={styles.resultCol}><Text>Denivelé -</Text><Text style={styles.resultNumber}>{this.state.segment.deniveleMoinsSegment} m </Text></View>
-                  </View> */}
-
               <View style={styles.map}>
                 {this.state.isLoading ? (
                   <ActivityIndicator />
@@ -392,36 +367,6 @@ class SegmentSummary extends Component {
               </View>
 
               <View>
-                {/* {!this.state.showEffortList && this.state.segment.efforts != null && this.state.segment.efforts.listEfforts != null ?
-
-                    <View
-                      style={{
-                        marginBottom: 0, paddingLeft: 10, paddingRight: 10, padding: 10,
-                        marginTop: 0,
-                        backgroundColor: 'white',
-                        borderBottomWidth: 0.5,
-                        justifyContent: 'center',
-                        borderBottomColor: '#B9B9B9'
-                      }}>
-                      <TouchableHighlight
-                       underlayColor='rgba(255,255,255,1,0.6)'
-                        onPress={() => this.showEffortList()}>
-                        <View>
-                          <TouchableHighlight
-                          underlayColor='rgba(255,255,255,1,0.6)'
-                            onPress={() => this.showEffortList()}>
-                            <Text>Voir vos résultats </Text>
-                          </TouchableHighlight>
-                          <TouchableHighlight
-                           underlayColor='rgba(255,255,255,1,0.6)'
-                            onPress={() => this.showEffortList()}>
-                            <Text>{this.state.segment.efforts.listEfforts.length} {this.getEffortLabel(this.state.segment.efforts.listEfforts.length)} </Text>
-                          </TouchableHighlight>
-                        </View>
-                      </TouchableHighlight>
-                    </View>
-                    : null} */}
-
                 {this.state.segment.efforts != null &&
                 this.state.segment.efforts.listEfforts != null ? (
                   <View style={{justifyContent: 'center'}}>

@@ -3,13 +3,25 @@ import {View, TouchableOpacity} from 'react-native';
 import {Text} from 'native-base';
 import {connect} from 'react-redux';
 import {ReactNativeModal as ModalSmall} from 'react-native-modal';
-const mapStateToProps = state => {
+import {Dispatch} from 'redux';
+const mapStateToProps = (state) => {
   return {
     isOkPopupGps: state.isOkPopupGps,
   };
 };
 
-class AskGpsModal extends Component {
+interface Props {
+  dispatch: Dispatch;
+  navigation: any;
+  isOkPopupGps: boolean;
+}
+
+interface State {
+  spinner: boolean;
+  isOpenModalHelp: boolean;
+}
+
+class AskGpsModal extends Component<Props, State> {
   constructor(props) {
     super(props);
 

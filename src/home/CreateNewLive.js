@@ -34,7 +34,7 @@ import {
 import {connect} from 'react-redux';
 import ApiUtils from '../ApiUtils';
 import Logo from '../assets/logo.png';
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
   return {
     userData: state.userData,
     recordingState: state.recordingState,
@@ -83,8 +83,8 @@ class CreateNewLive extends Component {
       body: formData,
     })
       .then(ApiUtils.checkStatus)
-      .then(response => response.json())
-      .then(responseJson => {
+      .then((response) => response.json())
+      .then((responseJson) => {
         // alert("success http");
         //save values in cache
         if (responseJson.codeErreur == 'SUCCESS') {
@@ -107,7 +107,7 @@ class CreateNewLive extends Component {
           alert(responseJson.message);
         }
       })
-      .catch(e => {
+      .catch((e) => {
         ApiUtils.logError('CreateNewLive onClickCreateLive', e.message);
         this.onClickNavigate('Lives');
       })
@@ -161,11 +161,13 @@ class CreateNewLive extends Component {
               alignSelf: 'center',
             }}
           />
-          <ActivityIndicator style={{height: 40, width: 40, color: 'white'}} color="white" />
+          <ActivityIndicator
+            style={{height: 40, width: 40, color: 'white'}}
+            color="white"
+          />
           <Text style={{textAlign: 'center', color: 'white'}}>
             Chargement en cours
           </Text>
-          {/* { (this.props.value == '') ? <Text style={this.props.style}>{this.props.message}</Text> : null} */}
         </View>
       </Content>
     );

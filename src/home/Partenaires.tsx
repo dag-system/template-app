@@ -25,37 +25,34 @@ import {connect} from 'react-redux';
 import Sidebar from './SideBar';
 
 import {TemplateArrayImagesPartenairesPath} from './../globalsModifs';
+import {Dispatch} from 'redux';
 
 const mapStateToProps = (state) => {
   return {
     userData: state.userData,
   };
 };
-class Partenaires extends Component {
+
+interface Props {
+  dispatch: Dispatch;
+  navigation: any;
+  onclose: Function;
+  onMap: boolean;
+  noHeader: boolean;
+}
+
+interface State {}
+
+class Partenaires extends Component<Props, State> {
   constructor(props) {
     super(props);
 
-    this.state = {
-      userdata: {
-        nomUtilisateur: '',
-        prenomUtilisateur: '',
-        telUtilisateur: '',
-        folocodeUtilisateur: '',
-        idUtilisateur: '',
-      },
-      newPassword: '',
-      newPasswordConfirmation: '',
-      isErrorName: false,
-      lives: [],
-      isLoading: false,
-      toasterMessage: '',
-      showDefaultDdn: false,
-    };
+    this.state = {};
   }
 
-  componentDidMount() {
-    this.setState({newPassword: true});
-  }
+  drawer;
+
+  componentDidMount() {}
 
   closeDrawer = () => {
     this.drawer._root.close();

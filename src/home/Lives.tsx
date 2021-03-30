@@ -73,6 +73,7 @@ interface Props extends DefaultProps {
   isOkPopupBAttery: boolean;
   isOkPopupBAttery2: boolean;
   notifications: any[];
+  phoneData: any;
 }
 
 interface State {
@@ -748,7 +749,7 @@ class Lives extends Component<Props, State> {
           var finalTraceArray = []; // new Object(this.props.polylines);
           var finalinterestArray = [];
           if (tracesArray != null && tracesArray.length != 0) {
-            tracesArray.forEach((trace) => {
+            tracesArray.forEach((trace: any) => {
               var finalTrace = trace;
 
               var positionArray = Object.values(trace.positionsTrace);
@@ -770,7 +771,7 @@ class Lives extends Component<Props, State> {
           if (result.interets != null && result.interets.length != 0) {
             var interestArray = Object.values(result.interets);
             var count = 0;
-            interestArray.forEach((interest) => {
+            interestArray.forEach((interest: any) => {
               var coordinate = {
                 latitude: parseFloat(interest.latitudeInteret),
                 longitude: parseFloat(interest.longitudeInteret),
@@ -838,7 +839,7 @@ class Lives extends Component<Props, State> {
     const jsonSport = this.state.listSport;
     for (let i = 0; i < jsonSport.length; i++) {
       if (idSport == jsonSport[i].idSport) {
-        return jsonSport[i].SportName;
+        return jsonSport[i].sportName;
       }
     }
   }
@@ -1072,7 +1073,6 @@ class Lives extends Component<Props, State> {
                       return b.idLive - a.idLive;
                     })}
                     extraData={this.props.lives}
-                    key={(item) => item.idLive}
                     renderItem={({item}) =>
                       this.state.isLoadingDeleting &&
                       this.state.deletingIds.filter((d) => d == item.idLive)
@@ -1126,7 +1126,6 @@ class Lives extends Component<Props, State> {
                           right={this.swipeoutBtns}
                           autoClose={true}
                           backgroundColor="transparent"
-                          rowID={item.idLive}
                           onOpen={(sectionID, rowID) => {
                             this.setState({
                               sectionID,

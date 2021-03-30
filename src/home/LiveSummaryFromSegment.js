@@ -39,18 +39,6 @@ class LiveSummaryFromSegment extends Component {
 
   componentDidMount() {
     this.loadLive(this.props.currentLiveFromSegmentId);
-    // this.setState({ live: this.props.currentLive });
-    // // alert(JSON.stringify(responseJson.segmentEfforts.length));
-    // // this.setState({ segmentEfforts: responseJson.segmentEfforts });
-    // this.setState({ statsLive: this.props.currentLive.statsLive });
-
-    // // this.saveCoordinates(this.props.currentLive.positions.tracks[0].trkseg[0].points);
-
-    // // this.getSports(responseJson.idSport);
-
-    // // this.setState({ sports: this.props.sports });
-    // var libelleSport = this.props.sports[idSport - 1].label;
-    // this.setState({ libelleSport: libelleSport });
   }
 
   loadLive(idLive) {
@@ -498,25 +486,6 @@ class LiveSummaryFromSegment extends Component {
                                     </Text>
                                   </View>
                                 </View>
-                                {/* <View style={{ display: "flex", flexDirection: "row", marginTop: 4 }} >
-
-                                    {segment.classementSegment <= 10 ?
-                                      <Text style={{ fontSize: 20, marginTop: 2, color: ApiUtils.getBackgroundColor() }}>
-                                        {segment.classementSegment}</Text>
-                                      :
-
-                                      <Text style={{ fontSize: 20, marginTop: 2 }}>
-                                        {segment.classementSegment}</Text>
-                                    }
-
-
-                                    <Text style={{ fontSize: 10, marginTop: 2 }}>
-                                      ème</Text>
-
-                                    <Text style={{ fontSize: 20, marginTop: 2 }}>
-                                      /{segment.nombreParticipantSegment}</Text>
-
-                                  </View> */}
                               </View>
                             </TouchableHighlight>
                           </View>
@@ -535,7 +504,6 @@ class LiveSummaryFromSegment extends Component {
             )}
           </ScrollView>
         </View>
-        {/* </Body> */}
       </Container>
     );
   }

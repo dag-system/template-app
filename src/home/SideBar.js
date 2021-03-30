@@ -3,13 +3,26 @@ import {
   StyleSheet,
   Linking,
   View,
+  Modal,
   Image,
+  TouchableOpacity,
   TouchableHighlight,
 } from 'react-native';
-import {Container, Body, Text, Icon} from 'native-base';
+import {
+  Container,
+  Header,
+  Left,
+  Body,
+  Right,
+  Text,
+  Button,
+  Icon,
+} from 'native-base';
 import ApiUtils from '../ApiUtils';
+import WebviewJetCode from './WebviewJetCode';
+import Logo from '../assets/logo_header.png';
 
-import {TemplateHasAppDonation} from './../globalsModifs';
+import {TemplateHasAppDonation, TemplateAppName} from './../globalsModifs';
 
 export default class Sidebar extends Component {
   constructor(props) {
@@ -17,7 +30,7 @@ export default class Sidebar extends Component {
 
     let navigation = props.navigation;
     this.state = {
-      hasAppDonnation: TemplateHasAppDonation,
+      isVisibleDonateModal: false,
     };
   }
 
@@ -41,6 +54,14 @@ export default class Sidebar extends Component {
       }
     });
   }
+
+  onStartDonate = () => {
+    this.setState({isVisibleDonateModal: true});
+  };
+
+  onCloseDonate = () => {
+    this.setState({isVisibleDonateModal: false});
+  };
 
   render() {
     return (
@@ -207,6 +228,29 @@ export default class Sidebar extends Component {
             </View>
           </TouchableHighlight>
 
+          {TemplateHasAppDonation ? (
+            <TouchableOpacity
+              onPress={() => this.onStartDonate()}
+              style={{width: '100%'}}>
+              <View
+                style={{
+                  display: 'flex',
+                  flexDirection: 'row',
+                  justifyContent: 'flex-start',
+                  padding: 10,
+                }}>
+                <Icon
+                  name="euro-sign"
+                  type="FontAwesome5"
+                  style={[styles.icon, {color: 'black'}]}
+                />
+                <Text style={[styles.menuText, {color: 'black'}]}>
+                  Faire un don
+                </Text>
+              </View>
+            </TouchableOpacity>
+          ) : null}
+
           <TouchableHighlight
             underlayColor="rgba(255,255,255,1,0.6)"
             onPress={() => this.onClickNavigate('Help')}
@@ -293,6 +337,39 @@ export default class Sidebar extends Component {
             </Text>
             {/* </View> */}
           </TouchableHighlight>
+
+          <Modal
+            visible={this.state.isVisibleDonateModal}
+            onRequestClose={() => this.onCloseDonate()}>
+            <Header style={styles.header}>
+              <Left>
+                <Button
+                  style={styles.drawerButton}
+                  onPress={() => this.onCloseDonate()}>
+                  <Icon
+                    style={styles.saveText}
+                    name="chevron-left"
+                    type="FontAwesome5"
+                  />
+                </Button>
+              </Left>
+              <Body style={{flex: 0}} />
+              <Right style={{flex: 1}}>
+                <Image
+                  resizeMode="contain"
+                  source={Logo}
+                  style={styles.logoHeader}
+                />
+              </Right>
+            </Header>
+            <WebviewJetCode
+              uri={
+                'http://dag-system.com/externalcontent/' +
+                TemplateAppName +
+                '/jetcode_don.html'
+              }
+            />
+          </Modal>
         </Body>
       </Container>
     );
@@ -326,5 +403,31 @@ const styles = StyleSheet.create({
     width: 30,
     height: 30,
     fontSize: 24,
+  },
+  header: {
+    backgroundColor: 'white',
+    // backgroundColor: ApiUtils.getBackgroundColor(),
+    width: '100%',
+  },
+  drawerButton: {
+    backgroundColor: 'transparent',
+    width: 120,
+    marginTop: 0,
+    paddingTop: 10,
+    shadowOffset: {height: 0, width: 0},
+    shadowOpacity: 0,
+    elevation: 0,
+    paddingLeft: 0,
+  },
+  saveText: {
+    color: 'black',
+    paddingLeft: 0,
+    marginLeft: 5,
+    marginRight: -5,
+  },
+  logoHeader: {
+    width: '100%',
+    height: 50,
+    marginRight: '20%',
   },
 });

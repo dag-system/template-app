@@ -30,6 +30,8 @@ import defaultMessages from './defaultMessages';
 import GlobalStyles from '../styles';
 import ValidationComponent from 'react-native-form-validator';
 
+import {TemplateIsPaying} from './../globalsModifs';
+
 const mapStateToProps = (state) => {
   return {
     userData: state.userData,
@@ -101,7 +103,16 @@ class ForgotPassword extends ValidationComponent {
             var action = {type: 'LOGIN', data: responseJson};
             this.props.dispatch(action);
             this.setState({isLoading: false});
-            this.onClickNavigate('Lives');
+
+            if (TemplateIsPaying) {
+              if (ApiUtils.hasPaid(responseJson)) {
+                this.onClickNavigate('Lives');
+              } else {
+                this.onClickNavigate('Paiement');
+              }
+            } else {
+              this.onClickNavigate('Lives');
+            }
           } else {
             alert("Votre folocode n'est pas valide");
           }
@@ -147,13 +158,6 @@ class ForgotPassword extends ValidationComponent {
           console.log(responseJson);
           var folocodes = Object.values(responseJson);
           this.setState({folocodes: folocodes});
-          // Toast.show({
-          //   text: "Votre mot de passe vous a été envoyé par email à l'instant",
-          //   buttonText: 'Ok',
-          //   type: 'success',
-          //   position: 'bottom',
-
-          // });
         } else {
           console.log(responseJson.message);
           Toast.show({
@@ -206,20 +210,6 @@ class ForgotPassword extends ValidationComponent {
     return (
       <Root>
         <Container>
-          {/* <Header style={styles.header}>
-            <Body>
-              <View style={{ flexDirection: 'row', justifyContent: 'space-between', width: '100%', paddingRight: 0, paddingLeft: 5 }}>
-                <Button style={styles.drawerButton} onPress={() => this.goBack()}>
-                  <Icon style={styles.saveText} name="chevron-left" type="FontAwesome5" />
-                  <Text style={styles.saveText}>Précedent</Text>
-                </Button>
-
-
-              </View>
-
-            </Body>
-          </Header> */}
-
           <Header style={styles.header}>
             <Left>
               <Button style={styles.drawerButton} onPress={() => this.goBack()}>
@@ -285,15 +275,6 @@ class ForgotPassword extends ValidationComponent {
                     : {backgroundColor: ApiUtils.getColor()},
                 ]}
                 onPress={() => this.onClickSendFollowCode()}
-                // style={[
-                //   styles.saveButton,
-                //   {
-                //     backgroundColor:
-                //     this.isFieldInError('emailUtilisateur') || this.state.emailUtilisateur == ''
-                //         ? 'transparent'
-                //         : ApiUtils.getBackgroundColor(),
-                //   },
-                // ]}
                 onPress={() => this.onClickValidate()}>
                 <Text
                   style={{

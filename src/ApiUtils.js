@@ -149,6 +149,22 @@ var ApiUtils = {
     }
   },
 
+  hasPaid(userData) {
+    let paiementsString = userData.paiements;
+    if (paiementsString == null) {
+      return false;
+    }
+    var paiements = Object.values(paiementsString);
+    console.log(paiements);
+    if (paiements != null && paiements.length > 0) {
+      if (paiements.filter((p) => p.idStation == IdStation).length > 0) {
+        return true;
+      }
+    } else {
+      return false;
+    }
+  },
+
   logError: function (methodName, message) {
     // alert(message);
     // let formData = new FormData();

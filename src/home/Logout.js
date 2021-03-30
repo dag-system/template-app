@@ -1,8 +1,9 @@
-import {Component} from 'react';
-import {StyleSheet} from 'react-native';
+import React, {Component} from 'react';
+import {View, Text, Image, TouchableOpacity} from 'react-native';
 import ApiUtils from '../ApiUtils';
 import {connect} from 'react-redux';
 import RNPusherPushNotifications from 'react-native-pusher-push-notifications';
+import Logo from '../assets/logo.png';
 
 const mapStateToProps = (state) => {
   return {
@@ -16,14 +17,7 @@ class Logout extends Component {
     this.state = {};
   }
 
-  componentDidMount() {
-    this.unSubscribe('debug-' + this.props.userData.idUtilisateur);
-    var action = {type: 'LOGOUT', data: null};
-
-    this.props.dispatch(action);
-
-    this.onClickNavigate('Home');
-  }
+  componentDidMount() {}
 
   unSubscribe = (interest) => {
     console.log(`Subscribing to "${interest}"`);
@@ -42,102 +36,79 @@ class Logout extends Component {
     this.props.navigation.navigate('Home');
   }
 
+  disconnect = () => {
+    this.unSubscribe('debug-' + this.props.userData.idUtilisateur);
+    var action = {type: 'LOGOUT', data: null};
+    this.props.dispatch(action);
+
+    this.onClickNavigate('Home');
+  };
+
   render() {
-    return null;
+    return (
+      <View
+        style={{
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'center',
+          alignItems: 'center',
+          flex: 1,
+          padding: 15,
+          backgroundColor: 'white',
+        }}>
+        <Image
+          style={{
+            height: 150,
+            marginBottom: 100,
+          }}
+          source={Logo}
+          resizeMode="contain"
+        />
+        <View>
+          <Text
+            style={{
+              width: '100%',
+              fontSize: 21,
+              marginBottom: 15,
+            }}>
+            Vous vous êtes déconnecté.
+          </Text>
+        </View>
+        <View>
+          <Text
+            style={{
+              fontSize: 17,
+              textAlign: 'center',
+            }}>
+            Vous vous êtes bien déconnecté, vous pouvez vous reconnecter sur un
+            autre compte si vous les souhaitez.
+          </Text>
+        </View>
+        <TouchableOpacity
+          onPress={() => this.disconnect()}
+          style={{
+            width: '80%',
+            height: 45,
+            backgroundColor: ApiUtils.getSecondColor(),
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            marginTop: 50,
+            marginBottom: 150,
+            borderColor: 'black',
+            borderWidth: 1,
+          }}>
+          <Text
+            style={{
+              fontSize: 17,
+              color: 'white',
+            }}>
+            Retourner sur la page d'accueil
+          </Text>
+        </TouchableOpacity>
+      </View>
+    );
   }
 }
-
-const styles = StyleSheet.create({
-  header: {
-    //Ò  backgroundColor: ApiUtils.getBackgroundColor()
-    backgroundColor: '#DADADA',
-  },
-  title: {
-    color: '#000',
-    // fontFamily: 'roboto'
-  },
-  text: {
-    fontFamily: 'Roboto',
-  },
-  body: {
-    width: '100%',
-    backgroundColor: '#DADADA',
-    //  justifyContent: 'center',
-  },
-  logo: {
-    width: '80%',
-    height: 150,
-    marginLeft: 25,
-    marginRight: 25,
-    marginTop: 50,
-    marginBottom: 50,
-  },
-  loginButtonSection: {
-    width: '100%',
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: ApiUtils.getBackgroundColor(),
-    paddingBottom: 40,
-  },
-
-  followCodeLoginSection: {
-    backgroundColor: '#DADADA',
-    width: '100%',
-    justifyContent: 'center',
-    alignItems: 'center',
-    paddingTop: 30,
-  },
-
-  inputCode: {
-    borderBottomColor: 'black',
-    borderBottomWidth: 1,
-    width: '80%',
-    height: 30,
-    padding: 0,
-    marginBottom: 20,
-    marginTop: 20,
-  },
-  p: {
-    fontSize: 12,
-    marginBottom: 5,
-  },
-  url: {
-    fontSize: 12,
-    textAlign: 'center',
-  },
-  textLink: {
-    color: '#5D8BE6',
-    fontWeight: 'bold',
-    fontSize: 11,
-    marginTop: 20,
-    marginRight: 10,
-  },
-
-  buttonok: {
-    marginBottom: 10,
-    width: 150,
-    height: 30,
-    borderRadius: 10,
-    marginRight: 40,
-  },
-  container: {
-    // flex: 1,
-    //  justifyContent: 'center',
-    //   alignItems: 'center',
-    // backgroundColor: ApiUtils.getBackgroundColor(),
-    backgroundColor: '#DADADA',
-  },
-  footer: {
-    backgroundColor: 'transparent',
-    height: 215,
-  },
-  userInfo: {
-    padding: 10,
-  },
-  icon: {
-    width: 24,
-    height: 24,
-  },
-});
 
 export default connect(mapStateToProps)(Logout);

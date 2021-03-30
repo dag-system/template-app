@@ -29,28 +29,32 @@ import BackgroundGeolocation, {
   DeviceSettingsRequest,
 } from 'react-native-background-geolocation';
 import {Dimensions} from 'react-native';
+import {Dispatch} from 'redux';
 const mapStateToProps = (state) => {
   return {
     userData: state.userData,
   };
 };
 
-class BatteryModal extends Component {
+interface Props {
+  dispatch: Dispatch;
+  navigation: any;
+  onclose: Function;
+  onMap: boolean;
+  noHeader: boolean;
+}
+
+interface State {
+  isLoading: boolean;
+  toasterMessage: string;
+  showDefaultDdn: boolean;
+}
+
+class BatteryModal extends Component<Props, State> {
   constructor(props) {
     super(props);
 
     this.state = {
-      userdata: {
-        nomUtilisateur: '',
-        prenomUtilisateur: '',
-        telUtilisateur: '',
-        folocodeUtilisateur: '',
-        idUtilisateur: '',
-      },
-      newPassword: '',
-      newPasswordConfirmation: '',
-      isErrorName: false,
-      lives: [],
       isLoading: false,
       toasterMessage: '',
       showDefaultDdn: false,
@@ -59,64 +63,8 @@ class BatteryModal extends Component {
 
   componentDidMount() {}
 
-  closeDrawer = () => {
-    this.drawer._root.close();
-  };
-
   ongoHome() {
     this.props.navigation.navigate('Home');
-  }
-
-  isErrorForm() {
-    var isError = false;
-    var withPassword = false;
-    if (this.state.userdata.nomUtilisateur == '') {
-      isError = true;
-    }
-
-    if (this.state.userdata.prenomUtilisateur == '') {
-      isError = true;
-    }
-
-    if (this.state.userdata.emailUtilisateur == '') {
-      isError = true;
-    }
-
-    if (!this.validateEmail(this.state.userdata.emailUtilisateur)) {
-      isError = true;
-    }
-
-    if (!!this.state.newPassword && this.state.newPassword != '') {
-      if (this.state.newPasswordConfirmation != this.state.newPassword) {
-        isError = true;
-      } else {
-        withPassword = true;
-      }
-    }
-
-    return isError;
-  }
-
-  onClickValidate() {
-    var isError = this.isErrorForm();
-    var withPassword = false;
-
-    if (!!this.state.newPassword && this.state.newPassword != '') {
-      if (this.state.newPasswordConfirmation != this.state.newPassword) {
-        isError = true;
-      } else {
-        withPassword = true;
-      }
-    }
-
-    if (!isError) {
-      this.onSendRequest(withPassword);
-    }
-  }
-
-  validateEmail(email) {
-    var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-    return re.test(email);
   }
 
   onPopupOk() {
@@ -163,37 +111,9 @@ class BatteryModal extends Component {
   }
   render() {
     return (
-      <Drawer
-        ref={(ref) => {
-          this.drawer = ref;
-        }}
-        content={
-          <Sidebar
-            navigation={this.props.navigation}
-            drawer={this.drawer}
-            selected="Help"
-          />
-        }>
+      <Drawer>
         <Container>
           <Root>
-            {this.props.noHeader ? null : (
-              <Header style={styles.header}>
-                <Left style={{flex: 1}}>
-                  <TouchableOpacity
-                    style={styles.drawerButton}
-                    onPress={() => this.onDrawer()}>
-                    <Icon
-                      style={styles.saveText}
-                      name="bars"
-                      type="FontAwesome5"
-                    />
-                  </TouchableOpacity>
-                </Left>
-                <Body style={{flex: 0}} />
-                <Right style={{flex: 1}} />
-              </Header>
-            )}
-
             {this.props.onMap ? (
               <Header style={styles.header}>
                 <Left style={{flex: 1}}>

@@ -61,6 +61,8 @@ interface State {
     idSport: number;
     sportName: string;
   }[];
+  acceptChallengeNameUtilisateur: boolean;
+  acceptChallengeUtilisateur: boolean;
 }
 
 class UploadGpx extends Component<Props, State> {
@@ -73,6 +75,8 @@ class UploadGpx extends Component<Props, State> {
       isLoading: false,
       comments: '',
       listSport: TemplateSportLive,
+      acceptChallengeNameUtilisateur: false,
+      acceptChallengeUtilisateur: false,
     };
   }
 

@@ -9,10 +9,8 @@ import {
   TouchableHighlight,
   TouchableOpacity,
   KeyboardAvoidingView,
-  ActivityIndicator,
   Image,
   ImageBackground,
-  StatusBar,
 } from 'react-native';
 import {
   Container,
@@ -35,7 +33,6 @@ import {connect} from 'react-redux';
 import DeviceInfo from 'react-native-device-info';
 
 import ApiUtils from '../ApiUtils';
-// import Logo from '../assets/logoHome.svg';
 import Logo from '../assets/logoHome.svg';
 import LogoHeader from '../assets/logo_header.png';
 import Loading from './Loading';
@@ -43,6 +40,8 @@ import {Modal} from 'react-native';
 import WebviewJetCode from './WebviewJetCode';
 import GlobalStyles from '../styles';
 import {Sponsors} from './Sponsors';
+
+import {TemplateIsPaying} from './../globalsModifs';
 
 const mapStateToProps = (state) => {
   return {
@@ -56,8 +55,6 @@ class Home extends Component {
     super(props);
 
     this.state = {
-      // username: navigation.state.params.username,
-      //   url: TRACKER_HOST + navigation.state.params.username,
       followCode: '',
       email: '',
       password: '',
@@ -76,9 +73,7 @@ class Home extends Component {
   }
 
   getPhoneData() {
-
     let brand = DeviceInfo.getBrand();
-
 
     let androidId = DeviceInfo.getAndroidIdSync();
     let systemVersion = DeviceInfo.getSystemVersion();
@@ -92,21 +87,20 @@ class Home extends Component {
     let hardware = DeviceInfo.getHardwareSync();
     let apiLevel = DeviceInfo.getApiLevelSync();
 
-    let data ={
-      brand : brand,
-      androidId : androidId,
-      systemVersion : systemVersion,
-      deviceId : deviceId,
-      device : device,
-      model : model,
-      manufacturer : manufacturer,
-      hardware : hardware,
-      apiLevel : apiLevel
-    }
+    let data = {
+      brand: brand,
+      androidId: androidId,
+      systemVersion: systemVersion,
+      deviceId: deviceId,
+      device: device,
+      model: model,
+      manufacturer: manufacturer,
+      hardware: hardware,
+      apiLevel: apiLevel,
+    };
 
     var action = {type: 'UPDATE_PHONE_DATA', data: data};
     this.props.dispatch(action);
-
   }
 
   componentDidMount() {
@@ -115,7 +109,15 @@ class Home extends Component {
     this.setState({selectedFolocode: -1});
 
     if (this.props.userData != null) {
-      this.onClickNavigate('Lives');
+      if (TemplateIsPaying) {
+        if (ApiUtils.hasPaid(this.props.userData)) {
+          this.onClickNavigate('Lives');
+        } else {
+          this.onClickNavigate('Paiement');
+        }
+      } else {
+        this.onClickNavigate('Lives');
+      }
     } else {
       BackgroundGeolocation.stop();
       BackgroundGeolocation.removeListeners();
@@ -127,7 +129,15 @@ class Home extends Component {
 
   checkIsConnected = () => {
     if (this.props.userData != null) {
-      this.onClickNavigate('Lives');
+      if (TemplateIsPaying) {
+        if (ApiUtils.hasPaid(this.props.userData)) {
+          this.onClickNavigate('Lives');
+        } else {
+          this.onClickNavigate('Paiement');
+        }
+      } else {
+        this.onClickNavigate('Lives');
+      }
     }
   };
 
@@ -175,7 +185,16 @@ class Home extends Component {
           var action = {type: 'LOGIN', data: responseJson};
           this.props.dispatch(action);
           this.setState({isLoading: false});
-          this.onClickNavigate('Lives');
+
+          if (TemplateIsPaying) {
+            if (ApiUtils.hasPaid(responseJson)) {
+              this.onClickNavigate('Lives');
+            } else {
+              this.onClickNavigate('Paiement');
+            }
+          } else {
+            this.onClickNavigate('Lives');
+          }
 
           // ApiUtils.setLogged().then(this.saveUserInfo(responseJson, false));
         } else {
@@ -240,7 +259,16 @@ class Home extends Component {
 
             this.props.dispatch(action);
             this.setState({isLoading: false});
-            this.onClickNavigate('Lives');
+
+            if (TemplateIsPaying) {
+              if (ApiUtils.hasPaid(responseJson)) {
+                this.onClickNavigate('Lives');
+              } else {
+                this.onClickNavigate('Paiement');
+              }
+            } else {
+              this.onClickNavigate('Lives');
+            }
           } else {
             alert("Votre folocode n'est pas valide");
           }
@@ -318,7 +346,7 @@ class Home extends Component {
   }
 
   pressLogo() {
-    this.logo.animate('bounce', 1000); // animate({ 0: { opacity: 0 }, 1: { opacity: 1 } });
+    this.logo.animate('bounce', 1000);
   }
 
   onValueFolocodeChange(value) {
