@@ -168,6 +168,13 @@
   {
     "action": "REPLACE_TEXT",
     "filePath": "./src/globalsModifs.js",
+    "source": "export const TemplateHasAppDonation = false;",
+    "cible": "export const TemplateHasAppDonation = $valueReplace;",
+    "datasource": "table.colonne"
+  },
+  {
+    "action": "REPLACE_TEXT",
+    "filePath": "./src/globalsModifs.js",
     "source": "export const TemplateChallengeAutreName = 'Template Test Autre';",
     "cible": "export const TemplateChallengeAutreName = '$valueReplace';",
     "datasource": "table.colonne"
