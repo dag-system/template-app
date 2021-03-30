@@ -416,6 +416,7 @@ class Help extends Component {
                     backgroundColor: ApiUtils.getColor(),
                     padding: 10,
                     borderWidth: 1,
+                    marginBottom: 75,
                   }}>
                   <Text
                     style={{
@@ -427,7 +428,6 @@ class Help extends Component {
                   </Text>
                 </TouchableOpacity>
               ) : null}
-              <View style={{marginBottom: 100}} />
             </Content>
             <Sponsors />
           </Root>

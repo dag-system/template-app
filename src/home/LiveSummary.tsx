@@ -1587,7 +1587,7 @@ const styles = StyleSheet.create({
   },
   drawerButton: {
     backgroundColor: 'transparent',
-    width : '100%',
+    width: '100%',
     marginTop: 0,
     paddingTop: 10,
     shadowOffset: {height: 0, width: 0},
