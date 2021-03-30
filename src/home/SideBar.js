@@ -10,6 +10,7 @@ import {
   ScrollView,
   TouchableHighlight,
 } from 'react-native';
+import VersionCheck from 'react-native-version-check';
 import {
   Container,
   Header,
@@ -297,17 +298,30 @@ export default class Sidebar extends Component {
                 justifyContent: 'center',
                 padding: 0,
               }}> */}
-              {/* <Icon
+            {/* <Icon
                 name="power-off"
                 type="FontAwesome5"
                 style={[styles.icon, {color: 'black'}]}
               /> */}
+            <View>
               <Text
                 style={[
-                  {color: 'black', textDecorationLine: 'underline', textAlign :'center'},
+                  {
+                    color: 'black',
+                    textDecorationLine: 'underline',
+                    textAlign: 'center',
+                  },
                 ]}>
                 Powered by DAG System
               </Text>
+              <Text     style={[
+                  {
+                    color: 'black',
+                    textAlign: 'center',
+                  },
+                ]}>Version V{VersionCheck.getCurrentVersion()}</Text>
+            </View>
+
             {/* </View> */}
           </TouchableHighlight>
         </Body>

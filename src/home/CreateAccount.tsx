@@ -38,6 +38,7 @@ import {KeyboardAvoidingView} from 'react-native';
 import GlobalStyles from '../styles';
 import {Platform} from 'react-native';
 import {Dimensions} from 'react-native';
+import VersionCheck from 'react-native-version-check';
 const mapStateToProps = (state) => {
   return {
     userData: state,
@@ -47,6 +48,8 @@ const mapStateToProps = (state) => {
     currentLive: state.currentLive,
   };
 };
+
+
 
 class CreateAccount extends ValidationComponent {
   constructor(props) {
@@ -148,6 +151,7 @@ class CreateAccount extends ValidationComponent {
   }
 
   componentDidMount() {
+
     let years = [];
     for (let i = 2021; i > 1930; i--) {
       years.push(i);
@@ -1019,7 +1023,8 @@ class CreateAccount extends ValidationComponent {
                     marginTop: 30,
                     marginBottom: 100,
                   }}>
-                  Version V{ApiUtils.VersionNumber()}
+                  Version V{VersionCheck.getCurrentVersion()}
+                  
                 </Text>
               )}
             </KeyboardAvoidingView>

@@ -8,6 +8,7 @@ import {
   Image,
   ActivityIndicator,
   ScrollView,
+  Modal,
   Share as ShareRn,
   TouchableHighlight,
   TouchableOpacity,
@@ -44,6 +45,8 @@ import {FlatList} from 'react-native';
 import GPXDocument from '../lib/gpx-parse/GPXDocument';
 import {check, request, PERMISSIONS, RESULTS} from 'react-native-permissions';
 import DefaultProps from '../models/DefaultProps';
+import AutoHeightWebView from 'react-native-autoheight-webview';
+import WebView from 'react-native-webview';
 
 const mapStateToProps = (state) => {
   return {
@@ -89,6 +92,7 @@ interface State {
   segmentEfforts: any[];
   isModalTraceVisible: boolean;
   refresh: boolean;
+  isOpenReplayModal: boolean;
 }
 
 class LiveSummary extends Component<Props, State> {
@@ -118,6 +122,7 @@ class LiveSummary extends Component<Props, State> {
       segmentEfforts: [],
       currentPolyline: null,
       isModalTraceVisible: false,
+      isOpenReplayModal: false,
     };
   }
 
@@ -437,17 +442,6 @@ class LiveSummary extends Component<Props, State> {
       });
   };
 
-  openLink(idLive) {
-    let url = 'https://folomi.fr/s/compte/playback.php?idLs[]=' + idLive;
-    Linking.canOpenURL(url).then((supported) => {
-      if (supported) {
-        Linking.openURL(url);
-      } else {
-        ApiUtils.logError('Home openLink', 'Dont know how to open URI: ' + url);
-      }
-    });
-  }
-
   downloadFile(url, name) {
     // if (Platform.OS == 'android') {
     this.checkPermissions(url, name);
@@ -554,6 +548,14 @@ class LiveSummary extends Component<Props, State> {
       console.log('Error =>', error);
       // setResult('error: '.concat(getErrorString(error)));
     }
+  };
+
+  openReplayModal = () => {
+    this.setState({isOpenReplayModal: true});
+  };
+
+  closeReplayModal = () => {
+    this.setState({isOpenReplayModal: false});
   };
 
   centerMapOnTrace(polyline) {
@@ -1270,7 +1272,9 @@ class LiveSummary extends Component<Props, State> {
                           paddingVertical: 12,
                         },
                       ]}
-                      onPress={() => this.openLink(this.state.live.idLive)}
+                      onPress={() =>
+                        this.openReplayModal(this.state.live.idLive)
+                      }
                       disabled={this.state.followCode == ''}>
                       <Text
                         style={{
@@ -1345,6 +1349,55 @@ class LiveSummary extends Component<Props, State> {
             {/* </View> */}
           </Content>
           <Sponsors />
+
+          <Modal
+            visible={this.state.isOpenReplayModal}
+            onRequestClose={() => this.closeReplayModal()}>
+            <Header style={styles.header}>
+              <Left style={{flex: 1}}>
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    justifyContent: 'flex-start',
+                    width: '100%',
+                    paddingRight: 0,
+                    paddingLeft: 0,
+                    marginTop: 20,
+                    marginBottom: 20,
+                  }}>
+                  <Button
+                    style={styles.drawerButton}
+                    onPress={() => this.closeReplayModal()}>
+                    <Icon
+                      style={styles.saveText}
+                      name="chevron-left"
+                      type="FontAwesome5"
+                    />
+                    {/* <Text style={styles.saveText}>Précedent</Text> */}
+                  </Button>
+                </View>
+              </Left>
+              <Body style={{flex: 0}} />
+              <Right style={{flex: 1}}>
+                <Image resizeMode="contain" source={Logo} style={styles.logo} />
+              </Right>
+            </Header>
+
+            <Content
+              style={{paddingHorizontal: 0, paddingTop: 0}}
+              scrollEnabled={true}>
+              <WebView
+                source={{
+                  uri:
+                    'https://folomi.fr/s/compte/playback.php?idLs[]=' +
+                    this.state.live.idLive,
+                }}
+                style={{
+                  marginTop: 0,
+                  height:  Dimensions.get('screen').height -(Platform.OS === "ios" ? 64 : 56),
+                }}></WebView>
+            </Content>
+          </Modal>
           {/******** modal5 : Traces list  *****************/}
           <ModalSmall
             isVisible={this.state.isModalTraceVisible}
@@ -1587,7 +1640,7 @@ const styles = StyleSheet.create({
   },
   drawerButton: {
     backgroundColor: 'transparent',
-    width : '100%',
+    width: '100%',
     marginTop: 0,
     paddingTop: 10,
     shadowOffset: {height: 0, width: 0},

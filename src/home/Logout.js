@@ -4,6 +4,7 @@ import ApiUtils from '../ApiUtils';
 import {connect} from 'react-redux';
 import RNPusherPushNotifications from 'react-native-pusher-push-notifications';
 import Logo from '../assets/logo.png';
+import BackgroundGeolocation from 'react-native-background-geolocation';
 
 const mapStateToProps = (state) => {
   return {
@@ -37,6 +38,8 @@ class Logout extends Component {
   }
 
   disconnect = () => {
+    BackgroundGeolocation.stop();
+
     this.unSubscribe('debug-' + this.props.userData.idUtilisateur);
     var action = {type: 'LOGOUT', data: null};
     this.props.dispatch(action);

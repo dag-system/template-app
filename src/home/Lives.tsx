@@ -60,7 +60,7 @@ const mapStateToProps = (state) => {
     isOkPopupBAttery: state.isOkPopupBAttery,
     isOkPopupBAttery2: state.isOkPopupBAttery2,
     notifications: state.notifications,
-    phoneData : state.phoneData
+    phoneData: state.phoneData,
   };
 };
 
@@ -133,6 +133,7 @@ class Lives extends Component<Props, State> {
     if (this.props.isRecording) {
       this.goToMap();
     } else {
+      BackgroundGeolocation.stop();
       this.downloadData();
     }
   }
@@ -172,6 +173,15 @@ class Lives extends Component<Props, State> {
   handleNotification = (notification) => {
     console.log('LALA');
 
+    if (notification.data != null) {
+      console.log(notification.data.TSLocationManager);
+
+      if (notification.data.TSLocationManager == 'true') {
+        console.log('ici');
+        return;
+      }
+    }
+
     console.log(notification);
     if (Platform.OS == 'ios') {
       console.log(notification.userInfo.data.notification);
@@ -186,10 +196,9 @@ class Lives extends Component<Props, State> {
         idLive: idLive,
       };
 
-
       switch (notification.appState) {
         case 'inactive':
-          console.log('inactive')
+          console.log('inactive');
           // this.props.dispatch(action);
           // var actionSaveLive = {type: 'SAVE_CURRENT_LIVE', data: live};
 
@@ -203,21 +212,19 @@ class Lives extends Component<Props, State> {
           });
           this.props.dispatch(action);
 
-          
-
         // inactive: App came in foreground by clicking on notification.
         //           Use notification.userInfo for redirecting to specific view controller
         case 'background':
         // background: App is in background and notification is received.
         //             You can fetch required data here don't do anything with UI
         case 'active':
-          console.log('active')
-        // App is foreground and notification is received. Show a alert or something.
-        this.setState({
-          isVisibleNotifcationModal: true,
-          idLiveNotif: actionData.idLive,
-        });
-        this.props.dispatch(action);
+          console.log('active');
+          // App is foreground and notification is received. Show a alert or something.
+          this.setState({
+            isVisibleNotifcationModal: true,
+            idLiveNotif: actionData.idLive,
+          });
+          this.props.dispatch(action);
         default:
           break;
       }
@@ -289,10 +296,8 @@ class Lives extends Component<Props, State> {
     this.getNewVersion();
   }
 
-
   getPhoneData() {
     let brand = DeviceInfo.getBrand();
-
 
     let androidId = DeviceInfo.getAndroidIdSync();
     let systemVersion = DeviceInfo.getSystemVersion();
@@ -306,21 +311,20 @@ class Lives extends Component<Props, State> {
     let hardware = DeviceInfo.getHardwareSync();
     let apiLevel = DeviceInfo.getApiLevelSync();
 
-    let data ={
-      brand : brand,
-      androidId : androidId,
-      systemVersion : systemVersion,
-      deviceId : deviceId,
-      device : device,
-      model : model,
-      manufacturer : manufacturer,
-      hardware : hardware,
-      apiLevel : apiLevel
-    }
+    let data = {
+      brand: brand,
+      androidId: androidId,
+      systemVersion: systemVersion,
+      deviceId: deviceId,
+      device: device,
+      model: model,
+      manufacturer: manufacturer,
+      hardware: hardware,
+      apiLevel: apiLevel,
+    };
 
     var action = {type: 'UPDATE_PHONE_DATA', data: data};
     this.props.dispatch(action);
-
   }
   componentWillUnmount() {
     this._unsubscribe();
@@ -431,7 +435,7 @@ class Lives extends Component<Props, State> {
     formData.append('method', 'createLive');
     formData.append('auth', ApiUtils.getAPIAuth());
     formData.append('idUtilisateur', this.props.userData.idUtilisateur);
-    formData.append('idversion', ApiUtils.VersionNumberInt().toString());
+    formData.append('idversion', VersionCheck.getCurrentVersion());
     formData.append('idSport', '17');
     formData.append('os', Platform.OS);
     formData.append('phoneData', JSON.stringify(this.props.phoneData));
@@ -694,6 +698,7 @@ class Lives extends Component<Props, State> {
     VersionCheck.needUpdate({
       depth: Platform.OS == 'android' ? 3 : 2,
     }).then((res) => {
+      console.log(res);
       if (res.isNeeded) {
         Alert.alert(
           'Nouvelle version disponible',
@@ -703,7 +708,7 @@ class Lives extends Component<Props, State> {
               text: 'Annuler',
               style: 'cancel',
             },
-            {text: 'Télécharger', onPress: () => this.openStorePage()},
+            {text: 'Télécharger', onPress: () => this.openStorePage(res.storeUrl)},
           ],
           {cancelable: false},
         );
@@ -723,15 +728,14 @@ class Lives extends Component<Props, State> {
             `- Device: ${request.manufacturer} ${request.model} ${request.version}`,
           );
 
-          this.onPressGoBatterySettings(request)
+          this.onPressGoBatterySettings(request);
           // If we've already shown this screen to the user, we don't want to annoy them.
           if (request.seen) {
-            console.log("seen")
+            console.log('seen');
             return;
           }
 
-
-          this.onPressGoBatterySettings(request)
+          this.onPressGoBatterySettings(request);
           // It's your responsibility to instruct the user what exactly
           // to do here, perhaps with a Confirm Dialog:
           // Alert.alert({
@@ -740,7 +744,7 @@ class Lives extends Component<Props, State> {
           // }).then((confirmed) => {
           //   if (confirmed) {
           //     // User clicked [Confirm] button.  Execute the redirect to settings screen:
-             
+
           //   }
           // });
         })
@@ -749,7 +753,7 @@ class Lives extends Component<Props, State> {
           // a particular Settings screen.
           console.warn(error);
         });
-    }else{
+    } else {
       console.log('not ignoring');
     }
   }
@@ -765,18 +769,18 @@ class Lives extends Component<Props, State> {
         },
         {
           text: 'Desactiver',
-          onPress: () =>   BackgroundGeolocation.deviceSettings.show(request),
+          onPress: () => BackgroundGeolocation.deviceSettings.show(request),
         },
       ],
       {cancelable: false},
     );
   };
 
-  openStorePage() {
-    let url =
-      Platform.OS === 'android'
-        ? 'https://play.google.com/store/apps/details?id=com.dag.insalyon.app'
-        : 'https://apps.apple.com/fr/app/my-cross/id1557933183';
+  openStorePage(url) {
+    // let url =
+    //   Platform.OS === 'android'
+    //     ? 'https://play.google.com/store/apps/details?id=com.dag.insalyon.app'
+    //     : 'https://apps.apple.com/fr/app/my-cross/id1557933183';
     Linking.openURL(url);
   }
 
@@ -826,7 +830,7 @@ class Lives extends Component<Props, State> {
               finalTraceArray.push(finalTrace);
             });
           }
-     
+
           if (result.interets != null && result.interets.length != 0) {
             var interestArray = Object.values(result.interets);
             var count = 0;
@@ -1364,7 +1368,6 @@ class Lives extends Component<Props, State> {
 
             <Sponsors />
 
-
             <Modal
               visible={
                 !this.props.isOkPopupBAttery || this.state.isOpenModalHelp
@@ -1377,7 +1380,6 @@ class Lives extends Component<Props, State> {
                 </View>
               </Container>
             </Modal>
-
 
             <Modal
               visible={
@@ -1568,7 +1570,7 @@ const styles = StyleSheet.create({
   },
   drawerButton: {
     backgroundColor: 'transparent',
-    width : '100%',
+    width: '100%',
     // width: '10%',
     // marginTop: 0,
     // paddingTop: 0,
