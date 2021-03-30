@@ -1,6 +1,6 @@
 [
   {
-    " action": "REPLACE_TEXT",
+    "action": "REPLACE_TEXT",
     "filePath": "./app.json",
     "source": "TemplateDisplayName",
     "cible": "$valueReplace",
