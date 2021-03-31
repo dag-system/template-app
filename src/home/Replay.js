@@ -29,7 +29,7 @@ import MapView, {Marker} from 'react-native-maps';
 import ApiUtils from '../ApiUtils';
 import {connect} from 'react-redux';
 import RNFetchBlob from 'rn-fetch-blob';
-import Logo from '../assets/logo_header.png';
+import Logo from '../assets/logo.png';
 import GlobalStyles from '../styles';
 import {Sponsors} from './Sponsors';
 import {ReactNativeModal as ModalSmall} from 'react-native-modal';

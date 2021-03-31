@@ -20,7 +20,8 @@ import {
 } from 'native-base';
 import ApiUtils from '../ApiUtils';
 import WebviewJetCode from './WebviewJetCode';
-import Logo from '../assets/logo_header.png';
+import Logo from '../assets/logo.png';
+import VersionCheck from 'react-native-version-check';
 
 import {TemplateHasAppDonation, TemplateAppName} from './../globalsModifs';
 

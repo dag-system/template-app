@@ -26,7 +26,7 @@ import {
 } from 'native-base';
 import ApiUtils from '../ApiUtils';
 import {connect} from 'react-redux';
-import Logo from '../assets/logo_header.png';
+import Logo from '../assets/logo.png';
 import {Sponsors} from './Sponsors';
 import ErrorMessage from './ErrorMessage';
 import {TextInput} from 'react-native-gesture-handler';

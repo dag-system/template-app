@@ -22,11 +22,11 @@ import {
 import ApiUtils from '../ApiUtils';
 import {connect} from 'react-redux';
 import Sidebar from './SideBar';
-import Logo from '../assets/logo_header.png';
+import Logo from '../assets/logo.png';
 import Rotate from '../assets/rotate.png';
 import AutoHeightWebView from 'react-native-autoheight-webview';
 
-import {TemplateAppName, TemplateSiteLink} from './../globalsModifs';
+import {TemplateIdOrganisation, TemplateSiteLink} from './../globalsModifs';
 
 const mapStateToProps = () => {
   return {};
@@ -164,9 +164,8 @@ class Classement extends Component<Props, State> {
               <AutoHeightWebView
                 source={{
                   uri:
-                    'https://folomi.fr/classement/' +
-                    {TemplateAppName} +
-                    '/classement.html',
+                    'https://folomi.fr/classement/classement.php?idS=' +
+                    TemplateIdOrganisation,
                 }}
                 style={{marginTop: 20, width: '100%'}}
                 startInLoadingState={true}

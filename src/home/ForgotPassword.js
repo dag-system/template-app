@@ -22,7 +22,7 @@ import {
   Right,
   Picker,
 } from 'native-base';
-import Logo from '../assets/logo_header.png';
+import Logo from '../assets/logo.png';
 import {Button as ButtonElement} from 'react-native-elements';
 import {connect} from 'react-redux';
 import ApiUtils from '../ApiUtils';

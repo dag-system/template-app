@@ -28,7 +28,7 @@ import {
 } from 'native-base';
 import Swipeout from 'react-native-swipeout';
 import ApiUtils from '../ApiUtils';
-import Logo from '../assets/logo_header.png';
+import Logo from '../assets/logo.png';
 import Sidebar from './SideBar';
 import {connect} from 'react-redux';
 import GlobalStyles from '../styles';
@@ -44,6 +44,7 @@ import VersionCheck from 'react-native-version-check';
 import RNPusherPushNotifications from 'react-native-pusher-push-notifications';
 import NotificationModal from './NotificationModal';
 import DeviceInfo from 'react-native-device-info';
+import BackgroundGeolocation from 'react-native-background-geolocation';
 import Help from './Help';
 
 import {TemplateAppName, TemplateSportLive} from './../globalsModifs';
@@ -139,6 +140,7 @@ class Lives extends Component<Props, State> {
     if (this.props.isRecording) {
       this.goToMap();
     } else {
+      BackgroundGeolocation.stop();
       this.downloadData();
     }
   }
@@ -178,6 +180,15 @@ class Lives extends Component<Props, State> {
   handleNotification = (notification) => {
     console.log('LALA');
 
+    if (notification.data != null) {
+      console.log(notification.data.TSLocationManager);
+
+      if (notification.data.TSLocationManager == 'true') {
+        console.log('ici');
+        return;
+      }
+    }
+
     console.log(notification);
     if (Platform.OS == 'ios') {
       console.log(notification.userInfo.data.notification);
@@ -195,12 +206,6 @@ class Lives extends Component<Props, State> {
       switch (notification.appState) {
         case 'inactive':
           console.log('inactive');
-          // this.props.dispatch(action);
-          // var actionSaveLive = {type: 'SAVE_CURRENT_LIVE', data: live};
-
-          // this.props.dispatch(actionSaveLive);
-
-          // this.onClickNavigate('LiveSummary');
 
           this.setState({
             isVisibleNotifcationModal: true,
@@ -221,6 +226,7 @@ class Lives extends Component<Props, State> {
             idLiveNotif: actionData.idLive,
           });
           this.props.dispatch(action);
+
         default:
           break;
       }
@@ -431,7 +437,7 @@ class Lives extends Component<Props, State> {
     formData.append('method', 'createLive');
     formData.append('auth', ApiUtils.getAPIAuth());
     formData.append('idUtilisateur', this.props.userData.idUtilisateur);
-    formData.append('idversion', ApiUtils.VersionNumberInt().toString());
+    formData.append('idversion', VersionCheck.getCurrentVersion());
     formData.append('idSport', this.state.selectedSport);
     formData.append('os', Platform.OS);
     formData.append('phoneData', JSON.stringify(this.props.phoneData));
@@ -703,22 +709,15 @@ class Lives extends Component<Props, State> {
               text: 'Annuler',
               style: 'cancel',
             },
-            {text: 'Télécharger', onPress: () => this.openStorePage()},
+            {
+              text: 'Télécharger',
+              onPress: () => Linking.openURL(res.storeUrl),
+            },
           ],
           {cancelable: false},
         );
       }
     });
-  }
-
-  openStorePage() {
-    let url =
-      Platform.OS === 'android'
-        ? 'https://play.google.com/store/apps/details?id=com.dag.' +
-          {TemplateAppName} +
-          '.app'
-        : 'https://apps.apple.com/fr/app/my-cross/id1557933183';
-    Linking.openURL(url);
   }
 
   async getinformationStation() {
@@ -897,10 +896,6 @@ class Lives extends Component<Props, State> {
   };
 
   render() {
-    // if (this.props.isRecording) {
-    //   return <Text>erroe</Text>;
-    // }
-
     return (
       <Root>
         <Drawer
@@ -927,7 +922,7 @@ class Lives extends Component<Props, State> {
                   />
                 </TouchableOpacity>
               </Left>
-              <Right style={{flex: 1, width: '80%'}}>
+              <Right style={{flex: 1, width: '100%'}}>
                 <Image resizeMode="contain" source={Logo} style={styles.logo} />
               </Right>
             </Header>
@@ -1559,12 +1554,11 @@ const styles = StyleSheet.create({
   body: {
     flex: 1,
     width: '100%',
-    //  justifyContent: 'center',
     backgroundColor: 'white',
   },
   logo: {
     width: '100%',
-    height: 70,
+    height: 50,
     marginRight: '50%',
   },
   p: {

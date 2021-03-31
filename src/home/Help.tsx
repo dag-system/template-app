@@ -23,7 +23,7 @@ import {
 import ApiUtils from '../ApiUtils';
 import {connect} from 'react-redux';
 import Sidebar from './SideBar';
-import Logo from '../assets/logo_header.png';
+import Logo from '../assets/logo.png';
 import GlobalStyles from '../styles';
 import {Sponsors} from './Sponsors';
 import IosReglages from '../assets/iosReglages.png';

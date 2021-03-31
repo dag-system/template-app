@@ -4,7 +4,11 @@ export const TemplateAppName = purgeString(
   TemplateDisplayName.trim().toLowerCase(),
 );
 
-export const TemplateOrganisation = 'TEMPLATETEST';
+export const TemplateOrganisation = purgeString(
+  TemplateDisplayName.trim().toUpperCase(),
+);
+
+export const TemplateIdOrganisation = 9;
 
 export const TemplateBackgroundColor = '#FFFFFF';
 
@@ -45,7 +49,7 @@ export const TemplateArrayImagesPartenairesPath = [];
 
 function purgeString(str) {
   const accents =
-    "ÀÁÂÃÄÅàáâãäåÒÓÔÕÕÖØòóôõöøÈÉÊËèéêëðÇçÐÌÍÎÏìíîïÙÚÛÜùúûüÑñŠšŸÿýŽž' ";
+    "ÀÁÂÃÄÅàáâãäåÒÓÔÕÕÖØòóôõöøÈÉÊËèéêëðÇçÐÌÍÎÏìíîïÙÚÛÜùúûüÑñŠšŸÿýŽž' ,";
   const accentsOut =
     'AAAAAAaaaaaaOOOOOOOooooooEEEEeeeeeCcDIIIIiiiiUUUUuuuuNnSsYyyZz';
   str = str.split('');

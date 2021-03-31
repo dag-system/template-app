@@ -7,8 +7,9 @@ import MapButtons from './MapButtons';
 import Map from './Map';
 import GeolocComponent from './GeolocComponent';
 import DefaultProps from '../models/DefaultProps';
+import BackgroundGeolocation from 'react-native-background-geolocation';
 
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
   return {
     currentLive: state.currentLive,
   };
@@ -26,6 +27,9 @@ class MapContainer extends Component<Props, State> {
     super(props);
     this.map = React.createRef();
     this.state = {};
+    this._unsubscribe = this.props.navigation.addListener('focus', () => {
+      this.componentDidMount();
+    });
   }
 
   componentDidMount() {
@@ -37,7 +41,7 @@ class MapContainer extends Component<Props, State> {
     }
   }
 
-  onUpdatePosition = pos => {
+  onUpdatePosition = (pos) => {
     if (this.map != null && this.map.current != null) {
       this.map.current.onUpdatePosition(pos);
     }
@@ -46,7 +50,9 @@ class MapContainer extends Component<Props, State> {
   render() {
     return (
       <Container style={styles.container}>
-        <GeolocComponent onUpdatePosition={pos => this.onUpdatePosition(pos)} />
+        <GeolocComponent
+          onUpdatePosition={(pos) => this.onUpdatePosition(pos)}
+        />
         <MapHeader navigation={this.props.navigation} />
         <Map ref={this.map} />
         <Footer>

@@ -33,8 +33,7 @@ import {connect} from 'react-redux';
 import DeviceInfo from 'react-native-device-info';
 
 import ApiUtils from '../ApiUtils';
-import Logo from '../assets/logoHome.svg';
-import LogoHeader from '../assets/logo_header.png';
+import Logo from '../assets/logo.png';
 import Loading from './Loading';
 import {Modal} from 'react-native';
 import WebviewJetCode from './WebviewJetCode';
@@ -506,10 +505,13 @@ class Home extends Component {
                       style={[GlobalStyles.row, {justifyContent: 'center'}]}
                       animation="bounceInDown"
                       delay={300}>
-                      <Logo
-                        width={'100%'}
-                        height={120}
-                        style={{alignSelf: 'center'}}
+                      <Image
+                        resizeMode="contain"
+                        source={Logo}
+                        style={{
+                          height: 200,
+                          width: 200,
+                        }}
                       />
                     </Animated.View>
                   </TouchableHighlight>
@@ -628,7 +630,7 @@ class Home extends Component {
                 <Right style={{flex: 1}}>
                   <Image
                     resizeMode="contain"
-                    source={LogoHeader}
+                    source={Logo}
                     style={styles.logoHeader}
                   />
                 </Right>
@@ -787,29 +789,19 @@ class Home extends Component {
 const styles = StyleSheet.create({
   header: {
     backgroundColor: 'white',
-    // backgroundColor: ApiUtils.getBackgroundColor(),
+    //backgroundColor: ApiUtils.getBackgroundColor(),
     width: '100%',
   },
   title: {
     color: '#000',
-    // fontFamily: 'roboto'
   },
   text: {
     fontFamily: 'Roboto',
-  },
-  body: {
-    // paddingBottom : 300
-    // width: '100%',
-    // // backgroundColor: '#DADADA',
-    // height: '140%',
-    //  justifyContent: 'center',
   },
   logo: {
     width: '70%',
     height: 100,
     alignSelf: 'center',
-    // marginLeft: 25,
-    // marginRight: 25,
     marginTop: Platform.OS == 'ios' ? 20 : 25,
     marginTop: 75,
     marginBottom: 100,
@@ -825,7 +817,6 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     width: '100%',
     height: '140%',
-    // justifyContent: 'center',
     alignItems: 'center',
     paddingTop: 30,
     paddingBottom: 200,
@@ -847,7 +838,6 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   textLink: {
-    // color: '#5D8BE6',
     color: '#7f8c8d',
     fontWeight: 'bold',
     fontSize: 12,
@@ -881,8 +871,6 @@ const styles = StyleSheet.create({
   buttonok: {
     marginBottom: 10,
     width: '80%',
-    // width: 150,
-    // height: 40,
     borderRadius: 30,
     marginRight: 0,
     justifyContent: 'center',

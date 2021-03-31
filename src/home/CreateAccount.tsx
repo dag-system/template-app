@@ -27,11 +27,12 @@ import {
   Picker,
 } from 'native-base';
 import ApiUtils from '../ApiUtils';
-import Logo from '../assets/logo_header.png';
+import Logo from '../assets/logo.png';
 import ValidationComponent from 'react-native-form-validator';
 import defaultMessages from './defaultMessages';
 import {connect} from 'react-redux';
 import {KeyboardAvoidingView, Dimensions} from 'react-native';
+import VersionCheck from 'react-native-version-check';
 import GlobalStyles from '../styles';
 
 import {
@@ -930,12 +931,12 @@ class CreateAccount extends ValidationComponent {
               {ApiUtils.ISDEBUG() ? (
                 <Text
                   style={{textAlign: 'center', fontSize: 12, marginTop: 30}}>
-                  Debug version {ApiUtils.VersionNumber()}
+                  Debug version {VersionCheck.getCurrentVersion()}
                 </Text>
               ) : ApiUtils.ISDEMO() ? (
                 <Text
                   style={{textAlign: 'center', fontSize: 12, marginTop: 30}}>
-                  Demo version {ApiUtils.VersionNumber()}
+                  Demo version {VersionCheck.getCurrentVersion()}
                 </Text>
               ) : (
                 <Text
@@ -945,7 +946,7 @@ class CreateAccount extends ValidationComponent {
                     marginTop: 30,
                     marginBottom: 100,
                   }}>
-                  Version V{ApiUtils.VersionNumber()}
+                  Version V {VersionCheck.getCurrentVersion()}
                 </Text>
               )}
             </KeyboardAvoidingView>
