@@ -243,7 +243,6 @@ class CreateAccount extends ValidationComponent {
         type: this.state.challengeRadioUtilisateur,
       },
       infoGlobal: {
-        payed: false,
         needVtt: this.state.needVtt == 'needvtt' ? true : false,
       },
     };
@@ -445,7 +444,7 @@ class CreateAccount extends ValidationComponent {
             <Body style={{flex: 1}}>
               <Image resizeMode="cover" source={Logo} style={styles.logo} />
             </Body>
-            <Right  />
+            <Right />
           </Header>
           <Content>
             <KeyboardAvoidingView>
@@ -1007,7 +1006,6 @@ class CreateAccount extends ValidationComponent {
                 }}>
                 <Switch
                   ref="needvtt"
-           
                   style={{paddingTop: 0}}
                   onValueChange={(text) => this.setState({needvtt: text})}
                   value={this.state.needvtt}
@@ -1114,7 +1112,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0,
     elevation: 0,
     paddingLeft: 0,
-    flex : 1
+    flex: 1,
   },
   saveText: {
     color: 'white',
