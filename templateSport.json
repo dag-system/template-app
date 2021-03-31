@@ -3,14 +3,14 @@
     "action": "REPLACE_TEXT",
     "filePath": "./app.json",
     "source": "TemplateDisplayName",
-    "cible": "$valueReplace",
+    "cible": "$appName",
     "datasource": "table.colonne"
   },
   {
-    " action": "REPLACE_TEXT",
+    "action": "REPLACE_TEXT",
     "filePath": "./android/app/src/main/res/values/strings.xml",
     "source": "Template Test",
-    "cible": "$valueReplace",
+    "cible": "$appName",
     "datasource": "table.colonne"
   },
   {
@@ -20,170 +20,150 @@
     "datasource": "file.colonne"
   },
   {
-    "action": "REPLACE_IMAGE",
-    "filePath": "./src/assets/",
-    "name": "logo_header.png",
-    "datasource": "file.colonne"
-  },
-  {
-    "action": "REPLACE_IMAGE",
-    "filePath": "./src/assets/",
-    "name": "logoHome.svg",
-    "datasource": "file.colonne"
-  },
-  {
     "action": "REPLACE_TEXT",
     "filePath": "./src/globalsModifs.js",
     "source": "export const TemplateDisplayName = 'Template Test';",
-    "cible": "export const TemplateDisplayName = '$valueReplace';",
-    "datasource": "table.colonne"
-  },
-  {
-    "action": "REPLACE_TEXT",
-    "filePath": "./src/globalsModifs.js",
-    "source": "export const TemplateOrganisation = 'TEMPLATETEST';",
-    "cible": "export const TemplateOrganisation = '$valueReplace';",
+    "cible": "export const TemplateDisplayName = '$appName';",
     "datasource": "table.colonne"
   },
   {
     "action": "REPLACE_TEXT",
     "filePath": "./src/globalsModifs.js",
     "source": "export const TemplateBackgroundColor = '#FFFFFF';",
-    "cible": "export const TemplateBackgroundColor = '$valueReplace';",
+    "cible": "export const TemplateBackgroundColor = '$color';",
     "datasource": "table.colonne"
   },
-
   {
     "action": "REPLACE_TEXT",
     "filePath": "./src/globalsModifs.js",
     "source": "export const TemplateSiteLink = 'www.dag-system.com';",
-    "cible": "export const TemplateSiteLink = '$valueReplace';",
+    "cible": "export const TemplateSiteLink = '$website';",
     "datasource": "table.colonne"
   },
   {
     "action": "REPLACE_TEXT",
     "filePath": "./src/globalsModifs.js",
     "source": "export const TemplateNameAsk = true;",
-    "cible": "export const TemplateNameAsk = $valueReplace;",
+    "cible": "export const TemplateNameAsk = $formLastName;",
     "datasource": "table.colonne"
   },
   {
     "action": "REPLACE_TEXT",
     "filePath": "./src/globalsModifs.js",
     "source": "export const TemplateFirstNameAsk = true;",
-    "cible": "export const TemplateFirstNameAsk = $valueReplace;",
+    "cible": "export const TemplateFirstNameAsk = $formFirstName;",
     "datasource": "table.colonne"
   },
   {
     "action": "REPLACE_TEXT",
     "filePath": "./src/globalsModifs.js",
     "source": "export const TemplateSexeAsk = true;",
-    "cible": "export const TemplateSexeAsk = $valueReplace;",
+    "cible": "export const TemplateSexeAsk = $formGender;",
     "datasource": "table.colonne"
   },
   {
     "action": "REPLACE_TEXT",
     "filePath": "./src/globalsModifs.js",
     "source": "export const TemplateDdnAsk = true;",
-    "cible": "export const TemplateDdnAsk = $valueReplace;",
+    "cible": "export const TemplateDdnAsk = $formBirthDate;",
     "datasource": "table.colonne"
   },
   {
     "action": "REPLACE_TEXT",
     "filePath": "./src/globalsModifs.js",
     "source": "export const TemplateMailAsk = true;",
-    "cible": "export const TemplateMailAsk = $valueReplace;",
+    "cible": "export const TemplateMailAsk = $formEmail;",
     "datasource": "table.colonne"
   },
   {
     "action": "REPLACE_TEXT",
     "filePath": "./src/globalsModifs.js",
     "source": "export const TemplateTelAsk = true;",
-    "cible": "export const TemplateTelAsk = $valueReplace;",
+    "cible": "export const TemplateTelAsk = $formPhone;",
     "datasource": "table.colonne"
   },
   {
     "action": "REPLACE_TEXT",
     "filePath": "./src/globalsModifs.js",
     "source": "export const TemplateAdressAsk = true;",
-    "cible": "export const TemplateAdressAsk = $valueReplace;",
+    "cible": "export const TemplateAdressAsk = $formAddress;",
     "datasource": "table.colonne"
   },
   {
     "action": "REPLACE_TEXT",
     "filePath": "./src/globalsModifs.js",
     "source": "export const TemplatePostalAsk = true;",
-    "cible": "export const TemplatePostalAsk = $valueReplace;",
+    "cible": "export const TemplatePostalAsk = $formPostalCode;",
     "datasource": "table.colonne"
   },
   {
     "action": "REPLACE_TEXT",
     "filePath": "./src/globalsModifs.js",
     "source": "export const TemplateCityAsk = true;",
-    "cible": "export const TemplateCityAsk = $valueReplace;",
+    "cible": "export const TemplateCityAsk = $formCity;",
     "datasource": "table.colonne"
   },
   {
     "action": "REPLACE_TEXT",
     "filePath": "./src/globalsModifs.js",
     "source": "export const TemplateCountryAsk = true;",
-    "cible": "export const TemplateCountryAsk = $valueReplace;",
+    "cible": "export const TemplateCountryAsk = $formCountry;",
     "datasource": "table.colonne"
   },
   {
     "action": "REPLACE_TEXT",
     "filePath": "./src/globalsModifs.js",
     "source": "export const TemplateTelVerifAsk = true;",
-    "cible": "export const TemplateTelVerifAsk = $valueReplace;",
+    "cible": "export const TemplateTelVerifAsk = $formPhoneValidation;",
     "datasource": "table.colonne"
   },
   {
     "action": "REPLACE_TEXT",
     "filePath": "./src/globalsModifs.js",
     "source": "export const TemplateChallengeClub = true;",
-    "cible": "export const TemplateChallengeClub = $valueReplace;",
+    "cible": "export const TemplateChallengeClub = $challengeClub;",
     "datasource": "table.colonne"
   },
   {
     "action": "REPLACE_TEXT",
     "filePath": "./src/globalsModifs.js",
     "source": "export const TemplateChallengeFamille = true;",
-    "cible": "export const TemplateChallengeFamille = $valueReplace;",
+    "cible": "export const TemplateChallengeFamille = $challengeFamille;",
     "datasource": "table.colonne"
   },
   {
     "action": "REPLACE_TEXT",
     "filePath": "./src/globalsModifs.js",
     "source": "export const TemplateChallengeAutre = true;",
-    "cible": "export const TemplateChallengeAutre = $valueReplace;",
+    "cible": "export const TemplateChallengeAutre = $otherChallenge;",
     "datasource": "table.colonne"
   },
   {
     "action": "REPLACE_TEXT",
     "filePath": "./src/globalsModifs.js",
     "source": "export const TemplateChallengeEntreprise = true;",
-    "cible": "export const TemplateChallengeEntreprise = $valueReplace;",
+    "cible": "export const TemplateChallengeEntreprise = $challengeEntreprise;",
     "datasource": "table.colonne"
   },
   {
     "action": "REPLACE_TEXT",
     "filePath": "./src/globalsModifs.js",
     "source": "export const TemplateHasAppDonation = false;",
-    "cible": "export const TemplateHasAppDonation = $valueReplace;",
+    "cible": "export const TemplateHasAppDonation = $ENATTENTETYPEDON;",
     "datasource": "table.colonne"
   },
   {
     "action": "REPLACE_TEXT",
     "filePath": "./src/globalsModifs.js",
     "source": "export const TemplateIsPaying = false;",
-    "cible": "export const TemplateIsPaying = $valueReplace;",
+    "cible": "export const TemplateIsPaying = $ENATTENTETYPEPAYANT;",
     "datasource": "table.colonne"
   },
   {
     "action": "REPLACE_TEXT",
     "filePath": "./src/globalsModifs.js",
     "source": "export const TemplateChallengeAutreName = 'Template Test Autre';",
-    "cible": "export const TemplateChallengeAutreName = '$valueReplace';",
+    "cible": "export const TemplateChallengeAutreName = '$otherChallengeInput';",
     "datasource": "table.colonne"
   },
   {
@@ -202,56 +182,56 @@
     "action": "REPLACE_TEXT",
     "filePath": "./android/app/_BUCK",
     "source": "dag.templateappname",
-    "cible": "$nom_application_en_minuscule",
+    "cible": "dag.$appliNameLowerCased",
     "datasource": "table.colonne"
   },
   {
     "action": "REPLACE_TEXT",
     "filePath": "./android/app/build.gradle",
     "source": "dag.templateappname",
-    "cible": "$nom_application_en_minuscule",
+    "cible": "dag.$appliNameLowerCased",
     "datasource": "table.colonne"
   },
   {
     "action": "REPLACE_TEXT",
     "filePath": "./android/app/google-services.json",
     "source": "dag.templateappname",
-    "cible": "$nom_application_en_minuscule",
+    "cible": "dag.$appliNameLowerCased",
     "datasource": "table.colonne"
   },
   {
     "action": "REPLACE_TEXT",
     "filePath": "./android/app/src/main/AndroidManifest.xml",
     "source": "dag.templateappname",
-    "cible": "$nom_application_en_minuscule",
+    "cible": "dag.$appliNameLowerCased",
     "datasource": "table.colonne"
   },
   {
     "action": "REPLACE_TEXT",
     "filePath": "./android/app/src/main/java/com/dag/templateAppName/app/MainActivity.java",
     "source": "dag.templateappname",
-    "cible": "$nom_application_en_minuscule",
+    "cible": "dag.$appliNameLowerCased",
     "datasource": "table.colonne"
   },
   {
     "action": "REPLACE_TEXT",
     "filePath": "./android/app/src/main/java/com/dag/templateAppName/app/MainApplication.java",
     "source": "dag.templateappname",
-    "cible": "$nom_application_en_minuscule",
+    "cible": "dag.$appliNameLowerCased",
     "datasource": "table.colonne"
   },
   {
     "action": "REPLACE_TEXT",
     "filePath": "./ios/Folomi.xcodeproj/project.pbxproj",
     "source": "dag.templateappname",
-    "cible": "$nom_application_en_minuscule",
+    "cible": "dag.$appliNameLowerCased",
     "datasource": "table.colonne"
   },
   {
     "action": "REPLACE_FOLDER_NAME",
     "filePath": "./android/app/src/main/java/com/dag",
     "source": "templateappname",
-    "cible": "$valueReplace;",
+    "cible": "$appliNameLowerCased;",
     "datasource": "table.colonne"
   }
 ]
