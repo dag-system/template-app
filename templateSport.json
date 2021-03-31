@@ -182,56 +182,56 @@
     "action": "REPLACE_TEXT",
     "filePath": "./android/app/_BUCK",
     "source": "dag.templateappname",
-    "cible": "dag.$appliNameLowerCased",
+    "cible": "dag.$appNameLowerCased",
     "datasource": "table.colonne"
   },
   {
     "action": "REPLACE_TEXT",
     "filePath": "./android/app/build.gradle",
     "source": "dag.templateappname",
-    "cible": "dag.$appliNameLowerCased",
+    "cible": "dag.$appNameLowerCased",
     "datasource": "table.colonne"
   },
   {
     "action": "REPLACE_TEXT",
     "filePath": "./android/app/google-services.json",
     "source": "dag.templateappname",
-    "cible": "dag.$appliNameLowerCased",
+    "cible": "dag.$appNameLowerCased",
     "datasource": "table.colonne"
   },
   {
     "action": "REPLACE_TEXT",
     "filePath": "./android/app/src/main/AndroidManifest.xml",
     "source": "dag.templateappname",
-    "cible": "dag.$appliNameLowerCased",
+    "cible": "dag.$appNameLowerCased",
     "datasource": "table.colonne"
   },
   {
     "action": "REPLACE_TEXT",
     "filePath": "./android/app/src/main/java/com/dag/templateAppName/app/MainActivity.java",
     "source": "dag.templateappname",
-    "cible": "dag.$appliNameLowerCased",
+    "cible": "dag.$appNameLowerCased",
     "datasource": "table.colonne"
   },
   {
     "action": "REPLACE_TEXT",
     "filePath": "./android/app/src/main/java/com/dag/templateAppName/app/MainApplication.java",
     "source": "dag.templateappname",
-    "cible": "dag.$appliNameLowerCased",
+    "cible": "dag.$appNameLowerCased",
     "datasource": "table.colonne"
   },
   {
     "action": "REPLACE_TEXT",
     "filePath": "./ios/Folomi.xcodeproj/project.pbxproj",
     "source": "dag.templateappname",
-    "cible": "dag.$appliNameLowerCased",
+    "cible": "dag.$appNameLowerCased",
     "datasource": "table.colonne"
   },
   {
     "action": "REPLACE_FOLDER_NAME",
     "filePath": "./android/app/src/main/java/com/dag",
     "source": "templateappname",
-    "cible": "$appliNameLowerCased;",
+    "cible": "$appNameLowerCased;",
     "datasource": "table.colonne"
   }
 ]
