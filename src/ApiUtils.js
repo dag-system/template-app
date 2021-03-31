@@ -12,8 +12,7 @@ var ApiUtils = {
   getOrganisation() {
     return 'DIGIRAIDINP';
   },
-  getIdStation()
-  {
+  getIdStation() {
     return IdStation;
   },
   ISDEBUG() {
@@ -24,6 +23,9 @@ var ApiUtils = {
   },
   getBackgroundColor() {
     return '#2B3990';
+  },
+  getSecondColor() {
+    return '#2b3990';
   },
   VersionNumber() {
     return VersionNumber;
@@ -56,26 +58,20 @@ var ApiUtils = {
     }
   },
 
-  hasPaid(userData)
-  {
-      let paiementsString = userData.paiements;
-      if(paiementsString == null)
-      {
-        return false;
+  hasPaid(userData) {
+    let paiementsString = userData.paiements;
+    if (paiementsString == null) {
+      return false;
+    }
+    var paiements = Object.values(paiementsString);
+    console.log(paiements);
+    if (paiements != null && paiements.length > 0) {
+      if (paiements.filter((p) => p.idStation == IdStation).length > 0) {
+        return true;
       }
-      var paiements = Object.values(paiementsString);
-      console.log(paiements);
-      if(paiements !=null && paiements.length > 0)
-      {
-        if(paiements.filter(p=> p.idStation == IdStation).length >0)
-        {
-          return true;
-        }
-      }else{
-
-        return false;
-      }
-  
+    } else {
+      return false;
+    }
   },
 
   getPhotoUrl(idStation, photo) {

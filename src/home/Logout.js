@@ -2,7 +2,6 @@ import React, {Component} from 'react';
 import {StyleSheet, View, Text, Image, TouchableOpacity} from 'react-native';
 import ApiUtils from '../ApiUtils';
 import {connect} from 'react-redux';
-import RNPusherPushNotifications from 'react-native-pusher-push-notifications';
 import Logo from '../assets/logo.png';
 
 const mapStateToProps = (state) => {
@@ -19,25 +18,11 @@ class Logout extends Component {
 
   componentDidMount() {}
 
-  unSubscribe = (interest) => {
-    console.log(`Subscribing to "${interest}"`);
-    RNPusherPushNotifications.unsubscribe(
-      interest,
-      (statusCode, response) => {
-        console.error(statusCode, response);
-      },
-      () => {
-        console.log(`CALLBACK: unsubscribed to ${interest}`);
-      },
-    );
-  };
-
   onClickNavigate(routeName) {
     this.props.navigation.navigate('Home');
   }
 
   disconnect = () => {
-    this.unSubscribe('debug-' + this.props.userData.idUtilisateur);
     var action = {type: 'LOGOUT', data: null};
     this.props.dispatch(action);
 
@@ -114,7 +99,7 @@ class Logout extends Component {
 const styles = StyleSheet.create({
   header: {
     //Ò  backgroundColor: ApiUtils.getBackgroundColor()
-    backgroundColor: '#DADADA',
+    backgroundColor: '#2B3990',
   },
   title: {
     color: '#000',
