@@ -4,9 +4,7 @@ export const TemplateAppName = purgeString(
   TemplateDisplayName.trim().toLowerCase(),
 );
 
-export const TemplateOrganisation = purgeString(
-  TemplateDisplayName.trim().toUpperCase(),
-);
+export const TemplateOrganisation = TemplateAppName.toUpperCase();
 
 export const TemplateIdOrganisation = 9;
 
