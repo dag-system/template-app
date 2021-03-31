@@ -26,7 +26,7 @@ import Logo from '../assets/logo.png';
 import Rotate from '../assets/rotate.png';
 import AutoHeightWebView from 'react-native-autoheight-webview';
 
-import {TemplateIdOrganisation, TemplateSiteLink} from './../globalsModifs';
+import {TemplateAppName, TemplateSiteLink} from './../globalsModifs';
 
 const mapStateToProps = () => {
   return {};
@@ -164,8 +164,9 @@ class Classement extends Component<Props, State> {
               <AutoHeightWebView
                 source={{
                   uri:
-                    'https://folomi.fr/classement/classement.php?idS=' +
-                    TemplateIdOrganisation,
+                    'https://folomi.fr/classement/' +
+                    TemplateAppName +
+                    '/classement.html',
                 }}
                 style={{marginTop: 20, width: '100%'}}
                 startInLoadingState={true}
@@ -185,7 +186,6 @@ class Classement extends Component<Props, State> {
 const styles = StyleSheet.create({
   header: {
     backgroundColor: 'white',
-    // width: '100%'
   },
   title: {
     width: '25%',

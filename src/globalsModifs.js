@@ -37,7 +37,7 @@ export const TemplateSportLive = [
   {idSport: 2, sportName: 'Marche'},
 ];
 
-export const TemplateReplayTrace = [
+export const TemplateTrace = [
   {label: 'Course Test', id: 58},
   {label: 'Course Test', id: 58},
 ];
