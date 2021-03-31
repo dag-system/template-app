@@ -137,16 +137,19 @@ class Classement extends Component<Props, State> {
                 Classement du challenge de votre application
               </Text>
 
-              <TouchableOpacity onPress={() => this.openLink(TemplateSiteLink)}>
-                <Text
-                  style={{
-                    textAlign: 'center',
-                    color: ApiUtils.getBackgroundColor(),
-                  }}>
-                  Retrouvez tous les classements sur notre site internet : A
-                  RENTRER
-                </Text>
-              </TouchableOpacity>
+              {TemplateSiteLink !== 'www.dag-system.com' ? (
+                <TouchableOpacity
+                  onPress={() => this.openLink(TemplateSiteLink)}>
+                  <Text
+                    style={{
+                      textAlign: 'center',
+                      color: ApiUtils.getBackgroundColor(),
+                    }}>
+                    Retrouvez tous les classements sur notre site internet : A
+                    RENTRER
+                  </Text>
+                </TouchableOpacity>
+              ) : null}
 
               {this.state.isPortrait ? (
                 <View>
