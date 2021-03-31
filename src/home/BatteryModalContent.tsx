@@ -9,7 +9,7 @@ import BackgroundGeolocation, {
 } from 'react-native-background-geolocation';
 import {Dimensions} from 'react-native';
 import {connect} from 'react-redux';
-import * as Sentry from '@sentry/react-native';
+// import * as Sentry from '@sentry/react-native';
 
 const mapStateToProps = (state) => {
   return {
@@ -94,7 +94,7 @@ class BatteryModalContent extends Component {
         this.setState({hasDeviceSettingsAvailable: true});
       })
       .catch((error) => {
-        Sentry.captureMessage(JSON.stringify(error));
+        // Sentry.captureMessage(JSON.stringify(error));
         this.setState({hasDeviceSettingsAvailable: false});
         console.log(error);
       });

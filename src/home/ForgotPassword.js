@@ -58,6 +58,7 @@ class ForgotPassword extends ValidationComponent {
   }
 
   onClickValidate() {
+
     // this.emailInput?.blur();
     var isValid = this.validate({
       emailUtilisateur: {email: true, required: true},
@@ -67,7 +68,10 @@ class ForgotPassword extends ValidationComponent {
     this.setState({folocodes: [], selectedFolocode: -1});
 
     if (isValid) {
+ 
       this.onSendRequest();
+    }else{
+    
     }
   }
   onClickSendFollowCode() {
@@ -134,6 +138,7 @@ class ForgotPassword extends ValidationComponent {
     formData.append('emailUtilisateur', this.state.emailUtilisateur);
     formData.append('organisation', ApiUtils.getOrganisation());
 
+
     fetch(ApiUtils.getAPIUrl(), {
       method: 'POST',
       headers: {},
@@ -142,6 +147,7 @@ class ForgotPassword extends ValidationComponent {
       .then(ApiUtils.checkStatus)
       .then((response) => response.json())
       .then((responseJson) => {
+        console.log(responseJson);
         if (responseJson.codeErreur == 'SUCCESS') {
           console.log('test');
           console.log(responseJson);
@@ -155,6 +161,7 @@ class ForgotPassword extends ValidationComponent {
 
           // });
         } else {
+          console.log("toddla");
           console.log(responseJson.message);
           Toast.show({
             text: responseJson.message,
@@ -165,7 +172,7 @@ class ForgotPassword extends ValidationComponent {
         }
       })
       .catch((e) => {
-        console.log(e);
+        console.log("tola");
         this.setState({spinner: false});
 
         ApiUtils.logError('create live', JSON.stringify(e.message));

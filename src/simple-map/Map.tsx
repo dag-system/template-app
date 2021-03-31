@@ -15,6 +15,8 @@ import {
 import {Icon, Text, Button} from 'native-base';
 import {connect} from 'react-redux';
 import MarkerInteret from '../assets/marker.png';
+import MarkerStart from '../assets/start.png';
+import MarkerEnd from '../assets/end.png';
 import Right from '../assets/right.png';
 import MapView, {Marker, Polyline} from 'react-native-maps';
 import {ReactNativeModal as ModalSmall} from 'react-native-modal';
@@ -622,22 +624,40 @@ class Map extends PureComponent<Props, State> {
                   />
                 ))
             : null}
-          {/* {this.props.markers.map((marker, index) => (
-          <MapView.Marker
-            key={index}
-            coordinate={marker.coordinate}
-            anchor={{ x: 0, y: 0 }}
-            tracksViewChanges={false}
-            // image={MarkerCircle}
-            title="">
-            <View style={[styles.markerIcon]}></View>
-          </MapView.Marker>))
-        } */}
+
+          {this.props.polylines.map((polyline, index) =>
+            polyline.positionsTrace.length > 0 ? (
+              <Marker
+                key={index}
+                coordinate={polyline.positionsTrace[0]}
+                anchor={{x: 0.5, y: 0.5}}
+                tracksViewChanges={true}
+                image={MarkerStart}
+                style={{height: 50, width: 50}}
+                title=""></Marker>
+            ) : null,
+          )}
+
+          {this.props.polylines.map((polyline, index) =>
+            polyline.positionsTrace.length > 0 ? (
+              <Marker
+                key={index}
+                coordinate={
+                  polyline.positionsTrace[polyline.positionsTrace.length - 1]
+                }
+                anchor={{x: 0.5, y: 0.5}}
+                tracksViewChanges={true}
+                image={MarkerEnd}
+                style={{height: 50, width: 50}}
+                title=""></Marker>
+            ) : null,
+          )}
+
           <Marker
             // onCalloutPress={() => this.onClickInterestPoint(marker)}
             key={'1'}
             coordinate={{
-              latitude:  45.78867732604313 ,
+              latitude: 45.78867732604313,
               longitude: 4.877905157240417,
             }}
             tracksViewChanges={true}>
@@ -646,7 +666,7 @@ class Map extends PureComponent<Props, State> {
                 name="arrow-right"
                 type="FontAwesome5"
                 color={'white'}
-                style={{color: 'black',fontSize : 16}}
+                style={{color: 'black', fontSize: 16}}
               />
             </View>
           </Marker>
@@ -654,7 +674,7 @@ class Map extends PureComponent<Props, State> {
             // onCalloutPress={() => this.onClickInterestPoint(marker)}
             key={'2'}
             coordinate={{
-              latitude:  45.79004221660561,
+              latitude: 45.79004221660561,
               longitude: 4.883379387467017,
             }}
             tracksViewChanges={true}>
@@ -663,7 +683,7 @@ class Map extends PureComponent<Props, State> {
                 name="arrow-down"
                 type="FontAwesome5"
                 color={'white'}
-                style={{color: 'black',fontSize : 16}}
+                style={{color: 'black', fontSize: 16}}
               />
             </View>
           </Marker>
@@ -672,7 +692,7 @@ class Map extends PureComponent<Props, State> {
             // onCalloutPress={() => this.onClickInterestPoint(marker)}
             key={'3'}
             coordinate={{
-              latitude:  45.78458003775824,
+              latitude: 45.78458003775824,
               longitude: 4.86908902265729,
             }}
             tracksViewChanges={true}>
@@ -681,7 +701,7 @@ class Map extends PureComponent<Props, State> {
                 name="arrow-left"
                 type="FontAwesome5"
                 color={'white'}
-                style={{color: 'black',fontSize : 16}}
+                style={{color: 'black', fontSize: 16}}
               />
             </View>
           </Marker>
@@ -690,7 +710,7 @@ class Map extends PureComponent<Props, State> {
             // onCalloutPress={() => this.onClickInterestPoint(marker)}
             key={'4'}
             coordinate={{
-              latitude:  45.78722447162104,
+              latitude: 45.78722447162104,
               longitude: 4.867673605366597,
             }}
             tracksViewChanges={true}>
@@ -699,11 +719,10 @@ class Map extends PureComponent<Props, State> {
                 name="arrow-right"
                 type="FontAwesome5"
                 color={'white'}
-                style={{color: 'black',fontSize : 16}}
+                style={{color: 'black', fontSize: 16}}
               />
             </View>
           </Marker>
-
 
           {this.props.pointsInterets != null
             ? this.props.pointsInterets.map((marker) => (
@@ -908,6 +927,14 @@ const styles = StyleSheet.create({
     backgroundColor: 'transparent',
     // marginTop: 5,
     elevation: 0,
+  },
+  markerStart: {
+    height: 20,
+    width: 20,
+    borderRadius: 200,
+    borderColor: 'white',
+    borderWidth: 3,
+    backgroundColor: 'green',
   },
   liveNameText: {
     color: 'black',

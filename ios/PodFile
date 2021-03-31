@@ -103,6 +103,8 @@ target 'Folomi' do
   
   pod 'react-native-version-check', :path => '../node_modules/react-native-version-check'
 
+  # pod 'RNSentry', :path => '../node_modules/@sentry/react-native'
+
   target 'FolomiTests' do
     inherit! :complete
     # Pods for testing
