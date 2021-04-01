@@ -295,34 +295,70 @@ export default class Sidebar extends Component {
             </View>
           </TouchableHighlight>
 
-          <TouchableHighlight
-            underlayColor="rgba(255,255,255,1,0.6)"
-            onPress={() => this.openLink('https://www.dag-system.com/')}
-            style={{width: '100%', position: 'absolute', bottom: 30}}>
-            {/* <View
-              style={{
-                display: 'flex',
-                flexDirection: 'row',
-                justifyContent: 'center',
-                padding: 0,
-              }}> */}
-            {/* <Icon
-                name="power-off"
-                type="FontAwesome5"
-                style={[styles.icon, {color: 'black'}]}
-              /> */}
-            <Text
-              style={[
-                {
-                  color: 'white',
-                  textDecorationLine: 'underline',
-                  textAlign: 'center',
-                },
-              ]}>
-              Powered by DAG System
-            </Text>
-            {/* </View> */}
-          </TouchableHighlight>
+          <View
+            style={{
+              width: '100%',
+              position: 'absolute',
+              bottom: 30,
+            }}>
+            <TouchableHighlight
+              underlayColor="rgba(255,255,255,1,0.6)"
+              onPress={() =>
+                this.openLink(
+                  'http://dag-system.com/externalcontent/' +
+                    TemplateAppName +
+                    '/confidentialite.pdf',
+                )
+              }
+              style={{width: '100%', height: 35}}>
+              <Text
+                style={[
+                  {
+                    color: 'black',
+                    textDecorationLine: 'underline',
+                    textAlign: 'center',
+                  },
+                ]}>
+                Politique de confidentialité
+              </Text>
+            </TouchableHighlight>
+            <TouchableHighlight
+              underlayColor="rgba(255,255,255,1,0.6)"
+              onPress={() =>
+                this.openLink(
+                  'http://dag-system.com/externalcontent/' +
+                    TemplateAppName +
+                    '/service.pdf',
+                )
+              }
+              style={{width: '100%', height: 35}}>
+              <Text
+                style={[
+                  {
+                    color: 'black',
+                    textDecorationLine: 'underline',
+                    textAlign: 'center',
+                  },
+                ]}>
+                Conditions de service
+              </Text>
+            </TouchableHighlight>
+            <TouchableHighlight
+              underlayColor="rgba(255,255,255,1,0.6)"
+              onPress={() => this.openLink('https://www.dag-system.com/')}
+              style={{width: '100%', height: 35}}>
+              <Text
+                style={[
+                  {
+                    color: 'black',
+                    textDecorationLine: 'underline',
+                    textAlign: 'center',
+                  },
+                ]}>
+                Powered by DAG System
+              </Text>
+            </TouchableHighlight>
+          </View>
         </Body>
       </Container>
     );
