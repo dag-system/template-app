@@ -31,6 +31,7 @@ import Sidebar from './SideBar';
 import moment from 'moment';
 import {Platform} from 'react-native';
 import {Dimensions} from 'react-native';
+import VersionCheck from 'react-native-version-check';
 
 const mapStateToProps = (state) => {
   return {
@@ -1005,13 +1006,13 @@ class Preferences extends Component {
                 <Text
                   full
                   style={{textAlign: 'center', fontSize: 12, marginTop: 30}}>
-                  Debug version {ApiUtils.VersionNumber()}
+                  Debug version {VersionCheck.getCurrentVersion()}
                 </Text>
               ) : ApiUtils.ISDEMO() ? (
                 <Text
                   full
                   style={{textAlign: 'center', fontSize: 12, marginTop: 30}}>
-                  Demo version {ApiUtils.VersionNumber()}
+                  Demo version {VersionCheck.getCurrentVersion()}
                 </Text>
               ) : (
                 <Text
@@ -1022,7 +1023,7 @@ class Preferences extends Component {
                     marginTop: 30,
                     marginBottom: 100,
                   }}>
-                  Version V{ApiUtils.VersionNumber()}
+                  Version V {VersionCheck.getCurrentVersion()}
                 </Text>
               )}
             </Content>

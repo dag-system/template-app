@@ -167,9 +167,10 @@ class Classement extends Component<Props, State> {
               <AutoHeightWebView
                 source={{
                   uri:
-                    'https://folomi.fr/classement/' +
-                    TemplateAppName +
-                    '/classement.html',
+                    'www.folomi.fr/classement/classementTemplate.html?organisation=' +
+                    ApiUtils.getOrganisation() +
+                    '&color=' +
+                    ApiUtils.getBackgroundColor().split('#')[1],
                 }}
                 style={{marginTop: 20, width: '100%'}}
                 startInLoadingState={true}
