@@ -1,4 +1,4 @@
-package com.dag.manouvelleappli.app;
+package com.dag.templateappname.app;
 import com.b8ne.RNPusherPushNotifications.NotificationsMessagingService;
 import com.facebook.react.ReactActivity;
 import com.facebook.react.ReactInstanceManager;

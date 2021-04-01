@@ -1,4 +1,4 @@
-export const TemplateDisplayName = 'MaNouvelleAppli';
+export const TemplateDisplayName = 'Template Test';
 
 export const TemplateAppName = purgeString(
   TemplateDisplayName.trim().toLowerCase(),
@@ -8,9 +8,9 @@ export const TemplateOrganisation = TemplateAppName.toUpperCase();
 
 export const TemplateIdOrganisation = 9;
 
-export const TemplateBackgroundColor = '#b5e';
+export const TemplateBackgroundColor = '#FFFFFF';
 
-export const TemplateSiteLink = 'dag@ste.com';
+export const TemplateSiteLink = 'www.dag-system.com';
 
 export const TemplateNameAsk = true;
 export const TemplateFirstNameAsk = true;
