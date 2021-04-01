@@ -131,7 +131,7 @@ android {
     }
 
     defaultConfig {
-            applicationId "com.dag.manouvelleappli.app"
+            applicationId "com.dag.templateappname.app"
             minSdkVersion rootProject.ext.minSdkVersion
             targetSdkVersion rootProject.ext.targetSdkVersion
             versionCode 538
