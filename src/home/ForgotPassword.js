@@ -206,20 +206,6 @@ class ForgotPassword extends ValidationComponent {
     return (
       <Root>
         <Container>
-          {/* <Header style={styles.header}>
-            <Body>
-              <View style={{ flexDirection: 'row', justifyContent: 'space-between', width: '100%', paddingRight: 0, paddingLeft: 5 }}>
-                <Button style={styles.drawerButton} onPress={() => this.goBack()}>
-                  <Icon style={styles.saveText} name="chevron-left" type="FontAwesome5" />
-                  <Text style={styles.saveText}>Précedent</Text>
-                </Button>
-
-
-              </View>
-
-            </Body>
-          </Header> */}
-
           <Header style={styles.header}>
             <Left>
               <Button style={styles.drawerButton} onPress={() => this.goBack()}>
@@ -284,7 +270,6 @@ class ForgotPassword extends ValidationComponent {
                     ? {backgroundColor: 'transparent'}
                     : {backgroundColor: ApiUtils.getColor()},
                 ]}
-                onPress={() => this.onClickSendFollowCode()}
                 // style={[
                 //   styles.saveButton,
                 //   {

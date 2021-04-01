@@ -7,6 +7,8 @@ import MapButtons from './MapButtons';
 import Map from './Map';
 import GeolocComponent from './GeolocComponent';
 import DefaultProps from '../models/DefaultProps';
+import BackgroundGeolocation from 'react-native-background-geolocation';
+
 
 const mapStateToProps = state => {
   return {
@@ -22,10 +24,16 @@ interface State {}
 
 class MapContainer extends Component<Props, State> {
   map: React.RefObject<unknown>;
+
+  
   constructor(props) {
     super(props);
     this.map = React.createRef();
     this.state = {};
+
+    this._unsubscribe = this.props.navigation.addListener('focus', () => {
+      this.componentDidMount();
+    });
   }
 
   componentDidMount() {

@@ -10,6 +10,7 @@ import {
   ScrollView,
   TouchableHighlight,
 } from 'react-native';
+import VersionCheck from 'react-native-version-check';
 import {
   Container,
   Header,
