@@ -182,7 +182,7 @@ class Help extends Component<Props, State> {
                 Bienvenue sur votre application sportive !
               </Text>
               <Text style={{marginTop: 10}}>
-                Entrainez-vous et affrontez vos amis et collègues au Cross INSA
+                Entrainez-vous et affrontez vos amis et collègues
                 en toute sécurité, et sans jamais vous croiser ! Le Cross est
                 ouvert
               </Text>
