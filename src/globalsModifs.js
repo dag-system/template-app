@@ -32,9 +32,9 @@ export const TemplateIsPaying = false;
 
 export const TemplateChallengeAutreName = 'Template Test Autre';
 
-export const TemplateSportLive = [{idSport: 1, sportName: 'Course'}];
+export const TemplateSportLive = [];
 
-export const TemplateTrace = [{label: 'Course Test', id: 58}];
+export const TemplateTrace = [];
 
 export const TemplateArrayImagesSponsorPath = [];
 export const TemplateArrayImagesPartenairesPath = [];
