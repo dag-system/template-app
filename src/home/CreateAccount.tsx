@@ -53,6 +53,7 @@ import {
   TemplateChallengeEntreprise,
   TemplateChallengeAutreName,
   TemplateIsPaying,
+  IsDemo,
 } from './../globalsModifs';
 
 const mapStateToProps = (state) => {
@@ -933,7 +934,7 @@ class CreateAccount extends ValidationComponent {
                   style={{textAlign: 'center', fontSize: 12, marginTop: 30}}>
                   Debug version {VersionCheck.getCurrentVersion()}
                 </Text>
-              ) : ApiUtils.ISDEMO() ? (
+              ) : IsDemo ? (
                 <Text
                   style={{textAlign: 'center', fontSize: 12, marginTop: 30}}>
                   Demo version {VersionCheck.getCurrentVersion()}

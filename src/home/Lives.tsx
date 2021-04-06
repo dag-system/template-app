@@ -140,7 +140,13 @@ class Lives extends Component<Props, State> {
     if (this.props.isRecording) {
       this.goToMap();
     } else {
+      
       BackgroundGeolocation.stop();
+      if (ApiUtils.isExpired()) {
+        this.onClickNavigate('IsExpired')
+        return;
+      }
+      
       this.downloadData();
     }
   }
