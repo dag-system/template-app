@@ -42,7 +42,7 @@ export const TemplateSportLive = [];
 export const TemplateTrace = [];
 
 export const TemplateArrayImagesSponsorPath = ['./assets/sponsor_logo1.png'];
-export const TemplateArrayImagesPartenairesPath = [];
+export const TemplateArrayImagesPartenairesPath = ['./assets/sponsor_logo1.png','./assets/sponsor_logo2.png'];
 
 function purgeString(str) {
   const accents =
