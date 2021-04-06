@@ -26,7 +26,7 @@ import Logo from '../assets/logo.png';
 import Rotate from '../assets/rotate.png';
 import AutoHeightWebView from 'react-native-autoheight-webview';
 
-import {TemplateAppName, TemplateSiteLink} from './../globalsModifs';
+import {TemplateSiteLink} from './../globalsModifs';
 
 const mapStateToProps = () => {
   return {};

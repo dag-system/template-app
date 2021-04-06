@@ -2,13 +2,11 @@ export const TemplateDisplayName = 'Template Test';
 
 export const IsDemo = true;
 
-export const TemplateAppName = IsDemo
-  ? 'demoapp'
-  : purgeString(TemplateDisplayName.trim().toLowerCase());
-
-export const TemplateOrganisation = purgeString(
+export const TemplateAppName = purgeString(
   TemplateDisplayName.trim().toLowerCase(),
 );
+
+export const TemplateOrganisation = TemplateAppName.toUpperCase();
 
 export const TemplateIdOrganisation = 9;
 
