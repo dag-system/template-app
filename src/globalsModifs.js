@@ -37,12 +37,10 @@ export const TemplateIsPaying = false;
 export const TemplateChallengeAutreName = 'Template Test Autre';
 
 export const TemplateSportLive = [];
-
-
 export const TemplateTrace = [];
 
-export const TemplateArrayImagesSponsorPath = ['./assets/sponsor_logo1.png'];
-export const TemplateArrayImagesPartenairesPath = ['./assets/sponsor_logo1.png','./assets/sponsor_logo2.png'];
+export const TemplateArrayImagesSponsorPath = [];
+export const TemplateArrayImagesPartenairesPath = [];
 
 function purgeString(str) {
   const accents =
