@@ -15,6 +15,7 @@
     "datasource": "table.colonne",
     "env":"demo"
   },
+
   {
     "action": "REPLACE_IMAGE",
     "filePath": "./src/assets/",
@@ -27,6 +28,14 @@
     "filePath": "./src/globalsModifs.js",
     "source": "export const TemplateDisplayName = 'Template Test';",
     "cible": "export const TemplateDisplayName = '$appName';",
+    "datasource": "table.colonne",
+    "env":"demo"
+  },
+  {
+    "action": "REPLACE_DATE",
+    "filePath": "./src/globalsModifs.js",
+    "source": "export const TemplateDisplayName = new Date('$expirationDate');",
+    "cible": "export const TemplateExpirationDate =  new Date('$expirationDate')';",
     "datasource": "table.colonne",
     "env":"demo"
   },
