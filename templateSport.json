@@ -29,6 +29,13 @@
   {
     "action": "REPLACE_TEXT",
     "filePath": "./src/globalsModifs.js",
+    "source": "export const IsDemo = true;",
+    "cible": "export const IsDemo = $isDemo;",
+    "datasource": "table.colonne"
+  },
+  {
+    "action": "REPLACE_TEXT",
+    "filePath": "./src/globalsModifs.js",
     "source": "export const TemplateBackgroundColor = '#FFFFFF';",
     "cible": "export const TemplateBackgroundColor = '$color';",
     "datasource": "table.colonne"
@@ -246,4 +253,6 @@
     "cible": "$appNameLowerCased;",
     "datasource": "table.colonne"
   }
+
+ 
 ]
