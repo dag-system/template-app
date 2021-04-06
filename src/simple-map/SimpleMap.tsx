@@ -58,7 +58,8 @@ const LATITUDE_DELTA = 0.00922;
 const LONGITUDE_DELTA = 0.00421;
 // const LATITUDE_DELTA = 0.16022;
 // const LONGITUDE_DELTA = 0.01221;
-const haversine = require('haversine');
+// const haversine = require('haversine');
+import haversine from 'haversine-distance'
 
 const mapStateToProps = (state) => {
   return {

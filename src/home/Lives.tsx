@@ -804,6 +804,7 @@ class Lives extends Component<Props, State> {
       .then((responseJson) => {
         //save values in cache
 
+        console.log(responseJson)
         var result = responseJson;
 
         if (result.traces != null && result.traces.length != 0) {
@@ -828,6 +829,41 @@ class Lives extends Component<Props, State> {
                 dplusTrace: trace.dplusTrace,
               };
               finalTraceArray.push(finalTrace);
+            });
+          }
+
+          //challenges 
+
+          var challengesArray = Object.values(result.challenges);
+          
+          var finalChallengesArray = []; // new Object(this.props.polylines);
+        
+          if (challengesArray != null && challengesArray.length != 0) {
+            challengesArray.forEach((challenge) => {
+              var finalChallenge= challenge;
+
+              var positionArray = Object.values(challenge.positionsTrace);
+              challenge.positionsTrace = positionArray;
+
+              finalChallenge = {
+                positionsTrace: positionArray,
+                idChallenge: finalChallenge.idChallenge,
+                libelleChallenge: finalChallenge.libelleChallenge,
+                distanceChallenge: finalChallenge.distanceChallenge,
+                gpxChallenge: finalChallenge.gpxChallenge,
+                dateDebutChallenge: finalChallenge.dateDebutChallenge,
+                dateFinChallenge: finalChallenge.dateFinChallenge,
+              };
+
+              // $json['idChallenge']=$colonne->idChallenge;
+              // $json['libelleChallenge']=$colonne->libelleChallenge;
+              // $json['distanceChallenge']=$colonne->distanceChallenge;
+              // $json['gpxChallenge']=$colonne->gpxChallenge;
+              // $json['dateDebutChallenge']=$colonne->dateDebutChallenge;
+              // $json['dateFinChallenge']=$colonne->dateFinChallenge;
+
+              
+              finalChallengesArray.push(finalChallenge);
             });
           }
 
@@ -887,13 +923,15 @@ class Lives extends Component<Props, State> {
             descriptionStation: result.descriptionStation,
             polylines: finalTraceArray,
             pointsInterets: finalinterestArray,
+            challenges : finalChallengesArray
           };
 
+          console.log(station.challenges)
           var action = {type: 'UPDATE_STATION_DATA', data: station};
           this.props.dispatch(action);
         }
       })
-      // .catch(e => alert('test', JSON.stringify(e)))
+       .catch(e =>   console.log(e))
       .then();
   }
 

@@ -633,7 +633,7 @@ class Map extends PureComponent<Props, State> {
                 anchor={{x: 0.5, y: 0.5}}
                 tracksViewChanges={true}
                 image={MarkerStart}
-                style={{height: 50, width: 50}}
+                style={{height: 30, width: 30}}
                 title=""></Marker>
             ) : null,
           )}
@@ -648,7 +648,7 @@ class Map extends PureComponent<Props, State> {
                 anchor={{x: 0.5, y: 0.5}}
                 tracksViewChanges={true}
                 image={MarkerEnd}
-                style={{height: 50, width: 50}}
+                style={{height: 30, width: 30}}
                 title=""></Marker>
             ) : null,
           )}

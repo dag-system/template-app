@@ -5,7 +5,8 @@ import {connect} from 'react-redux';
 import Geolocation from '@react-native-community/geolocation';
 import BackgroundGeolocation from 'react-native-background-geolocation';
 import {check, request, PERMISSIONS, RESULTS} from 'react-native-permissions';
-const haversine = require('haversine');
+// const haversine = require('haversine');
+import haversine from 'haversine-distance'
 import DefaultProps from '../models/DefaultProps';
 
 const mapStateToProps = (state) => {
@@ -16,6 +17,7 @@ const mapStateToProps = (state) => {
     coordinates: state.coordinates,
     isMoving: state.isMoving,
     odometer: state.odometer,
+    polylines: state.polylines,
   };
 };
 
@@ -26,6 +28,7 @@ interface Props extends DefaultProps {
   dates: any[];
   odometer: any;
   isMoving: boolean;
+  polylines : any[]
 }
 
 interface State {}
@@ -278,6 +281,7 @@ class GeolocComponent extends Component<Props, State> {
   }
 
   onLocation(location) {
+    this.calculDistanceFromStartChallenge(location.coords);
     if (this.props.isMoving) {
       this.addMarker(location);
       this.props.onUpdatePosition(location);
@@ -290,6 +294,17 @@ class GeolocComponent extends Component<Props, State> {
       var action = {type: 'UPDATE_GPS_OK', data: data};
       this.props.dispatch(action);
     }
+  }
+
+  calculDistanceFromStartChallenge(position: any) {
+    let trace = this.props.polylines[0];
+
+    let startPoint = trace.positionsTrace[0];
+
+    let distance = haversine(position, startPoint);
+
+    var action = {type: 'SET_DISTANCE_FROM_CHALLENGE_START', data: distance};
+    this.props.dispatch(action);
   }
 
   async addMarker(location) {

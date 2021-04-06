@@ -74,14 +74,17 @@ var ApiUtils = {
 
   checkStatus: function (response) {
     if (response.ok) {
-      console.log(response);
+     console.log(response);
+    //  response.text().then(function (text) {
+    //   console.log(text);
+    //  });
       return response;
     } else {
-      response.text().then(function (text) {
-        console.log(text);
-      });
+      // response.text().then(function (text) {
+      //  console.log(text);
+      // });
       let error = new Error(response.statusText);
-      error.response = response;
+     
       throw error;
     }
   },

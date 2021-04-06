@@ -1,77 +1,61 @@
 import React, {Component} from 'react';
-import {
-  StyleSheet,
-  TouchableOpacity,
-  View,
-  Alert,
-  Share,
-} from 'react-native';
-import {
-  Header,
-  Body,
-  Icon,
-  Text,
-} from 'native-base';
+import {StyleSheet, TouchableOpacity, View, Alert, Share} from 'react-native';
+import {Header, Body, Icon, Text} from 'native-base';
 import ApiUtils from '../ApiUtils';
 import {connect} from 'react-redux';
 import GlobalStyles from '../styles';
 import DefaultProps from '../models/DefaultProps';
 import BackgroundGeolocation from 'react-native-background-geolocation';
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
   return {
     isRecording: state.isRecording,
     currentLive: state.currentLive,
-    userData : state.userData,
-    dates : state.dates,
-    odometer : state.odometer,
-    currentPosition : state.currentPosition
+    userData: state.userData,
+    dates: state.dates,
+    odometer: state.odometer,
+    currentPosition: state.currentPosition,
+    distanceFromChallengeStart: state.distanceFromChallengeStart,
   };
 };
 
 interface Props extends DefaultProps {
-  isRecording: boolean,
-  currentLive: any,
-  userData : any,
-  dates : any[],
-  odometer : any,
-  currentPosition : any
+  isRecording: boolean;
+  currentLive: any;
+  userData: any;
+  dates: any[];
+  odometer: any;
+  currentPosition: any;
+  distanceFromChallengeStart: any;
 }
 
 interface State {}
 
-
-class MapHeader extends Component<Props,State> {
+class MapHeader extends Component<Props, State> {
   interval: number;
   constructor(props) {
     super(props);
 
-    this.state = {
-    
-    };
+    this.state = {};
   }
 
   componentDidMount() {
     setTimeout(() => this.didMount(), 300);
-
   }
   didMount() {
     clearInterval(this.interval);
-    this.interval =  setInterval(() =>this.setState({test :1}), 1100);
+    this.interval = setInterval(() => this.setState({test: 1}), 1100);
   }
 
-  componentWillUnmount()
-  {
+  componentWillUnmount() {
     clearInterval(this.interval);
   }
 
   goBackOk() {
-
     BackgroundGeolocation.stop();
     var action = {type: 'CLEAR_MAP', data: null};
     this.props.dispatch(action);
 
     this.props.navigation.navigate('Lives');
-
   }
 
   goBack() {
@@ -92,7 +76,6 @@ class MapHeader extends Component<Props,State> {
       this.goBackOk();
     }
   }
-
 
   onClickShare() {
     Share.share(
@@ -217,6 +200,25 @@ class MapHeader extends Component<Props,State> {
     }
   }
 
+  getDistanceFromChallengeStart = () => {
+    let distance = this.props.distanceFromChallengeStart;
+    if (distance != null) {
+      distance = distance ;
+      if(distance > 2000)
+      {
+        distance = distance / 1000;
+        distance = distance.toFixed(1);
+        distance += ' km';
+      }else{
+        distance = distance.toFixed(0);
+        distance += ' m';
+      }
+      return distance;
+    } else {
+      return '';
+    }
+  };
+
   getSpeed() {
     var time = this.getCurrentTimeInSec();
 
@@ -224,93 +226,103 @@ class MapHeader extends Component<Props,State> {
       return '-';
     }
 
-    let distKm = this.props.odometer;
+    let dist = this.props.odometer;
 
-    return ((distKm / time) * 3600).toFixed(2);
+    return ((dist / time) * 3.6).toFixed(2);
+  }
+
+  getDistance () {
+    let dist = this.props.odometer;
+    if(dist !=null)
+    {
+      return (dist/1000).toFixed(2);
+    }else{
+      return "-";
+    }
   }
 
   render() {
     return (
       <View>
-      <Header style={styles.header}>
-        <Body>
-          <View
-            style={{
-              flexDirection: 'row',
-              justifyContent: 'space-between',
-              width: '100%',
-              paddingRight: 0,
-            }}>
+        <Header style={styles.header}>
+          <Body>
             <View
               style={{
                 flexDirection: 'row',
-                justifyContent: 'flex-start',
+                justifyContent: 'space-between',
+                width: '100%',
                 paddingRight: 0,
               }}>
-              <TouchableOpacity
-                style={styles.goBackButton}
-                onPress={() => this.goBack()}>
-                <Icon
-                  style={styles.saveText}
-                  name="chevron-left"
-                  type="FontAwesome5"
-                />
-              </TouchableOpacity>
-              <TouchableOpacity
+              <View
                 style={{
-                  backgroundColor: 'transparent',
-                  elevation: 0,
-                  justifyContent: 'center',
-                }}
-                onPress={() => this.goBack()}>
-                <View style={[GlobalStyles.row]}>
-                  <Text style={{color: 'black'}}>
-                    {this.props.userData.nomUtilisateur}
-                  </Text>
-                  <Text style={{color: 'black', marginLeft: 5}}>
-                    {this.props.userData.prenomUtilisateur}
-                  </Text>
-                </View>
-              </TouchableOpacity>
-            </View>
-            <View style={{flexDirection: 'row', justifyContent: 'flex-end'}}>
-              {this.props.currentPosition ? (
+                  flexDirection: 'row',
+                  justifyContent: 'flex-start',
+                  paddingRight: 0,
+                }}>
                 <TouchableOpacity
-                  style={[{marginLeft: 10}]}
-                  onPress={() => this.onClickShare()}>
+                  style={styles.goBackButton}
+                  onPress={() => this.goBack()}>
                   <Icon
-                    active
-                    name="share"
+                    style={styles.saveText}
+                    name="chevron-left"
                     type="FontAwesome5"
                   />
                 </TouchableOpacity>
-              ) : null}
+                <TouchableOpacity
+                  style={{
+                    backgroundColor: 'transparent',
+                    elevation: 0,
+                    justifyContent: 'center',
+                  }}
+                  onPress={() => this.goBack()}>
+                  <View style={[GlobalStyles.row]}>
+                    <Text style={{color: 'black'}}>
+                      {this.props.userData.nomUtilisateur}
+                    </Text>
+                    <Text style={{color: 'black', marginLeft: 5}}>
+                      {this.props.userData.prenomUtilisateur}
+                    </Text>
+                  </View>
+                </TouchableOpacity>
+              </View>
+              <View style={{flexDirection: 'row', justifyContent: 'flex-end'}}>
+                {this.props.currentPosition ? (
+                  <TouchableOpacity
+                    style={[{marginLeft: 10}]}
+                    onPress={() => this.onClickShare()}>
+                    <Icon active name="share" type="FontAwesome5" />
+                  </TouchableOpacity>
+                ) : null}
+              </View>
             </View>
-          </View>
-        </Body>
-      </Header>
-         <View style={styles.statBanner}>
-         <Text style={styles.timeText}>{this.getCurrentTime()}</Text>
-         <Text>|</Text>
-         <Text style={styles.timeText}>{this.getSpeed()} km/h</Text>
-         <Text>|</Text>
-         <Text style={styles.timeText}>
-           {this.props.odometer?.toFixed(2)} km
-         </Text>
-       </View>
+          </Body>
+        </Header>
+        <View style={styles.statBanner}>
+          <Text style={styles.timeText}>{this.getCurrentTime()}</Text>
+          <Text>|</Text>
+          <Text style={styles.timeText}>{this.getSpeed()} km/h</Text>
+          <Text>|</Text>
+          <Text style={styles.timeText}>
+            {this.getDistance()} km
+          </Text>
+        </View>
+        <View>
+          {/* <Text style={{textAlign : 'center'}}> Vous êtes à {this.getDistanceFromChallengeStart()} du départ</Text> */}
+          <Text style={{textAlign : 'center'}}> Challenge Cross INSA</Text>
+          <Text style={{textAlign : 'center'}}> vous avez déjà parcouru 1.3km en 3 m 44 s</Text>
+        </View>
 
-       <View style={styles.liveNameBanner}>
-         <Text style={styles.liveNameText}>
-           {this.props.currentLive?.libelleLive}
-         </Text>
-       </View>
-       </View>
+        {/* <View style={styles.liveNameBanner}>
+          <Text style={styles.liveNameText}>
+            {this.props.currentLive?.libelleLive}
+          </Text>
+        </View> */}
+      </View>
     );
   }
 }
 
 const styles = StyleSheet.create({
-
   goBackButton: {
     backgroundColor: 'transparent',
     width: 30,

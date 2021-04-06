@@ -1,4 +1,5 @@
-const haversine = require('haversine');
+import haversine from 'haversine-distance'
+import GpxService from '../services/GpxService';
 const initialState = {
   userData: null,
   sports: [],
@@ -137,6 +138,15 @@ const reducer = (state = initialState, action) => {
         return state;
       }
 
+    }
+
+    case 'SET_DISTANCE_FROM_CHALLENGE_START' : 
+    {
+      let nextState = {
+        ...state,
+        distanceFromChallengeStart: action.data,
+      };
+      return nextState || state;
     }
 
     case 'DELETE_NOTIFICATION': {
@@ -303,6 +313,15 @@ const reducer = (state = initialState, action) => {
         odometer += dist;
       }
 
+      let gpxService = new GpxService();
+      let distanceFromStart = gpxService.calculDistanceFromStartChallenge(state.polylines[0], action.data);
+      if(state.polylines[0].checkpoints == null)
+      {
+        gpxService.getPointPassage(58);
+      }else{
+        let isOnchallenge =  gpxService.isOnChallenge(state.polylines[0], action.data);
+      }
+    
       coords.push(action.data);
 
       let nextState = {
@@ -311,6 +330,7 @@ const reducer = (state = initialState, action) => {
         currentPosition: action.data,
         isGpsNotOk: isGpsNotOk,
         odometer: odometer,
+        distanceFromChallengeStart : distanceFromStart
       };
       return nextState || state;
     }
@@ -391,6 +411,8 @@ const reducer = (state = initialState, action) => {
         nomStation: action.data.nomStation,
         descriptionStation: action.data.descriptionStation,
         pointsInterets: action.data.pointsInterets,
+        challenges : action.data.challenges
+
       };
       return nextState || state;
     }

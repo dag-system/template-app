@@ -41,7 +41,8 @@ import Sidebar from './SideBar';
 
 import {isPointInPolygon} from 'geolib';
 
-const haversine = require('haversine');
+// const haversine = require('haversine');
+import haversine from 'haversine-distance'
 const mapStateToProps = (state) => {
   return {
     userData: state.userData,
