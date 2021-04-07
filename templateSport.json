@@ -34,7 +34,7 @@
   {
     "action": "REPLACE_DATE",
     "filePath": "./src/globalsModifs.js",
-    "source": "export const TemplateExpirationDate = new Date('');",
+    "source": "export const TemplateExpirationDate = new Date();",
     "cible": "export const TemplateExpirationDate =  new Date('$expirationDate')';",
     "datasource": "table.colonne",
     "env":"demo"

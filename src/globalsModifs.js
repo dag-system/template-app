@@ -2,7 +2,7 @@ export const TemplateDisplayName = 'Template Test';
 
 export const IsDemo = true;
 
-export const TemplateExpirationDate = new Date('');
+export const TemplateExpirationDate = new Date();
 
 export const TemplateAppName = purgeString(
   TemplateDisplayName.trim().toLowerCase(),
