@@ -98,7 +98,7 @@ class IsExpired extends Component {
           <Text
             style={{
               fontSize: 17,
-              color: 'white',
+              color: ApiUtils.getColor(),
             }}>
            Quitter
           </Text>

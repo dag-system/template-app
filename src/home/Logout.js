@@ -103,7 +103,7 @@ class Logout extends Component {
           <Text
             style={{
               fontSize: 17,
-              color: 'white',
+              color: ApiUtils.getColor() ,
             }}>
             Retourner sur la page d'accueil
           </Text>

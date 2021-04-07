@@ -24,6 +24,7 @@ var ApiUtils = {
   },
   isExpired() {
     let currentDate = new Date();
+    
     if (IsDemo) {
       if (
         moment(currentDate.toISOString()).isAfter(
@@ -61,17 +62,23 @@ var ApiUtils = {
     return ISDEBUG;
   },
   getBackgroundColor() {
-    return TemplateBackgroundColor;
+    return '#FFFFFF';
   },
   getSecondColor() {
-    return '#DE084C';
+    return TemplateBackgroundColor;
   },
   getColor() {
+
     let color = this.getBackgroundColor();
 
     if (this.getBackgroundColor() == '#FFFFFF') {
       color = this.getSecondColor();
     }
+
+    if (color == '#FFFFFF') {
+      return '#000000';
+    }
+
     return color;
   },
   VersionNumber() {
