@@ -104,10 +104,15 @@ class Home extends Component {
 
   componentDidMount() {
     this.getPhoneData();
+
     // #stop BackroundGeolocation and remove-listeners when Home Screen is rendered.
     this.setState({selectedFolocode: -1});
-
+    if (ApiUtils.isExpired()) {
+      this.onClickNavigate('IsExpired')
+      return;
+    }
     if (this.props.userData != null) {
+    
       if (TemplateIsPaying) {
         if (ApiUtils.hasPaid(this.props.userData)) {
           this.onClickNavigate('Lives');

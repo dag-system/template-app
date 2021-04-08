@@ -1,6 +1,12 @@
 // ApiUtils.js
 
-import {TemplateBackgroundColor, TemplateOrganisation} from './globalsModifs';
+import {
+  TemplateBackgroundColor,
+  TemplateOrganisation,
+  IsDemo,
+  TemplateExpirationDate,
+} from './globalsModifs';
+import moment from 'moment';
 
 const ISDEBUG = false;
 const ISDEMO = false;
@@ -15,6 +21,21 @@ var ApiUtils = {
   },
   getPushNotificationInstance() {
     return pushNotificationInstance;
+  },
+  isExpired() {
+    let currentDate = new Date();
+    
+    if (IsDemo) {
+      if (
+        moment(currentDate.toISOString()).isAfter(
+          TemplateExpirationDate.toISOString(),
+        )
+      ) {
+        return true;
+      }
+    } else {
+      return false;
+    }
   },
   removeAccents(str) {
     let accents =
@@ -41,17 +62,23 @@ var ApiUtils = {
     return ISDEBUG;
   },
   getBackgroundColor() {
-    return TemplateBackgroundColor;
+    return '#FFFFFF';
   },
   getSecondColor() {
-    return '#DE084C';
+    return TemplateBackgroundColor;
   },
   getColor() {
+
     let color = this.getBackgroundColor();
 
     if (this.getBackgroundColor() == '#FFFFFF') {
       color = this.getSecondColor();
     }
+
+    if (color == '#FFFFFF') {
+      return '#000000';
+    }
+
     return color;
   },
   VersionNumber() {

@@ -4,7 +4,7 @@ import ApiUtils from '../ApiUtils';
 import {connect} from 'react-redux';
 import RNPusherPushNotifications from 'react-native-pusher-push-notifications';
 import Logo from '../assets/logo.png';
-import BackgroundGeolocation from 'react-native-background-geolocation';
+import RNExitApp from 'react-native-exit-app';
 
 const mapStateToProps = (state) => {
   return {
@@ -12,7 +12,7 @@ const mapStateToProps = (state) => {
   };
 };
 
-class Logout extends Component {
+class IsExpired extends Component {
   constructor(props) {
     super(props);
     this.state = {};
@@ -38,12 +38,7 @@ class Logout extends Component {
   }
 
   disconnect = () => {
-    BackgroundGeolocation.stop();
-    this.unSubscribe('debug-' + this.props.userData.idUtilisateur);
-    var action = {type: 'LOGOUT', data: null};
-    this.props.dispatch(action);
-
-    this.onClickNavigate('Home');
+    RNExitApp.exitApp();
   };
 
   render() {
@@ -73,7 +68,7 @@ class Logout extends Component {
               fontSize: 21,
               marginBottom: 15,
             }}>
-            Vous vous êtes déconnecté.
+            License d'utilisation perimée
           </Text>
         </View>
         <View>
@@ -82,8 +77,8 @@ class Logout extends Component {
               fontSize: 17,
               textAlign: 'center',
             }}>
-            Vous vous êtes bien déconnecté, vous pouvez vous reconnecter sur un
-            autre compte si vous les souhaitez.
+            La license d'utilisation de cette application est terminée. Merci de renouvelez
+            votre abonement.
           </Text>
         </View>
         <TouchableOpacity
@@ -103,9 +98,9 @@ class Logout extends Component {
           <Text
             style={{
               fontSize: 17,
-              color: ApiUtils.getColor() ,
+              color: ApiUtils.getColor(),
             }}>
-            Retourner sur la page d'accueil
+           Quitter
           </Text>
         </TouchableOpacity>
       </View>
@@ -113,4 +108,4 @@ class Logout extends Component {
   }
 }
 
-export default connect(mapStateToProps)(Logout);
+export default connect(mapStateToProps)(IsExpired);

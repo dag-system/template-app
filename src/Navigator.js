@@ -21,6 +21,7 @@ import Replay from './home/Replay';
 import MapContainer from './simple-map/MapContainer';
 import AskGpsModal from './home/AskGpsModal';
 import Paiement from './home/Paiement';
+import IsExpired from './home/IsExpired';
 
 export default class Navigator extends Component {
   componentDidMount() {}
@@ -53,6 +54,15 @@ export default class Navigator extends Component {
           <Stack.Screen
             name="Lives"
             component={Lives}
+            headerMode="none"
+            options={{
+              animationEnabled: false,
+            }}
+          />
+
+          <Stack.Screen
+            name="IsExpired"
+            component={IsExpired}
             headerMode="none"
             options={{
               animationEnabled: false,

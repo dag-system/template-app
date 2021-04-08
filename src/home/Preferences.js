@@ -32,6 +32,7 @@ import moment from 'moment';
 import {Platform} from 'react-native';
 import {Dimensions} from 'react-native';
 import VersionCheck from 'react-native-version-check';
+import {IsDemo} from './../globalsModifs';
 
 const mapStateToProps = (state) => {
   return {
@@ -1008,7 +1009,7 @@ class Preferences extends Component {
                   style={{textAlign: 'center', fontSize: 12, marginTop: 30}}>
                   Debug version {VersionCheck.getCurrentVersion()}
                 </Text>
-              ) : ApiUtils.ISDEMO() ? (
+              ) : IsDemo ? (
                 <Text
                   full
                   style={{textAlign: 'center', fontSize: 12, marginTop: 30}}>
