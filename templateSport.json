@@ -5,7 +5,7 @@
     "source": "TemplateDisplayName",
     "cible": "$appName",
     "datasource": "table.colonne",
-    "env":"demo"
+    "env": "demo"
   },
   {
     "action": "REPLACE_TEXT",
@@ -13,7 +13,7 @@
     "source": "Template Test",
     "cible": "$appName",
     "datasource": "table.colonne",
-    "env":"demo"
+    "env": "demo"
   },
 
   {
@@ -21,7 +21,7 @@
     "filePath": "./src/assets/",
     "name": "logo.png",
     "datasource": "file.colonne",
-    "env":"demo"
+    "env": "demo"
   },
   {
     "action": "REPLACE_TEXT",
@@ -29,7 +29,7 @@
     "source": "export const TemplateDisplayName = 'Template Test';",
     "cible": "export const TemplateDisplayName = '$appName';",
     "datasource": "table.colonne",
-    "env":"demo"
+    "env": "demo"
   },
   {
     "action": "REPLACE_DATE",
@@ -37,7 +37,7 @@
     "source": "export const TemplateExpirationDate = new Date();",
     "cible": "export const TemplateExpirationDate =  new Date('$expirationDate')';",
     "datasource": "table.colonne",
-    "env":"demo"
+    "env": "demo"
   },
   {
     "action": "REPLACE_TEXT",
@@ -45,7 +45,7 @@
     "source": "export const IsDemo = true;",
     "cible": "export const IsDemo = $isDemo;",
     "datasource": "table.colonne",
-    "env":"prod"
+    "env": "prod"
   },
   {
     "action": "REPLACE_TEXT",
@@ -53,7 +53,7 @@
     "source": "export const TemplateBackgroundColor = '#FFFFFF';",
     "cible": "export const TemplateBackgroundColor = '$color';",
     "datasource": "table.colonne",
-    "env":"demo"
+    "env": "demo"
   },
   {
     "action": "REPLACE_TEXT",
@@ -61,7 +61,7 @@
     "source": "export const TemplateSiteLink = 'www.dag-system.com';",
     "cible": "export const TemplateSiteLink = '$website';",
     "datasource": "table.colonne",
-    "env":"demo"
+    "env": "demo"
   },
   {
     "action": "REPLACE_TEXT",
@@ -69,7 +69,7 @@
     "source": "export const TemplateNameAsk = true;",
     "cible": "export const TemplateNameAsk = $formLastName;",
     "datasource": "table.colonne",
-    "env":"demo"
+    "env": "demo"
   },
   {
     "action": "REPLACE_TEXT",
@@ -77,7 +77,7 @@
     "source": "export const TemplateFirstNameAsk = true;",
     "cible": "export const TemplateFirstNameAsk = $formFirstName;",
     "datasource": "table.colonne",
-    "env":"demo"
+    "env": "demo"
   },
   {
     "action": "REPLACE_TEXT",
@@ -92,7 +92,7 @@
     "source": "export const TemplateDdnAsk = true;",
     "cible": "export const TemplateDdnAsk = $formBirthDate;",
     "datasource": "table.colonne",
-    "env":"demo"
+    "env": "demo"
   },
   {
     "action": "REPLACE_TEXT",
@@ -100,7 +100,7 @@
     "source": "export const TemplateMailAsk = true;",
     "cible": "export const TemplateMailAsk = $formEmail;",
     "datasource": "table.colonne",
-    "env":"demo"
+    "env": "demo"
   },
   {
     "action": "REPLACE_TEXT",
@@ -108,7 +108,7 @@
     "source": "export const TemplateTelAsk = true;",
     "cible": "export const TemplateTelAsk = $formPhone;",
     "datasource": "table.colonne",
-    "env":"demo"
+    "env": "demo"
   },
   {
     "action": "REPLACE_TEXT",
@@ -116,7 +116,7 @@
     "source": "export const TemplateAdressAsk = true;",
     "cible": "export const TemplateAdressAsk = $formAddress;",
     "datasource": "table.colonne",
-    "env":"demo"
+    "env": "demo"
   },
   {
     "action": "REPLACE_TEXT",
@@ -124,7 +124,7 @@
     "source": "export const TemplatePostalAsk = true;",
     "cible": "export const TemplatePostalAsk = $formPostalCode;",
     "datasource": "table.colonne",
-    "env":"demo"
+    "env": "demo"
   },
   {
     "action": "REPLACE_TEXT",
@@ -132,7 +132,7 @@
     "source": "export const TemplateCityAsk = true;",
     "cible": "export const TemplateCityAsk = $formCity;",
     "datasource": "table.colonne",
-    "env":"demo"
+    "env": "demo"
   },
   {
     "action": "REPLACE_TEXT",
@@ -140,7 +140,7 @@
     "source": "export const TemplateCountryAsk = true;",
     "cible": "export const TemplateCountryAsk = $formCountry;",
     "datasource": "table.colonne",
-    "env":"demo"
+    "env": "demo"
   },
   {
     "action": "REPLACE_TEXT",
@@ -148,7 +148,7 @@
     "source": "export const TemplateTelVerifAsk = true;",
     "cible": "export const TemplateTelVerifAsk = $formPhoneValidation;",
     "datasource": "table.colonne",
-    "env":"demo"
+    "env": "demo"
   },
   {
     "action": "REPLACE_TEXT",
@@ -156,7 +156,7 @@
     "source": "export const TemplateChallengeClub = true;",
     "cible": "export const TemplateChallengeClub = $challengeClub;",
     "datasource": "table.colonne",
-    "env":"demo"
+    "env": "demo"
   },
   {
     "action": "REPLACE_TEXT",
@@ -164,7 +164,7 @@
     "source": "export const TemplateChallengeFamille = true;",
     "cible": "export const TemplateChallengeFamille = $challengeFamille;",
     "datasource": "table.colonne",
-    "env":"demo"
+    "env": "demo"
   },
   {
     "action": "REPLACE_TEXT",
@@ -172,7 +172,7 @@
     "source": "export const TemplateChallengeAutre = true;",
     "cible": "export const TemplateChallengeAutre = $otherChallenge;",
     "datasource": "table.colonne",
-    "env":"demo"
+    "env": "demo"
   },
   {
     "action": "REPLACE_TEXT",
@@ -180,7 +180,7 @@
     "source": "export const TemplateChallengeEntreprise = true;",
     "cible": "export const TemplateChallengeEntreprise = $challengeEntreprise;",
     "datasource": "table.colonne",
-    "env":"demo"
+    "env": "demo"
   },
   {
     "action": "REPLACE_TEXT",
@@ -188,7 +188,7 @@
     "source": "export const TemplateHasAppDonation = false;",
     "cible": "export const TemplateHasAppDonation = $ENATTENTETYPEDON;",
     "datasource": "table.colonne",
-    "env":"demo"
+    "env": "demo"
   },
   {
     "action": "REPLACE_TEXT",
@@ -196,7 +196,7 @@
     "source": "export const TemplateIsPaying = false;",
     "cible": "export const TemplateIsPaying = $ENATTENTETYPEPAYANT;",
     "datasource": "table.colonne",
-    "env":"demo"
+    "env": "demo"
   },
   {
     "action": "REPLACE_TEXT",
@@ -204,35 +204,35 @@
     "source": "export const TemplateChallengeAutreName = 'Template Test Autre';",
     "cible": "export const TemplateChallengeAutreName = '$otherChallengeInput';",
     "datasource": "table.colonne",
-    "env":"demo"
+    "env": "demo"
   },
   {
     "action": "REPLACE_TABLE_SPONSORS",
     "filePath": "./src/globalsModifs.js",
     "source": "export const TemplateArrayImagesSponsorPath = [];",
     "datasource": "table.colonne",
-    "env":"demo"
+    "env": "demo"
   },
   {
     "action": "REPLACE_TABLE_PARTENAIRES",
     "filePath": "./src/globalsModifs.js",
     "source": "export const TemplateArrayImagesPartenairesPath = [];",
     "datasource": "table.colonne",
-    "env":"demo"
+    "env": "demo"
   },
   {
     "action": "REPLACE_TABLE_SPORTS",
     "filePath": "./src/globalsModifs.js",
     "source": "export const TemplateSportLive = [];",
     "datasource": "table.colonne",
-    "env":"demo"
+    "env": "demo"
   },
   {
     "action": "REPLACE_TABLE_TRACE",
     "filePath": "./src/globalsModifs.js",
     "source": "export const TemplateTrace = [];",
     "datasource": "table.colonne",
-    "env":"demo"
+    "env": "demo"
   },
   {
     "action": "REPLACE_TEXT",
@@ -240,7 +240,7 @@
     "source": "dag.templateappname",
     "cible": "dag.$appNameLowerCased",
     "datasource": "table.colonne",
-    "env":"prod"
+    "env": "prod"
   },
   {
     "action": "REPLACE_TEXT",
@@ -248,7 +248,7 @@
     "source": "dag.templateappname",
     "cible": "dag.$appNameLowerCased",
     "datasource": "table.colonne",
-    "env":"prod"
+    "env": "prod"
   },
   {
     "action": "REPLACE_TEXT",
@@ -256,14 +256,15 @@
     "source": "dag.templateappname",
     "cible": "dag.$appNameLowerCased",
     "datasource": "table.colonne",
-    "env":"prod"
+    "env": "prod"
   },
   {
     "action": "REPLACE_TEXT",
     "filePath": "./src/globalsModifs.js",
     "source": "export const TemplateIdOrganisation = '9';",
     "cible": "export const TemplateIdOrganisation = '$idOrganisation';",
-    "datasource": "table.colonne"
+    "datasource": "table.colonne",
+    "env": "demo"
   },
   {
     "action": "REPLACE_TEXT",
@@ -271,7 +272,7 @@
     "source": "dag.templateappname",
     "cible": "dag.$appNameLowerCased",
     "datasource": "table.colonne",
-    "env":"prod"
+    "env": "prod"
   },
   {
     "action": "REPLACE_TEXT",
@@ -279,7 +280,7 @@
     "source": "dag.templateappname",
     "cible": "dag.$appNameLowerCased",
     "datasource": "table.colonne",
-    "env":"prod"
+    "env": "prod"
   },
   {
     "action": "REPLACE_TEXT",
@@ -287,7 +288,7 @@
     "source": "dag.templateappname",
     "cible": "dag.$appNameLowerCased",
     "datasource": "table.colonne",
-    "env":"prod"
+    "env": "prod"
   },
   {
     "action": "REPLACE_TEXT",
@@ -295,7 +296,7 @@
     "source": "dag.templateappname",
     "cible": "dag.$appNameLowerCased",
     "datasource": "table.colonne",
-    "env":"prod"
+    "env": "prod"
   },
   {
     "action": "REPLACE_FOLDER_NAME",
@@ -303,8 +304,6 @@
     "source": "templateappname",
     "cible": "$appNameLowerCased;",
     "datasource": "table.colonne",
-    "env":"prod"
+    "env": "prod"
   }
-
- 
 ]
