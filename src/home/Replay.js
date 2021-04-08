@@ -48,6 +48,7 @@ const mapStateToProps = (state) => {
     userData: state.userData,
     currentMapStyle: state.currentMapStyle,
     polylines: state.polylines,
+    challenges : state.challenges
   };
 };
 
@@ -75,6 +76,7 @@ class Replay extends Component {
       segmentEfforts: [],
       coordinatesTime: [],
       coordinatesTime2: [],
+      canStart : false,
 
       currentMarker: null,
       currentMarker2: null,
@@ -193,20 +195,24 @@ class Replay extends Component {
       .then(ApiUtils.checkStatus)
       .then((response) => response.json())
       .then((responseJson) => {
+      
         let data = Object.values(responseJson);
-        this.setState({isloading: false});
+
+        this.setState({isloading: false, canStart : true});
 
         if (index == 1) {
+          
           let dataTime = this.getCoordinates(data);
           let dataMap = this.getCoordinatesForMap(data);
+     
           this.setState({coordinates: dataMap}, () => this.centerMap());
           this.setState({coordinatesTime: dataTime});
           let startPoint1 = this.getClosestInterestPoint(
-            this.state.pointPassages[0],
+            this.props.challenges.filter(c => c.idChallenge == this.state.challengeId)[0].positionsTrace[0],
             data,
-            50,
+            10,
           );
-          this.setState({startPoint1: startPoint1, isDownloaded1: true});
+          this.setState({startPoint1: startPoint1, isDownloaded1: true, canStart : true});
           this.centerMapOnTrace(dataMap);
         } else {
           let dataTime = this.getCoordinates(data);
@@ -214,18 +220,18 @@ class Replay extends Component {
           this.setState({coordinates2: dataMap});
           this.setState({coordinatesTime2: dataTime});
           let startPoint2 = this.getClosestInterestPoint(
-            this.state.pointPassages[0],
+            this.props.challenges.filter(c => c.idChallenge == this.state.challengeId)[0].positionsTrace[0],
             data,
-            50,
+            10,
           );
-          this.setState({startPoint2: startPoint2, isDownloaded2: true});
+          this.setState({startPoint2: startPoint2, isDownloaded2: true, canStart : true});
         }
       })
 
       .catch((e) => {
         this.setState({isloading: false});
         // ApiUtils.logError('create live', JSON.stringify(e.message));
-        // alert('Une erreur est survenue : ' + JSON.stringify(e.message));
+         //alert('Une erreur est survenue : ' + JSON.stringify(e.message));
         console.log(e);
         if (e.message == 'Timeout' || e.message == 'Network request failed') {
           this.setState({noConnection: true});
@@ -342,16 +348,16 @@ class Replay extends Component {
         longitude: parseFloat(element[1]),
       };
 
-      var isInside = isPointInPolygon(coordinate, [
-        {latitude: 45.239345439246804, longitude: 5.487474486152105},
-        {latitude: 45.239345439246804, longitude: 5.603112382684815},
-        {latitude: 45.16591923938339, longitude: 5.603112382684815},
-        {latitude: 45.16591923938339, longitude: 5.487474486152105},
-      ]);
+      // var isInside = isPointInPolygon(coordinate, [
+      //   {latitude: 45.239345439246804, longitude: 5.487474486152105},
+      //   {latitude: 45.239345439246804, longitude: 5.603112382684815},
+      //   {latitude: 45.16591923938339, longitude: 5.603112382684815},
+      //   {latitude: 45.16591923938339, longitude: 5.487474486152105},
+      // ]);
 
-      if (isInside) {
+      // if (isInside) {
         coordinates.push(coordinate);
-      }
+      // }
     });
 
     return coordinates;
@@ -370,16 +376,16 @@ class Replay extends Component {
         time: time[0],
       };
 
-      var isInside = isPointInPolygon(coordinate, [
-        {latitude: 45.239345439246804, longitude: 5.487474486152105},
-        {latitude: 45.239345439246804, longitude: 5.603112382684815},
-        {latitude: 45.16591923938339, longitude: 5.603112382684815},
-        {latitude: 45.16591923938339, longitude: 5.487474486152105},
-      ]);
+      // var isInside = isPointInPolygon(coordinate, [
+      //   {latitude: 45.239345439246804, longitude: 5.487474486152105},
+      //   {latitude: 45.239345439246804, longitude: 5.603112382684815},
+      //   {latitude: 45.16591923938339, longitude: 5.603112382684815},
+      //   {latitude: 45.16591923938339, longitude: 5.487474486152105},
+      // ]);
 
-      if (isInside) {
+      // if (isInside) {
         coordinates.push(coordinate);
-      }
+      // }
     });
 
     return coordinates;
@@ -426,19 +432,19 @@ class Replay extends Component {
                   _this.setState({coordinates: finalTrace.positionsTrace});
                   _this.setState({coordinatesTime: latLongTime});
                   let startPoint1 = _this.getClosestInterestPoint(
-                    this.state.pointPassages[0],
+                    this.props.challenges.filter(c => c.idChallenge == this.state.challengeId)[0].positionsTrace[0],
                     coordinatesTime,
-                    50,
+                    10,
                   );
-                  this.setState({startPoint1: startPoint1});
+                  this.setState({startPoint1: startPoint1, canStart : true});
                   _this.centerMapOnTrace(finalTrace);
                 } else {
-                  _this.setState({coordinates2: finalTrace.positionsTrace});
+                  _this.setState({coordinates2: finalTrace.positionsTrace, canStart : true});
                   _this.setState({coordinatesTime2: latLongTime});
                   let startPoint2 = _this.getClosestInterestPoint(
-                    this.state.pointPassages[0],
+                    this.props.challenges.filter(c => c.idChallenge == this.state.challengeId)[0].positionsTrace[0],
                     coordinatesTime2,
-                    50,
+                    10,
                   );
                   this.setState({startPoint2: startPoint2});
                 }
@@ -691,16 +697,18 @@ class Replay extends Component {
 
   onChangeTrace1(value) {
     this.setState({gpx1Name: value});
+    this.setState({canStart : false}); 
   }
 
   onChangeTrace2(value) {
-    this.setState({gpx2Name: value});
+    this.setState({gpx2Name: value});  
+     this.setState({canStart : false}); 
   }
 
   onChangeChallenge(value) {
     this.setState({challengeId: value, isloadingChallenge: true});
     this.getClassementChallenge(value);
-    this.getPointPassage(value);
+ //   this.getPointPassage(value);
   }
 
   validateRunners() {
@@ -716,9 +724,10 @@ class Replay extends Component {
 
     // this.readFile(this.state.gpx1Name, 1);
     // this.readFile(this.state.gpx2Name, 2);
-
+    this.setState({canStart : false}); 
     this.getGpxPoint(this.state.gpx1Name, 1);
     this.getGpxPoint(this.state.gpx2Name, 2);
+    
   }
 
   isUserSelected() {
@@ -834,24 +843,34 @@ class Replay extends Component {
                     onValueChange={this.onChangeChallenge.bind(this)}
                     placeholder={'Choisissez une épreuve'}
                     placeholderStyle={{
-                      color: ApiUtils.getBackgroundColor(),
+                      color: ApiUtils.getColor(),
                     }}
-                    placeholderIconColor={ApiUtils.getBackgroundColor()}
-                    textStyle={{color: ApiUtils.getBackgroundColor()}}
+                    placeholderIconColor={ApiUtils.getColor()}
+                    textStyle={{color: ApiUtils.getColor()}}
                     itemStyle={{
-                      color: ApiUtils.getBackgroundColor(),
+                      color: ApiUtils.getColor(),
                       marginLeft: 0,
                       paddingLeft: 10,
-                      borderBottomColor: ApiUtils.getBackgroundColor(),
+                      borderBottomColor: ApiUtils.getColor(),
                       borderBottomWidth: 1,
                     }}
                     itemTextStyle={{
-                      color: ApiUtils.getBackgroundColor(),
-                      borderBottomColor: ApiUtils.getBackgroundColor(),
+                      color: ApiUtils.getColor(),
+                      borderBottomColor: ApiUtils.getColor(),
                       borderBottomWidth: 1,
                     }}>
                     <Picker.Item label="Choisissez une épreuve" value="-1" />
-                    <Picker.Item label="My Cross" value={58} />
+                    {this.props.challenges.map((challenge) => {
+                        return (
+                          <Picker.Item
+                            label={
+                             challenge.libelleChallenge
+                            }
+                           value={challenge.idChallenge}
+                          />
+                        );
+                      })}
+                    {/* <Picker.Item label="My Cross" value={58} /> */}
                   </Picker>
 
                   {!this.state.isloadingChallenge &&
@@ -899,20 +918,20 @@ class Replay extends Component {
                             onValueChange={this.onChangeTrace1.bind(this)}
                             placeholder={'Choisir'}
                             placeholderStyle={{
-                              color: ApiUtils.getBackgroundColor(),
+                              color: ApiUtils.getColor(),
                             }}
-                            placeholderIconColor={ApiUtils.getBackgroundColor()}
-                            textStyle={{color: ApiUtils.getBackgroundColor()}}
+                            placeholderIconColor={ApiUtils.getColor()}
+                            textStyle={{color: ApiUtils.getColor()}}
                             itemStyle={{
-                              color: ApiUtils.getBackgroundColor(),
+                              color: ApiUtils.getColor(),
                               marginLeft: 0,
                               paddingLeft: 10,
-                              borderBottomColor: ApiUtils.getBackgroundColor(),
+                              borderBottomColor: ApiUtils.getColor(),
                               borderBottomWidth: 1,
                             }}
                             itemTextStyle={{
-                              color: ApiUtils.getBackgroundColor(),
-                              borderBottomColor: ApiUtils.getBackgroundColor(),
+                              color: ApiUtils.getColor(),
+                              borderBottomColor: ApiUtils.getColor(),
                               borderBottomWidth: 1,
                             }}>
                             <Picker.Item label="Choisir" value="-1" />
@@ -971,20 +990,20 @@ class Replay extends Component {
                             onValueChange={this.onChangeTrace2.bind(this)}
                             placeholder={'Choisir'}
                             placeholderStyle={{
-                              color: ApiUtils.getBackgroundColor(),
+                              color: ApiUtils.getColor(),
                             }}
-                            placeholderIconColor={ApiUtils.getBackgroundColor()}
-                            textStyle={{color: ApiUtils.getBackgroundColor()}}
+                            placeholderIconColor={ApiUtils.getColor()}
+                            textStyle={{color: ApiUtils.getColor()}}
                             itemStyle={{
-                              color: ApiUtils.getBackgroundColor(),
+                              color: ApiUtils.getColor(),
                               marginLeft: 0,
                               paddingLeft: 10,
-                              borderBottomColor: ApiUtils.getBackgroundColor(),
+                              borderBottomColor: ApiUtils.getColor(),
                               borderBottomWidth: 1,
                             }}
                             itemTextStyle={{
-                              color: ApiUtils.getBackgroundColor(),
-                              borderBottomColor: ApiUtils.getBackgroundColor(),
+                              color: ApiUtils.getColor(),
+                              borderBottomColor: ApiUtils.getColor(),
                               borderBottomWidth: 1,
                             }}>
                             <Picker.Item label="Choisir" value="-1" />
@@ -1015,10 +1034,10 @@ class Replay extends Component {
                           paddingHorizontal: 50,
                           elevation: 0,
                           alignSelf: 'center',
-                          borderColor: ApiUtils.getBackgroundColor(),
+                          borderColor: ApiUtils.getColor(),
                           borderWidth: 1,
                           backgroundColor: this.isUserSelected()
-                            ? ApiUtils.getBackgroundColor()
+                            ? ApiUtils.getColor()
                             : 'white',
                         }}
                         onPress={() => this.validateRunners()}>
@@ -1026,7 +1045,7 @@ class Replay extends Component {
                           style={{
                             color: this.isUserSelected()
                               ? 'white'
-                              : ApiUtils.getBackgroundColor(),
+                              : ApiUtils.getColor(),
                           }}>
                           Comparer
                         </Text>
@@ -1037,7 +1056,7 @@ class Replay extends Component {
                   ) : null}
 
                   {this.isUserSelected() &&
-                  this.hasTraceDownloaded() &&
+                  this.hasTraceDownloaded() && this.state.canStart &&
                   !this.state.isStarted ? (
                     <Button
                       style={{
@@ -1239,7 +1258,7 @@ class Replay extends Component {
                         style={{
                           width: 25,
                           height: 25,
-                          backgroundColor: ApiUtils.getBackgroundColor(),
+                          backgroundColor: ApiUtils.getColor(),
                           borderRadius: 100,
                           borderColor: 'white',
                           borderWidth: 1,
