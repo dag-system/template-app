@@ -306,11 +306,9 @@ class MapHeader extends Component<Props, State> {
             {this.getDistance()} km
           </Text>
         </View>
-        <View>
-          {/* <Text style={{textAlign : 'center'}}> Vous êtes à {this.getDistanceFromChallengeStart()} du départ</Text> */}
-          <Text style={{textAlign : 'center'}}> Challenge Cross INSA</Text>
-          <Text style={{textAlign : 'center'}}> vous avez déjà parcouru 1.3km en 3 m 44 s</Text>
-        </View>
+        {/* <View>
+           <Text style={{textAlign : 'center'}}> Vous êtes à {this.getDistanceFromChallengeStart()} du départ</Text> 
+        </View> */}
 
         {/* <View style={styles.liveNameBanner}>
           <Text style={styles.liveNameText}>

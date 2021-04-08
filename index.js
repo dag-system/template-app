@@ -20,13 +20,13 @@ if (__DEV__) {
 }
 
 
-// Sentry.init({
-//   dsn:
-//     'https://d455e5c5cf5548f89d42e2f9582469f7@o556570.ingest.sentry.io/5687721',
-//     debug: false,
-//     deactivateStacktraceMerging: true
+Sentry.init({
+  dsn:
+    'https://d455e5c5cf5548f89d42e2f9582469f7@o556570.ingest.sentry.io/5687721',
+    debug: false,
+    deactivateStacktraceMerging: true
 
-// });
+});
 
 AppRegistry.registerComponent(appName, () => App);
 
