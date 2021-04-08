@@ -26,6 +26,7 @@ interface Props extends DefaultProps {
   odometer: any;
   currentPosition: any;
   distanceFromChallengeStart: any;
+  ondrawer(): void;
 }
 
 interface State {}
@@ -55,7 +56,8 @@ class MapHeader extends Component<Props, State> {
     var action = {type: 'CLEAR_MAP', data: null};
     this.props.dispatch(action);
 
-    this.props.navigation.navigate('Lives');
+    // this.props.navigation.navigate('Lives');
+    this.props.navigation.navigate('Home');
   }
 
   goBack() {
@@ -261,10 +263,10 @@ class MapHeader extends Component<Props, State> {
                 }}>
                 <TouchableOpacity
                   style={styles.goBackButton}
-                  onPress={() => this.goBack()}>
+                  onPress={() => this.props.ondrawer()}>
                   <Icon
                     style={styles.saveText}
-                    name="chevron-left"
+                    name="bars"
                     type="FontAwesome5"
                   />
                 </TouchableOpacity>
@@ -274,7 +276,7 @@ class MapHeader extends Component<Props, State> {
                     elevation: 0,
                     justifyContent: 'center',
                   }}
-                  onPress={() => this.goBack()}>
+                  onPress={() => this.props.ondrawer()}>
                   <View style={[GlobalStyles.row]}>
                     <Text style={{color: 'black'}}>
                       {this.props.userData.nomUtilisateur}

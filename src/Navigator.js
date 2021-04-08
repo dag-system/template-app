@@ -20,6 +20,7 @@ import Classement from './home/Classement';
 import Replay from './home/Replay';
 import MapContainer from './simple-map/MapContainer';
 import AskGpsModal from './home/AskGpsModal';
+import Introduction from './home/Introduction';
 
 export default class Navigator extends Component {
   componentDidMount() {}
@@ -32,7 +33,7 @@ export default class Navigator extends Component {
             animationEnabled: false,
           }}>
           <Stack.Screen name="Home" component={Home} headerMode="none" />
-
+          <Stack.Screen name="Introduction" component={Introduction} headerMode="none" />
           <Stack.Screen name="Replay" component={Replay} headerMode="none" />
 
           <Stack.Screen

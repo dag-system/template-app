@@ -105,7 +105,7 @@ class ForgotPassword extends ValidationComponent {
             var action = {type: 'LOGIN', data: responseJson};
             this.props.dispatch(action);
             this.setState({isLoading: false});
-            this.onClickNavigate('Lives');
+            this.onClickNavigate('Introduction');
           } else {
             alert("Votre folocode n'est pas valide");
           }

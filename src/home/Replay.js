@@ -493,7 +493,7 @@ class Replay extends Component {
   }
 
   onGoBack() {
-    this.props.navigation.navigate('Lives');
+    this.props.navigation.navigate('SimpleMap');
   }
 
   downloadFile(url, name) {

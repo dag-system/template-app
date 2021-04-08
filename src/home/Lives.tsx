@@ -1406,18 +1406,7 @@ class Lives extends Component<Props, State> {
 
             <Sponsors />
 
-            <Modal
-              visible={
-                !this.props.isOkPopupBAttery || this.state.isOpenModalHelp
-              }>
-              <Container style={{flex: 1}}>
-                <View style={{flex: 1}}>
-                  <Help noHeader={true} />
-
-                  {/* <View style={{height: 300}} /> */}
-                </View>
-              </Container>
-            </Modal>
+            
 
             <Modal
               visible={

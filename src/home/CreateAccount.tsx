@@ -339,7 +339,7 @@ class CreateAccount extends ValidationComponent {
           var action = {type: 'LOGIN', data: responseJson};
           this.props.dispatch(action);
 
-          this.onClickNavigate('Lives');
+          this.onClickNavigate('SimpleMap');
         } else {
           Toast.show({
             text: responseJson.message,

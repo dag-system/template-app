@@ -1,40 +1,18 @@
 import React, {Component} from 'react';
 import {
-  Platform,
   StyleSheet,
-  Alert,
-  Linking,
   View,
-  TextInput,
   Image,
-  FlatList,
-  TouchableHighlight,
   ActivityIndicator,
 } from 'react-native';
 import {
-  Container,
-  Header,
   Content,
-  Footer,
-  Left,
-  Body,
-  Right,
-  Card,
-  CardItem,
   Text,
-  H1,
-  Button,
-  Title,
-  Form,
-  Item,
-  Input,
-  Label,
-  H3,
 } from 'native-base';
 import {connect} from 'react-redux';
 import ApiUtils from '../ApiUtils';
 import Logo from '../assets/logo.png';
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
   return {
     userData: state.userData,
     recordingState: state.recordingState,
@@ -83,8 +61,8 @@ class CreateNewLive extends Component {
       body: formData,
     })
       .then(ApiUtils.checkStatus)
-      .then(response => response.json())
-      .then(responseJson => {
+      .then((response) => response.json())
+      .then((responseJson) => {
         // alert("success http");
         //save values in cache
         if (responseJson.codeErreur == 'SUCCESS') {
@@ -102,14 +80,14 @@ class CreateNewLive extends Component {
           var action = {type: 'CREATE_LIVE', data: live};
           this.props.dispatch(action);
 
-          this.onClickNavigate('SimpleMap');
+          //     this.onClickNavigate('SimpleMap');
         } else {
           alert(responseJson.message);
         }
       })
-      .catch(e => {
+      .catch((e) => {
         ApiUtils.logError('CreateNewLive onClickCreateLive', e.message);
-        this.onClickNavigate('Lives');
+        this.onClickNavigate('SimpleMap');
       })
       .then();
   }
@@ -161,7 +139,10 @@ class CreateNewLive extends Component {
               alignSelf: 'center',
             }}
           />
-          <ActivityIndicator style={{height: 40, width: 40, color: 'white'}} color="white" />
+          <ActivityIndicator
+            style={{height: 40, width: 40, color: 'white'}}
+            color="white"
+          />
           <Text style={{textAlign: 'center', color: 'white'}}>
             Chargement en cours
           </Text>

@@ -79,7 +79,7 @@ class GeolocComponent extends Component<Props, State> {
   didMount() {
     if (this.props.currentLive == null) {
       //  this.onDisconnect(false);
-      this.props.navigation.navigate('Lives');
+     // this.props.navigation.navigate('Lives');
     } else {
       this.requestMotionPermission();
       Geolocation.setRNConfiguration({

@@ -79,15 +79,16 @@ class MapButtons extends Component<Props, State> {
     setTimeout(() => this.didMount(), 300);
   }
   didMount() {
+    if (this.props.currentLive != null) {
+      this.setState({libelleLive: this.props.currentLive.libelleLive});
+      if (this.state.selectedSport == -1) {
+        this.setState({selectedSport: this.props.currentLive.idSport});
+      }
+    }
     this.setState({
-      libelleLive: this.props.currentLive.libelleLive,
       acceptChallengeNameUtilisateur:
         this.props.userData.acceptChallengeNameUtilisateur == 1,
     });
-
-    if (this.state.selectedSport == -1) {
-      this.setState({selectedSport: this.props.currentLive.idSport});
-    }
   }
 
   onstart() {
@@ -271,10 +272,6 @@ class MapButtons extends Component<Props, State> {
               },
             };
             this.props.dispatch(action);
-
-            // .then(
-            //   this.props.navigation.navigate('LiveSummary')
-            // );
           } else {
             alert(responseJson.message);
           }
@@ -445,7 +442,7 @@ class MapButtons extends Component<Props, State> {
 
           this.onDisconnect(false);
           // this.toggleModal3(false);
-          this.props.navigation.navigate('Lives');
+          //    this.props.navigation.navigate('Lives');
 
           this.setState({spinner: false});
           //this.props.navigation.navigate('Lives');
@@ -489,9 +486,10 @@ class MapButtons extends Component<Props, State> {
 
     if (isSummary) {
       this.props.navigation.navigate('LiveSummary');
-    } else {
-      this.props.navigation.navigate('Lives');
     }
+    //  else {
+    //   this.props.navigation.navigate('Lives');
+    // }
   }
 
   onChangeLiveName(name) {
@@ -804,7 +802,7 @@ const styles = StyleSheet.create({
   },
   drawerButton: {
     backgroundColor: 'transparent',
-    width : '100%',
+    width: '100%',
     marginTop: 0,
     paddingTop: 10,
     shadowOffset: {height: 0, width: 0},

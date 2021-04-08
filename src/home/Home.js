@@ -115,7 +115,7 @@ class Home extends Component {
     this.setState({selectedFolocode: -1});
 
     if (this.props.userData != null) {
-      this.onClickNavigate('Lives');
+      this.onClickNavigate('SimpleMap');
     } else {
       BackgroundGeolocation.stop();
       BackgroundGeolocation.removeListeners();
@@ -127,7 +127,7 @@ class Home extends Component {
 
   checkIsConnected = () => {
     if (this.props.userData != null) {
-      this.onClickNavigate('Lives');
+      this.onClickNavigate('SimpleMap');
     }
   };
 
@@ -175,7 +175,7 @@ class Home extends Component {
           var action = {type: 'LOGIN', data: responseJson};
           this.props.dispatch(action);
           this.setState({isLoading: false});
-          this.onClickNavigate('Lives');
+          this.onClickNavigate('Introduction');
 
           // ApiUtils.setLogged().then(this.saveUserInfo(responseJson, false));
         } else {
@@ -240,7 +240,7 @@ class Home extends Component {
 
             this.props.dispatch(action);
             this.setState({isLoading: false});
-            this.onClickNavigate('Lives');
+            this.onClickNavigate('Introduction');
           } else {
             alert("Votre folocode n'est pas valide");
           }

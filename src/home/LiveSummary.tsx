@@ -342,7 +342,7 @@ class LiveSummary extends Component<Props, State> {
   }
 
   onGoBack() {
-    this.props.navigation.navigate('Lives');
+    this.props.navigation.navigate('SimpleMap');
   }
 
   getShortDate(date) {
