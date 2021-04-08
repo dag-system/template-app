@@ -42,7 +42,7 @@ import {Sponsors} from './Sponsors';
 import VersionCheck from 'react-native-version-check';
 import moment from 'moment';
 
-import {TemplateExpirationDate, TemplateIsPaying} from './../globalsModifs';
+import {TemplateExpirationDate, TemplateIdOrganisation, TemplateIsPaying} from './../globalsModifs';
 
 const mapStateToProps = (state) => {
   return {
@@ -365,7 +365,7 @@ class Home extends Component {
     const formData = new FormData();
     formData.append('method', 'getInformationStation');
     formData.append('auth', ApiUtils.getAPIAuth());
-    formData.append('idStation', '52');
+    formData.append('idStation', TemplateIdOrganisation);
     //fetch followCode API
 
     fetch(ApiUtils.getAPIUrl(), {

@@ -14,7 +14,7 @@ const initialState = {
   isMoving: false,
   isStarted: false,
   odometer: 0,
-  pointsInterets: [{"coordinates": {"latitude": 45.78797001525351, "longitude": 4.876706950495785}, "couleurTrace": undefined, "description": "", "descriptionInteret": "", "id": "interest0", "idInteret": "7257", "idStation": "52", "libelleInteret": "Départ INSA", "lienInteret": "", "photoInteret": "KO", "telephoneInteret": ""}],
+  pointsInterets: [],
   polylines: [],
   nomStation: null,
   descriptionStation: null,

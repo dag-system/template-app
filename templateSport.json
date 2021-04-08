@@ -260,6 +260,13 @@
   },
   {
     "action": "REPLACE_TEXT",
+    "filePath": "./src/globalsModifs.js",
+    "source": "export const TemplateIdOrganisation = '9';",
+    "cible": "export const TemplateIdOrganisation = '$idOrganisation';",
+    "datasource": "table.colonne"
+  },
+  {
+    "action": "REPLACE_TEXT",
     "filePath": "./android/app/src/main/AndroidManifest.xml",
     "source": "dag.templateappname",
     "cible": "dag.$appNameLowerCased",

@@ -47,7 +47,7 @@ import DeviceInfo from 'react-native-device-info';
 import BackgroundGeolocation from 'react-native-background-geolocation';
 import Help from './Help';
 
-import {TemplateAppName, TemplateSportLive} from './../globalsModifs';
+import {TemplateAppName, TemplateIdOrganisation, TemplateSportLive} from './../globalsModifs';
 
 const mapStateToProps = (state) => {
   return {
@@ -730,7 +730,7 @@ class Lives extends Component<Props, State> {
     const formData = new FormData();
     formData.append('method', 'getInformationStation');
     formData.append('auth', ApiUtils.getAPIAuth());
-    formData.append('idStation', '52');
+    formData.append('idStation', TemplateIdOrganisation);
     //fetch followCode API
 
     fetch(ApiUtils.getAPIUrl(), {
