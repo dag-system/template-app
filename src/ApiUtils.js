@@ -74,7 +74,7 @@ var ApiUtils = {
 
   checkStatus: function (response) {
     if (response.ok) {
-     console.log(response);
+  //   console.log(response);
     //  response.text().then(function (text) {
     //   console.log(text);
     //  });
