@@ -329,7 +329,7 @@ export default class Sidebar extends Component {
               position: 'absolute',
               bottom: 30,
             }}>
-            <TouchableHighlight
+            {/* <TouchableHighlight
               underlayColor="rgba(255,255,255,1,0.6)"
               onPress={() =>
                 this.openLink(
@@ -349,7 +349,7 @@ export default class Sidebar extends Component {
                 ]}>
                 Politique de confidentialité
               </Text>
-            </TouchableHighlight>
+            </TouchableHighlight> */}
             {/* <TouchableHighlight
               underlayColor="rgba(255,255,255,1,0.6)"
               onPress={() =>
