@@ -93,7 +93,10 @@ var ApiUtils = {
   },
 
   getAPIUrl() {
-    return 'https://folomi.fr/api/sportapi_dev.php';
+    if (ISDEBUG) {
+      return 'https://folomi.fr/api/sportapi_dev.php';
+    }
+    return 'https://folomi.fr/api/sportapi.php';
   },
 
   getAPIAuth() {
