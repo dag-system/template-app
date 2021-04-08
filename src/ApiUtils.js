@@ -24,7 +24,7 @@ var ApiUtils = {
   },
   isExpired() {
     let currentDate = new Date();
-    
+
     if (IsDemo) {
       if (
         moment(currentDate.toISOString()).isAfter(
@@ -68,7 +68,6 @@ var ApiUtils = {
     return TemplateBackgroundColor;
   },
   getColor() {
-
     let color = this.getBackgroundColor();
 
     if (this.getBackgroundColor() == '#FFFFFF') {
@@ -120,9 +119,6 @@ var ApiUtils = {
   },
 
   getAPIUrl() {
-    if (ISDEBUG) {
-      return 'https://folomi.fr/api/sportapi_dev.php';
-    }
     return 'https://folomi.fr/api/sportapi.php';
   },
 
