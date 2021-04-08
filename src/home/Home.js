@@ -39,8 +39,10 @@ import {Modal} from 'react-native';
 import WebviewJetCode from './WebviewJetCode';
 import GlobalStyles from '../styles';
 import {Sponsors} from './Sponsors';
+import VersionCheck from 'react-native-version-check';
+import moment from 'moment';
 
-import {TemplateIsPaying} from './../globalsModifs';
+import {TemplateExpirationDate, TemplateIsPaying} from './../globalsModifs';
 
 const mapStateToProps = (state) => {
   return {
@@ -612,6 +614,27 @@ class Home extends Component {
                       </Text>
                     </TouchableOpacity>
                   </View>
+
+                <Text
+              style={[
+                {
+                  color: 'black',
+                  textAlign: 'center',
+                  fontSize: 13,
+                  marginTop : 30
+                },
+              ]}>
+              Version V {VersionCheck.getCurrentVersion()} 
+            </Text>
+            <Text
+              style={[
+                {
+                  color: 'black',
+                  textAlign: 'center',
+                  fontSize: 13,
+                  marginTop : 5
+                },
+              ]}>Expiration le {moment(TemplateExpirationDate.toISOString()).format('DD/MM/YYYY')}</Text>
                 </ImageBackground>
               </View>
             </KeyboardAvoidingView>
@@ -755,8 +778,15 @@ class Home extends Component {
                   </TouchableOpacity>
                 </View>
 
+
                 <View style={{marginBottom: 0}} />
+
+          
+
               </KeyboardAvoidingView>
+
+        
+
               <Sponsors />
             </Modal>
 
