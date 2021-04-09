@@ -10,7 +10,7 @@ export class Sponsors extends Component {
     this.state = {};
   }
 
-  componentDidMount() {
+  componentDidMount() {}
 
   render() {
     return (

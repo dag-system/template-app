@@ -8,7 +8,7 @@ export const TemplateAppName = purgeString(
   TemplateDisplayName.trim().toLowerCase(),
 );
 
-export const TemplateOrganisation = TemplateAppName.toUpperCase();
+export const TemplateOrganisation = '32THDEMOAPP';
 
 export const TemplateIdOrganisation = '9';
 
@@ -39,8 +39,9 @@ export const TemplateChallengeAutreName = 'Template Test Autre';
 export const TemplateSportLive = [];
 export const TemplateTrace = [];
 
-export const TemplateArrayImagesSponsorPath = [];
-export const TemplateArrayImagesPartenairesPath = [];
+export const TemplateArrayImagesSponsorPath = [ require('./assets/logo.png'),require('./assets/logo.png')];
+// export const image = require('./assets/logo.png');
+export const TemplateArrayImagesPartenairesPath = [ require('./assets/logo.png'),require('./assets/logo.png')];
 
 function purgeString(str) {
   const accents =
