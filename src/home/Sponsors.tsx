@@ -11,6 +11,8 @@ export class Sponsors extends Component {
   }
 
   componentDidMount() {
+    
+  } 
 
   render() {
     return (
