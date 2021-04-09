@@ -1,4 +1,4 @@
-export const TemplateDisplayName = 'Template Test';
+export const TemplateDisplayName = "Template Test";
 
 export const IsDemo = true;
 
