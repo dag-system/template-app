@@ -800,7 +800,7 @@ class Home extends Component {
                         fontWeight: 'bold',
                         textAlign: 'center',
                         color:
-                        this.state.followCode == '' && this.state.selectedFolocode == -1 ? 'black' :ApiUtils.getSecondColor(),
+                        this.state.followCode == '' && this.state.selectedFolocode == -1 ? 'black' : 'white',
                       }}>
                       CONNEXION
                     </Text>
