@@ -86,7 +86,7 @@ class IsExpired extends Component {
           style={{
             width: '80%',
             height: 45,
-            backgroundColor: ApiUtils.getSecondColor(),
+            backgroundColor: ApiUtils.getColor(),
             display: 'flex',
             justifyContent: 'center',
             alignItems: 'center',
@@ -98,7 +98,7 @@ class IsExpired extends Component {
           <Text
             style={{
               fontSize: 17,
-              color: ApiUtils.getColor(),
+              color: ApiUtils.getSecondColor(),
             }}>
            Quitter
           </Text>

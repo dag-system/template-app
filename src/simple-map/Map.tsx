@@ -82,7 +82,21 @@ class Map extends PureComponent<Props, State> {
 
     // setTimeout(() => this.setState({ userdata: { ...this.state.userdata, ddnUtilisateur: this.state.userdata.ddnUtilisateur) }} ), 100)
   }
-  didMount() {}
+  didMount() {
+
+    if(this.props.polylines.length > 0)
+    {
+      let firstPolyline = this.props.polylines[0];
+      if (firstPolyline.positionsTrace.length != 0) {
+        this.refs.map.fitToCoordinates(firstPolyline.positionsTrace, {
+          edgePadding: {top: 10, right: 10, bottom: 10, left: 10},
+          animated: true,
+        });
+      }
+
+    }
+
+  }
 
   saveCurrentMapStyle() {
     let nextStyle = 'standard';
@@ -578,8 +592,8 @@ class Map extends PureComponent<Props, State> {
           showsScale={false}
           showsTraffic={false}
           initialRegion={{
-            latitude: 45.78728972333324, // 44.843884,
-            longitude: 4.874593511376774,
+            latitude: 45.76512485710589, // 44.843884,
+            longitude: 4.8696115893891765,
             latitudeDelta: LATITUDE_DELTA_CLOSE,
             longitudeDelta: LONGITUDE_DELTA_CLOSE,
           }}

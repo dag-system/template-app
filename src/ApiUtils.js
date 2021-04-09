@@ -25,7 +25,7 @@ var ApiUtils = {
   isExpired() {
     let currentDate = new Date();
 
-    if (IsDemo) {
+    if (IsDemo &&!__DEV__) {
       if (
         moment(currentDate.toISOString()).isAfter(
           TemplateExpirationDate.toISOString(),

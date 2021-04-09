@@ -109,7 +109,7 @@ class Home extends Component {
 
     // #stop BackroundGeolocation and remove-listeners when Home Screen is rendered.
     this.setState({selectedFolocode: -1});
-    if (ApiUtils.isExpired()) {
+    if (ApiUtils.isExpired() ) {
       this.onClickNavigate('IsExpired')
       return;
     }
@@ -410,6 +410,34 @@ class Home extends Component {
             });
           }
 
+
+                  //challenges 
+
+                  var challengesArray = Object.values(result.challenges);
+          
+                  var finalChallengesArray = []; // new Object(this.props.polylines);
+                
+                  if (challengesArray != null && challengesArray.length != 0) {
+                    challengesArray.forEach((challenge) => {
+                      var finalChallenge= challenge;
+        
+                      var positionArray = Object.values(challenge.positionsTrace);
+                      challenge.positionsTrace = positionArray;
+        
+                      finalChallenge = {
+                        positionsTrace: positionArray,
+                        idChallenge: finalChallenge.idChallenge,
+                        libelleChallenge: finalChallenge.libelleChallenge,
+                        distanceChallenge: finalChallenge.distanceChallenge,
+                        gpxChallenge: finalChallenge.gpxChallenge,
+                        dateDebutChallenge: finalChallenge.dateDebutChallenge,
+                        dateFinChallenge: finalChallenge.dateFinChallenge,
+                      };
+        
+                      finalChallengesArray.push(finalChallenge);
+                    });
+                  }
+
           if (
             result.pointsInterets != null &&
             result.pointsInterets.length != 0
@@ -470,6 +498,7 @@ class Home extends Component {
             descriptionStation: result.descriptionStation,
             polylines: finalTraceArray,
             pointsInterets: finalinterestArray,
+             challenges : finalChallengesArray
           };
 
           var action = {type: 'UPDATE_STATION_DATA', data: station};
@@ -771,7 +800,7 @@ class Home extends Component {
                         fontWeight: 'bold',
                         textAlign: 'center',
                         color:
-                          this.state.selectedFolocode == -1 ? 'black' : 'white',
+                        this.state.followCode == '' && this.state.selectedFolocode == -1 ? 'black' :ApiUtils.getSecondColor(),
                       }}>
                       CONNEXION
                     </Text>

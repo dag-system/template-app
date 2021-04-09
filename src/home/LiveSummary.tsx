@@ -703,22 +703,6 @@ class LiveSummary extends Component<Props, State> {
                       Challenge
                     </Text>
                   </TouchableOpacity>
-                  {/* <TouchableOpacity
-                    onPress={() =>
-                      Linking.openURL('https://www.insa-lyon.fr/')
-                    }>
-                    <Text style={{textAlign: 'center', marginTop: 10}}>
-                      (Résultats plus complets sur
-                    </Text>
-                    <Text
-                      style={{
-                        textAlign: 'center',
-                        textDecorationLine: 'underline',
-                      }}>
-                      {' '}
-                      https://www.insa-lyon.fr/)
-                    </Text>
-                  </TouchableOpacity> */}
                 </View>
               ) : null}
 
@@ -748,23 +732,6 @@ class LiveSummary extends Component<Props, State> {
                           Challenge
                         </Text>
                       </TouchableOpacity>
-
-                      {/* <TouchableOpacity
-                        onPress={() =>
-                          Linking.openURL('https://www.insa-lyon.fr/')
-                        }>
-                        <Text style={{textAlign: 'center', marginTop: 10}}>
-                          (Résultats plus complets sur
-                        </Text>
-                        <Text
-                          style={{
-                            textAlign: 'center',
-                            textDecorationLine: 'underline',
-                          }}>
-                          {' '}
-                          https://www.insa-lyon.fr/)
-                        </Text>
-                      </TouchableOpacity> */}
                     </View>
                   ) : null}
 

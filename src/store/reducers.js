@@ -391,6 +391,7 @@ const reducer = (state = initialState, action) => {
         nomStation: action.data.nomStation,
         descriptionStation: action.data.descriptionStation,
         pointsInterets: action.data.pointsInterets,
+        challenges : action.data.challenges
       };
       return nextState || state;
     }

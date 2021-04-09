@@ -189,6 +189,43 @@ export default class Sidebar extends Component {
 
           <TouchableHighlight
             underlayColor="rgba(255,255,255,1,0.6)"
+            onPress={() => this.onClickNavigate('Replay')}
+            style={{
+              width: '100%',
+              backgroundColor:
+                this.props.selected == 'Replay' ? '#E9E9E9' : 'transparent',
+            }}>
+            <View
+              style={{
+                display: 'flex',
+                flexDirection: 'row',
+                justifyContent: 'flex-start',
+                flexWrap: 'wrap',
+                padding: 10,
+              }}>
+              <Icon
+                name="chart-line"
+                type="FontAwesome5"
+                style={[
+                  styles.icon,
+                  {color: this.props.selected == 'Replay' ? 'black' : 'black'},
+                ]}
+              />
+              <Text
+                style={[
+                  styles.menuText,
+                  {
+                    color: this.props.selected == 'Replay' ? 'black' : 'black',
+                  },
+                ]}>
+                Comparateur
+              </Text>
+            </View>
+          </TouchableHighlight>
+
+
+          <TouchableHighlight
+            underlayColor="rgba(255,255,255,1,0.6)"
             onPress={() => this.onClickNavigate('Partenaires')}
             style={{
               width: '100%',

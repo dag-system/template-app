@@ -294,7 +294,6 @@ class Lives extends Component<Props, State> {
 
   onSubscriptionsChanged = (interests) => {
     console.log('CALLBACK: onSubscriptionsChanged');
-    console.log(interests);
   };
 
   onRefresh() {
@@ -773,6 +772,34 @@ class Lives extends Component<Props, State> {
             });
           }
 
+
+          //challenges 
+
+          var challengesArray = Object.values(result.challenges);
+          
+          var finalChallengesArray = []; // new Object(this.props.polylines);
+        
+          if (challengesArray != null && challengesArray.length != 0) {
+            challengesArray.forEach((challenge) => {
+              var finalChallenge= challenge;
+
+              var positionArray = Object.values(challenge.positionsTrace);
+              challenge.positionsTrace = positionArray;
+
+              finalChallenge = {
+                positionsTrace: positionArray,
+                idChallenge: finalChallenge.idChallenge,
+                libelleChallenge: finalChallenge.libelleChallenge,
+                distanceChallenge: finalChallenge.distanceChallenge,
+                gpxChallenge: finalChallenge.gpxChallenge,
+                dateDebutChallenge: finalChallenge.dateDebutChallenge,
+                dateFinChallenge: finalChallenge.dateFinChallenge,
+              };
+
+              finalChallengesArray.push(finalChallenge);
+            });
+          }
+
           if (result.interets != null && result.interets.length != 0) {
             var interestArray = Object.values(result.interets);
             var count = 0;
@@ -782,7 +809,6 @@ class Lives extends Component<Props, State> {
                 longitude: parseFloat(interest.longitudeInteret),
               };
 
-              console.log(interest);
               var finalInterest = {
                 id: 'interest' + count,
                 idInteret: interest.idInteret,
@@ -824,12 +850,12 @@ class Lives extends Component<Props, State> {
               }
             });
           }
-
           var station = {
             nomStation: result.nomStation,
             descriptionStation: result.descriptionStation,
             polylines: finalTraceArray,
             pointsInterets: finalinterestArray,
+            challenges : finalChallengesArray
           };
 
           var action = {type: 'UPDATE_STATION_DATA', data: station};

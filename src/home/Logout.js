@@ -91,7 +91,7 @@ class Logout extends Component {
           style={{
             width: '80%',
             height: 45,
-            backgroundColor: ApiUtils.getSecondColor(),
+            backgroundColor: ApiUtils.getColor(),
             display: 'flex',
             justifyContent: 'center',
             alignItems: 'center',
@@ -103,7 +103,7 @@ class Logout extends Component {
           <Text
             style={{
               fontSize: 17,
-              color: ApiUtils.getColor() ,
+              color: ApiUtils.getSecondColor() ,
             }}>
             Retourner sur la page d'accueil
           </Text>

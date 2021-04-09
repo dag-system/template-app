@@ -41,14 +41,14 @@ import Sidebar from './SideBar';
 
 import {isPointInPolygon} from 'geolib';
 
-import {TemplateReplayTrace} from './../globalsModifs';
-
-const haversine = require('haversine');
+// const haversine = require('haversine');
+import haversine from 'haversine-distance';
 const mapStateToProps = (state) => {
   return {
     userData: state.userData,
     currentMapStyle: state.currentMapStyle,
     polylines: state.polylines,
+    challenges: state.challenges,
   };
 };
 
@@ -76,6 +76,7 @@ class Replay extends Component {
       segmentEfforts: [],
       coordinatesTime: [],
       coordinatesTime2: [],
+      canStart: false,
 
       currentMarker: null,
       currentMarker2: null,
@@ -101,9 +102,28 @@ class Replay extends Component {
   }
 
   componentDidMount() {
+    setTimeout(() => this.didMount(), 300);
     this._unsubscribe = this.props.navigation.addListener('blur', () => {
+      // do something
+      
       this.componentWillUnmount();
     });
+  }
+
+  didMount() {
+
+    if(this.props.polylines.length > 0)
+    {
+      let firstPolyline = this.props.polylines[0];
+      if (firstPolyline.positionsTrace.length != 0) {
+        this.refs.map.fitToCoordinates(firstPolyline.positionsTrace, {
+          edgePadding: {top: 10, right: 10, bottom: 10, left: 10},
+          animated: true,
+        });
+      }
+
+    }
+
   }
 
   componentWillUnmount() {
@@ -127,7 +147,10 @@ class Replay extends Component {
     formData.append('idChallenge', idChallenge);
     fetch(ApiUtils.getAPIUrl(), {
       method: 'POST',
-      headers: {},
+      headers: {
+        // Accept: 'application/json',
+        // 'Content-Type': 'application/json',
+      },
       body: formData,
     })
       .then(ApiUtils.checkStatus)
@@ -140,6 +163,8 @@ class Replay extends Component {
 
       .catch((e) => {
         this.setState({isloading: false});
+        // ApiUtils.logError('create live', JSON.stringify(e.message));
+        // alert('Une erreur est survenue : ' + JSON.stringify(e.message));
         console.log(e);
         if (e.message == 'Timeout' || e.message == 'Network request failed') {
           this.setState({noConnection: true});
@@ -156,10 +181,12 @@ class Replay extends Component {
   }
 
   centerMapOnTrace(positions) {
+    // if (polyline.positionsTrace.length != 0) {
     this.refs.map.fitToCoordinates(positions, {
       edgePadding: {top: 10, right: 10, bottom: 10, left: 10},
       animated: true,
     });
+    // }
   }
 
   getGpxPoint(gpxName, index) {
@@ -174,28 +201,40 @@ class Replay extends Component {
     formData.append('auth', ApiUtils.getAPIAuth());
     formData.append('gpxName', gpxName);
 
+    //fetch followCode API
     fetch(ApiUtils.getAPIUrl(), {
       method: 'POST',
-      headers: {},
+      headers: {
+        // Accept: 'application/json',
+        // 'Content-Type': 'application/json',
+      },
       body: formData,
     })
       .then(ApiUtils.checkStatus)
       .then((response) => response.json())
       .then((responseJson) => {
         let data = Object.values(responseJson);
-        this.setState({isloading: false});
+
+        this.setState({isloading: false, canStart: true});
 
         if (index == 1) {
           let dataTime = this.getCoordinates(data);
           let dataMap = this.getCoordinatesForMap(data);
+
           this.setState({coordinates: dataMap}, () => this.centerMap());
           this.setState({coordinatesTime: dataTime});
           let startPoint1 = this.getClosestInterestPoint(
-            this.state.pointPassages[0],
+            this.props.challenges.filter(
+              (c) => c.idChallenge == this.state.challengeId,
+            )[0].positionsTrace[0],
             data,
-            50,
+            10,
           );
-          this.setState({startPoint1: startPoint1, isDownloaded1: true});
+          this.setState({
+            startPoint1: startPoint1,
+            isDownloaded1: true,
+            canStart: true,
+          });
           this.centerMapOnTrace(dataMap);
         } else {
           let dataTime = this.getCoordinates(data);
@@ -203,16 +242,24 @@ class Replay extends Component {
           this.setState({coordinates2: dataMap});
           this.setState({coordinatesTime2: dataTime});
           let startPoint2 = this.getClosestInterestPoint(
-            this.state.pointPassages[0],
+            this.props.challenges.filter(
+              (c) => c.idChallenge == this.state.challengeId,
+            )[0].positionsTrace[0],
             data,
-            50,
+            10,
           );
-          this.setState({startPoint2: startPoint2, isDownloaded2: true});
+          this.setState({
+            startPoint2: startPoint2,
+            isDownloaded2: true,
+            canStart: true,
+          });
         }
       })
 
       .catch((e) => {
         this.setState({isloading: false});
+        // ApiUtils.logError('create live', JSON.stringify(e.message));
+        //alert('Une erreur est survenue : ' + JSON.stringify(e.message));
         console.log(e);
         if (e.message == 'Timeout' || e.message == 'Network request failed') {
           this.setState({noConnection: true});
@@ -235,9 +282,13 @@ class Replay extends Component {
     formData.append('auth', ApiUtils.getAPIAuth());
     formData.append('idChallenge', idChallenge);
 
+    //fetch followCode API
     fetch(ApiUtils.getAPIUrl(), {
       method: 'POST',
-      headers: {},
+      headers: {
+        // Accept: 'application/json',
+        // 'Content-Type': 'application/json',
+      },
       body: formData,
     })
       .then(ApiUtils.checkStatus)
@@ -255,10 +306,14 @@ class Replay extends Component {
           )[0].gpxLive;
           this.setState({gpx1Name: userGpx});
         }
+
+        // this.setState({isloading: false, pointPassages: result});
       })
 
       .catch((e) => {
         this.setState({isloadingChallenge: false});
+        // ApiUtils.logError('create live', JSON.stringify(e.message));
+        // alert('Une erreur est survenue : ' + JSON.stringify(e.message));
         if (e.message == 'Timeout' || e.message == 'Network request failed') {
           this.setState({noConnection: true});
 
@@ -275,6 +330,7 @@ class Replay extends Component {
   readFile(gpxFile, index) {
     let filePath = 'https://folomi.fr/fichiers/gpxLive/' + gpxFile + '.gpx';
 
+    // var path = this.normalize(filePath);
     let dirs = RNFetchBlob.fs.dirs;
     let path = dirs.DownloadDir + '/' + 'folomi' + '/' + gpxFile + '.gpx';
 
@@ -300,6 +356,7 @@ class Replay extends Component {
                 duration: 3000,
                 position: 'bottom',
               });
+              // alert(e)
             }
           })
           .catch((e) => alert(e));
@@ -319,16 +376,16 @@ class Replay extends Component {
         longitude: parseFloat(element[1]),
       };
 
-      var isInside = isPointInPolygon(coordinate, [
-        {latitude: 45.239345439246804, longitude: 5.487474486152105},
-        {latitude: 45.239345439246804, longitude: 5.603112382684815},
-        {latitude: 45.16591923938339, longitude: 5.603112382684815},
-        {latitude: 45.16591923938339, longitude: 5.487474486152105},
-      ]);
+      // var isInside = isPointInPolygon(coordinate, [
+      //   {latitude: 45.239345439246804, longitude: 5.487474486152105},
+      //   {latitude: 45.239345439246804, longitude: 5.603112382684815},
+      //   {latitude: 45.16591923938339, longitude: 5.603112382684815},
+      //   {latitude: 45.16591923938339, longitude: 5.487474486152105},
+      // ]);
 
-      if (isInside) {
-        coordinates.push(coordinate);
-      }
+      // if (isInside) {
+      coordinates.push(coordinate);
+      // }
     });
 
     return coordinates;
@@ -347,34 +404,40 @@ class Replay extends Component {
         time: time[0],
       };
 
-      var isInside = isPointInPolygon(coordinate, [
-        {latitude: 45.239345439246804, longitude: 5.487474486152105},
-        {latitude: 45.239345439246804, longitude: 5.603112382684815},
-        {latitude: 45.16591923938339, longitude: 5.603112382684815},
-        {latitude: 45.16591923938339, longitude: 5.487474486152105},
-      ]);
+      // var isInside = isPointInPolygon(coordinate, [
+      //   {latitude: 45.239345439246804, longitude: 5.487474486152105},
+      //   {latitude: 45.239345439246804, longitude: 5.603112382684815},
+      //   {latitude: 45.16591923938339, longitude: 5.603112382684815},
+      //   {latitude: 45.16591923938339, longitude: 5.487474486152105},
+      // ]);
 
-      if (isInside) {
-        coordinates.push(coordinate);
-      }
+      // if (isInside) {
+      coordinates.push(coordinate);
+      // }
     });
 
     return coordinates;
   }
 
   readGpxFile(filePath, index) {
+    // var path = this.normalize(filePath);
     var _this = this;
     console.log(filePath);
 
     RNFetchBlob.fs
       .readFile(filePath, 'utf8')
       .then((data) => {
+        // alert('ok')
+        // console.log(data);
+        // handle the data ..
+
         try {
           var test = new GPXDocument(data);
 
           test.getTracks().then((t) => {
             t.forEach((tr) => {
               var finalTrace = {
+                // positionsTrace: positionArray,
                 couleurTrace: ApiUtils.getColor(),
                 nomTrace: tr.getName(),
                 isActive: true,
@@ -382,11 +445,13 @@ class Replay extends Component {
               };
 
               tr.loadAllSegmentInfo().then((resu) => {
+                // console.log(resu);
                 finalTrace.distanceTrace = (
                   resu[0].totalDistance / 1000
                 ).toFixed(1);
                 finalTrace.dplusTrace = resu[0].totalElevationGain.toFixed(0);
 
+                // var positionArray = tr.transformGpxPointToLatLong(resu[0].points);
                 finalTrace.positionsTrace = resu[0].latLongList;
 
                 let latLongTime = resu[0].latLongTimeList;
@@ -395,23 +460,44 @@ class Replay extends Component {
                   _this.setState({coordinates: finalTrace.positionsTrace});
                   _this.setState({coordinatesTime: latLongTime});
                   let startPoint1 = _this.getClosestInterestPoint(
-                    this.state.pointPassages[0],
+                    this.props.challenges.filter(
+                      (c) => c.idChallenge == this.state.challengeId,
+                    )[0].positionsTrace[0],
                     coordinatesTime,
-                    50,
+                    10,
                   );
-                  this.setState({startPoint1: startPoint1});
+                  this.setState({startPoint1: startPoint1, canStart: true});
                   _this.centerMapOnTrace(finalTrace);
                 } else {
-                  _this.setState({coordinates2: finalTrace.positionsTrace});
+                  _this.setState({
+                    coordinates2: finalTrace.positionsTrace,
+                    canStart: true,
+                  });
                   _this.setState({coordinatesTime2: latLongTime});
                   let startPoint2 = _this.getClosestInterestPoint(
-                    this.state.pointPassages[0],
+                    this.props.challenges.filter(
+                      (c) => c.idChallenge == this.state.challengeId,
+                    )[0].positionsTrace[0],
                     coordinatesTime2,
-                    50,
+                    10,
                   );
                   this.setState({startPoint2: startPoint2});
                 }
+
+                // var action = {type: 'ADD_TRACE', data: finalTrace};
+                // _this.props.dispatch(action);
+
+                // Toast.show({
+                //   text: 'Le fichier gpx a bien été importé',
+                //   buttonText: 'Ok',
+                //   type: 'success',
+                //   duration: 3000,
+                //   position: 'bottom',
+                // });
+                // polylines.push(finalTrace);
               });
+
+              // this.setState({ polylines: polylines })
             });
           });
         } catch (e) {
@@ -422,6 +508,7 @@ class Replay extends Component {
             duration: 3000,
             position: 'bottom',
           });
+          // alert(e)
         }
       })
       .catch((e) => {
@@ -488,6 +575,7 @@ class Replay extends Component {
           if (res == 'granted') {
             this.onDownloadFileok(url, name);
           } else {
+            // alert('error')
             this.requestStoragePermission(url, name);
           }
         });
@@ -513,7 +601,9 @@ class Replay extends Component {
         this.onDownloadFileok(url, name);
       } else {
       }
-    } catch (err) {}
+    } catch (err) {
+      // console.warn(err);
+    }
   };
 
   saveCurrentMapStyle(style) {
@@ -535,10 +625,12 @@ class Replay extends Component {
   }
 
   centerMap() {
-    this.refs.map.fitToCoordinates(this.state.coordinates, {
-      edgePadding: {top: 10, right: 10, bottom: 10, left: 10},
-      animated: true,
-    });
+    if (this.state.coordinates != null && this.state.coordinates.length != 0) {
+      this.refs.map.fitToCoordinates(this.state.coordinates, {
+        edgePadding: {top: 10, right: 10, bottom: 10, left: 10},
+        animated: true,
+      });
+    }
   }
 
   start() {
@@ -560,6 +652,7 @@ class Replay extends Component {
   onInterval = () => {
     let startTime = new Date().getTime();
     let startTimeSeconds = this.state.startTimeSeconds;
+    // startTimeSeconds += 1;
 
     let markers1 = this.state.coordinatesTime;
     let markers2 = this.state.coordinatesTime2;
@@ -571,6 +664,8 @@ class Replay extends Component {
     let marker1 = this.getMarker(markers1, startTimeSeconds, startPoint1);
 
     if (marker1 != null) {
+      // console.log(marker1);
+      // let marker1 = markers1[index];
       let finalMarker1 = {
         latitude: marker1.latitude,
         longitude: marker1.longitude,
@@ -578,6 +673,7 @@ class Replay extends Component {
 
       this.setState({currentMarker: finalMarker1});
     } else {
+      // this.stop();
       console.log('marker1 est null');
     }
 
@@ -636,19 +732,34 @@ class Replay extends Component {
 
   onChangeTrace1(value) {
     this.setState({gpx1Name: value});
+    this.setState({canStart: false});
   }
 
   onChangeTrace2(value) {
     this.setState({gpx2Name: value});
+    this.setState({canStart: false});
   }
 
   onChangeChallenge(value) {
     this.setState({challengeId: value, isloadingChallenge: true});
     this.getClassementChallenge(value);
-    this.getPointPassage(value);
+    //   this.getPointPassage(value);
   }
 
   validateRunners() {
+    // // let gpxLive =
+    // // 'https://folomi.fr/fichiers/gpxLive/' +
+    // // '10354_5ffffc3d6d027' +
+    // // '.gpx';
+
+    // gpxLive =
+    // 'https://folomi.fr/fichiers/gpxLive/' +
+    // '10315_5fff374f5a594' +
+    // '.gpx';
+
+    // this.readFile(this.state.gpx1Name, 1);
+    // this.readFile(this.state.gpx2Name, 2);
+    this.setState({canStart: false});
     this.getGpxPoint(this.state.gpx1Name, 1);
     this.getGpxPoint(this.state.gpx2Name, 2);
   }
@@ -669,11 +780,13 @@ class Replay extends Component {
     var markerMin = null;
 
     points.forEach((p) => {
+      // if (!this.isAlreadyVisitedPoints(p) && this.isShowType(p.type) && p.coordinates != null) {
       var dist = haversine(startPoint, p.coordinates);
       if (dist < minDistance && dist < maxDistance) {
         markerMin = p;
         minDistance = dist;
       }
+      // }
     });
 
     return markerMin;
@@ -711,6 +824,16 @@ class Replay extends Component {
           <Container>
             <Header style={styles.header}>
               <Left style={{flex: 1}}>
+                {/* <Button
+                    style={styles.drawerButton}
+                    onPress={() => this.onGoBack()}>
+                    <Icon
+                      style={styles.saveText}
+                      name="chevron-left"
+                      type="FontAwesome5"
+                    /> */}
+                {/* <Text style={styles.saveText}>Précedent</Text> */}
+                {/* </Button> */}
                 <TouchableOpacity
                   style={styles.drawerButton}
                   onPress={() => this.onDrawer()}>
@@ -754,30 +877,32 @@ class Replay extends Component {
                     onValueChange={this.onChangeChallenge.bind(this)}
                     placeholder={'Choisissez une épreuve'}
                     placeholderStyle={{
-                      color: ApiUtils.getBackgroundColor(),
+                      color: ApiUtils.getColor(),
                     }}
-                    placeholderIconColor={ApiUtils.getBackgroundColor()}
-                    textStyle={{color: ApiUtils.getBackgroundColor()}}
+                    placeholderIconColor={ApiUtils.getColor()}
+                    textStyle={{color: ApiUtils.getColor()}}
                     itemStyle={{
-                      color: ApiUtils.getBackgroundColor(),
+                      color: ApiUtils.getColor(),
                       marginLeft: 0,
                       paddingLeft: 10,
-                      borderBottomColor: ApiUtils.getBackgroundColor(),
+                      borderBottomColor: ApiUtils.getColor(),
                       borderBottomWidth: 1,
                     }}
                     itemTextStyle={{
-                      color: ApiUtils.getBackgroundColor(),
-                      borderBottomColor: ApiUtils.getBackgroundColor(),
+                      color: ApiUtils.getColor(),
+                      borderBottomColor: ApiUtils.getColor(),
                       borderBottomWidth: 1,
                     }}>
                     <Picker.Item label="Choisissez une épreuve" value="-1" />
-                    {TemplateReplayTrace.map((cours, index) => {
-                      <Picker.Item
-                        label={cours.label}
-                        value={cours.id}
-                        key={index}
-                      />;
+                    {this.props.challenges.map((challenge) => {
+                      return (
+                        <Picker.Item
+                          label={challenge.libelleChallenge}
+                          value={challenge.idChallenge}
+                        />
+                      );
                     })}
+                    {/* <Picker.Item label="My Cross" value={58} /> */}
                   </Picker>
 
                   {!this.state.isloadingChallenge &&
@@ -825,20 +950,20 @@ class Replay extends Component {
                             onValueChange={this.onChangeTrace1.bind(this)}
                             placeholder={'Choisir'}
                             placeholderStyle={{
-                              color: ApiUtils.getBackgroundColor(),
+                              color: ApiUtils.getColor(),
                             }}
-                            placeholderIconColor={ApiUtils.getBackgroundColor()}
-                            textStyle={{color: ApiUtils.getBackgroundColor()}}
+                            placeholderIconColor={ApiUtils.getColor()}
+                            textStyle={{color: ApiUtils.getColor()}}
                             itemStyle={{
-                              color: ApiUtils.getBackgroundColor(),
+                              color: ApiUtils.getColor(),
                               marginLeft: 0,
                               paddingLeft: 10,
-                              borderBottomColor: ApiUtils.getBackgroundColor(),
+                              borderBottomColor: ApiUtils.getColor(),
                               borderBottomWidth: 1,
                             }}
                             itemTextStyle={{
-                              color: ApiUtils.getBackgroundColor(),
-                              borderBottomColor: ApiUtils.getBackgroundColor(),
+                              color: ApiUtils.getColor(),
+                              borderBottomColor: ApiUtils.getColor(),
                               borderBottomWidth: 1,
                             }}>
                             <Picker.Item label="Choisir" value="-1" />
@@ -897,20 +1022,20 @@ class Replay extends Component {
                             onValueChange={this.onChangeTrace2.bind(this)}
                             placeholder={'Choisir'}
                             placeholderStyle={{
-                              color: ApiUtils.getBackgroundColor(),
+                              color: ApiUtils.getColor(),
                             }}
-                            placeholderIconColor={ApiUtils.getBackgroundColor()}
-                            textStyle={{color: ApiUtils.getBackgroundColor()}}
+                            placeholderIconColor={ApiUtils.getColor()}
+                            textStyle={{color: ApiUtils.getColor()}}
                             itemStyle={{
-                              color: ApiUtils.getBackgroundColor(),
+                              color: ApiUtils.getColor(),
                               marginLeft: 0,
                               paddingLeft: 10,
-                              borderBottomColor: ApiUtils.getBackgroundColor(),
+                              borderBottomColor: ApiUtils.getColor(),
                               borderBottomWidth: 1,
                             }}
                             itemTextStyle={{
-                              color: ApiUtils.getBackgroundColor(),
-                              borderBottomColor: ApiUtils.getBackgroundColor(),
+                              color: ApiUtils.getColor(),
+                              borderBottomColor: ApiUtils.getColor(),
                               borderBottomWidth: 1,
                             }}>
                             <Picker.Item label="Choisir" value="-1" />
@@ -941,10 +1066,10 @@ class Replay extends Component {
                           paddingHorizontal: 50,
                           elevation: 0,
                           alignSelf: 'center',
-                          borderColor: ApiUtils.getBackgroundColor(),
+                          borderColor: ApiUtils.getColor(),
                           borderWidth: 1,
                           backgroundColor: this.isUserSelected()
-                            ? ApiUtils.getBackgroundColor()
+                            ? ApiUtils.getColor()
                             : 'white',
                         }}
                         onPress={() => this.validateRunners()}>
@@ -952,7 +1077,7 @@ class Replay extends Component {
                           style={{
                             color: this.isUserSelected()
                               ? 'white'
-                              : ApiUtils.getBackgroundColor(),
+                              : ApiUtils.getColor(),
                           }}>
                           Comparer
                         </Text>
@@ -964,6 +1089,7 @@ class Replay extends Component {
 
                   {this.isUserSelected() &&
                   this.hasTraceDownloaded() &&
+                  this.state.canStart &&
                   !this.state.isStarted ? (
                     <Button
                       style={{
@@ -1096,13 +1222,16 @@ class Replay extends Component {
                   ) : null}
                 </View>
               )}
-
+              {/* <ScrollView contentContainerStyle={styles.loginButtonSection}> */}
               <View
                 style={{
                   height: this.state.isMapFullSize ? '90%' : 200,
                   marginTop: this.state.isMapFullSize ? 0 : 20,
                   flex: 1,
                 }}>
+                {/* {this.state.isloading ? (
+                  <ActivityIndicator />
+                ) : ( */}
                 <MapView
                   ref="map"
                   style={{
@@ -1117,13 +1246,16 @@ class Replay extends Component {
                   showsPointsOfInterest={false}
                   showsScale={false}
                   showsTraffic={false}
+                  // onPress={(coordinate) => { this.showMapFullSize() }}
                   toolbarEnabled={false}
                   initialRegion={{
-                    latitude: 45.78728972333324, // 44.843884,
-                    longitude: 4.874593511376774,
+                    latitude: 45.76512485710589, // dag system
+                    longitude: 4.8696115893891765,
                     latitudeDelta: LATITUDE_DELTA,
                     longitudeDelta: LONGITUDE_DELTA,
-                  }}>
+                  }}
+                  // onLayout={() => this.centerMap()}
+                >
                   {this.state.coordinates != null &&
                   this.state.coordinates.length > 0 ? (
                     <MapView.Polyline
@@ -1150,6 +1282,8 @@ class Replay extends Component {
 
                   {this.state.currentMarker != null ? (
                     <Marker
+                      // onPress={() => this.onClickInterestPoint(marker)}
+                      // onCalloutPress={() => this.onClickInterestPoint(marker)}
                       key={'marker1'}
                       coordinate={this.state.currentMarker}
                       tracksViewChanges={false}>
@@ -1157,7 +1291,7 @@ class Replay extends Component {
                         style={{
                           width: 25,
                           height: 25,
-                          backgroundColor: ApiUtils.getBackgroundColor(),
+                          backgroundColor: ApiUtils.getColor(),
                           borderRadius: 100,
                           borderColor: 'white',
                           borderWidth: 1,
@@ -1177,6 +1311,8 @@ class Replay extends Component {
 
                   {this.state.currentMarker2 != null ? (
                     <Marker
+                      // onPress={() => this.onClickInterestPoint(marker)}
+                      // onCalloutPress={() => this.onClickInterestPoint(marker)}
                       key={'marker2'}
                       coordinate={this.state.currentMarker2}
                       tracksViewChanges={false}>
@@ -1201,7 +1337,49 @@ class Replay extends Component {
                       </View>
                     </Marker>
                   ) : null}
+                  {/* 
+                  {this.props.polylines != null
+                    ? this.props.polylines
+                        .filter(pol => pol.isActive == true)
+                        .map((polyline, index) => (
+                          <MapView.Polyline
+                            key={polyline.nomTrace + index}
+                            // onPress={() => this.selectPolyline(polyline)}
+                            coordinates={polyline.positionsTrace}
+                            tappable={true}
+                            tracksViewChanges={false}
+                            zIndex={0}
+                            geodesic={true}
+                            strokeColor={polyline.couleurTrace}
+                            strokeWidth={5}
+                          />
+                        ))
+                    : null} */}
                 </MapView>
+                {/* )} */}
+
+                {/* {this.props.polylines != null &&
+                this.props.polylines.length > 0 ? (
+                  <Button
+                    onPress={this.onOpenTraceModal.bind(this)}
+                    style={{
+                      flexDirection: 'row',
+                      justifyContent: 'space-between',
+                      width: 53,
+                      height: 53,
+                      backgroundColor: 'white',
+                      zIndex: 5,
+                      position: 'absolute',
+                      top: Platform.OS == 'android' ? 20 : 20,
+                      left: 80,
+                    }}>
+                    <Icon
+                      type="Ionicons"
+                      name="map-outline"
+                      style={[{color: '#000', fontSize: 22}]}
+                    />
+                  </Button>
+                ) : null} */}
 
                 {this.props.currentMapStyle == 'standard' ||
                 this.props.currentMapStyle == 'hybrid' ||
@@ -1265,6 +1443,7 @@ class Replay extends Component {
                     position: 'absolute',
                     top: Platform.OS == 'ios' ? 20 : 20,
                     left: Platform.OS == 'ios' ? 20 : 10,
+                    // left : 0,
                     zIndex: 2,
                   }}
                   onPress={() => this.showMapFullSize()}>
@@ -1299,11 +1478,13 @@ class Replay extends Component {
                   <Icon active name="md-locate" style={styles.centerLogo} />
                 </Button>
               </View>
+              {/* </ScrollView> */}
 
+              {/* </View> */}
               <View style={{marginBottom: 300}} />
             </Content>
             <Sponsors />
-
+            {/******** modal5 : Traces list  *****************/}
             <ModalSmall
               isVisible={this.state.isModalTraceVisible}
               onRequestClose={() => {
@@ -1311,7 +1492,9 @@ class Replay extends Component {
               }}
               onSwipeComplete={() =>
                 this.setState({isModalTraceVisible: false})
-              }>
+              }
+              // swipeDirection={'left'}
+            >
               <View
                 style={{
                   marginTop: 22,
@@ -1412,8 +1595,10 @@ const styles = StyleSheet.create({
   },
   loginButtonSection: {
     width: '100%',
+    // height: '120%',
     flex: 1,
     paddingBottom: 100,
+    // marginTop: 5,
   },
   centerLogo: {
     color: '#000',
@@ -1442,9 +1627,11 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     width: '100%',
     backgroundColor: 'white',
+    // padding: 10
   },
   buttonHideTrace: {
     backgroundColor: 'transparent',
+    // marginTop: 5,
     elevation: 0,
   },
 });

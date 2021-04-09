@@ -4,8 +4,8 @@ import {
   Image,
   TouchableOpacity,
   View,
-  Dimensions,
   Linking,
+  Modal,
   Platform,
 } from 'react-native';
 import {
@@ -26,11 +26,10 @@ import Sidebar from './SideBar';
 import Logo from '../assets/logo.png';
 import GlobalStyles from '../styles';
 import {Sponsors} from './Sponsors';
-import IosReglages from '../assets/iosReglages.png';
-import Ios2 from '../assets/ios2.png';
-
-import {TemplateAppName} from './../globalsModifs';
-import {Dispatch} from 'redux';
+import BatteryModalContent from './BatteryModalContent';
+import VideoModal from './VideoModal';
+import Video from 'react-native-video';
+import VideoPrez from '../assets/tuto.mp4';
 
 const mapStateToProps = (state) => {
   return {
@@ -38,15 +37,7 @@ const mapStateToProps = (state) => {
   };
 };
 
-interface Props {
-  dispatch: Dispatch;
-  navigation: any;
-  noHeader: boolean;
-}
-
-interface State {}
-
-class Help extends Component<Props, State> {
+class Help extends Component {
   drawer: any;
   constructor(props) {
     super(props);
@@ -66,6 +57,7 @@ class Help extends Component<Props, State> {
       isLoading: false,
       toasterMessage: '',
       showDefaultDdn: false,
+      isVideoFullScreen: false,
     };
   }
 
@@ -135,6 +127,14 @@ class Help extends Component<Props, State> {
       }
     });
   }
+
+  openVideo() {
+    this.setState({isVideoFullScreen: true});
+  }
+
+  closeVideo = () => {
+    this.setState({isVideoFullScreen: false});
+  };
   render() {
     return (
       <Drawer
@@ -168,7 +168,7 @@ class Help extends Component<Props, State> {
               </Header>
             )}
 
-            <Content style={{padding: 10, paddingTop: 20}} scrollEnabled={true}>
+            <Content style={{padding: 5, paddingTop: 20}} scrollEnabled={true}>
               <View style={[GlobalStyles.row, {justifyContent: 'center'}]}>
                 <Image resizeMode="contain" source={Logo} style={styles.logo} />
               </View>
@@ -177,397 +177,86 @@ class Help extends Component<Props, State> {
                   textAlign: 'center',
                   fontWeight: 'bold',
                   color: ApiUtils.getColor(),
-                  marginTop: 30,
+                  marginTop: 10,
                 }}>
                 Bienvenue sur votre application sportive !
               </Text>
+
               <Text style={{marginTop: 10}}>
                 Entrainez-vous et affrontez vos amis et collègues
-                en toute sécurité, et sans jamais vous croiser ! Le Cross est
-                ouvert
+                en toute sécurité, et sans jamais vous croiser !
               </Text>
+
               <Text style={{marginTop: 10}}>
-                Au moment de faire votre course, rendez-vous au départ du
-                parcours, lancez l’application et démarrez votre activité. Ne
-                vous souciez plus de rien, courrez et votre chronomètre
-                s’activera automatiquement en fonction de votre position GPS.
-                Bien sur, vous devrez garder votre smartphone ou montre
-                connectée sur vous. Une fois la course terminée, arrêtez la et
-                enregistrez la.
+                Découvrez le fonctionnement de l'application dans la vidéo
+                ci-dessous :
               </Text>
-              <Text style={{marginTop: 10}}>
-                Consultez votre temps sur l'application puis votre classement
-                sera disponible en fin de journée sur le site internet de
-                l’organisateur.
-              </Text>
-              <Text style={{marginTop: 10}}>
-                Vous pouvez faire le parcours autant de fois que vous le
-                souhaitez pour améliorer votre classement et vos résultats.
-              </Text>
-              <Text
-                style={{
-                  marginTop: 10,
-                  fontWeight: 'bold',
-                  color: ApiUtils.getColor(),
-                  textDecorationLine: 'underline',
-                  textTransform: 'uppercase',
-                }}>
-                Manuel à lire avant de lancer une activité :
-              </Text>
-              <Text style={{marginTop: 10, fontWeight: 'bold'}}>
-                1 - Enregistrer vos activités
-              </Text>
-              <Text style={{marginTop: 5}}>
-                - Pour enregistrer une nouvelle activité cliquez sur le bouton «
-                + »
-              </Text>
-              <Text style={{marginTop: 5}}>
-                - Dès que vous êtes prêt cliquez sur « démarrer » puis
-                lancez-vous sur nos parcours.
-              </Text>
-              <Text style={{marginTop: 5}}>
-                - Réalisez votre activité, l’application enregistrera votre
-                activité et calculera vos performances sur nos différents
-                parcours.
-              </Text>
-              <Text style={{marginTop: 5}}>
-                - A votre arrivée cliquez sur « stop ».
-              </Text>
-              <Text style={{marginTop: 5}}>
-                - Cliquez sur « enregistrer » votre parcours
-              </Text>
-              <Text style={{marginTop: 5}}>
-                Pour voir la liste des parcours cliquez sur (petit logo carte)
-              </Text>
-              <Text style={{marginTop: 5}}>
-                Retrouvez les classements à cette adresse, mis à jour chaque
-                soir :
-              </Text>
-              <TouchableOpacity
-                onPress={() =>
-                  this.openLink(
-                    'https://folomi.fr/classement/' +
-                      {TemplateAppName} +
-                      '/classement.html',
-                  )
-                }>
-                <Text
+
+              <Modal visible={this.state.isVideoFullScreen} style={{flex: 1}}>
+                <TouchableOpacity
                   style={{
-                    textAlign: 'center',
-                    marginTop: 10,
-                    textDecorationLine: 'underline',
-                  }}>
-                  https://folomi.fr/classement/{TemplateAppName}/classement.html
-                </Text>
-              </TouchableOpacity>
-              <Text style={{marginTop: 10, fontWeight: 'bold'}}>
-                2 - Paramétrez votre téléphone
-              </Text>
-              <Text style={{marginTop: 10}}>
-                Pour un meilleur enregistrement de votre activité, paramétrez la
-                gestion de la batterie de votre téléphone pour que l’app ne se
-                stoppe pas pendant l’effort
-              </Text>
-              <Text style={{marginTop: 10}}>
-                Vous retrouverez ces informations dans le menu aide. Bonne
-                course.
-              </Text>
-
-              <Text style={{marginTop: 10, fontWeight: 'bold'}}>
-                3 – Pour un fonctionnement optimal
-              </Text>
-              <Text style={{marginTop: 10}}>
-                Pour être sûr d’avoir un bon enregistrement de vos performances
-                :
-              </Text>
-              <Text style={{marginTop: 10}}>
-                - Mettre en route la fonction GPS lors de l’utilisation
-              </Text>
-              <Text style={{marginTop: 10}}>
-                - Désactivez sur le téléphone les fonctionnalités d’économie de
-                batterie
-              </Text>
-              <Text style={{marginTop: 10}}>
-                - Lancer l’activité dans une zone couverte par le réseau
-              </Text>
-              <Text style={{marginTop: 10}}>
-                - Faire strictement le parcours du départ à l’arrivée, ne pas
-                changer de parcours.
-              </Text>
-              <Text style={{marginTop: 10}}>
-                - Ne pas arrêter l’activité sans avoir franchi la ligne
-                d’arrivée de quelques mètres.
-              </Text>
-              <Text>
-                - Enregistrer son activité lorsque nous sommes couverts par le
-                réseau afin que le classement soit mis à jour automatiquement
-              </Text>
-
-              {!this.props.noHeader ? (
-                <View>
+                    position: 'absolute',
+                    top: Platform.OS == 'ios' ? 90 : 20,
+                    zIndex: 30,
+                  }}
+                  onPress={() => this.closeVideo()}>
                   <Icon
+                    name="times"
                     type="FontAwesome5"
-                    name="exclamation-triangle"
-                    style={{
-                      textAlign: 'center',
-                      marginTop: 20,
-                      marginBottom: 20,
-                      fontSize: 40,
-                    }}
+                    style={{color: 'white', marginLeft: 15}}
                   />
+                </TouchableOpacity>
 
-                  <Text style={{marginTop: 10}}>
-                    Avant de partir, assurez-vous d’avoir bien paramétré votre
-                    téléphone pour avoir le meilleur enregistrement de votre
-                    activité :
+                <VideoModal />
+              </Modal>
+
+              <TouchableOpacity
+                style={{
+                  position: 'relative',
+                  top: Platform.OS == 'ios' ? 60 : 40,
+                  zIndex: 100,
+                  marginLeft: 10,
+                }}
+                onPress={() => this.openVideo()}>
+                <View
+                  style={{
+                    display: 'flex',
+                    flexDirection: 'row',
+                  }}>
+                  <Icon
+                    style={{marginTop: -5, color: 'white'}}
+                    name="expand-alt"
+                    type="FontAwesome5"
+                  />
+                  <Text style={{textAlign: 'center', color: 'white'}}>
+                    {' '}
+                    Voir en grand
                   </Text>
+                </View>
+              </TouchableOpacity>
 
-                  <Text style={{marginTop: 10}}>
-                    Selon certaines marques ou modèles, les systèmes d’économie
-                    de batterie ferment intempestivement soit l’application,
-                    soit certaines options comme le GPS. De ce fait,
-                    l'application "plante", se met en pause automatiquement et
-                    votre tracé (parcours) est inexact ou inexistant dans votre
-                    résumé.
-                  </Text>
-
-                  <Text
-                    style={{
-                      textAlign: 'center',
-                      fontWeight: 'bold',
-                      color: ApiUtils.getColor(),
-                      textDecorationLine: 'underline',
-                      marginTop: 30,
-                    }}>
-                    Alors, comment faire ?
-                  </Text>
-
-                  <Text style={{marginTop: 10}}>
-                    Il suffit donc de désactiver l’économiseur de batterie pour
-                    profiter au maximum de votre application. Voici la liste des
-                    modèles les plus touchés et les procédures pour chacun
-                    d’entre eux. Allez ! C’est à vous !
-                  </Text>
-
-                  {Platform.OS == 'android' ? (
-                    <View>
-                      <Text style={{fontWeight: 'bold', marginTop: 10}}>
-                        HUAWEI (Mate 20, P8 lite 2017, P10, …)
-                      </Text>
-                      <Text style={{marginTop: 10}} />
-                      <Text> 1. Aller dans "Réglages"</Text>
-                      <Text> 2. Cliquer sur "Batterie"</Text>
-                      <Text> 3. Cliquer sur "Lancement d'application"</Text>
-                      <Text>
-                        {' '}
-                        4. Rechercher et désactiver notre application{' '}
-                      </Text>
-                      <Text>
-                        5. Cliquer sur OK en vérifiant que tout soit activé
-                      </Text>
-
-                      <Text style={{fontWeight: 'bold', marginTop: 10}}>
-                        SAMSUNG (Galaxy S8 et inférieur : Galaxy A5, Galaxy S7,
-                        Galaxy J5, ...)
-                      </Text>
-                      <Text style={{marginTop: 10}} />
-                      <Text> 1. Aller dans "Paramètres"</Text>
-                      <Text> 2. Cliquer sur "Maintenance de l'appareil"</Text>
-                      <Text> 3. Cliquer sur "Batterie"</Text>
-                      <Text> 5. Cliquer sur "Ajouter des applications"</Text>
-                      <Text>6.Sélectionner notre application</Text>
-                      <Text>Cliquer sur "Terminé"</Text>
-
-                      <Text style={{fontWeight: 'bold', marginTop: 10}}>
-                        SAMSUNG (Galaxy S8 et inférieur : Galaxy A5, Galaxy S7,
-                        Galaxy J5, ...)
-                      </Text>
-                      <Text style={{marginTop: 10}} />
-                      <Text> 1. Aller dans "Paramètres"</Text>
-                      <Text> 2. Cliquer sur "Maintenance de l'appareil"</Text>
-                      <Text> 3. Cliquer sur "Batterie"</Text>
-                      <Text> 5. Cliquer sur "Ajouter des applications"</Text>
-                      <Text>6.Sélectionner notre application</Text>
-                      <Text>Cliquer sur "Terminé"</Text>
-
-                      <Text style={{fontWeight: 'bold', marginTop: 10}}>
-                        SAMSUNG (Galaxy S10, Galaxy S9, …){' '}
-                      </Text>
-                      <Text>1. Aller dans "Paramètres" </Text>
-                      <Text>2. Cliquer sur "Maintenance de l'appareil" </Text>
-                      <Text>3. Cliquer sur "Batterie" </Text>
-                      <Text>
-                        4. Cliquer sur les 3 petits points en haut à droite{' '}
-                      </Text>
-                      <Text>5. Cliquer sur "Paramètres" </Text>
-                      <Text>
-                        6. Désactiver "Mise en veille applis inutilisées"{' '}
-                      </Text>
-                      <Text>
-                        7. Désactiver "Désactiver auto. applis inutilis."{' '}
-                      </Text>
-                      <Text>8. Cliquer sur "Applications en veille" </Text>
-                      <Text>
-                        9. Vérifier que l'application notre application ne soit
-                        pas dans la liste, sinon supprimer-là à l'aide de la
-                        corbeille en haut à droite{' '}
-                      </Text>
-
-                      <Text style={{fontWeight: 'bold', marginTop: 10}}>
-                        {' '}
-                        SAMSUNG ( Galaxy A3)
-                      </Text>
-                      <Text>
-                        Par défaut, sur ce modèle, l’économiseur de batterie est
-                        désactivé. Sinon, voici la procédure !
-                      </Text>
-                      <Text>1. Aller dans “Paramètres”</Text>
-                      <Text>2. Cliquer sur “Batterie”</Text>
-                      <Text>3. Cliquer sur “Détails”</Text>
-                      <Text>4. Cliquer sur notre application</Text>
-                      <Text>5. Désactivé notre application</Text>
-
-                      <Text style={{fontWeight: 'bold', marginTop: 10}}>
-                        HONOR (8, 9, 10, …)
-                      </Text>
-                      <Text>1. Aller dans “Réglages”</Text>
-                      <Text>2. Cliquer sur “Batterie”</Text>
-                      <Text>3. Cliquer sur “Lancement d'application”</Text>
-                      <Text>4. Chercher notre application</Text>
-                      <Text>5. Désélectionner la checkbox</Text>
-                      <Text>
-                        5. Sélectionner les 3 champs qui vont s'afficher en
-                        popup
-                      </Text>
-
-                      <Text style={{fontWeight: 'bold', marginTop: 10}}>
-                        {' '}
-                        XIAOMI (Redmi note 7 et plus …)
-                      </Text>
-                      <Text>1. Aller dans "Paramètres"</Text>
-                      <Text>2. Cliquer sur "Gérer les applications"</Text>
-                      <Text>
-                        3. Rechercher et cliquer sur notre application
-                      </Text>
-                      <Text>4. Activer "Démarrage automatique"</Text>
-                      <Text>5. Une fenêtre s'ouvre, cliquer sur "OK"</Text>
-                      <Text>
-                        6. Cliquer ensuite sur "Économiseur de batterie"
-                      </Text>
-                      <Text>7. Sélectionner "Pas de restriction"</Text>
-
-                      <Text style={{fontWeight: 'bold', marginTop: 10}}>
-                        {' '}
-                        ASUS (Zenfone 5 …)
-                      </Text>
-                      <Text>
-                        1. Aller dans l'application "Gestionnaire mobile"
-                      </Text>
-                      <Text>2. Cliquer sur "PowerMaster"</Text>
-                      <Text>
-                        3. Cliquer sur les 3 petits points en haut à droite
-                      </Text>
-                      <Text>4. Cliquer sur "Réglages"</Text>
-                      <Text>
-                        5. Désactiver la case "Refuser automatiquement le
-                        démarrage"
-                      </Text>
-                      <Text>6. Désactiver "Nettoyage suspendu"</Text>
-                      <Text>
-                        7. Retourner sur la page précédente (Réglages)
-                      </Text>
-                      <Text>8. Cliquer sur "Gestionnaire de démarrage"</Text>
-                      <Text>9. Activer notre application</Text>
-                      <Text>10. Cliquer sur "Autoriser"</Text>
-
-                      <Text style={{fontWeight: 'bold', marginTop: 10}}>
-                        WIKO (Ufeel)
-                      </Text>
-                      <Text>1. Aller dans l'application "Phone Assist"</Text>
-                      <Text>2. Cliquer sur "Eco. de batterie"</Text>
-                      <Text>3. Cliquer sur "Mode éco"</Text>
-                      <Text>
-                        4. Désactiver "Activer automatiquement le mode éco"
-                      </Text>
-                      <Text>5. Revenir en arrière (Eco. de batterie)</Text>
-                      <Text>6. Cliquer sur "Paramètres avancés & astuces"</Text>
-                      <Text>
-                        7. Cliquer sur l'icône réglage en haut à droite
-                      </Text>
-                      <Text>
-                        8. Cliquer sur "White-list des apps en arrière-plan"
-                      </Text>
-                      <Text>9. Activer notre application </Text>
-
-                      <Text style={{fontWeight: 'bold', marginTop: 10}}>
-                        ONEPLUS (6 et plus...)
-                      </Text>
-                      <Text>1. Aller dans "Paramètres"</Text>
-                      <Text>2. Cliquer sur "Batterie"</Text>
-                      <Text>3. Cliquer sur "Optimisation de la batterie"</Text>
-                      <Text>4. Sélectionner notre application</Text>
-                      <Text>5. Sélectionner "Ne pas optimiser"</Text>
-                    </View>
-                  ) : (
-                    <View>
-                      <Text style={{fontWeight: 'bold', marginTop: 10}}>
-                        VOUS UTILISEZ IOS14 (OU UNE VERSION PLUS RÉCENTE) ?
-                      </Text>
-
-                      <Text style={{fontWeight: 'bold', marginTop: 10}}>
-                        Voici la procédure pour modifier les paramètres de
-                        localisation :
-                      </Text>
-                      <Text>1. Ouvrez les paramètres de votre téléphone</Text>
-                      <Text>2. Accédez à "Position"</Text>
-                      <Text>
-                        3. Sélectionnez “Lorsque l’app est active” et réglez
-                        “Position exacte” sur ON (voir capture d'écran
-                        ci-dessous)
-                      </Text>
-                      <Text>4. Redémarrez l'application</Text>
-
-                      <Image
-                        style={{
-                          marginTop: 20,
-                          marginLeft: 'auto',
-                          marginRight: 'auto',
-                        }}
-                        source={IosReglages}
-                        width={(Dimensions.get('screen').width * 70) / 100}
-                        resizeMode="contain"
-                      />
-
-                      <Text style={{fontWeight: 'bold', marginTop: 10}}>
-                        VOUS UTILISEZ IOS 13 (OU UNE VERSION PLUS ANCIENNE) ?
-                      </Text>
-
-                      <Text style={{fontWeight: 'bold', marginTop: 10}}>
-                        Voici la procédure pour modifier les paramètres de
-                        localisation :
-                      </Text>
-                      <Text>1. Ouvrez les paramètres de votre téléphone</Text>
-                      <Text>2. Accédez à "Position"</Text>
-                      <Text>
-                        3. Sélectionnez “Lorsque l’app est active” (voir capture
-                        d'écran ci-dessous)
-                      </Text>
-                      <Text>4. Redémarrez l'application</Text>
-
-                      <Image
-                        style={{
-                          marginTop: 10,
-                          marginLeft: 'auto',
-                          marginRight: 'auto',
-                        }}
-                        source={Ios2}
-                        width={(Dimensions.get('screen').width * 90) / 100}
-                        resizeMode="contain"
-                      />
-                    </View>
-                  )}
+              {!this.state.isVideoFullScreen ? (
+                <Video
+                  source={VideoPrez} // Can be a URL or a local file.
+                  ref={(ref) => {
+                    this.player = ref;
+                  }} // Store reference
+                  repeat={true}
+                  onBuffer={this.onBuffer} // Callback when remote video is buffering
+                  onError={this.videoError} // Callback when video cannot be loaded
+                  style={[styles.video, {}]}
+                  // style={[this.state.isFullScreen ? styles.video : styles.fullScreenVideo,{height : 10}]}
+                />
+              ) : null}
+          
+              {/* {!this.props.noHeader ? ( */}
+              {!this.props.noHeader ? (
+                <View style={{height: '100%'}}>
+                  <BatteryModalContent noHeader={false} isInline={true} />
                 </View>
               ) : null}
+
+              {/* // ) : null} */}
 
               {this.props.noHeader ? (
                 <Text style={{textAlign: 'center', marginTop: 10}}>
@@ -588,6 +277,7 @@ class Help extends Component<Props, State> {
                     backgroundColor: ApiUtils.getColor(),
                     padding: 10,
                     borderWidth: 1,
+                    marginBottom: 75,
                   }}>
                   <Text
                     style={{
@@ -599,7 +289,6 @@ class Help extends Component<Props, State> {
                   </Text>
                 </TouchableOpacity>
               ) : null}
-              <View style={{marginBottom: 100}} />
             </Content>
             <Sponsors />
           </Root>
@@ -701,6 +390,20 @@ const styles = StyleSheet.create({
     width: '60%',
     height: 50,
     alignSelf: 'center',
+  },
+
+  video: {
+    width: '100%',
+    height: 750,
+  },
+
+  fullScreenVideo: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    bottom: 0,
+    right: 0,
+    zIndex: 1,
   },
 });
 
