@@ -7,6 +7,7 @@ import {
   Image,
   TouchableOpacity,
   TouchableHighlight,
+  ScrollView,
 } from 'react-native';
 import {
   Container,
@@ -23,7 +24,11 @@ import WebviewJetCode from './WebviewJetCode';
 import Logo from '../assets/logo.png';
 import VersionCheck from 'react-native-version-check';
 
-import {TemplateHasAppDonation, TemplateAppName} from './../globalsModifs';
+import {
+  TemplateHasAppDonation,
+  TemplateAppName,
+  isDemo,
+} from './../globalsModifs';
 
 export default class Sidebar extends Component {
   constructor(props) {
@@ -67,7 +72,7 @@ export default class Sidebar extends Component {
   render() {
     return (
       <Container>
-        <Body style={styles.body}>
+        <ScrollView style={styles.body}>
           <View
             style={{
               flexDirection: 'row',
@@ -223,7 +228,6 @@ export default class Sidebar extends Component {
             </View>
           </TouchableHighlight>
 
-
           <TouchableHighlight
             underlayColor="rgba(255,255,255,1,0.6)"
             onPress={() => this.onClickNavigate('Partenaires')}
@@ -350,16 +354,17 @@ export default class Sidebar extends Component {
           <View
             style={{
               width: '100%',
-              position: 'absolute',
-              bottom: 30,
+              marginTop: 50,
             }}>
             <TouchableHighlight
               underlayColor="rgba(255,255,255,1,0.6)"
               onPress={() =>
                 this.openLink(
-                  'http://dag-system.com/externalcontent/' +
-                    TemplateAppName +
-                    '/confidentialite.pdf',
+                  IsDemo === true
+                    ? 'http://dag-system.com/externalcontent/templatetest/service.pdf'
+                    : 'http://dag-system.com/externalcontent/' +
+                        TemplateAppName +
+                        '/confidentialite.pdf',
                 )
               }
               style={{width: '100%', height: 35}}>
@@ -378,9 +383,11 @@ export default class Sidebar extends Component {
               underlayColor="rgba(255,255,255,1,0.6)"
               onPress={() =>
                 this.openLink(
-                  'http://dag-system.com/externalcontent/' +
-                    TemplateAppName +
-                    '/service.pdf',
+                  IsDemo === true
+                    ? 'http://dag-system.com/externalcontent/templatetest/service.pdf'
+                    : 'http://dag-system.com/externalcontent/' +
+                        TemplateAppName +
+                        '/service.pdf',
                 )
               }
               style={{width: '100%', height: 35}}>
@@ -454,7 +461,7 @@ export default class Sidebar extends Component {
               }
             />
           </Modal>
-        </Body>
+        </ScrollView>
       </Container>
     );
   }

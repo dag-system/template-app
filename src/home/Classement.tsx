@@ -170,7 +170,7 @@ class Classement extends Component<Props, State> {
                     'https://www.folomi.fr/classement/classementTemplate.html?organisation=' +
                     ApiUtils.getOrganisation() +
                     '&color=' +
-                    ApiUtils.getBackgroundColor().split('#')[1],
+                    ApiUtils.getSecondColor().split('#')[1],
                 }}
                 style={{marginTop: 20, width: '100%'}}
                 startInLoadingState={true}
