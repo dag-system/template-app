@@ -52,14 +52,14 @@ class WebViewJetCode extends Component {
 
     if (eventData.type == 'payResult') {
       let amount = 2;
-
-      this.setPaiementOk(this.props.userData.idUtilisateur,amount,ApiUtils.getIdStation());
-
       
       var action = {type: 'ADD_PAYRESULT', data: eventData};
       this.props.dispatch(action);
 
-      this.downloadPayResult(eventData);
+      this.setPaiementOk(this.props.userData.idUtilisateur,amount,ApiUtils.getIdStation());
+
+
+      //this.downloadPayResult(eventData);
     }
   }
 
