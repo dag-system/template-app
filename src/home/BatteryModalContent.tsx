@@ -144,6 +144,12 @@ class BatteryModalContent extends Component {
   onPopupOk = () => {
     var action = {type: 'VIEW_POPUPBATTERY', data: null};
     this.props.dispatch(action);
+
+
+    if(this.props.onValidate)
+    {    
+      this.props.onValidate();
+    }
   };
 
   openLink(url) {

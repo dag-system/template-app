@@ -1288,7 +1288,7 @@ class Lives extends Component<Props, State> {
                 )}
               </View>
             </Content>
-            <TouchableHighlight
+            {/* <TouchableHighlight
               underlayColor="rgba(255,255,255,1,0.6)"
               disabled={this.state.spinner}
               style={[styles.buttonok, {zIndex: 12}]}
@@ -1310,7 +1310,7 @@ class Lives extends Component<Props, State> {
                   style={styles.plusButtonLogo}
                 />
               )}
-            </TouchableHighlight>
+            </TouchableHighlight> */}
 
             <TouchableHighlight
               underlayColor="rgba(255,255,255,1,0.6)"

@@ -106,12 +106,12 @@ class ForgotPassword extends ValidationComponent {
 
             if (TemplateIsPaying) {
               if (ApiUtils.hasPaid(responseJson)) {
-                this.onClickNavigate('Lives');
+                this.onClickNavigate('Introduction');
               } else {
                 this.onClickNavigate('Paiement');
               }
             } else {
-              this.onClickNavigate('Lives');
+              this.onClickNavigate('Introduction');
             }
           } else {
             alert("Votre folocode n'est pas valide");

@@ -54,6 +54,11 @@ class BatteryModal extends Component {
     this.props.onclose && this.props.onclose();
   };
 
+  onValidate = () => {
+
+    this.props.onValidate && this.props.onValidate();
+  };
+
   render() {
     return (
       <Drawer
@@ -109,6 +114,7 @@ class BatteryModal extends Component {
               <BatteryModalContent
                 onMap={this.props.onMap}
                 noHeader={this.props.noHeader}
+                onValidate={() => this.onValidate()}
               />
               <View style={{marginBottom: 100}} />
             </Content>

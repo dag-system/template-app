@@ -1,98 +1,81 @@
 import React, {Component} from 'react';
-import {
-  StyleSheet,
-  TouchableOpacity,
-  View,
-  Alert,
-  Share,
-} from 'react-native';
-import {
-  Header,
-  Body,
-  Icon,
-  Text,
-} from 'native-base';
+import {StyleSheet, TouchableOpacity, View, Alert, Share, Image} from 'react-native';
+import {Header, Body, Icon, Text, Left, Right} from 'native-base';
 import ApiUtils from '../ApiUtils';
 import {connect} from 'react-redux';
 import GlobalStyles from '../styles';
 import DefaultProps from '../models/DefaultProps';
 import BackgroundGeolocation from 'react-native-background-geolocation';
-const mapStateToProps = state => {
+import Logo from '../assets/logo.png';
+const mapStateToProps = (state) => {
   return {
     isRecording: state.isRecording,
     currentLive: state.currentLive,
-    userData : state.userData,
-    dates : state.dates,
-    odometer : state.odometer,
-    currentPosition : state.currentPosition
+    userData: state.userData,
+    dates: state.dates,
+    odometer: state.odometer,
+    currentPosition: state.currentPosition,
   };
 };
 
 interface Props extends DefaultProps {
-  isRecording: boolean,
-  currentLive: any,
-  userData : any,
-  dates : any[],
-  odometer : any,
-  currentPosition : any
+  isRecording: boolean;
+  currentLive: any;
+  userData: any;
+  dates: any[];
+  odometer: any;
+  currentPosition: any;
+  ondrawer() :void;
 }
 
 interface State {}
 
-
-class MapHeader extends Component<Props,State> {
+class MapHeader extends Component<Props, State> {
   interval: number;
   constructor(props) {
     super(props);
 
-    this.state = {
-    
-    };
+    this.state = {};
   }
 
   componentDidMount() {
     setTimeout(() => this.didMount(), 300);
-
   }
   didMount() {
     clearInterval(this.interval);
-    this.interval =  setInterval(() =>this.setState({test :1}), 1100);
+   // this.interval = setInterval(() => this.setState({test: 1}), 1100);
   }
 
-  componentWillUnmount()
-  {
-    clearInterval(this.interval);
-  }
+  // componentWillUnmount() {
+  //   clearInterval(this.interval);
+  // }
 
-  goBackOk() {
+  // goBackOk() {
+  //   BackgroundGeolocation.stop();
+  //   var action = {type: 'CLEAR_MAP', data: null};
+  //   this.props.dispatch(action);
 
-    BackgroundGeolocation.stop();
-    var action = {type: 'CLEAR_MAP', data: null};
-    this.props.dispatch(action);
+  //   this.props.navigation.navigate('Lives');
+  // }
 
-    this.props.navigation.navigate('Lives');
-
-  }
-
-  goBack() {
-    if (this.props.isRecording) {
-      Alert.alert(
-        "Quitter l'activité",
-        "Si vous quittez l'activité vous allez perdre les données enregistrées. Etes-vous sûr de quitter l'activité ?",
-        [
-          {
-            text: 'Annuler',
-            style: 'cancel',
-          },
-          {text: 'Quitter', onPress: () => this.goBackOk()},
-        ],
-        {cancelable: false},
-      );
-    } else {
-      this.goBackOk();
-    }
-  }
-
+  // goBack() {
+  //   if (this.props.isRecording) {
+  //     Alert.alert(
+  //       "Quitter l'activité",
+  //       "Si vous quittez l'activité vous allez perdre les données enregistrées. Etes-vous sûr de quitter l'activité ?",
+  //       [
+  //         {
+  //           text: 'Annuler',
+  //           style: 'cancel',
+  //         },
+  //         {text: 'Quitter', onPress: () => this.goBackOk()},
+  //       ],
+  //       {cancelable: false},
+  //     );
+  //   } else {
+  //     this.goBackOk();
+  //   }
+  // }
 
   onClickShare() {
     Share.share(
@@ -229,88 +212,71 @@ class MapHeader extends Component<Props,State> {
     return ((distKm / time) * 3600).toFixed(2);
   }
 
+  openDrawer = () =>{
+    // alert('ici');
+    this.props.ondrawer();
+  }
+
   render() {
     return (
       <View>
-      <Header style={styles.header}>
-        <Body>
+        <Header style={styles.header}>
           <View
             style={{
-              flexDirection: 'row',
-              justifyContent: 'space-between',
-              width: '100%',
-              paddingRight: 0,
+            // flex: 1,
+            // width : '10%'
+             
             }}>
-            <View
-              style={{
-                flexDirection: 'row',
-                justifyContent: 'flex-start',
-                paddingRight: 0,
-              }}>
-              <TouchableOpacity
-                style={styles.goBackButton}
-                onPress={() => this.goBack()}>
-                <Icon
-                  style={styles.saveText}
-                  name="chevron-left"
-                  type="FontAwesome5"
-                />
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={{
-                  backgroundColor: 'transparent',
-                  elevation: 0,
-                  justifyContent: 'center',
-                }}
-                onPress={() => this.goBack()}>
-                <View style={[GlobalStyles.row]}>
-                  <Text style={{color: 'black'}}>
-                    {this.props.userData.nomUtilisateur}
-                  </Text>
-                  <Text style={{color: 'black', marginLeft: 5}}>
-                    {this.props.userData.prenomUtilisateur}
-                  </Text>
-                </View>
-              </TouchableOpacity>
-            </View>
-            <View style={{flexDirection: 'row', justifyContent: 'flex-end'}}>
-              {this.props.currentPosition ? (
-                <TouchableOpacity
-                  style={[{marginLeft: 10}]}
-                  onPress={() => this.onClickShare()}>
-                  <Icon
-                    active
-                    name="share"
-                    type="FontAwesome5"
-                  />
-                </TouchableOpacity>
-              ) : null}
-            </View>
+            <TouchableOpacity
+              style={styles.goBackButton}
+              onPress={() => this.openDrawer()}>
+              <Icon style={styles.saveText} name="bars" type="FontAwesome5" />
+            </TouchableOpacity>
           </View>
-        </Body>
-      </Header>
-         <View style={styles.statBanner}>
-         <Text style={styles.timeText}>{this.getCurrentTime()}</Text>
-         <Text>|</Text>
-         <Text style={styles.timeText}>{this.getSpeed()} km/h</Text>
-         <Text>|</Text>
-         <Text style={styles.timeText}>
-           {this.props.odometer?.toFixed(2)} km
-         </Text>
-       </View>
-
-       <View style={styles.liveNameBanner}>
-         <Text style={styles.liveNameText}>
-           {this.props.currentLive?.libelleLive}
-         </Text>
-       </View>
-       </View>
+          <View style={{width : '90%'}} >
+          <TouchableOpacity
+          style={{display : 'flex', flexDirection :'row', justifyContent :'center', width :'100%'}}
+              // style={{flex :1}}
+              onPress={() => this.openDrawer()}>
+            <Image
+              resizeMode="contain"
+              source={Logo}
+              style={styles.logoHeader}
+            />
+            </TouchableOpacity>
+     </View>
+     <View ></View>
+          {/* <View style={{flexDirection: 'row', justifyContent: 'flex-end'}}>
+                {this.props.currentPosition ? (
+                  <TouchableOpacity
+                    style={[{marginLeft: 10}]}
+                    onPress={() => this.onClickShare()}>
+                    <Icon active name="share" type="FontAwesome5" />
+                  </TouchableOpacity>
+                ) : null}
+              </View> */}
+        </Header>
+        {/* <View style={styles.statBanner}>
+          <Text style={styles.timeText}>{this.getCurrentTime()}</Text>
+          <Text>|</Text>
+          <Text style={styles.timeText}>{this.getSpeed()} km/h</Text>
+          <Text>|</Text>
+          <Text style={styles.timeText}>
+            {this.props.odometer?.toFixed(2)} km
+          </Text>
+        </View> */}
+{/* 
+        <View style={styles.liveNameBanner}>
+          <Text style={styles.liveNameText}>
+            {this.props.currentLive?.libelleLive}
+          </Text>
+        </View> */}
+      </View>
     );
   }
 }
 
 const styles = StyleSheet.create({
-
   goBackButton: {
     backgroundColor: 'transparent',
     width: 30,
@@ -327,6 +293,8 @@ const styles = StyleSheet.create({
     paddingLeft: 0,
     marginLeft: 0,
     marginRight: -5,
+    width: 80,
+    height : 40
   },
 
   header: {
@@ -364,6 +332,14 @@ const styles = StyleSheet.create({
   timeText: {
     fontWeight: 'bold',
     fontSize: 20,
+  },
+  logoHeader: {
+    // width: '10%',
+    height: 50,
+     width : '100%',
+    // width : 100
+    // marginRight: '2%',
+    
   },
 });
 

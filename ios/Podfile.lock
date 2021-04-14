@@ -241,7 +241,7 @@ PODS:
     - React-cxxreact (= 0.62.2)
     - React-jsi (= 0.62.2)
   - React-jsinspector (0.62.2)
-  - react-native-document-picker (5.0.1):
+  - react-native-document-picker (5.0.3):
     - React-Core
   - react-native-geolocation (2.0.2):
     - React
@@ -256,7 +256,12 @@ PODS:
     - React
   - react-native-version-check (3.4.2):
     - React
-  - react-native-webview (11.2.3):
+  - react-native-video (5.1.1):
+    - React-Core
+    - react-native-video/Video (= 5.1.1)
+  - react-native-video/Video (5.1.1):
+    - React-Core
+  - react-native-webview (11.3.2):
     - React-Core
   - React-RCTActionSheet (0.62.2):
     - React-Core/RCTActionSheetHeaders (= 0.62.2)
@@ -324,25 +329,27 @@ PODS:
   - RNBackgroundGeolocation (3.10.0):
     - CocoaLumberjack (~> 3.6.1)
     - React-Core
-  - RNCAsyncStorage (1.14.1):
+  - RNCAsyncStorage (1.15.2):
     - React-Core
   - RNCMaskedView (0.1.10):
     - React
-  - RNCPicker (1.9.11):
+  - RNCPicker (1.14.0):
     - React-Core
   - RNCPushNotificationIOS (1.8.0):
     - React-Core
-  - RNDeviceInfo (8.0.6):
+  - RNDeviceInfo (8.0.8):
     - React-Core
+  - RNExitApp (1.1.0):
+    - React
   - RNGestureHandler (1.10.3):
     - React-Core
   - RNPermissions (2.2.2):
     - React-Core
-  - RNReanimated (1.13.2):
+  - RNReanimated (1.13.3):
     - React-Core
   - RNScreens (2.18.1):
     - React-Core
-  - RNSentry (2.2.2):
+  - RNSentry (2.4.0):
     - React-Core
     - Sentry (= 6.1.4)
   - RNShare (4.1.2):
@@ -403,6 +410,7 @@ DEPENDENCIES:
   - react-native-safe-area-context (from `../node_modules/react-native-safe-area-context`)
   - "react-native-slider (from `../node_modules/@react-native-community/slider`)"
   - react-native-version-check (from `../node_modules/react-native-version-check`)
+  - react-native-video (from `../node_modules/react-native-video`)
   - react-native-webview (from `../node_modules/react-native-webview`)
   - React-RCTActionSheet (from `../node_modules/react-native/Libraries/ActionSheetIOS`)
   - React-RCTAnimation (from `../node_modules/react-native/Libraries/NativeAnimation`)
@@ -423,6 +431,7 @@ DEPENDENCIES:
   - "RNCPicker (from `../node_modules/@react-native-picker/picker`)"
   - "RNCPushNotificationIOS (from `../node_modules/@react-native-community/push-notification-ios`)"
   - RNDeviceInfo (from `../node_modules/react-native-device-info`)
+  - RNExitApp (from `../node_modules/react-native-exit-app`)
   - RNGestureHandler (from `../node_modules/react-native-gesture-handler`)
   - RNPermissions (from `../node_modules/react-native-permissions`)
   - RNReanimated (from `../node_modules/react-native-reanimated`)
@@ -498,6 +507,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/@react-native-community/slider"
   react-native-version-check:
     :path: "../node_modules/react-native-version-check"
+  react-native-video:
+    :path: "../node_modules/react-native-video"
   react-native-webview:
     :path: "../node_modules/react-native-webview"
   React-RCTActionSheet:
@@ -536,6 +547,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/@react-native-community/push-notification-ios"
   RNDeviceInfo:
     :path: "../node_modules/react-native-device-info"
+  RNExitApp:
+    :path: "../node_modules/react-native-exit-app"
   RNGestureHandler:
     :path: "../node_modules/react-native-gesture-handler"
   RNPermissions:
@@ -585,14 +598,15 @@ SPEC CHECKSUMS:
   React-jsi: b6dc94a6a12ff98e8877287a0b7620d365201161
   React-jsiexecutor: 1540d1c01bb493ae3124ed83351b1b6a155db7da
   React-jsinspector: 512e560d0e985d0e8c479a54a4e5c147a9c83493
-  react-native-document-picker: d6a15c20e1b2d488af459aefff831839e9995927
+  react-native-document-picker: 2e6ecd112c48215e36431734d902f35201ffab0a
   react-native-geolocation: c956aeb136625c23e0dce0467664af2c437888c9
   react-native-maps: f4b89da81626ad7f151a8bfcb79733295d31ce5c
   react-native-pusher-push-notifications: 498ef2fb05a19e74c77886ab7bbac419a8f36eda
   react-native-safe-area-context: f0906bf8bc9835ac9a9d3f97e8bde2a997d8da79
   react-native-slider: e99fc201cefe81270fc9d81714a7a0f5e566b168
   react-native-version-check: d8b8900e6ce03ae1568cb22ef9451f2508188883
-  react-native-webview: 6520e3e7b4933de76b95ef542c8d7115cf45b68e
+  react-native-video: 0bb76b6d6b77da3009611586c7dbf817b947f30e
+  react-native-webview: 71567b6bf3d4e55914e580d720cc8f7df64af817
   React-RCTActionSheet: f41ea8a811aac770e0cc6e0ad6b270c644ea8b7c
   React-RCTAnimation: 49ab98b1c1ff4445148b72a3d61554138565bad0
   React-RCTBlob: a332773f0ebc413a0ce85942a55b064471587a71
@@ -606,16 +620,17 @@ SPEC CHECKSUMS:
   rn-fetch-blob: f065bb7ab7fb48dd002629f8bdcb0336602d3cba
   RNBackgroundFetch: 8dbb63141792f1473e863a0797ffbd5d987af2fc
   RNBackgroundGeolocation: 1184aff02a730e243785482561d0b8d9649548a3
-  RNCAsyncStorage: fe58eec522885718d6b297b7b658bf87d7ca557b
+  RNCAsyncStorage: 9b7605e899f9acb2fba33e87952c529731265453
   RNCMaskedView: 5a8ec07677aa885546a0d98da336457e2bea557f
-  RNCPicker: 6780c753e9e674065db90d9c965920516402579d
+  RNCPicker: 1a266981fc99330c252f5f98b3f09a377a35d88c
   RNCPushNotificationIOS: 61a7c72bd1ebad3568025957d001e0f0e7b32191
-  RNDeviceInfo: a91ad51aaf8dc7079f56614045cf6f0a923237bb
+  RNDeviceInfo: 41a8c8a41ae0e70d85cbe652cd5318150cb2cc40
+  RNExitApp: c4e052df2568b43bec8a37c7cd61194d4cfee2c3
   RNGestureHandler: a479ebd5ed4221a810967000735517df0d2db211
   RNPermissions: 5df468064df661a4c8c017e2791ce90d7695eea5
-  RNReanimated: e03f7425cb7a38dcf1b644d680d1bfc91c3337ad
+  RNReanimated: 514a11da3a2bcc6c3dfd9de32b38e2b9bf101926
   RNScreens: f7ad633b2e0190b77b6a7aab7f914fad6f198d8d
-  RNSentry: 490708be01d0871588b33435d144369551ab038d
+  RNSentry: b0d55027200c96f52e26b9bfb20296d47fc5051d
   RNShare: d22507fa5e80c72f236b5622556cf831de5b1e93
   RNSVG: ce9d996113475209013317e48b05c21ee988d42e
   RNVectorIcons: 31cebfcf94e8cf8686eb5303ae0357da64d7a5a4

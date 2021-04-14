@@ -10,7 +10,7 @@ export const TemplateAppName = purgeString(
 
 export const TemplateOrganisation = TemplateAppName.toUpperCase();
 
-export const TemplateIdOrganisation = '9';
+export const TemplateIdOrganisation = '52';
 
 export const TemplateBackgroundColor = '#FFFFFF';
 

@@ -116,6 +116,8 @@ class Help extends Component {
   onPopupOk() {
     var action = {type: 'VIEW_POPUPAIDE', data: null};
     this.props.dispatch(action);
+
+    this.props.onValidate && this.props.onValidate();
   }
 
   openLink(url) {

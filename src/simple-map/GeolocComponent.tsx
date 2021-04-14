@@ -76,17 +76,17 @@ class GeolocComponent extends Component<Props, State> {
     setTimeout(() => this.didMount(), 300);
   }
   didMount() {
-    if (this.props.currentLive == null) {
-      //  this.onDisconnect(false);
-      this.props.navigation.navigate('Lives');
-    } else {
+    // if (this.props.currentLive == null) {
+    //   //  this.onDisconnect(false);
+    //   this.props.navigation.navigate('Lives');
+    // } else {
       this.requestMotionPermission();
       Geolocation.setRNConfiguration({
         authorizationLevel: 'always',
         skipPermissionRequests: false,
       });
       this.configGeoloc();
-    }
+    // }
   }
 
   componentWillUnmount() {
@@ -269,7 +269,7 @@ class GeolocComponent extends Component<Props, State> {
         'ErrorCode : ' +
         error +
         ' idLive : ' +
-        this.props.currentLive.idLive +
+        this.props.currentLive?.idLive +
         ' ' +
         Platform.OS,
       '',

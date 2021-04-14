@@ -31,7 +31,7 @@ import {ScrollView, TextInput} from 'react-native-gesture-handler';
 import DefaultProps from '../models/DefaultProps';
 import {buildGPX, GarminBuilder} from 'gpx-builder';
 import {Point} from 'gpx-builder/dist/builder/BaseBuilder/models';
-
+import VersionCheck from 'react-native-version-check';
 import {TemplateSportLive} from './../globalsModifs';
 
 const mapStateToProps = (state) => {
@@ -41,6 +41,10 @@ const mapStateToProps = (state) => {
     isMoving: state.isMoving,
     userData: state.userData,
     coordinatesString: state.coordinatesString,
+    currentPosition: state.currentPosition,
+    currentMapStyle: state.currentMapStyle,
+    polylines: state.polylines,
+    isGpsNotOk: state.isGpsNotOk,
   };
 };
 
@@ -50,6 +54,12 @@ interface Props extends DefaultProps {
   isMoving: boolean;
   userData: any;
   coordinatesString: string;
+  polylines: any[];
+  currentMapStyle: string;
+  onCenter(): void;
+  openTraceModal(): void;
+  closeTraceModal(): void;
+  isGpsNotOk: boolean;
 }
 
 interface State {
@@ -60,6 +70,8 @@ interface State {
   spinner: boolean;
   libelleLiveIsModified: boolean;
   acceptChallengeNameUtilisateur: boolean;
+  currentMapStyle: string;
+  isOpenExtraButtons: boolean;
 
   listSport: {
     idSport: number;
@@ -88,14 +100,84 @@ class MapButtons extends Component<Props, State> {
   }
   didMount() {
     this.setState({
-      libelleLive: this.props.currentLive.libelleLive,
+      // libelleLive: this.props.currentLive.libelleLive,
       acceptChallengeNameUtilisateur:
         this.props.userData.acceptChallengeNameUtilisateur == 1,
     });
 
-    if (this.state.selectedSport == -1) {
-      this.setState({selectedSport: this.props.currentLive.idSport});
+    // if (this.state.selectedSport == -1) {
+    //   this.setState({selectedSport: this.props.currentLive.idSport});
+    // }
+  }
+
+  getLibelleLive() {
+    var date = new Date();
+    var hour = date.getHours();
+
+    if (hour <= 11) {
+      return 'Activité matinale';
     }
+    if (hour > 11 && hour < 19) {
+      return "Activité de l'après-midi";
+    }
+
+    if (hour >= 19) {
+      return 'Activité du soir';
+    }
+  }
+
+  onCreateLive() {
+    let formData = new FormData();
+    formData.append('method', 'createLive');
+    formData.append('auth', ApiUtils.getAPIAuth());
+    formData.append('idUtilisateur', this.props.userData.idUtilisateur);
+    formData.append('idversion', VersionCheck.getCurrentVersion());
+    formData.append('idSport', this.state.selectedSport);
+    formData.append('os', Platform.OS);
+    formData.append('phoneData', JSON.stringify(this.props.phoneData));
+
+    var libelleLive = this.getLibelleLive();
+
+    formData.append('libelleLive', libelleLive);
+    //fetch followCode API
+    fetch(ApiUtils.getAPIUrl(), {
+      method: 'POST',
+      headers: {
+        // Accept: 'application/json',
+        // 'Content-Type': 'application/json',
+      },
+      body: formData,
+    })
+      .then(ApiUtils.checkStatus)
+      .then((response) => response.json())
+      .then((responseJson) => {
+        // alert("success http");
+        //save values in cache
+        if (responseJson.codeErreur == 'SUCCESS') {
+          //SaveData
+
+          var live = {
+            idLive: responseJson.idLive,
+            codeLive: responseJson.codeLive,
+            libelleLive: responseJson.libelleLive,
+            dateCreationLive: responseJson.dateCreationLive,
+            invites: [],
+            statsInfos: {},
+          };
+
+          var action = {type: 'CREATE_LIVE', data: live};
+          this.props.dispatch(action);
+
+          this.onstart();
+        } else {
+          alert(responseJson.message);
+        }
+      })
+      .catch((e) => {
+        ApiUtils.logError('CreateNewLive onClickCreateLive', e.message);
+        // this.onClickNavigate('Lives');
+      })
+      .then();
   }
 
   onstart() {
@@ -431,7 +513,7 @@ class MapButtons extends Component<Props, State> {
     let formData = new FormData();
     formData.append('method', 'deleteLive');
     formData.append('auth', ApiUtils.getAPIAuth());
-    formData.append('idLive', this.props.currentLive.idLive);
+    formData.append('idLive', this.props.currentLive?.idLive);
     //fetch followCode API
     fetch(ApiUtils.getAPIUrl(), {
       method: 'POST',
@@ -453,7 +535,7 @@ class MapButtons extends Component<Props, State> {
 
           this.onDisconnect(false);
           // this.toggleModal3(false);
-          this.props.navigation.navigate('Lives');
+          // this.props.navigation.navigate('Lives');
 
           this.setState({spinner: false});
           //this.props.navigation.navigate('Lives');
@@ -495,11 +577,11 @@ class MapButtons extends Component<Props, State> {
 
     this.toggleStopModal();
 
-    if (isSummary) {
-      this.props.navigation.navigate('LiveSummary');
-    } else {
-      this.props.navigation.navigate('Lives');
-    }
+    // if (isSummary) {
+    //   this.props.navigation.navigate('LiveSummary');
+    // } else {
+    //   this.props.navigation.navigate('Lives');
+    // }
   }
 
   onChangeLiveName(name) {
@@ -535,52 +617,328 @@ class MapButtons extends Component<Props, State> {
     this.setState({selectedSport: value});
   };
 
+  onClickGetCurrentPosition() {
+    this.props.onCenter();
+  }
+
+  toggleExtraButtons = () => {
+    this.setState({isOpenExtraButtons: !this.state.isOpenExtraButtons});
+  };
+
+  saveCurrentMapStyle() {
+    let nextStyle = 'standard';
+
+    if (Platform.OS == 'android') {
+      if (this.props.currentMapStyle == 'standard') {
+        nextStyle = 'terrain';
+      } else if (this.props.currentMapStyle == 'terrain') {
+        nextStyle = 'hybrid';
+      } else if (this.props.currentMapStyle == 'hybrid') {
+        nextStyle = 'standard';
+      } else {
+        nextStyle = 'standard';
+      }
+    }
+
+    if (Platform.OS == 'ios') {
+      if (this.props.currentMapStyle == 'standard') {
+        nextStyle = 'hybrid';
+      } else if (this.props.currentMapStyle == 'hybrid') {
+        nextStyle = 'standard';
+      } else {
+        nextStyle = 'standard';
+      }
+    }
+
+    var action = {type: 'UPDATE_MAP_STYLE', data: nextStyle};
+    this.props.dispatch(action);
+  }
+
+  getFabDefaultLogo() {
+    if (this.props.currentMapStyle == 'terrain') {
+      return 'tree';
+    }
+
+    if (this.props.currentMapStyle == 'hybrid') {
+      return 'satellite';
+    }
+    return 'map';
+  }
+
+  onOpenTraceModal() {
+    this.props.openTraceModal();
+    // this.setState({isModalTraceVisible: true});
+  }
+
+  closeTraceModal() {
+    this.props.closeTraceModal();
+    // this.setState({isModalTraceVisible: false});
+  }
+
   render() {
     return (
-      <View style={{width: '100%'}}>
-        <View style={{flex: 1, backgroundColor: 'transparent', width: '100%'}}>
-          {!this.props.isRecording ? (
-            <Button
+      <View
+        style={{
+          position: 'absolute',
+          left: 0,
+          right: 0,
+          bottom: 50,
+
+          zIndex: 1000,
+          justifyContent: 'center',
+        }}>
+        <View>
+          {this.props.isGpsNotOk ? (
+            <View
               style={{
-                backgroundColor: '#39F800',
-                width: '100%',
-                height: '100%',
                 justifyContent: 'center',
-              }}
-              onPress={() => this.onstart()}>
+                display: 'flex',
+                flexDirection: 'row',
+                zIndex: 5,
+                width: '100%',
+                // position: 'absolute',
+                // top: 100,
+                marginLeft: 'auto',
+              }}>
+              <View
+                style={[
+                  {
+                    backgroundColor: '#FE3C03',
+                    marginLeft: 'auto',
+                    marginRight: 'auto',
+                    paddingVertical: 5,
+                    paddingHorizontal: 15,
+                    borderRadius: 30,
+                    marginBottom : 10,
+                  },
+                ]}>
+                <View>
+                  <Text style={{color: 'white'}}>
+                    {this.props.isGpsNotOk}
+                    En attente de l’acquisition du signal GPS
+                  </Text>
+
+                  {/* <TouchableOpacity
+                    onPress={() => this.openBatteryModal()}
+                    style={{zIndex: 200}}>
+                    <Text
+                      style={{
+                        color: 'white',
+                        textAlign: 'center',
+                        marginTop: 10,
+                        textDecorationLine: 'underline',
+                      }}>
+                      En savoir plus
+                    </Text>
+                  </TouchableOpacity> */}
+                </View>
+              </View>
+            </View>
+          ) : null}
+
+          {!this.props.isGpsNotOk && !this.props.isRecording ? (
+            <TouchableOpacity
+              style={{
+                justifyContent: 'center',
+                display: 'flex',
+                flexDirection: 'row',
+                marginBottom: 10,
+              }}>
+              <View
+                style={[
+                  {
+                    backgroundColor: '#44E660',
+                    paddingVertical: 5,
+                    paddingHorizontal: 15,
+                    borderRadius: 30,
+                  },
+                ]}>
+                <Text style={{color: 'white', textAlign: 'center'}}>
+                  Signal GPS Trouvé
+                </Text>
+              </View>
+            </TouchableOpacity>
+          ) : null}
+        </View>
+        <View
+          style={{
+            display: 'flex',
+            flexDirection: 'row',
+            justifyContent: 'center',
+          }}>
+          <View>
+            {this.state.isOpenExtraButtons ? (
+              <View
+                key="extraButtons"
+                style={{
+                  marginBottom: 0,
+                  position: 'absolute',
+                  zIndex: 1000,
+                  bottom: 80,
+                }}>
+                {this.props.polylines != null &&
+                this.props.polylines.length > 0 ? (
+                  <TouchableOpacity
+                    onPress={() => this.onOpenTraceModal()}
+                    style={{
+                      flexDirection: 'row',
+                      width: 40,
+                      height: 40,
+                      borderRadius: 300,
+                      backgroundColor: 'white',
+                      zIndex: 5,
+                      marginBottom: 10,
+                      justifyContent: 'center',
+                    }}>
+                    <View style={{justifyContent: 'center'}}>
+                      <Icon
+                        active
+                        type="Ionicons"
+                        name="map-outline"
+                        style={[styles.title, {fontSize: 22}]}
+                      />
+                    </View>
+                  </TouchableOpacity>
+                ) : null}
+
+                <TouchableOpacity
+                  style={{
+                    width: 40,
+                    height: 40,
+                    borderRadius: 300,
+                    display: 'flex',
+                    flexDirection: 'row',
+                    justifyContent: 'center',
+                    backgroundColor: 'white',
+                    shadowColor: '#000',
+                    shadowOffset: {
+                      width: 0,
+                      height: 5,
+                    },
+                    shadowOpacity: 0.34,
+                    shadowRadius: 6.27,
+
+                    // elevation: 0,
+                  }}
+                  onPress={() => this.saveCurrentMapStyle()}>
+                  <View style={{justifyContent: 'center'}}>
+                    <Icon
+                      style={[styles.title, {fontSize: 19}]}
+                      name={this.getFabDefaultLogo()}
+                      color="black"
+                      type="FontAwesome5"
+                    />
+                  </View>
+                </TouchableOpacity>
+              </View>
+            ) : null}
+
+            <TouchableOpacity
+              onPress={() => this.toggleExtraButtons()}
+              style={{
+                alignSelf: 'center',
+                backgroundColor: 'white',
+                marginTop: 20,
+                padding: 10,
+                borderRadius: 300,
+                justifyContent: 'center',
+                marginRight: 20,
+                width: 40,
+                height: 40,
+                display: 'flex',
+                flexDirection: 'row',
+              }}>
+              <View style={{justifyContent: 'center'}}>
+                <Icon
+                  name="ellipsis-v"
+                  style={[styles.title, {fontSize: 20}]}
+                  type="FontAwesome5"
+                />
+              </View>
+            </TouchableOpacity>
+          </View>
+          {this.props.isRecording ? (
+            <TouchableOpacity
+              onPress={() => this.onStop()}
+              style={{
+                alignSelf: 'center',
+                backgroundColor: '#E6444B',
+                // width: '100%',
+                // height: '100%',
+                // width:100,
+                width: 80,
+                height: 80,
+                borderRadius: 300,
+                justifyContent: 'center',
+              }}>
               <Text
                 style={[
                   styles.buttonText,
-                  {color: 'black', textAlign: 'center'},
+                  {color: 'white', textAlign: 'center'},
                 ]}>
-                DEMARRER
+                Stop
               </Text>
-            </Button>
+            </TouchableOpacity>
           ) : (
-            <View
+            <TouchableOpacity
+              onPress={() => this.onCreateLive()}
               style={{
-                height: '100%',
-                flexDirection: 'row',
-                justifyContent: 'flex-start',
-                width: Dimensions.get('screen').width,
-                paddingRight: 0,
-                paddingLeft: 0,
-                paddingBottom: 0,
-              }}>
-              <Button
-                full
-                onPress={() => this.onStop()}
-                style={{
-                  backgroundColor: '#FE3C03',
-                  width: '100%',
-                  height: '100%',
-                }}>
-                <Text style={[styles.buttonText, {color: 'white'}]}>STOP</Text>
-              </Button>
-            </View>
+                alignSelf: 'center',
+                backgroundColor: this.props.isGpsNotOk ? '#B9B9B9' : '#44E660',
+                // width: '100%',
+                // height: '100%',
+                // width:100,
+                width: 80,
+                height: 80,
+                borderRadius: 300,
+                justifyContent: 'center',
+              }}
+              disabled={this.props.isGpsNotOk}>
+              <Text
+                style={[
+                  styles.buttonText,
+                  {color: 'white', textAlign: 'center'},
+                ]}>
+                Start
+              </Text>
+            </TouchableOpacity>
           )}
+
+          <TouchableOpacity
+            onPress={() => this.onClickGetCurrentPosition()}
+            style={{
+              alignSelf: 'center',
+              backgroundColor: 'white',
+              // width: '100%',
+              // height: '100%',
+              // width:100,
+              width: 40,
+              height: 40,
+              borderRadius: 300,
+              justifyContent: 'center',
+              display: 'flex',
+              flexDirection: 'row',
+              marginLeft: 20,
+            }}>
+            {Platform.OS == 'ios' ? (
+              <View style={{justifyContent: 'center'}}>
+                <Icon
+                  name="location-arrow"
+                  style={[styles.title, {fontSize: 20}]}
+                  type="FontAwesome5"
+                />
+              </View>
+            ) : (
+              <View style={{justifyContent: 'center'}}>
+                <Icon
+                  name="locate-outline"
+                  style={[styles.title, {fontSize: 22}]}
+                  type="Ionicons"
+                />
+              </View>
+            )}
+          </TouchableOpacity>
         </View>
-        {/* </Footer> */}
         {/******** modal3 : finish LIVE *****************/}
         <Modal
           animationType={'none'}

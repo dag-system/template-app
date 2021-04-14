@@ -117,12 +117,12 @@ class Home extends Component {
     
       if (TemplateIsPaying) {
         if (ApiUtils.hasPaid(this.props.userData)) {
-          this.onClickNavigate('Lives');
+          this.onClickNavigate('SimpleMap');
         } else {
           this.onClickNavigate('Paiement');
         }
       } else {
-        this.onClickNavigate('Lives');
+        this.onClickNavigate('SimpleMap');
       }
     } else {
       BackgroundGeolocation.stop();
@@ -137,12 +137,12 @@ class Home extends Component {
     if (this.props.userData != null) {
       if (TemplateIsPaying) {
         if (ApiUtils.hasPaid(this.props.userData)) {
-          this.onClickNavigate('Lives');
+          this.onClickNavigate('Introduction');
         } else {
           this.onClickNavigate('Paiement');
         }
       } else {
-        this.onClickNavigate('Lives');
+        this.onClickNavigate('Introduction');
       }
     }
   };
@@ -194,12 +194,12 @@ class Home extends Component {
 
           if (TemplateIsPaying) {
             if (ApiUtils.hasPaid(responseJson)) {
-              this.onClickNavigate('Lives');
+              this.onClickNavigate('SimpleMap');
             } else {
               this.onClickNavigate('Paiement');
             }
           } else {
-            this.onClickNavigate('Lives');
+            this.onClickNavigate('SimpleMap');
           }
 
           // ApiUtils.setLogged().then(this.saveUserInfo(responseJson, false));
@@ -268,12 +268,12 @@ class Home extends Component {
 
             if (TemplateIsPaying) {
               if (ApiUtils.hasPaid(responseJson)) {
-                this.onClickNavigate('Lives');
+                this.onClickNavigate('SimpleMap');
               } else {
                 this.onClickNavigate('Paiement');
               }
             } else {
-              this.onClickNavigate('Lives');
+              this.onClickNavigate('SimpleMap');
             }
           } else {
             alert("Votre folocode n'est pas valide");
