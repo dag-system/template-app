@@ -22,6 +22,7 @@ import {isPointInPolygon} from 'geolib';
 import BatteryModal from '../home/BatteryModal';
 import DefaultProps from '../models/DefaultProps';
 import ApiUtils from '../ApiUtils';
+import Carousel, { Pagination } from 'react-native-snap-carousel';
 
 const LATITUDE_DELTA_CLOSE = 0.02922;
 const LONGITUDE_DELTA_CLOSE = 0.02421;
@@ -71,6 +72,28 @@ class Map extends PureComponent<Props, State> {
       refresh: false,
       currentInteret: null,
       isModalInterestVisible: false,
+      carouselItems: [
+        {
+          title: 'Item 1',
+          text: 'Text 1',
+        },
+        {
+          title: 'Item 2',
+          text: 'Text 2',
+        },
+        {
+          title: 'Item 3',
+          text: 'Text 3',
+        },
+        {
+          title: 'Item 4',
+          text: 'Text 4',
+        },
+        {
+          title: 'Item 5',
+          text: 'Text 5',
+        },
+      ],
     };
   }
 
@@ -103,6 +126,25 @@ class Map extends PureComponent<Props, State> {
     }
     this.selectPolyline(polyline);
   }
+
+  _renderItem = ({item, index}) => {
+    return (
+      <View
+        style={{
+          width: '100%',
+          height: '100%',
+          padding: 5,
+          backgroundColor: 'white',
+          borderRadius: 10,
+          marginLeft: 0,
+          marginRight: 0,
+          borderColor: 'black',
+          borderWidth: 0,
+        }}>
+        <Text style={styles.title}>{item.title}</Text>
+      </View>
+    );
+  };
 
   selectPolyline(polyline) {
     this.setState({currentPolyline: polyline});
@@ -161,6 +203,29 @@ class Map extends PureComponent<Props, State> {
   closeInterestModal() {
     this.setState({isModalInterestVisible: false});
   }
+
+  get pagination () {
+    const { carouselItems, activeSlide } = this.state;
+    return (
+        <Pagination
+          dotsLength={carouselItems.length}
+          activeDotIndex={activeSlide}
+          // containerStyle={{ backgroundColor: 'rgba(0, 0, 0, 0.75)' }}
+          dotStyle={{
+              width: 10,
+              height: 10,
+              borderRadius: 5,
+              marginHorizontal: 8,
+              backgroundColor: 'white'
+          }}
+          inactiveDotStyle={{
+              // Define styles for inactive dots here
+          }}
+          inactiveDotOpacity={0.4}
+          inactiveDotScale={1}
+        />
+    );
+}
 
   onUpdatePosition = (newCoordinate) => {
     if (this.refs.map != null) {
@@ -221,7 +286,29 @@ class Map extends PureComponent<Props, State> {
   render() {
     return (
       <View style={styles.map}>
-
+        <View
+          style={{
+            zIndex: 1000,
+            position: 'absolute',
+            top: 20,
+            left: 0,
+            height: 200,
+            width: '100%',
+          }}>
+          <Carousel
+            ref={(c) => {
+              this._carousel = c;
+            }}
+            data={this.state.carouselItems}
+            renderItem={this._renderItem}
+            sliderWidth={400}
+            itemWidth={300}
+            layout={'default'}
+            onSnapToItem={(index) => this.setState({ activeSlide: index }) }
+            
+          />
+            { this.pagination }
+        </View>
 
         {/* Point d'interet  */}
 
