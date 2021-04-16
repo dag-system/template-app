@@ -39,6 +39,8 @@ import moment from 'moment';
 import Slider from '@react-native-community/slider';
 import Sidebar from './SideBar';
 
+import {textAutoBackgroundColor} from './../globalsModifs';
+
 import {isPointInPolygon} from 'geolib';
 
 // const haversine = require('haversine');
@@ -105,15 +107,13 @@ class Replay extends Component {
     setTimeout(() => this.didMount(), 300);
     this._unsubscribe = this.props.navigation.addListener('blur', () => {
       // do something
-      
+
       this.componentWillUnmount();
     });
   }
 
   didMount() {
-
-    if(this.props.polylines.length > 0)
-    {
+    if (this.props.polylines.length > 0) {
       let firstPolyline = this.props.polylines[0];
       if (firstPolyline.positionsTrace.length != 0) {
         this.refs.map.fitToCoordinates(firstPolyline.positionsTrace, {
@@ -121,9 +121,7 @@ class Replay extends Component {
           animated: true,
         });
       }
-
     }
-
   }
 
   componentWillUnmount() {
@@ -1527,7 +1525,7 @@ class Replay extends Component {
 
 const styles = StyleSheet.create({
   header: {
-    backgroundColor: 'white',
+    backgroundColor: ApiUtils.getBackgroundColor(),
     width: '100%',
     borderBottomColor: '#D3D3D3',
     borderBottomWidth: 1,
@@ -1582,7 +1580,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   saveText: {
-    color: 'black',
+    color: textAutoBackgroundColor,
     paddingLeft: 0,
     marginLeft: 5,
     marginRight: -5,

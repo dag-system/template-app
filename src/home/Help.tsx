@@ -30,6 +30,7 @@ import BatteryModalContent from './BatteryModalContent';
 import VideoModal from './VideoModal';
 import Video from 'react-native-video';
 import VideoPrez from '../assets/tuto.mp4';
+import {textAutoBackgroundColor} from '../globalsModifs';
 
 const mapStateToProps = (state) => {
   return {
@@ -183,8 +184,8 @@ class Help extends Component {
               </Text>
 
               <Text style={{marginTop: 10}}>
-                Entrainez-vous et affrontez vos amis et collègues
-                en toute sécurité, et sans jamais vous croiser !
+                Entrainez-vous et affrontez vos amis et collègues en toute
+                sécurité, et sans jamais vous croiser !
               </Text>
 
               <Text style={{marginTop: 10}}>
@@ -248,7 +249,7 @@ class Help extends Component {
                   // style={[this.state.isFullScreen ? styles.video : styles.fullScreenVideo,{height : 10}]}
                 />
               ) : null}
-          
+
               {/* {!this.props.noHeader ? ( */}
               {!this.props.noHeader ? (
                 <View style={{height: '100%'}}>
@@ -325,7 +326,7 @@ const styles = StyleSheet.create({
     elevation: 0,
   },
   saveText: {
-    color: 'black',
+    color: textAutoBackgroundColor,
   },
   body: {
     width: '100%',

@@ -47,7 +47,12 @@ import DeviceInfo from 'react-native-device-info';
 import BackgroundGeolocation from 'react-native-background-geolocation';
 import Help from './Help';
 
-import {TemplateAppName, TemplateIdOrganisation, TemplateSportLive} from './../globalsModifs';
+import {
+  TemplateAppName,
+  TemplateIdOrganisation,
+  TemplateSportLive,
+  textAutoBackgroundColor,
+} from './../globalsModifs';
 
 const mapStateToProps = (state) => {
   return {
@@ -140,13 +145,12 @@ class Lives extends Component<Props, State> {
     if (this.props.isRecording) {
       this.goToMap();
     } else {
-      
       BackgroundGeolocation.stop();
       if (ApiUtils.isExpired()) {
-        this.onClickNavigate('IsExpired')
+        this.onClickNavigate('IsExpired');
         return;
       }
-      
+
       this.downloadData();
     }
   }
@@ -772,16 +776,15 @@ class Lives extends Component<Props, State> {
             });
           }
 
-
-          //challenges 
+          //challenges
 
           var challengesArray = Object.values(result.challenges);
-          
+
           var finalChallengesArray = []; // new Object(this.props.polylines);
-        
+
           if (challengesArray != null && challengesArray.length != 0) {
             challengesArray.forEach((challenge) => {
-              var finalChallenge= challenge;
+              var finalChallenge = challenge;
 
               var positionArray = Object.values(challenge.positionsTrace);
               challenge.positionsTrace = positionArray;
@@ -855,7 +858,7 @@ class Lives extends Component<Props, State> {
             descriptionStation: result.descriptionStation,
             polylines: finalTraceArray,
             pointsInterets: finalinterestArray,
-            challenges : finalChallengesArray
+            challenges: finalChallengesArray,
           };
 
           var action = {type: 'UPDATE_STATION_DATA', data: station};
@@ -1529,7 +1532,7 @@ class Lives extends Component<Props, State> {
 
 const styles = StyleSheet.create({
   header: {
-    backgroundColor: 'white',
+    backgroundColor: ApiUtils.getBackgroundColor(),
     width: '100%',
     borderBottomColor: '#D3D3D3',
     borderBottomWidth: 1,
@@ -1555,7 +1558,7 @@ const styles = StyleSheet.create({
     elevation: 0,
   },
   saveText: {
-    color: 'black',
+    color: textAutoBackgroundColor,
   },
   container: {
     flex: 1,
@@ -1615,7 +1618,7 @@ const styles = StyleSheet.create({
 
     width: 60,
     height: 60,
-    backgroundColor: ApiUtils.getColor(),
+    backgroundColor: ApiUtils.getBackgroundColor(),
     borderRadius: 30,
     textAlign: 'center',
     padding: 0,

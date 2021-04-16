@@ -27,7 +27,7 @@ import ApiUtils from '../ApiUtils';
 import {connect} from 'react-redux';
 import WebviewJetCode from './WebviewJetCode';
 
-import {TemplateAppName} from './../globalsModifs';
+import {TemplateAppName, textAutoBackgroundColor} from './../globalsModifs';
 import {Dispatch} from 'redux';
 
 const mapStateToProps = (state) => {
@@ -190,7 +190,7 @@ const styles = StyleSheet.create({
   },
 
   saveText: {
-    color: 'black',
+    color: textAutoBackgroundColor,
     paddingLeft: 0,
     marginLeft: 5,
     marginRight: -5,

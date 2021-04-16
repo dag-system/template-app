@@ -6,6 +6,8 @@ import RNPusherPushNotifications from 'react-native-pusher-push-notifications';
 import Logo from '../assets/logo.png';
 import RNExitApp from 'react-native-exit-app';
 
+import {textAutoBackgroundColor, textAutoSecondColor} from './../globalsModifs';
+
 const mapStateToProps = (state) => {
   return {
     userData: state.userData,
@@ -77,8 +79,8 @@ class IsExpired extends Component {
               fontSize: 17,
               textAlign: 'center',
             }}>
-            La license d'utilisation de cette application est terminée. Merci de renouvelez
-            votre abonement.
+            La license d'utilisation de cette application est terminée. Merci de
+            renouvelez votre abonement.
           </Text>
         </View>
         <TouchableOpacity
@@ -86,7 +88,7 @@ class IsExpired extends Component {
           style={{
             width: '80%',
             height: 45,
-            backgroundColor: ApiUtils.getColor(),
+            backgroundColor: ApiUtils.getSecondColor(),
             display: 'flex',
             justifyContent: 'center',
             alignItems: 'center',
@@ -98,9 +100,9 @@ class IsExpired extends Component {
           <Text
             style={{
               fontSize: 17,
-              color: ApiUtils.getSecondColor(),
+              color: textAutoSecondColor,
             }}>
-           Quitter
+            Quitter
           </Text>
         </TouchableOpacity>
       </View>

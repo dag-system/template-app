@@ -33,7 +33,7 @@ import {TextInput} from 'react-native-gesture-handler';
 import DocumentPicker from 'react-native-document-picker';
 import DefaultProps from '../models/DefaultProps';
 
-import {TemplateSportLive} from './../globalsModifs';
+import {TemplateSportLive, textAutoBackgroundColor} from './../globalsModifs';
 
 const mapStateToProps = (state) => {
   return {
@@ -555,7 +555,7 @@ class UploadGpx extends Component<Props, State> {
 
 const styles = StyleSheet.create({
   header: {
-    backgroundColor: 'white',
+    backgroundColor: ApiUtils.getBackgroundColor(),
     width: '100%',
     borderBottomColor: '#D3D3D3',
     borderBottomWidth: 1,
@@ -610,7 +610,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   saveText: {
-    color: 'black',
+    color: textAutoBackgroundColor,
     paddingLeft: 0,
     marginLeft: 5,
     marginRight: -5,

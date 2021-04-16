@@ -34,6 +34,8 @@ import {
 import {connect} from 'react-redux';
 import ApiUtils from '../ApiUtils';
 import Logo from '../assets/logo.png';
+
+import {textAutoBackgroundColor, textAutoSecondColor} from './../globalsModifs';
 const mapStateToProps = (state) => {
   return {
     userData: state.userData,
@@ -163,7 +165,7 @@ class CreateNewLive extends Component {
           />
           <ActivityIndicator
             style={{height: 40, width: 40, color: 'white'}}
-            color="white"
+            color={textAutoBackgroundColor}
           />
           <Text style={{textAlign: 'center', color: 'white'}}>
             Chargement en cours

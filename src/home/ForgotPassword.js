@@ -30,7 +30,11 @@ import defaultMessages from './defaultMessages';
 import GlobalStyles from '../styles';
 import ValidationComponent from 'react-native-form-validator';
 
-import {TemplateIsPaying} from './../globalsModifs';
+import {
+  TemplateIsPaying,
+  textAutoBackgroundColor,
+  textAutoSecondColor,
+} from './../globalsModifs';
 
 const mapStateToProps = (state) => {
   return {
@@ -384,8 +388,8 @@ class ForgotPassword extends ValidationComponent {
                           color:
                             this.state.followCode == '' &&
                             this.state.selectedFolocode == -1
-                              ? 'black'
-                              : 'white',
+                              ? textAutoBackgroundColor
+                              : textAutoSecondColor,
                         }}>
                         CONNEXION
                       </Text>
@@ -403,7 +407,7 @@ class ForgotPassword extends ValidationComponent {
 
 const styles = StyleSheet.create({
   header: {
-    backgroundColor: 'white',
+    backgroundColor: ApiUtils.getBackgroundColor(),
     // backgroundColor: ApiUtils.getBackgroundColor(),
     width: '100%',
   },
@@ -422,7 +426,7 @@ const styles = StyleSheet.create({
     paddingLeft: 0,
   },
   saveText: {
-    color: 'black',
+    color: textAutoBackgroundColor,
     paddingLeft: 0,
     marginLeft: 5,
     marginRight: -5,

@@ -28,6 +28,8 @@ import {
   TemplateHasAppDonation,
   TemplateAppName,
   IsDemo,
+  textAutoBackgroundColor,
+  textAutoSecondColor,
 } from './../globalsModifs';
 
 export default class Sidebar extends Component {
@@ -104,9 +106,26 @@ export default class Sidebar extends Component {
               <Icon
                 name="running"
                 type="FontAwesome5"
-                style={[styles.icon, {color: 'black'}]}
+                style={[
+                  styles.icon,
+                  {
+                    color:
+                      this.props.selected == 'Lives'
+                        ? textAutoSecondColor
+                        : textAutoBackgroundColor,
+                  },
+                ]}
               />
-              <Text style={[styles.menuText, {color: 'black'}]}>
+              <Text
+                style={[
+                  styles.menuText,
+                  {
+                    color:
+                      this.props.selected == 'Lives'
+                        ? textAutoSecondColor
+                        : textAutoBackgroundColor,
+                  },
+                ]}>
                 Mes activités
               </Text>
             </View>
@@ -136,7 +155,9 @@ export default class Sidebar extends Component {
                   styles.icon,
                   {
                     color:
-                      this.props.selected == 'Preferences' ? 'black' : 'black',
+                      this.props.selected == 'Preferences'
+                        ? textAutoSecondColor
+                        : textAutoBackgroundColor,
                   },
                 ]}
               />
@@ -145,7 +166,9 @@ export default class Sidebar extends Component {
                   styles.menuText,
                   {
                     color:
-                      this.props.selected == 'Preferences' ? 'black' : 'black',
+                      this.props.selected == 'Preferences'
+                        ? textAutoSecondColor
+                        : textAutoBackgroundColor,
                   },
                 ]}>
                 Mon profil
@@ -175,7 +198,9 @@ export default class Sidebar extends Component {
                   styles.icon,
                   {
                     color:
-                      this.props.selected == 'Classement' ? 'black' : 'black',
+                      this.props.selected == 'Classement'
+                        ? textAutoSecondColor
+                        : textAutoBackgroundColor,
                   },
                 ]}
               />
@@ -184,7 +209,9 @@ export default class Sidebar extends Component {
                   styles.menuText,
                   {
                     color:
-                      this.props.selected == 'Classement' ? 'black' : 'black',
+                      this.props.selected == 'Classement'
+                        ? textAutoSecondColor
+                        : textAutoBackgroundColor,
                   },
                 ]}>
                 Classement
@@ -213,14 +240,22 @@ export default class Sidebar extends Component {
                 type="FontAwesome5"
                 style={[
                   styles.icon,
-                  {color: this.props.selected == 'Replay' ? 'black' : 'black'},
+                  {
+                    color:
+                      this.props.selected == 'Replay'
+                        ? textAutoSecondColor
+                        : textAutoBackgroundColor,
+                  },
                 ]}
               />
               <Text
                 style={[
                   styles.menuText,
                   {
-                    color: this.props.selected == 'Replay' ? 'black' : 'black',
+                    color:
+                      this.props.selected == 'Replay'
+                        ? textAutoSecondColor
+                        : textAutoBackgroundColor,
                   },
                 ]}>
                 Comparateur
@@ -253,7 +288,9 @@ export default class Sidebar extends Component {
                   styles.icon,
                   {
                     color:
-                      this.props.selected == 'Partenaires' ? 'black' : 'black',
+                      this.props.selected == 'Partenaires'
+                        ? textAutoSecondColor
+                        : textAutoBackgroundColor,
                   },
                 ]}
               />
@@ -262,7 +299,9 @@ export default class Sidebar extends Component {
                   styles.menuText,
                   {
                     color:
-                      this.props.selected == 'Partenaires' ? 'black' : 'black',
+                      this.props.selected == 'Partenaires'
+                        ? textAutoSecondColor
+                        : textAutoBackgroundColor,
                   },
                 ]}>
                 Partenaires
@@ -284,9 +323,10 @@ export default class Sidebar extends Component {
                 <Icon
                   name="euro-sign"
                   type="FontAwesome5"
-                  style={[styles.icon, {color: 'black'}]}
+                  style={[styles.icon, {color: textAutoBackgroundColor}]}
                 />
-                <Text style={[styles.menuText, {color: 'black'}]}>
+                <Text
+                  style={[styles.menuText, {color: textAutoBackgroundColor}]}>
                   Faire un don
                 </Text>
               </View>
@@ -314,14 +354,22 @@ export default class Sidebar extends Component {
                 type="FontAwesome5"
                 style={[
                   styles.icon,
-                  {color: this.props.selected == 'Help' ? 'black' : 'black'},
+                  {
+                    color:
+                      this.props.selected == 'Help'
+                        ? textAutoSecondColor
+                        : textAutoBackgroundColor,
+                  },
                 ]}
               />
               <Text
                 style={[
                   styles.menuText,
                   {
-                    color: this.props.selected == 'Help' ? 'black' : 'black',
+                    color:
+                      this.props.selected == 'Help'
+                        ? textAutoSecondColor
+                        : textAutoBackgroundColor,
                   },
                 ]}>
                 Guide d'utilisation
@@ -343,9 +391,9 @@ export default class Sidebar extends Component {
               <Icon
                 name="power-off"
                 type="FontAwesome5"
-                style={[styles.icon, {color: 'black'}]}
+                style={[styles.icon, {color: textAutoBackgroundColor}]}
               />
-              <Text style={[styles.menuText, {color: 'black'}]}>
+              <Text style={[styles.menuText, {color: textAutoBackgroundColor}]}>
                 Se déconnecter
               </Text>
             </View>
@@ -371,7 +419,7 @@ export default class Sidebar extends Component {
               <Text
                 style={[
                   {
-                    color: 'black',
+                    color: textAutoBackgroundColor,
                     textDecorationLine: 'underline',
                     textAlign: 'center',
                     fontSize: 12,
@@ -395,7 +443,7 @@ export default class Sidebar extends Component {
               <Text
                 style={[
                   {
-                    color: 'black',
+                    color: textAutoBackgroundColor,
                     textDecorationLine: 'underline',
                     textAlign: 'center',
                     fontSize: 12,
@@ -411,7 +459,7 @@ export default class Sidebar extends Component {
               <Text
                 style={[
                   {
-                    color: 'black',
+                    color: textAutoBackgroundColor,
                     textDecorationLine: 'underline',
                     textAlign: 'center',
                   },
@@ -422,7 +470,7 @@ export default class Sidebar extends Component {
             <Text
               style={[
                 {
-                  color: 'black',
+                  color: textAutoBackgroundColor,
                   textAlign: 'center',
                   fontSize: 13,
                 },
@@ -498,7 +546,7 @@ const styles = StyleSheet.create({
     fontSize: 24,
   },
   header: {
-    backgroundColor: 'white',
+    backgroundColor: ApiUtils.getBackgroundColor(),
     // backgroundColor: ApiUtils.getBackgroundColor(),
     width: '100%',
   },
@@ -513,7 +561,7 @@ const styles = StyleSheet.create({
     paddingLeft: 0,
   },
   saveText: {
-    color: 'black',
+    color: textAutoBackgroundColor,
     paddingLeft: 0,
     marginLeft: 5,
     marginRight: -5,

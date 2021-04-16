@@ -12,6 +12,8 @@ import MapView from 'react-native-maps';
 import ApiUtils from '../ApiUtils';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {connect} from 'react-redux';
+
+import {textAutoBackgroundColor} from './../globalsModifs';
 const mapStateToProps = (state) => {
   return {
     currentLive: state.currentLive,
@@ -511,7 +513,7 @@ class LiveSummaryFromSegment extends Component {
 
 const styles = StyleSheet.create({
   header: {
-    backgroundColor: 'white',
+    backgroundColor: ApiUtils.getBackgroundColor(),
     width: '100%',
   },
   title: {
@@ -559,7 +561,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   saveText: {
-    color: 'black',
+    color: textAutoBackgroundColor,
     paddingLeft: 0,
     marginLeft: 5,
     marginRight: -5,

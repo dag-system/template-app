@@ -24,8 +24,12 @@ import {
 import {connect} from 'react-redux';
 import Sidebar from './SideBar';
 
-import {TemplateArrayImagesPartenairesPath} from './../globalsModifs';
+import {
+  TemplateArrayImagesPartenairesPath,
+  textAutoBackgroundColor,
+} from './../globalsModifs';
 import {Dispatch} from 'redux';
+import ApiUtils from './../ApiUtils';
 
 const mapStateToProps = (state) => {
   return {
@@ -149,7 +153,7 @@ class Partenaires extends Component<Props, State> {
 
 const styles = StyleSheet.create({
   header: {
-    backgroundColor: 'white',
+    backgroundColor: ApiUtils.getBackgroundColor(),
     // width: '100%'
   },
   title: {
@@ -175,7 +179,7 @@ const styles = StyleSheet.create({
     elevation: 0,
   },
   saveText: {
-    color: 'black',
+    color: textAutoBackgroundColor,
   },
   body: {
     width: '100%',

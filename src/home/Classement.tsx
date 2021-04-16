@@ -26,7 +26,7 @@ import Logo from '../assets/logo.png';
 import Rotate from '../assets/rotate.png';
 import AutoHeightWebView from 'react-native-autoheight-webview';
 
-import {TemplateSiteLink} from './../globalsModifs';
+import {TemplateSiteLink, textAutoBackgroundColor} from './../globalsModifs';
 
 const mapStateToProps = () => {
   return {};
@@ -170,7 +170,7 @@ class Classement extends Component<Props, State> {
                     'https://www.folomi.fr/classement/classementTemplate.html?organisation=' +
                     ApiUtils.getOrganisation() +
                     '&color=' +
-                    ApiUtils.getSecondColor().split('#')[1],
+                    ApiUtils.getBackgroundColor().split('#')[1],
                 }}
                 style={{marginTop: 20, width: '100%'}}
                 startInLoadingState={true}
@@ -188,7 +188,7 @@ class Classement extends Component<Props, State> {
 
 const styles = StyleSheet.create({
   header: {
-    backgroundColor: 'white',
+    backgroundColor: ApiUtils.getBackgroundColor(),
   },
   title: {
     width: '25%',
@@ -212,7 +212,7 @@ const styles = StyleSheet.create({
     elevation: 0,
   },
   saveText: {
-    color: 'black',
+    color: textAutoBackgroundColor,
   },
   body: {
     width: '100%',

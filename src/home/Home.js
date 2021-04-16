@@ -42,7 +42,12 @@ import {Sponsors} from './Sponsors';
 import VersionCheck from 'react-native-version-check';
 import moment from 'moment';
 
-import {TemplateExpirationDate, TemplateIdOrganisation, TemplateIsPaying} from './../globalsModifs';
+import {
+  TemplateExpirationDate,
+  TemplateIdOrganisation,
+  TemplateIsPaying,
+  textAutoBackgroundColor,
+} from './../globalsModifs';
 
 const mapStateToProps = (state) => {
   return {
@@ -109,12 +114,11 @@ class Home extends Component {
 
     // #stop BackroundGeolocation and remove-listeners when Home Screen is rendered.
     this.setState({selectedFolocode: -1});
-    if (ApiUtils.isExpired() ) {
-      this.onClickNavigate('IsExpired')
+    if (ApiUtils.isExpired()) {
+      this.onClickNavigate('IsExpired');
       return;
     }
     if (this.props.userData != null) {
-    
       if (TemplateIsPaying) {
         if (ApiUtils.hasPaid(this.props.userData)) {
           this.onClickNavigate('Lives');
@@ -410,33 +414,32 @@ class Home extends Component {
             });
           }
 
+          //challenges
 
-                  //challenges 
+          var challengesArray = Object.values(result.challenges);
 
-                  var challengesArray = Object.values(result.challenges);
-          
-                  var finalChallengesArray = []; // new Object(this.props.polylines);
-                
-                  if (challengesArray != null && challengesArray.length != 0) {
-                    challengesArray.forEach((challenge) => {
-                      var finalChallenge= challenge;
-        
-                      var positionArray = Object.values(challenge.positionsTrace);
-                      challenge.positionsTrace = positionArray;
-        
-                      finalChallenge = {
-                        positionsTrace: positionArray,
-                        idChallenge: finalChallenge.idChallenge,
-                        libelleChallenge: finalChallenge.libelleChallenge,
-                        distanceChallenge: finalChallenge.distanceChallenge,
-                        gpxChallenge: finalChallenge.gpxChallenge,
-                        dateDebutChallenge: finalChallenge.dateDebutChallenge,
-                        dateFinChallenge: finalChallenge.dateFinChallenge,
-                      };
-        
-                      finalChallengesArray.push(finalChallenge);
-                    });
-                  }
+          var finalChallengesArray = []; // new Object(this.props.polylines);
+
+          if (challengesArray != null && challengesArray.length != 0) {
+            challengesArray.forEach((challenge) => {
+              var finalChallenge = challenge;
+
+              var positionArray = Object.values(challenge.positionsTrace);
+              challenge.positionsTrace = positionArray;
+
+              finalChallenge = {
+                positionsTrace: positionArray,
+                idChallenge: finalChallenge.idChallenge,
+                libelleChallenge: finalChallenge.libelleChallenge,
+                distanceChallenge: finalChallenge.distanceChallenge,
+                gpxChallenge: finalChallenge.gpxChallenge,
+                dateDebutChallenge: finalChallenge.dateDebutChallenge,
+                dateFinChallenge: finalChallenge.dateFinChallenge,
+              };
+
+              finalChallengesArray.push(finalChallenge);
+            });
+          }
 
           if (
             result.pointsInterets != null &&
@@ -498,7 +501,7 @@ class Home extends Component {
             descriptionStation: result.descriptionStation,
             polylines: finalTraceArray,
             pointsInterets: finalinterestArray,
-             challenges : finalChallengesArray
+            challenges: finalChallengesArray,
           };
 
           var action = {type: 'UPDATE_STATION_DATA', data: station};
@@ -563,7 +566,7 @@ class Home extends Component {
                         GlobalStyles.button,
                         {
                           marginTop: 0,
-                          borderColor: 'black',
+                          borderColor: textAutoBackgroundColor,
                           opacity: 1,
                           width: '80%',
                           padding: 10,
@@ -574,7 +577,7 @@ class Home extends Component {
                         style={{
                           textAlign: 'center',
                           fontWeight: 'bold',
-                          color: 'black',
+                          color: textAutoBackgroundColor,
                           textTransform: 'uppercase',
                         }}>
                         Créer un compte
@@ -593,12 +596,12 @@ class Home extends Component {
                         GlobalStyles.button,
                         {
                           marginTop: 10,
-                          borderColor: 'black',
+                          borderColor: textAutoBackgroundColor,
                           opacity: 1,
                           width: '80%',
-                          borderColor: 'black',
+                          borderColor: textAutoBackgroundColor,
                           padding: 10,
-                          backgroundColor: 'black',
+                          backgroundColor: textAutoBackgroundColor,
                         },
                       ]}
                       onPress={() => this.openModalLogin()}>
@@ -624,10 +627,10 @@ class Home extends Component {
                       style={[
                         {
                           marginTop: 10,
-                          borderColor: 'black',
+                          borderColor: textAutoBackgroundColor,
                           opacity: 1,
                           width: '80%',
-                          borderColor: 'black',
+                          borderColor: textAutoBackgroundColor,
                           padding: 2,
                         },
                       ]}
@@ -636,7 +639,7 @@ class Home extends Component {
                         style={{
                           textAlign: 'center',
                           textDecorationLine: 'underline',
-                          color: 'black',
+                          color: textAutoBackgroundColor,
                           textTransform: 'uppercase',
                         }}>
                         J'ai oublié mon code ?
@@ -644,26 +647,31 @@ class Home extends Component {
                     </TouchableOpacity>
                   </View>
 
-                <Text
-              style={[
-                {
-                  color: 'black',
-                  textAlign: 'center',
-                  fontSize: 13,
-                  marginTop : 30
-                },
-              ]}>
-              Version V {VersionCheck.getCurrentVersion()} 
-            </Text>
-            <Text
-              style={[
-                {
-                  color: 'black',
-                  textAlign: 'center',
-                  fontSize: 13,
-                  marginTop : 5
-                },
-              ]}>Expiration le {moment(TemplateExpirationDate.toISOString()).format('DD/MM/YYYY')}</Text>
+                  <Text
+                    style={[
+                      {
+                        color: textAutoBackgroundColor,
+                        textAlign: 'center',
+                        fontSize: 13,
+                        marginTop: 30,
+                      },
+                    ]}>
+                    Version V {VersionCheck.getCurrentVersion()}
+                  </Text>
+                  <Text
+                    style={[
+                      {
+                        color: textAutoBackgroundColor,
+                        textAlign: 'center',
+                        fontSize: 13,
+                        marginTop: 5,
+                      },
+                    ]}>
+                    Expiration le{' '}
+                    {moment(TemplateExpirationDate.toISOString()).format(
+                      'DD/MM/YYYY',
+                    )}
+                  </Text>
                 </ImageBackground>
               </View>
             </KeyboardAvoidingView>
@@ -700,7 +708,7 @@ class Home extends Component {
                     textTransform: 'uppercase',
                     textAlign: 'center',
                     marginTop: 30,
-                    color: ApiUtils.getColor(),
+                    color: textAutoBackgroundColor,
                   }}>
                   Vous avez déjà un compte ?
                 </Text>
@@ -717,20 +725,20 @@ class Home extends Component {
                       onValueChange={this.onValueFolocodeChange.bind(this)}
                       placeholder={'Choisissez le Code'}
                       placeholderStyle={{
-                        color: ApiUtils.getColor(),
+                        color: textAutoBackgroundColor,
                       }}
-                      placeholderIconColor={ApiUtils.getColor()}
-                      textStyle={{color: ApiUtils.getColor()}}
+                      placeholderIconColor={textAutoBackgroundColor}
+                      textStyle={{color: textAutoBackgroundColor}}
                       itemStyle={{
-                        color: ApiUtils.getColor(),
+                        color: textAutoBackgroundColor,
                         marginLeft: 0,
                         paddingLeft: 10,
-                        borderBottomColor: ApiUtils.getColor(),
+                        borderBottomColor: textAutoBackgroundColor,
                         borderBottomWidth: 1,
                       }}
                       itemTextStyle={{
-                        color: ApiUtils.getColor(),
-                        borderBottomColor: ApiUtils.getColor(),
+                        color: textAutoBackgroundColor,
+                        borderBottomColor: textAutoBackgroundColor,
                         borderBottomWidth: 1,
                       }}>
                       <Picker.Item label="Choisissez le Code" value={-1} />
@@ -788,7 +796,7 @@ class Home extends Component {
                       this.state.followCode == '' &&
                       this.state.selectedFolocode == -1
                         ? {backgroundColor: 'transparent'}
-                        : {backgroundColor: ApiUtils.getColor()},
+                        : {backgroundColor: 'transparent'},
                     ]}
                     onPress={() => this.onClickSendFollowCode()}
                     disabled={
@@ -800,21 +808,18 @@ class Home extends Component {
                         fontWeight: 'bold',
                         textAlign: 'center',
                         color:
-                        this.state.followCode == '' && this.state.selectedFolocode == -1 ? 'black' : 'white',
+                          this.state.followCode == '' &&
+                          this.state.selectedFolocode == -1
+                            ? 'black'
+                            : 'black',
                       }}>
                       CONNEXION
                     </Text>
                   </TouchableOpacity>
                 </View>
 
-
                 <View style={{marginBottom: 0}} />
-
-          
-
               </KeyboardAvoidingView>
-
-        
 
               <Sponsors />
             </Modal>
@@ -852,12 +857,12 @@ class Home extends Component {
 
 const styles = StyleSheet.create({
   header: {
-    backgroundColor: 'white',
+    backgroundColor: ApiUtils.getBackgroundColor(),
     //backgroundColor: ApiUtils.getBackgroundColor(),
     width: '100%',
   },
   title: {
-    color: '#000',
+    color: textAutoBackgroundColor,
   },
   text: {
     fontFamily: 'Roboto',
@@ -927,7 +932,7 @@ const styles = StyleSheet.create({
   },
 
   saveText: {
-    color: 'black',
+    color: textAutoBackgroundColor,
     paddingLeft: 0,
     marginLeft: 5,
     marginRight: -5,

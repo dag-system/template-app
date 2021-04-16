@@ -54,7 +54,11 @@ import {Dimensions} from 'react-native';
 import BatteryModal from '../home/BatteryModal';
 import DefaultProps from '../models/DefaultProps';
 
-import {TemplateDisplayName, TemplateSportLive} from './../globalsModifs';
+import {
+  TemplateDisplayName,
+  TemplateSportLive,
+  textAutoBackgroundColor,
+} from './../globalsModifs';
 
 const LATITUDE_DELTA = 0.00922;
 const LONGITUDE_DELTA = 0.00421;
@@ -2721,14 +2725,14 @@ var styles = StyleSheet.create({
     elevation: 0,
   },
   header: {
-    backgroundColor: 'white',
+    backgroundColor: ApiUtils.getBackgroundColor(),
     paddingLeft: 10,
     paddingTop: 10,
     paddingBottom: 10,
     // height: 80
   },
   headerModal: {
-    backgroundColor: 'white',
+    backgroundColor: ApiUtils.getBackgroundColor(),
     paddingLeft: 10,
     paddingTop: 0,
     paddingBottom: 5,
@@ -2914,7 +2918,7 @@ var styles = StyleSheet.create({
     textDecorationLine: 'underline',
   },
   saveText: {
-    color: 'black',
+    color: textAutoBackgroundColor,
     paddingLeft: 0,
     marginLeft: 0,
     marginRight: -5,

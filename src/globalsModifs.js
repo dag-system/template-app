@@ -12,8 +12,11 @@ export const TemplateOrganisation = TemplateAppName.toUpperCase();
 
 export const TemplateIdOrganisation = '9';
 
-export const TemplateBackgroundColor = '#FFFFFF';
+export const TemplateBackgroundColor = '#123456';
 export const TemplateSecondColor = '#FFFFFF';
+
+export const textAutoBackgroundColor = autoColor(TemplateBackgroundColor);
+export const textAutoSecondColor = autoColor(TemplateSecondColor);
 
 export const TemplateSiteLink = 'www.dag-system.com';
 
@@ -57,4 +60,24 @@ function purgeString(str) {
     }
   }
   return str.join('');
+}
+
+function autoColor(color) {
+  max = hexToRgb(color).r + hexToRgb(color).g + hexToRgb(color).b;
+  if (max > (3 * 256) / 2) {
+    return '#000000';
+  } else {
+    return '#FFFFFF';
+  }
+}
+
+function hexToRgb(hex) {
+  var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+  return result
+    ? {
+        r: parseInt(result[1], 16),
+        g: parseInt(result[2], 16),
+        b: parseInt(result[3], 16),
+      }
+    : null;
 }

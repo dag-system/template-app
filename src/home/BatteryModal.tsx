@@ -16,6 +16,7 @@ import Sidebar from './SideBar';
 import {Sponsors} from './Sponsors';
 import BatteryModalContent from './BatteryModalContent';
 import ApiUtils from '../ApiUtils';
+import {textAutoBackgroundColor, textAutoSecondColor} from '../globalsModifs';
 
 const mapStateToProps = (state) => {
   return {
@@ -147,7 +148,7 @@ const styles = StyleSheet.create({
     elevation: 0,
   },
   saveText: {
-    color: ApiUtils.getColor(),
+    color: textAutoBackgroundColor,
   },
   body: {
     width: '100%',

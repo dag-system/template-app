@@ -32,7 +32,7 @@ import moment from 'moment';
 import {Platform} from 'react-native';
 import {Dimensions} from 'react-native';
 import VersionCheck from 'react-native-version-check';
-import {IsDemo} from './../globalsModifs';
+import {IsDemo, textAutoBackgroundColor} from './../globalsModifs';
 
 const mapStateToProps = (state) => {
   return {
@@ -1037,7 +1037,7 @@ class Preferences extends Component {
 
 const styles = StyleSheet.create({
   header: {
-    backgroundColor: 'white',
+    backgroundColor: ApiUtils.getBackgroundColor(),
   },
   title: {
     width: '25%',
@@ -1060,7 +1060,7 @@ const styles = StyleSheet.create({
     elevation: 0,
   },
   saveText: {
-    color: 'black',
+    color: textAutoBackgroundColor,
   },
   body: {
     width: '100%',

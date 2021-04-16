@@ -5,6 +5,7 @@ import MapView from 'react-native-maps';
 import {connect} from 'react-redux';
 import ApiUtils from '../ApiUtils';
 import Logo from '../assets/logo.png';
+import {textAutoBackgroundColor} from './../globalsModifs';
 const mapStateToProps = (state) => {
   return {
     userData: state.userData,
@@ -260,7 +261,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
   },
   saveText: {
-    color: 'black',
+    color: textAutoBackgroundColor,
   },
   body: {
     width: '100%',

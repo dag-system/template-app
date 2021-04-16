@@ -54,6 +54,7 @@ import {
   TemplateChallengeAutreName,
   TemplateIsPaying,
   IsDemo,
+  textAutoBackgroundColor,
 } from './../globalsModifs';
 
 const mapStateToProps = (state) => {
@@ -960,7 +961,7 @@ class CreateAccount extends ValidationComponent {
 
 const styles = StyleSheet.create({
   header: {
-    backgroundColor: 'white',
+    backgroundColor: ApiUtils.getBackgroundColor(),
     // backgroundColor: ApiUtils.getColor(),
     width: '100%',
   },
@@ -992,7 +993,7 @@ const styles = StyleSheet.create({
     paddingLeft: 0,
   },
   saveText: {
-    color: 'black',
+    color: textAutoBackgroundColor,
     paddingLeft: 0,
     marginLeft: 5,
     marginRight: -5,
