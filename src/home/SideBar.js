@@ -360,20 +360,21 @@ export default class Sidebar extends Component {
               underlayColor="rgba(255,255,255,1,0.6)"
               onPress={() =>
                 this.openLink(
-                  IsDemo === true
+                  isDemo === true
                     ? 'http://dag-system.com/externalcontent/templatetest/service.pdf'
                     : 'http://dag-system.com/externalcontent/' +
                         TemplateAppName +
                         '/confidentialite.pdf',
                 )
               }
-              style={{width: '100%', height: 35}}>
+              style={{width: '100%', height: 30}}>
               <Text
                 style={[
                   {
                     color: 'black',
                     textDecorationLine: 'underline',
                     textAlign: 'center',
+                    fontSize: 12,
                   },
                 ]}>
                 Politique de confidentialité
@@ -383,20 +384,21 @@ export default class Sidebar extends Component {
               underlayColor="rgba(255,255,255,1,0.6)"
               onPress={() =>
                 this.openLink(
-                  IsDemo === true
+                  isDemo === true
                     ? 'http://dag-system.com/externalcontent/templatetest/service.pdf'
                     : 'http://dag-system.com/externalcontent/' +
                         TemplateAppName +
                         '/service.pdf',
                 )
               }
-              style={{width: '100%', height: 35}}>
+              style={{width: '100%', height: 30}}>
               <Text
                 style={[
                   {
                     color: 'black',
                     textDecorationLine: 'underline',
                     textAlign: 'center',
+                    fontSize: 12,
                   },
                 ]}>
                 Conditions de service
