@@ -5,6 +5,7 @@ import {
   TemplateOrganisation,
   IsDemo,
   TemplateExpirationDate,
+  TemplateSecondColor,
 } from './globalsModifs';
 import moment from 'moment';
 
@@ -25,7 +26,7 @@ var ApiUtils = {
   isExpired() {
     let currentDate = new Date();
 
-    if (IsDemo &&!__DEV__) {
+    if (IsDemo && !__DEV__) {
       if (
         moment(currentDate.toISOString()).isAfter(
           TemplateExpirationDate.toISOString(),
@@ -62,10 +63,10 @@ var ApiUtils = {
     return ISDEBUG;
   },
   getBackgroundColor() {
-    return '#FFFFFF';
+    return TemplateBackgroundColor;
   },
   getSecondColor() {
-    return TemplateBackgroundColor;
+    return TemplateSecondColor;
   },
   getColor() {
     let color = this.getBackgroundColor();

@@ -1,4 +1,4 @@
-export const TemplateDisplayName = "Template Test";
+export const TemplateDisplayName = 'Template Test';
 
 export const IsDemo = true;
 
@@ -13,6 +13,7 @@ export const TemplateOrganisation = TemplateAppName.toUpperCase();
 export const TemplateIdOrganisation = '9';
 
 export const TemplateBackgroundColor = '#FFFFFF';
+export const TemplateSecondColor = '#FFFFFF';
 
 export const TemplateSiteLink = 'www.dag-system.com';
 

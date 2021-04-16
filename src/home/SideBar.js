@@ -27,7 +27,7 @@ import VersionCheck from 'react-native-version-check';
 import {
   TemplateHasAppDonation,
   TemplateAppName,
-  isDemo,
+  IsDemo,
 } from './../globalsModifs';
 
 export default class Sidebar extends Component {
@@ -360,7 +360,7 @@ export default class Sidebar extends Component {
               underlayColor="rgba(255,255,255,1,0.6)"
               onPress={() =>
                 this.openLink(
-                  isDemo === true
+                  IsDemo === true
                     ? 'http://dag-system.com/externalcontent/templatetest/service.pdf'
                     : 'http://dag-system.com/externalcontent/' +
                         TemplateAppName +
@@ -384,7 +384,7 @@ export default class Sidebar extends Component {
               underlayColor="rgba(255,255,255,1,0.6)"
               onPress={() =>
                 this.openLink(
-                  isDemo === true
+                  IsDemo === true
                     ? 'http://dag-system.com/externalcontent/templatetest/service.pdf'
                     : 'http://dag-system.com/externalcontent/' +
                         TemplateAppName +
