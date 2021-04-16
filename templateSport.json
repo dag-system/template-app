@@ -170,7 +170,7 @@
     "action": "REPLACE_TEXT",
     "filePath": "./src/globalsModifs.js",
     "source": "export const TemplateChallengeAutre = true;",
-    "cible": "export const TemplateChallengeAutre = $otherChallenge;",
+    "cible": "export const TemplateChallengeAutre = $challengeRank;",
     "datasource": "table.colonne",
     "env": "demo"
   },

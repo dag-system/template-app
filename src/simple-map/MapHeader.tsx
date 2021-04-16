@@ -246,10 +246,11 @@ class MapHeader extends Component<Props, State> {
                   }}
                   onPress={() => this.goBack()}>
                   <View style={[GlobalStyles.row]}>
-                    <Text style={{color: 'black'}}>
+                    <Text style={{color: textAutoBackgroundColor}}>
                       {this.props.userData.nomUtilisateur}
                     </Text>
-                    <Text style={{color: 'black', marginLeft: 5}}>
+                    <Text
+                      style={{color: textAutoBackgroundColor, marginLeft: 5}}>
                       {this.props.userData.prenomUtilisateur}
                     </Text>
                   </View>
@@ -260,7 +261,12 @@ class MapHeader extends Component<Props, State> {
                   <TouchableOpacity
                     style={[{marginLeft: 10}]}
                     onPress={() => this.onClickShare()}>
-                    <Icon active name="share" type="FontAwesome5" />
+                    <Icon
+                      active
+                      name="share"
+                      type="FontAwesome5"
+                      style={{color: textAutoBackgroundColor}}
+                    />
                   </TouchableOpacity>
                 ) : null}
               </View>

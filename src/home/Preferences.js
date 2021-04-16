@@ -547,13 +547,7 @@ class Preferences extends Component {
                     style={styles.saveButton}
                     onPress={() => this.onClickValidate()}
                     disabled={this.isErrorForm()}>
-                    <Text
-                      style={[
-                        styles.saveText,
-                        {color: this.isErrorForm() ? 'gray' : 'black'},
-                      ]}>
-                      ENREGISTRER
-                    </Text>
+                    <Text style={[styles.saveText]}>ENREGISTRER</Text>
                   </Button>
                 )}
               </Right>

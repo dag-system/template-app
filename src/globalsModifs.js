@@ -12,7 +12,7 @@ export const TemplateOrganisation = TemplateAppName.toUpperCase();
 
 export const TemplateIdOrganisation = '9';
 
-export const TemplateBackgroundColor = '#123456';
+export const TemplateBackgroundColor = '#FFFFFF';
 export const TemplateSecondColor = '#FFFFFF';
 
 export const textAutoBackgroundColor = autoColor(TemplateBackgroundColor);
