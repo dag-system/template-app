@@ -237,7 +237,7 @@
   {
     "action": "REPLACE_TEXT",
     "filePath": "./src/globalsModifs.js",
-    "source": "export const TemplateIdOrganisation = '9';",
+    "source": "export const TemplateIdOrganisation = '57';",
     "cible": "export const TemplateIdOrganisation = '$idOrganisation';",
     "datasource": "table.colonne",
     "env": "demo"

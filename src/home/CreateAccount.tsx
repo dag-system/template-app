@@ -556,7 +556,7 @@ class CreateAccount extends ValidationComponent {
                     </Label>
                     <View style={[GlobalStyles.row]}>
                       <Picker
-                        style={{width: Dimensions.get('screen').width / 3 - 10}}
+                        style={{width: Dimensions.get('screen').width / 3}}
                         mode="dropdown"
                         accessibilityLabel={'Jour'}
                         iosHeader={'Jour'}
@@ -588,7 +588,7 @@ class CreateAccount extends ValidationComponent {
                         })}
                       </Picker>
                       <Picker
-                        style={{width: Dimensions.get('screen').width / 3 - 10}}
+                        style={{width: Dimensions.get('screen').width / 3}}
                         mode="dropdown"
                         accessibilityLabel={'Mois'}
                         iosHeader={'Mois'}
@@ -621,7 +621,7 @@ class CreateAccount extends ValidationComponent {
                       </Picker>
 
                       <Picker
-                        style={{width: Dimensions.get('screen').width / 3 - 10}}
+                        style={{width: Dimensions.get('screen').width / 3}}
                         mode="dropdown"
                         accessibilityLabel={''}
                         iosHeader={'Année'}

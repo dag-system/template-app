@@ -816,9 +816,8 @@ class Preferences extends Component {
                     <Label style={{fontSize: 12}}>
                       Important pour les classements par catégorie
                     </Label>
-                    <View style={[GlobalStyles.row]}>
+                    <View style={styles.rowDate}>
                       <Picker
-                        style={{width: Dimensions.get('screen').width / 3 - 10}}
                         mode="dropdown"
                         accessibilityLabel={'Jour'}
                         iosHeader={'Jour'}
@@ -850,7 +849,6 @@ class Preferences extends Component {
                         })}
                       </Picker>
                       <Picker
-                        style={{width: Dimensions.get('screen').width / 3 - 10}}
                         mode="dropdown"
                         accessibilityLabel={'Mois'}
                         iosHeader={'Mois'}
@@ -883,7 +881,6 @@ class Preferences extends Component {
                       </Picker>
 
                       <Picker
-                        style={{width: Dimensions.get('screen').width / 3 - 10}}
                         mode="dropdown"
                         accessibilityLabel={''}
                         iosHeader={'Année'}
@@ -1162,6 +1159,10 @@ const styles = StyleSheet.create({
   icon: {
     width: 24,
     height: 24,
+  },
+  rowDate: {
+    display: 'flex',
+    flexDirection: 'row',
   },
 });
 

@@ -12,7 +12,7 @@ export const TemplateOrganisation = purgeString(
   romanizeString(TemplateDisplayName.toUpperCase()),
 );
 
-export const TemplateIdOrganisation = '9';
+export const TemplateIdOrganisation = '57';
 
 export const TemplateBackgroundColor = '#FFFFFF';
 export const TemplateSecondColor = '#FFFFFF';
