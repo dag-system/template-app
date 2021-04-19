@@ -26,7 +26,7 @@
   {
     "action": "REPLACE_TEXT",
     "filePath": "./src/globalsModifs.js",
-    "source": "export const TemplateDisplayName = \"Template Test\";",
+    "source": "export const TemplateDisplayName = 'Template Test';",
     "cible": "export const TemplateDisplayName = '$appName';",
     "datasource": "table.colonne",
     "env": "demo"
