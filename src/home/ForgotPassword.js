@@ -21,6 +21,7 @@ import {
   Left,
   Right,
   Picker,
+  Footer,
 } from 'native-base';
 import Logo from '../assets/logo.png';
 import {Button as ButtonElement} from 'react-native-elements';
@@ -31,6 +32,7 @@ import GlobalStyles from '../styles';
 import ValidationComponent from 'react-native-form-validator';
 
 import {TemplateIsPaying} from './../globalsModifs';
+import {Sponsors} from './Sponsors';
 
 const mapStateToProps = (state) => {
   return {
@@ -395,7 +397,11 @@ class ForgotPassword extends ValidationComponent {
               </View>
             ) : null}
           </View>
+      
         </Container>
+        <Footer style={{backgroundColor :'white', paddingBottom  :64}}>
+            <Sponsors />
+          </Footer>
       </Root>
     );
   }

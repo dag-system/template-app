@@ -40,6 +40,9 @@ import DeviceInfo from 'react-native-device-info';
 import VersionCheck from 'react-native-version-check';
 import BatteryModal from './BatteryModal';
 
+import {TemplateIdOrganisation} from './../globalsModifs';
+import AskGpsModal from './AskGpsModal';
+
 const mapStateToProps = (state) => {
   return {
     userData: state.userData,
@@ -47,7 +50,8 @@ const mapStateToProps = (state) => {
     lives: state.lives,
     sports: state.sports,
     isOkPopupBAttery: state.isOkPopupBAttery,
-    isOkPopupBAttery2 : state.isOkPopupBAttery2
+    isOkPopupBAttery2: state.isOkPopupBAttery2,
+    isOkPopupGps : state.isOkPopupGps
   };
 };
 
@@ -69,7 +73,7 @@ class Introduction extends Component {
   }
 
   async downloadData() {
-    this.init();
+    // this.init();
     this.getPhoneData();
     await this.getNewVersion();
     await this.getLives(this.props.userData.idUtilisateur);
@@ -449,7 +453,25 @@ class Introduction extends Component {
           }>
           <Container style={{flex: 1}}>
             <View style={{flex: 1}}>
-              <BatteryModal noHeader={true} onValidate={() =>  this.onClickNavigate('SimpleMap')}/>
+              <BatteryModal
+                noHeader={true}
+              />
+
+              {/* <View style={{height: 300}} /> */}
+            </View>
+          </Container>
+        </Modal>
+
+        <Modal
+          visible={
+            this.props.isOkPopupBAttery2 && this.props.isOkPopupBAttery && !this.props.isOkPopupGps
+          }>
+          <Container style={{flex: 1}}>
+            <View style={{flex: 1}}>
+              <AskGpsModal
+                noHeader={true}
+                onValidate={() => this.onClickNavigate('SimpleMap')}
+              />
 
               {/* <View style={{height: 300}} /> */}
             </View>

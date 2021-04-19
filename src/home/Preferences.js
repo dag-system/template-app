@@ -523,7 +523,7 @@ class Preferences extends Component {
                   onPress={() => this.onDrawer()}>
                   <Icon
                     style={styles.saveText}
-                    name="chevron-left"
+                    name="bars"
                     type="FontAwesome5"
                   />
                 </Button>

@@ -42,7 +42,9 @@ interface State {
 }
 
 class Classement extends Component<Props, State> {
+  drawer : Drawer;
   constructor(props) {
+    
     super(props);
 
     this.state = {
@@ -59,7 +61,7 @@ class Classement extends Component<Props, State> {
     });
   }
 
-  drawer;
+
 
   componentDidMount() {}
 

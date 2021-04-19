@@ -1,8 +1,8 @@
-export const TemplateDisplayName = "Template Test";
+export const TemplateDisplayName = "INSALYON";
 
 export const IsDemo = true;
 
-export const TemplateExpirationDate = new Date();
+export const TemplateExpirationDate = new Date('December 17, 2030 03:24:00');
 
 export const TemplateAppName = purgeString(
   TemplateDisplayName.trim().toLowerCase(),
@@ -36,10 +36,10 @@ export const TemplateIsPaying = false;
 
 export const TemplateChallengeAutreName = 'Template Test Autre';
 
-export const TemplateSportLive = [];
+export const TemplateSportLive = [{idSport : 17, sportName : "CROSS"},{idSport : 18, sportName : "2n sport"}];
 export const TemplateTrace = [];
 
-export const TemplateArrayImagesSponsorPath = [];
+export const TemplateArrayImagesSponsorPath = [require("./assets/logo.png")];
 export const TemplateArrayImagesPartenairesPath = [];
 
 function purgeString(str) {

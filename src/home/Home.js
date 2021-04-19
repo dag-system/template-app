@@ -137,12 +137,12 @@ class Home extends Component {
     if (this.props.userData != null) {
       if (TemplateIsPaying) {
         if (ApiUtils.hasPaid(this.props.userData)) {
-          this.onClickNavigate('Introduction');
+          this.onClickNavigate('SimpleMap');
         } else {
           this.onClickNavigate('Paiement');
         }
       } else {
-        this.onClickNavigate('Introduction');
+        this.onClickNavigate('SimpleMap');
       }
     }
   };

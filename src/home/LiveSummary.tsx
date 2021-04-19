@@ -29,9 +29,10 @@ import {
   Root,
   Toast,
 } from 'native-base';
+import moment from 'moment';
 import AutoHeightWebView from 'react-native-autoheight-webview';
 import WebView from 'react-native-webview';
-
+import haversine from 'haversine-distance';
 import MapView, {Polyline} from 'react-native-maps';
 import ApiUtils from '../ApiUtils';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -48,6 +49,7 @@ import {check, request, PERMISSIONS, RESULTS} from 'react-native-permissions';
 import DefaultProps from '../models/DefaultProps';
 
 import {TemplateSportLive} from './../globalsModifs';
+import GpxService from '../services/GpxServices';
 
 const mapStateToProps = (state) => {
   return {
@@ -94,6 +96,7 @@ interface State {
   isModalTraceVisible: boolean;
   refresh: boolean;
   isOpenReplayModal: boolean;
+  splits: any[];
 }
 
 class LiveSummary extends Component<Props, State> {
@@ -106,6 +109,7 @@ class LiveSummary extends Component<Props, State> {
       libelleSport: '',
       coordinates: [],
       isMapFullSize: false,
+      splits: [],
       isloading: true,
       statsLive: {
         distance: null,
@@ -302,13 +306,62 @@ class LiveSummary extends Component<Props, State> {
     //   });
     // }
 
-    this.setState({coordinates: coordinates});
+    this.setState({coordinates: coordinates}, () => this.centerMap());
 
     var live = this.props.currentLive;
     live.coordinates = coordinates;
 
     var action = {type: 'SAVE_CURRENT_LIVE', data: live};
     this.props.dispatch(action);
+
+    //this.calculateTimeForEachKm(positions);
+  }
+
+  async calculateTimeForEachKm(coordinates) {
+    let dist = 0;
+    let splits = [];
+    let startPoint = coordinates[0];
+
+    for (let i = 1; i < coordinates.length; i++) {
+      dist += GpxService.calculateDistBetweenTwoPoints(
+        coordinates[i],
+        coordinates[i - 1],
+      );
+      if (dist > 1000) {
+        let time = GpxService.calculateTimeBetweenTwoPoints(
+          coordinates[i],
+          startPoint,
+        );
+        let speed = 
+        GpxService.convertTokmH(GpxService.calculateSpeed(dist,time));
+        let pace = GpxService.speedToPace(speed);
+        time = GpxService.paceDisplay(time);
+        splits.push({time: time, dist: dist, speed: speed, pace : pace});
+        dist = GpxService.calculateDistBetweenTwoPoints(
+          coordinates[i],
+          coordinates[i - 1],
+        );
+        startPoint = coordinates[i-1];
+      }
+
+      if (i == coordinates.length - 1) {
+        let time = GpxService.calculateTimeBetweenTwoPoints(
+          coordinates[i],
+          startPoint,
+        );
+  
+        let speed = 
+        GpxService.convertTokmH(GpxService.calculateSpeed(dist,time));
+        let pace = GpxService.speedToPace(speed);
+        time = GpxService.paceDisplay(time);
+        splits.push({time: time, dist: dist, speed: speed, pace : pace});
+        
+        dist = 0;
+        startPoint = coordinates[i];
+      }
+    }
+    console.log(splits);
+    this.setState({splits: splits});
   }
 
   getSports(idSport) {
@@ -615,7 +668,11 @@ class LiveSummary extends Component<Props, State> {
   };
 
   centerMap() {
-    if (this.state.coordinates != null && this.state.coordinates.length != 0) {
+    if (
+      this.state.coordinates != null &&
+      this.state.coordinates.length != 0 &&
+      this.refs.map != null
+    ) {
       this.refs.map.fitToCoordinates(this.state.coordinates, {
         edgePadding: {top: 10, right: 10, bottom: 10, left: 10},
         animated: true,
@@ -932,7 +989,7 @@ class LiveSummary extends Component<Props, State> {
                         geodesic={true}
                         strokeColor="rgba(63,170,239, 1)"
                         strokeWidth={3}
-                        zIndex={0}
+                        zIndex={12}
                       />
                     ) : null}
 
@@ -1213,6 +1270,28 @@ class LiveSummary extends Component<Props, State> {
                           />
                         </View>
                       </View>
+                    </View>
+                  ) : null}
+
+                  {this.state.splits != null && this.state.splits.length > 0 ? (
+                    <View>
+                      <Text>Intervalles</Text>
+                      {this.state.splits.map((split, index) => {
+                        return (
+                          <View 
+                            style={{
+                              display: 'flex',
+                              flexDirection: 'row',
+                              justifyContent: 'space-around',
+                            }}>
+                            {/* <Text>{index} </Text> */}
+                            <Text>{split.dist > 1000 ? index+1 : (split.dist / 1000).toFixed(2)} km </Text>
+                            <Text>{split.time} s </Text>
+                            <Text>{split.speed?.toFixed(1)} km/h </Text>
+                            <Text>{split.dist > 1000 ? split.time : split.pace}/km</Text>
+                          </View>
+                        );
+                      })}
                     </View>
                   ) : null}
                   {this.state.live.commentLive != '' &&

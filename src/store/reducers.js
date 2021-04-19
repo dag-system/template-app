@@ -393,6 +393,9 @@ const reducer = (state = initialState, action) => {
         pointsInterets: action.data.pointsInterets,
         challenges : action.data.challenges
       };
+      console.log(nextState.pointsInterets);
+      console.log(nextState.pointsInterets);
+      console.log("interets");
       return nextState || state;
     }
 

@@ -2,7 +2,6 @@ import React, {Component} from 'react';
 import {View, Text, Image, TouchableOpacity} from 'react-native';
 import ApiUtils from '../ApiUtils';
 import {connect} from 'react-redux';
-import RNPusherPushNotifications from 'react-native-pusher-push-notifications';
 import Logo from '../assets/logo.png';
 import RNExitApp from 'react-native-exit-app';
 
@@ -19,19 +18,6 @@ class IsExpired extends Component {
   }
 
   componentDidMount() {}
-
-  unSubscribe = (interest) => {
-    console.log(`Subscribing to "${interest}"`);
-    RNPusherPushNotifications.unsubscribe(
-      interest,
-      (statusCode, response) => {
-        console.error(statusCode, response);
-      },
-      () => {
-        console.log(`CALLBACK: unsubscribed to ${interest}`);
-      },
-    );
-  };
 
   onClickNavigate(routeName) {
     this.props.navigation.navigate('Home');
@@ -77,8 +63,8 @@ class IsExpired extends Component {
               fontSize: 17,
               textAlign: 'center',
             }}>
-            La license d'utilisation de cette application est terminée. Merci de renouvelez
-            votre abonement.
+            La license d'utilisation de cette application est terminée. Merci de
+            renouvelez votre abonement.
           </Text>
         </View>
         <TouchableOpacity
@@ -100,7 +86,7 @@ class IsExpired extends Component {
               fontSize: 17,
               color: ApiUtils.getSecondColor(),
             }}>
-           Quitter
+            Quitter
           </Text>
         </TouchableOpacity>
       </View>

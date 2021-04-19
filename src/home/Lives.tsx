@@ -47,7 +47,11 @@ import DeviceInfo from 'react-native-device-info';
 import BackgroundGeolocation from 'react-native-background-geolocation';
 import Help from './Help';
 
-import {TemplateAppName, TemplateIdOrganisation, TemplateSportLive} from './../globalsModifs';
+import {
+  TemplateAppName,
+  TemplateIdOrganisation,
+  TemplateSportLive,
+} from './../globalsModifs';
 
 const mapStateToProps = (state) => {
   return {
@@ -137,27 +141,25 @@ class Lives extends Component<Props, State> {
   }
 
   async componentDidMountOk() {
-    if (this.props.isRecording) {
-      this.goToMap();
-    } else {
-      
-      BackgroundGeolocation.stop();
-      if (ApiUtils.isExpired()) {
-        this.onClickNavigate('IsExpired')
-        return;
-      }
-      
-      this.downloadData();
-    }
+    // if (this.props.isRecording) {
+    //   this.goToMap();
+    // } else {
+    //   BackgroundGeolocation.stop();
+    //   if (ApiUtils.isExpired()) {
+    //     this.onClickNavigate('IsExpired')
+    //     return;
+    //   }
+    //   this.downloadData();
+    // }
   }
-  async downloadData() {
-    this.init();
-    this.getPhoneData();
-    await this.getNewVersion();
-    await this.getLives(this.props.userData.idUtilisateur);
+  // async downloadData() {
+  //   this.init();
+  //   this.getPhoneData();
+  //   await this.getNewVersion();
+  //   await this.getLives(this.props.userData.idUtilisateur);
 
-    await this.getinformationStation();
-  }
+  //   await this.getinformationStation();
+  // }
 
   init = () => {
     RNPusherPushNotifications.setInstanceId(
@@ -183,6 +185,13 @@ class Lives extends Component<Props, State> {
     );
   };
 
+  isCurrentRecordingLive(idLive) {
+    return (
+      this.props.isRecording &&
+      this.props.currentLive != null &&
+      this.props.currentLive.idLive == idLive
+    );
+  }
   handleNotification = (notification) => {
     console.log('LALA');
 
@@ -296,43 +305,14 @@ class Lives extends Component<Props, State> {
     console.log('CALLBACK: onSubscriptionsChanged');
   };
 
-  onRefresh() {
-    this.init();
-    this.getPhoneData();
+  onRefresh = () => {
+    alert('la');
+    // this.init();
+    // this.getPhoneData();
     this.getLives(this.props.userData.idUtilisateur);
-    this.getNewVersion();
-  }
+    //this.getNewVersion();
+  };
 
-  getPhoneData() {
-    let brand = DeviceInfo.getBrand();
-
-    let androidId = DeviceInfo.getAndroidIdSync();
-    let systemVersion = DeviceInfo.getSystemVersion();
-    let deviceId = DeviceInfo.getDeviceId();
-
-    let device = DeviceInfo.getDeviceSync();
-
-    let model = DeviceInfo.getModel();
-
-    let manufacturer = DeviceInfo.getManufacturerSync();
-    let hardware = DeviceInfo.getHardwareSync();
-    let apiLevel = DeviceInfo.getApiLevelSync();
-
-    let data = {
-      brand: brand,
-      androidId: androidId,
-      systemVersion: systemVersion,
-      deviceId: deviceId,
-      device: device,
-      model: model,
-      manufacturer: manufacturer,
-      hardware: hardware,
-      apiLevel: apiLevel,
-    };
-
-    var action = {type: 'UPDATE_PHONE_DATA', data: data};
-    this.props.dispatch(action);
-  }
   componentWillUnmount() {
     this._unsubscribe();
   }
@@ -366,6 +346,7 @@ class Lives extends Component<Props, State> {
   }
 
   async getLives(idUtilisateur) {
+    console.log('la');
     this.setState({isLoading: true});
     let formData = new FormData();
     formData.append('method', 'getLives');
@@ -695,175 +676,13 @@ class Lives extends Component<Props, State> {
   getStatsTimeInfo(json) {
     if (json != undefined) {
       var infos = JSON.parse(json);
+      if (infos.duree == '0') {
+        return '00:00:00';
+      }
       return infos.duree;
     }
 
-    return 0;
-  }
-
-  async getNewVersion() {
-    VersionCheck.needUpdate({
-      depth: Platform.OS == 'android' ? 3 : 2,
-    }).then((res) => {
-      if (res.isNeeded) {
-        Alert.alert(
-          'Nouvelle version disponible',
-          "Une nouvelle version de l'application est disponible",
-          [
-            {
-              text: 'Annuler',
-              style: 'cancel',
-            },
-            {
-              text: 'Télécharger',
-              onPress: () => Linking.openURL(res.storeUrl),
-            },
-          ],
-          {cancelable: false},
-        );
-      }
-    });
-  }
-
-  async getinformationStation() {
-    const formData = new FormData();
-    formData.append('method', 'getInformationStation');
-    formData.append('auth', ApiUtils.getAPIAuth());
-    formData.append('idStation', TemplateIdOrganisation);
-    //fetch followCode API
-
-    fetch(ApiUtils.getAPIUrl(), {
-      method: 'POST',
-      headers: {
-        // Accept: 'application/json',
-        // 'Content-Type': 'application/json',
-      },
-      body: formData,
-    })
-      .then(ApiUtils.checkStatus)
-      .then((response) => response.json())
-      .then((responseJson) => {
-        //save values in cache
-
-        var result = responseJson;
-
-        if (result.traces != null && result.traces.length != 0) {
-          var tracesArray = Object.values(result.traces);
-
-          var finalTraceArray = []; // new Object(this.props.polylines);
-          var finalinterestArray = [];
-          if (tracesArray != null && tracesArray.length != 0) {
-            tracesArray.forEach((trace: any) => {
-              var finalTrace = trace;
-
-              var positionArray = Object.values(trace.positionsTrace);
-              trace.positionsTrace = positionArray;
-
-              finalTrace = {
-                positionsTrace: positionArray,
-                couleurTrace: trace.couleurTrace,
-                nomTrace: trace.nomTrace,
-                isActive: true,
-                sportTrace: trace.sportTrace,
-                distanceTrace: trace.distanceTrace,
-                dplusTrace: trace.dplusTrace,
-              };
-              finalTraceArray.push(finalTrace);
-            });
-          }
-
-
-          //challenges 
-
-          var challengesArray = Object.values(result.challenges);
-          
-          var finalChallengesArray = []; // new Object(this.props.polylines);
-        
-          if (challengesArray != null && challengesArray.length != 0) {
-            challengesArray.forEach((challenge) => {
-              var finalChallenge= challenge;
-
-              var positionArray = Object.values(challenge.positionsTrace);
-              challenge.positionsTrace = positionArray;
-
-              finalChallenge = {
-                positionsTrace: positionArray,
-                idChallenge: finalChallenge.idChallenge,
-                libelleChallenge: finalChallenge.libelleChallenge,
-                distanceChallenge: finalChallenge.distanceChallenge,
-                gpxChallenge: finalChallenge.gpxChallenge,
-                dateDebutChallenge: finalChallenge.dateDebutChallenge,
-                dateFinChallenge: finalChallenge.dateFinChallenge,
-              };
-
-              finalChallengesArray.push(finalChallenge);
-            });
-          }
-
-          if (result.interets != null && result.interets.length != 0) {
-            var interestArray = Object.values(result.interets);
-            var count = 0;
-            interestArray.forEach((interest: any) => {
-              var coordinate = {
-                latitude: parseFloat(interest.latitudeInteret),
-                longitude: parseFloat(interest.longitudeInteret),
-              };
-
-              var finalInterest = {
-                id: 'interest' + count,
-                idInteret: interest.idInteret,
-                idStation: interest.idStation,
-                coordinates: coordinate,
-                libelleInteret: interest.libelleInteret,
-                couleurTrace: interest.couleurTrace,
-                descriptionInteret: interest.descriptionInteret,
-                telephoneInteret: interest.telephoneInteret,
-                lienInteret: interest.lienInteret,
-                photoInteret: interest.photoInteret,
-                description: '',
-              };
-
-              if (
-                finalInterest.descriptionInteret == null &&
-                interest.externalData != null
-              ) {
-                var extraData = JSON.parse(interest.externalData);
-                if (
-                  extraData.hasDescription.length > 0 &&
-                  extraData.hasDescription[0] != null
-                ) {
-                  if (
-                    extraData.hasDescription[0].shortDescription != null &&
-                    extraData.hasDescription[0].shortDescription.length > 1
-                  ) {
-                    finalInterest.description =
-                      extraData.hasDescription[0].shortDescription[1];
-                  } else {
-                    finalInterest.description =
-                      extraData.hasDescription[0].shortDescription[0];
-                  }
-                }
-              }
-              if (interest.actifInteret == '1') {
-                finalinterestArray.push(finalInterest);
-                count++;
-              }
-            });
-          }
-          var station = {
-            nomStation: result.nomStation,
-            descriptionStation: result.descriptionStation,
-            polylines: finalTraceArray,
-            pointsInterets: finalinterestArray,
-            challenges : finalChallengesArray
-          };
-
-          var action = {type: 'UPDATE_STATION_DATA', data: station};
-          this.props.dispatch(action);
-        }
-      })
-      // .catch(e => alert('test', JSON.stringify(e)))
-      .then();
+    return '00:00:00';
   }
 
   getSport(idSport) {
@@ -965,7 +784,7 @@ class Lives extends Component<Props, State> {
               refreshControl={
                 <RefreshControl
                   refreshing={this.state.isLoading}
-                  onRefresh={() => this.onRefresh()}
+                  onRefresh={this.onRefresh}
                 />
               }>
               {this.props.notifications != null &&
@@ -1103,7 +922,7 @@ class Lives extends Component<Props, State> {
                     renderItem={({item}) =>
                       this.state.isLoadingDeleting &&
                       this.state.deletingIds.filter((d) => d == item.idLive)
-                        .length > 0 ? (
+                        .length > 0 ? ( //en cours de suppression
                         <TouchableOpacity
                           onPress={this.viewLive.bind(this, item)}>
                           <View style={[styles.rowContainer]}>
@@ -1218,7 +1037,11 @@ class Lives extends Component<Props, State> {
                                           item.etatLive,
                                         ),
                                       }}>
-                                      {this.getLiveStatusLibelle(item.etatLive)}
+                                      {this.isCurrentRecordingLive(item.idLive)
+                                        ? "En cours d'enregistrement"
+                                        : this.getLiveStatusLibelle(
+                                            item.etatLive,
+                                          )}
                                     </Text>
                                   ) : item.isImportedFromGpx != 1 ? (
                                     <View style={[GlobalStyles.row]}>
@@ -1226,7 +1049,11 @@ class Lives extends Component<Props, State> {
                                         style={{
                                           fontWeight: 'bold',
                                         }}>
-                                        {this.getStatsInfo(item.statsLive)}
+                                        {this.isCurrentRecordingLive(
+                                          item.idLive,
+                                        )
+                                          ? 'en cours'
+                                          : this.getStatsInfo(item.statsLive)}
                                       </Text>
                                       <Text> | </Text>
                                       <Text

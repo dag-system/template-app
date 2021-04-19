@@ -14,6 +14,7 @@ interface Props {
   dispatch: Dispatch;
   navigation: any;
   isOkPopupGps: boolean;
+  onValidate() : void;
 }
 
 interface State {
@@ -36,7 +37,8 @@ class AskGpsModal extends Component<Props, State> {
     var action = {type: 'VIEW_POPUPGPS', data: null};
     this.props.dispatch(action);
 
-    this.props.navigation.navigate('SimpleMap');
+    this.props.onValidate();
+ //  this.props.navigation.navigate('SimpleMap');
   };
 
   render = () => {

@@ -16,7 +16,7 @@ export class Sponsors extends Component {
 
   render() {
     return (
-      <View>
+      <View >
         <View
           style={{
             borderBottomWidth: 1,
@@ -49,6 +49,7 @@ export class Sponsors extends Component {
             );
           })}
         </View>
+      
       </View>
     );
   }

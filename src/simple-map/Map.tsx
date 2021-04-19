@@ -22,7 +22,10 @@ import {isPointInPolygon} from 'geolib';
 import BatteryModal from '../home/BatteryModal';
 import DefaultProps from '../models/DefaultProps';
 import ApiUtils from '../ApiUtils';
-import Carousel, { Pagination } from 'react-native-snap-carousel';
+import Carousel, {Pagination} from 'react-native-snap-carousel';
+import MapCarousel from './MapCarousel';
+import MapStatBanner from './MapStatBanner';
+import Interest from '../models/Interest';
 
 const LATITUDE_DELTA_CLOSE = 0.02922;
 const LONGITUDE_DELTA_CLOSE = 0.02421;
@@ -109,10 +112,12 @@ class Map extends PureComponent<Props, State> {
     if (this.props.polylines.length > 0) {
       let firstPolyline = this.props.polylines[0];
       if (firstPolyline.positionsTrace.length != 0) {
-        this.refs.map.fitToCoordinates(firstPolyline.positionsTrace, {
-          edgePadding: {top: 10, right: 10, bottom: 10, left: 10},
-          animated: true,
-        });
+        if (this.refs.map != null) {
+          this.refs.map.fitToCoordinates(firstPolyline.positionsTrace, {
+            edgePadding: {top: 10, right: 10, bottom: 10, left: 10},
+            animated: true,
+          });
+        }
       }
     }
   }
@@ -127,24 +132,10 @@ class Map extends PureComponent<Props, State> {
     this.selectPolyline(polyline);
   }
 
-  _renderItem = ({item, index}) => {
-    return (
-      <View
-        style={{
-          width: '100%',
-          height: '100%',
-          padding: 5,
-          backgroundColor: 'white',
-          borderRadius: 10,
-          marginLeft: 0,
-          marginRight: 0,
-          borderColor: 'black',
-          borderWidth: 0,
-        }}>
-        <Text style={styles.title}>{item.title}</Text>
-      </View>
-    );
-  };
+  centerOnPoi(interest : Interest) {
+    console.log(interest.coordinates)
+    this.setCenter(interest.coordinates);
+  }
 
   selectPolyline(polyline) {
     this.setState({currentPolyline: polyline});
@@ -203,29 +194,6 @@ class Map extends PureComponent<Props, State> {
   closeInterestModal() {
     this.setState({isModalInterestVisible: false});
   }
-
-  get pagination () {
-    const { carouselItems, activeSlide } = this.state;
-    return (
-        <Pagination
-          dotsLength={carouselItems.length}
-          activeDotIndex={activeSlide}
-          // containerStyle={{ backgroundColor: 'rgba(0, 0, 0, 0.75)' }}
-          dotStyle={{
-              width: 10,
-              height: 10,
-              borderRadius: 5,
-              marginHorizontal: 8,
-              backgroundColor: 'white'
-          }}
-          inactiveDotStyle={{
-              // Define styles for inactive dots here
-          }}
-          inactiveDotOpacity={0.4}
-          inactiveDotScale={1}
-        />
-    );
-}
 
   onUpdatePosition = (newCoordinate) => {
     if (this.refs.map != null) {
@@ -286,32 +254,8 @@ class Map extends PureComponent<Props, State> {
   render() {
     return (
       <View style={styles.map}>
-        <View
-          style={{
-            zIndex: 1000,
-            position: 'absolute',
-            top: 20,
-            left: 0,
-            height: 200,
-            width: '100%',
-          }}>
-          <Carousel
-            ref={(c) => {
-              this._carousel = c;
-            }}
-            data={this.state.carouselItems}
-            renderItem={this._renderItem}
-            sliderWidth={400}
-            itemWidth={300}
-            layout={'default'}
-            onSnapToItem={(index) => this.setState({ activeSlide: index }) }
-            
-          />
-            { this.pagination }
-        </View>
-
         {/* Point d'interet  */}
-
+        {!this.props.isRecording ? <MapCarousel /> : <MapStatBanner />}
         <ModalSmall
           style={{marginTop: 22, paddingTop: 22, borderRadius: 10}}
           isVisible={this.state.isModalInterestVisible}
@@ -535,7 +479,7 @@ class Map extends PureComponent<Props, State> {
           <BatteryModal
             noHeader={true}
             onMap={true}
-            onclose={this.closeModalBattery}
+            onclose={() => this.closeModalBattery()}
           />
         </Modal>
       </View>
@@ -548,7 +492,7 @@ const styles = StyleSheet.create({
     flex: 1,
     borderColor: 'black',
     borderWidth: 0,
-    zIndex: 1,
+    zIndex: 0,
     minHeight: 400,
   },
   title: {

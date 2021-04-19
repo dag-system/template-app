@@ -41,7 +41,6 @@ import Sidebar from './SideBar';
 
 import {isPointInPolygon} from 'geolib';
 
-// const haversine = require('haversine');
 import haversine from 'haversine-distance';
 const mapStateToProps = (state) => {
   return {
@@ -824,16 +823,6 @@ class Replay extends Component {
           <Container>
             <Header style={styles.header}>
               <Left style={{flex: 1}}>
-                {/* <Button
-                    style={styles.drawerButton}
-                    onPress={() => this.onGoBack()}>
-                    <Icon
-                      style={styles.saveText}
-                      name="chevron-left"
-                      type="FontAwesome5"
-                    /> */}
-                {/* <Text style={styles.saveText}>Précedent</Text> */}
-                {/* </Button> */}
                 <TouchableOpacity
                   style={styles.drawerButton}
                   onPress={() => this.onDrawer()}>
@@ -1254,7 +1243,7 @@ class Replay extends Component {
                     latitudeDelta: LATITUDE_DELTA,
                     longitudeDelta: LONGITUDE_DELTA,
                   }}
-                  // onLayout={() => this.centerMap()}
+                   onLayout={() => this.centerMap()}
                 >
                   {this.state.coordinates != null &&
                   this.state.coordinates.length > 0 ? (

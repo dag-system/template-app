@@ -45,6 +45,7 @@ export default class Sidebar extends Component {
   onClickNavigate(routeName) {
     // this.props.drawer.close()
     if (this.props.drawer != null && this.props.drawer._root != null) {
+      console.log('close')
       this.props.drawer._root.close();
     }
 
@@ -386,7 +387,7 @@ export default class Sidebar extends Component {
               underlayColor="rgba(255,255,255,1,0.6)"
               onPress={() =>
                 this.openLink(
-                  IsDemo === true
+                  isDemo === true
                     ? 'http://dag-system.com/externalcontent/templatetest/service.pdf'
                     : 'http://dag-system.com/externalcontent/' +
                         TemplateAppName +
@@ -409,7 +410,7 @@ export default class Sidebar extends Component {
               underlayColor="rgba(255,255,255,1,0.6)"
               onPress={() =>
                 this.openLink(
-                  IsDemo === true
+                  isDemo === true
                     ? 'http://dag-system.com/externalcontent/templatetest/service.pdf'
                     : 'http://dag-system.com/externalcontent/' +
                         TemplateAppName +
@@ -455,7 +456,10 @@ export default class Sidebar extends Component {
             </Text>
           </View>
 
-          <Modal
+      <View style={{height : 100}}></View>
+        </ScrollView>
+
+        <Modal
             visible={this.state.isVisibleDonateModal}
             onRequestClose={() => this.onCloseDonate()}>
             <Header style={styles.header}>
@@ -487,7 +491,6 @@ export default class Sidebar extends Component {
               }
             />
           </Modal>
-        </ScrollView>
       </Container>
     );
   }

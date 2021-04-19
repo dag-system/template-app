@@ -37,7 +37,7 @@ interface Props extends DefaultProps {
 
 interface State {}
 
-class MapHeader extends Component<Props, State> {
+class MapStatBanner extends Component<Props, State> {
   interval: number;
   constructor(props) {
     super(props);
@@ -50,7 +50,7 @@ class MapHeader extends Component<Props, State> {
   }
   didMount() {
     clearInterval(this.interval);
-    // this.interval = setInterval(() => this.setState({test: 1}), 1100);
+    this.interval = setInterval(() => this.setState({test: 1}), 1100);
   }
 
   // componentWillUnmount() {
@@ -226,128 +226,50 @@ class MapHeader extends Component<Props, State> {
 
   render() {
     return (
-      <View>
-        <Header style={styles.header}>
-          <View
-            style={{
-              flex: 1,
-              width: '10%',
-            }}>
-            <TouchableOpacity
-              style={styles.goBackButton}
-              onPress={() => this.openDrawer()}>
-              <Icon style={styles.saveText} name="bars" type="FontAwesome5" />
-            </TouchableOpacity>
-          </View>
-          <View>
-            <TouchableOpacity
-              style={{
-                display: 'flex',
-                flexDirection: 'row',
-                justifyContent: 'center',
-                width: '100%',
-              }}
-              // style={{flex :1}}
-              onPress={() => this.openDrawer()}>
-              <Image
-                resizeMode="contain"
-                source={Logo}
-                style={styles.logoHeader}
-              />
-            </TouchableOpacity>
-          </View>
-          <View></View>
-          {/* <View style={{flexDirection: 'row', justifyContent: 'flex-end'}}>
-                {this.props.currentPosition ? (
-                  <TouchableOpacity
-                    style={[{marginLeft: 10}]}
-                    onPress={() => this.onClickShare()}>
-                    <Icon active name="share" type="FontAwesome5" />
-                  </TouchableOpacity>
-                ) : null}
-              </View> */}
-        </Header>
-        {/* <View style={styles.statBanner}>
-          <View>
-            <Text style={styles.timeText}>{this.getCurrentTime()}</Text>
-          </View>
+      <View style={styles.statBanner}>
+        <View style={styles.timeTextContainer}>
+          <Text style={styles.timeText}>{this.getCurrentTime()}</Text>
+        </View>
 
-          <View>
-            <Text style={styles.timeText}>{this.getSpeed()} km/h</Text>
-          </View>
-          <View>
-            <Text style={styles.timeText}>
-              {this.props.odometer?.toFixed(2)} km
-            </Text>
-          </View>
-        </View> */}
-        {/* 
-        <View style={styles.liveNameBanner}>
-          <Text style={styles.liveNameText}>
-            {this.props.currentLive?.libelleLive}
+        <View style={styles.timeTextContainer}>
+          <Text style={styles.timeText}>{this.getSpeed()} km/h</Text>
+        </View>
+        <View style={styles.timeTextContainer}>
+          <Text style={styles.timeText}>
+            {this.props.odometer?.toFixed(2)} km
           </Text>
-        </View> */}
+        </View>
       </View>
     );
   }
 }
 
 const styles = StyleSheet.create({
-  goBackButton: {
-    backgroundColor: 'transparent',
-    width: 30,
-    marginTop: 0,
-    paddingTop: 10,
-    shadowOffset: {height: 0, width: 0},
-    shadowOpacity: 0,
-    elevation: 0,
-    marginLeft: 0,
-    paddingLeft: 0,
-  },
-  saveText: {
-    color: 'black',
-    paddingLeft: 0,
-    marginLeft: 0,
-    marginRight: -5,
-    width: 80,
-    height: 40,
-  },
+    statBanner: {
+        position : 'absolute',
+        top :0,
+        zIndex : 1000,
+        flexDirection: 'row',
+        borderTopColor: '#D5D5D5',
+        borderTopWidth: 1,
+        justifyContent: 'space-around',
+        width: '100%',
+        // backgroundColor: 'white',
+        padding: 10,
+        marginTop : 10,
+      },
 
-  header: {
-    backgroundColor: 'white',
-    paddingLeft: 10,
-    paddingTop: 10,
-    paddingBottom: 10,
-    // height: 80
-  },
+      timeTextContainer:{
+        backgroundColor: 'white',
+        padding : 10,
+        paddingHorizontal : 15,
+        borderRadius : 10,
+      },
+
+      timeText:{
  
-  liveNameBanner: {
-    backgroundColor: 'white',
-    borderTopColor: '#D5D5D5',
-    borderTopWidth: 1,
-    justifyContent: 'center',
-    width: '100%',
-    height: 30,
-    paddingTop: 5,
-    paddingBottom: 5,
-    color: 'white',
-  },
-  liveNameText: {
-    color: 'black',
-    textAlign: 'center',
-    fontWeight: 'bold',
-  },
-  timeText: {
-    fontWeight: 'bold',
-    fontSize: 20,
-  },
-  logoHeader: {
-    // width: '10%',
-    height: 50,
-    width: '100%',
-    // width : 100
-    // marginRight: '2%',
-  },
+        fontWeight : 'bold'
+      }
 });
 
-export default connect(mapStateToProps)(MapHeader);
+export default connect(mapStateToProps)(MapStatBanner);

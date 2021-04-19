@@ -20,6 +20,7 @@ import {
   Switch,
   Picker,
   Spinner,
+  Footer,
 } from 'native-base';
 import ApiUtils from '../ApiUtils';
 import {connect} from 'react-redux';
@@ -33,6 +34,7 @@ import {buildGPX, GarminBuilder} from 'gpx-builder';
 import {Point} from 'gpx-builder/dist/builder/BaseBuilder/models';
 import VersionCheck from 'react-native-version-check';
 import {TemplateSportLive} from './../globalsModifs';
+import * as Animated from 'react-native-animatable';
 
 const mapStateToProps = (state) => {
   return {
@@ -72,6 +74,8 @@ interface State {
   acceptChallengeNameUtilisateur: boolean;
   currentMapStyle: string;
   isOpenExtraButtons: boolean;
+  modalChooseSportVisible :boolean;
+
 
   listSport: {
     idSport: number;
@@ -80,6 +84,7 @@ interface State {
 }
 
 class MapButtons extends Component<Props, State> {
+  extraButtons: any;
   constructor(props) {
     super(props);
 
@@ -92,6 +97,7 @@ class MapButtons extends Component<Props, State> {
       spinner: false,
       acceptChallengeNameUtilisateur: false,
       listSport: TemplateSportLive,
+      modalChooseSportVisible : false
     };
   }
 
@@ -99,15 +105,17 @@ class MapButtons extends Component<Props, State> {
     setTimeout(() => this.didMount(), 300);
   }
   didMount() {
+    if (this.props.currentLive != null) {
+      this.setState({
+        libelleLive: this.props.currentLive.libelleLive,
+        selectedSport: this.props.currentLive.idSport,
+      });
+    }
     this.setState({
       // libelleLive: this.props.currentLive.libelleLive,
       acceptChallengeNameUtilisateur:
         this.props.userData.acceptChallengeNameUtilisateur == 1,
     });
-
-    // if (this.state.selectedSport == -1) {
-    //   this.setState({selectedSport: this.props.currentLive.idSport});
-    // }
   }
 
   getLibelleLive() {
@@ -126,19 +134,43 @@ class MapButtons extends Component<Props, State> {
     }
   }
 
-  onCreateLive() {
+  toggleModalChooseSport = () =>{
+    this.setState({modalChooseSportVisible : !this.state.modalChooseSportVisible})
+  }
+
+  onCreateLive = () =>
+  {
+    if (TemplateSportLive.length == 1) {
+
+      this.onClickCreateLiveOk();
+    }else{
+      this.setState({modalChooseSportVisible : true})
+    }
+  }
+  onClickCreateLiveOk = () => {
+
+    this.setState({modalChooseSportVisible : false});
+
     let formData = new FormData();
     formData.append('method', 'createLive');
     formData.append('auth', ApiUtils.getAPIAuth());
     formData.append('idUtilisateur', this.props.userData.idUtilisateur);
     formData.append('idversion', VersionCheck.getCurrentVersion());
-    formData.append('idSport', this.state.selectedSport);
+    let idSport = -1;
+    if (TemplateSportLive.length == 1) {
+      idSport = TemplateSportLive[0].idSport;
+      formData.append('idSport', TemplateSportLive[0].idSport);
+    }else{
+      formData.append('idSport', this.state.selectedSport);
+    }
+
     formData.append('os', Platform.OS);
     formData.append('phoneData', JSON.stringify(this.props.phoneData));
 
     var libelleLive = this.getLibelleLive();
 
     formData.append('libelleLive', libelleLive);
+    this.setState({spinner : true});
     //fetch followCode API
     fetch(ApiUtils.getAPIUrl(), {
       method: 'POST',
@@ -161,19 +193,22 @@ class MapButtons extends Component<Props, State> {
             codeLive: responseJson.codeLive,
             libelleLive: responseJson.libelleLive,
             dateCreationLive: responseJson.dateCreationLive,
+            idSport: idSport,
             invites: [],
             statsInfos: {},
           };
 
           var action = {type: 'CREATE_LIVE', data: live};
           this.props.dispatch(action);
-
+          this.setState({spinner : false});
           this.onstart();
         } else {
+          this.setState({spinner : false});
           alert(responseJson.message);
         }
       })
       .catch((e) => {
+        this.setState({spinner : false});
         ApiUtils.logError('CreateNewLive onClickCreateLive', e.message);
         // this.onClickNavigate('Lives');
       })
@@ -361,7 +396,7 @@ class MapButtons extends Component<Props, State> {
               },
             };
             this.props.dispatch(action);
-
+            this.props.navigation.navigate('LiveSummary');
             // .then(
             //   this.props.navigation.navigate('LiveSummary')
             // );
@@ -622,7 +657,28 @@ class MapButtons extends Component<Props, State> {
   }
 
   toggleExtraButtons = () => {
-    this.setState({isOpenExtraButtons: !this.state.isOpenExtraButtons});
+    if (this.state.isOpenExtraButtons) {
+      // if(this.extraButtons !=null)
+      // {
+      //   this.extraButtons
+      //   .animate('zoomOut', 300)
+      //   .then((endState) =>
+      //     console.log(
+      //       endState.finished
+      //         ? this.setState({
+      //             isOpenExtraButtons: !this.state.isOpenExtraButtons,
+      //           })
+      //         : 'bounce cancelled',
+      //     ),
+      //   );
+      // }else{
+      this.setState({
+        isOpenExtraButtons: !this.state.isOpenExtraButtons,
+      });
+      // }
+    } else {
+      this.setState({isOpenExtraButtons: !this.state.isOpenExtraButtons});
+    }
   };
 
   saveCurrentMapStyle() {
@@ -675,6 +731,10 @@ class MapButtons extends Component<Props, State> {
     // this.setState({isModalTraceVisible: false});
   }
 
+  isErrorFormCreate = () => {
+    return this.state.selectedSport == -1;
+  };
+
   render() {
     return (
       <View
@@ -682,10 +742,12 @@ class MapButtons extends Component<Props, State> {
           position: 'absolute',
           left: 0,
           right: 0,
-          bottom: 50,
-
+          bottom: Platform.OS == 'ios' ? 110 : 70,
+          paddingTop: 50,
           zIndex: 1000,
           justifyContent: 'center',
+          // borderWidth :1,
+          // borderColor : 'black',
         }}>
         <View>
           {this.props.isGpsNotOk ? (
@@ -709,7 +771,7 @@ class MapButtons extends Component<Props, State> {
                     paddingVertical: 5,
                     paddingHorizontal: 15,
                     borderRadius: 30,
-                    marginBottom : 10,
+                    marginBottom: 10,
                   },
                 ]}>
                 <View>
@@ -744,7 +806,9 @@ class MapButtons extends Component<Props, State> {
                 flexDirection: 'row',
                 marginBottom: 10,
               }}>
-              <View
+              <Animated.View
+                animation="bounceOutRight"
+                delay={2000}
                 style={[
                   {
                     backgroundColor: '#44E660',
@@ -756,10 +820,11 @@ class MapButtons extends Component<Props, State> {
                 <Text style={{color: 'white', textAlign: 'center'}}>
                   Signal GPS Trouvé
                 </Text>
-              </View>
+              </Animated.View>
             </TouchableOpacity>
           ) : null}
         </View>
+
         <View
           style={{
             display: 'flex',
@@ -769,37 +834,49 @@ class MapButtons extends Component<Props, State> {
           <View>
             {this.state.isOpenExtraButtons ? (
               <View
+                ref={(ref) => {
+                  this.extraButtons = ref;
+                }}
+                animation="zoomIn"
                 key="extraButtons"
                 style={{
                   marginBottom: 0,
                   position: 'absolute',
-                  zIndex: 1000,
+
                   bottom: 80,
                 }}>
-                {this.props.polylines != null &&
-                this.props.polylines.length > 0 ? (
-                  <TouchableOpacity
-                    onPress={() => this.onOpenTraceModal()}
-                    style={{
-                      flexDirection: 'row',
-                      width: 40,
-                      height: 40,
-                      borderRadius: 300,
-                      backgroundColor: 'white',
-                      zIndex: 5,
-                      marginBottom: 10,
-                      justifyContent: 'center',
-                    }}>
-                    <View style={{justifyContent: 'center'}}>
-                      <Icon
-                        active
-                        type="Ionicons"
-                        name="map-outline"
-                        style={[styles.title, {fontSize: 22}]}
-                      />
-                    </View>
-                  </TouchableOpacity>
-                ) : null}
+                {/* {this.props.polylines != null &&
+                this.props.polylines.length > 0 ? ( */}
+                <TouchableOpacity
+                  onPress={() => this.onOpenTraceModal()}
+                  style={{
+                    flexDirection: 'row',
+                    width: 40,
+                    height: 40,
+                    borderRadius: 300,
+                    backgroundColor: 'white',
+                    zIndex: 1000,
+                    marginBottom: 10,
+                    justifyContent: 'center',
+
+                    shadowColor: '#000',
+                    shadowOffset: {
+                      width: 0,
+                      height: 5,
+                    },
+                    shadowOpacity: 0.34,
+                    shadowRadius: 6.27,
+                  }}>
+                  <View style={{justifyContent: 'center'}}>
+                    <Icon
+                      type="FontAwesome5"
+                      name="filter"
+                      style={[styles.title, {fontSize: 16}]}
+                    />
+                  </View>
+                </TouchableOpacity>
+
+                {/* // ) : null} */}
 
                 <TouchableOpacity
                   style={{
@@ -850,7 +927,7 @@ class MapButtons extends Component<Props, State> {
               }}>
               <View style={{justifyContent: 'center'}}>
                 <Icon
-                  name="ellipsis-v"
+                  name={this.state.isOpenExtraButtons ? 'times' : 'ellipsis-v'}
                   style={[styles.title, {fontSize: 20}]}
                   type="FontAwesome5"
                 />
@@ -894,13 +971,15 @@ class MapButtons extends Component<Props, State> {
                 justifyContent: 'center',
               }}
               disabled={this.props.isGpsNotOk}>
-              <Text
-                style={[
-                  styles.buttonText,
-                  {color: 'white', textAlign: 'center'},
-                ]}>
-                Start
-              </Text>
+              {this.state.spinner ? (
+                <Spinner color="white" style={{alignSelf :'center'}} />
+              ) : (
+                <Text
+                  style={[
+                    styles.buttonText,
+                    {color: 'white', textAlign: 'center'},
+                  ]}>Start</Text>
+              )}
             </TouchableOpacity>
           )}
 
@@ -1142,20 +1221,157 @@ class MapButtons extends Component<Props, State> {
                   <View style={{marginBottom: 300}} />
                 </View>
               </ScrollView>
-              <View
-                style={{
-                  marginBottom: 0,
-                  position: 'absolute',
-                  bottom: Platform.OS == 'ios' ? 80 : 50,
-                  zIndex: 12,
-                  width: '100%',
-                  backgroundColor: 'white',
-                }}>
-                <Sponsors />
-              </View>
             </View>
           </Root>
+          <Footer style={{backgroundColor: 'white', paddingBottom: 64}}>
+            <Sponsors />
+          </Footer>
         </Modal>
+
+            {/******** modal : choose sport for new LIVE *****************/}
+            <Modal
+              animationType={'none'}
+              transparent={false}
+              visible={this.state.modalChooseSportVisible}
+              onRequestClose={() => {
+                this.toggleModalChooseSport();
+              }}>
+              {/* {this.state.modal3Visible ? ( */}
+              <Root>
+                <View>
+                  <Header style={styles.headerModal}>
+                    <Left>
+                      <Button
+                        style={styles.drawerButton}
+                        onPress={() => {
+                          this.toggleModalChooseSport();
+                        }}>
+                        <Icon
+                          style={styles.saveText}
+                          name="chevron-left"
+                          type="FontAwesome5"
+                        />
+                      </Button>
+                    </Left>
+                    <Body style={{justifyContent: 'center', flex: 1}}>
+                      <Text style={{fontWeight: 'bold'}}>
+                        Démarrer une activité
+                      </Text>
+                    </Body>
+                    <Right style={{flex: 1}} />
+                  </Header>
+
+                  <ScrollView scrollEnabled={true}>
+                    <View>
+                      <View>
+                        <Picker
+                          mode="dropdown"
+                          accessibilityLabel={'Choisissez votre sport'}
+                          iosHeader={'Choisissez votre sport'}
+                          iosIcon={
+                            <Icon name="chevron-down" type="FontAwesome5" />
+                          }
+                          style={{marginTop: 0}}
+                          selectedValue={this.state.selectedSport}
+                          onValueChange={this.onValueSportChange.bind(this)}
+                          placeholder={'Choisissez votre sport'}
+                          placeholderStyle={{
+                            color: ApiUtils.getColor(),
+                          }}
+                          placeholderIconColor={ApiUtils.getColor()}
+                          textStyle={{color: ApiUtils.getColor()}}
+                          itemStyle={{
+                            color: ApiUtils.getColor(),
+                            marginLeft: 0,
+                            paddingLeft: 10,
+                            borderBottomColor: ApiUtils.getColor(),
+                            borderBottomWidth: 1,
+                          }}
+                          itemTextStyle={{
+                            color: ApiUtils.getColor(),
+                            borderBottomColor: ApiUtils.getColor(),
+                            borderBottomWidth: 1,
+                          }}>
+                          <Picker.Item
+                            label="Choisissez votre sport"
+                            value="-1"
+                          />
+                          {this.state.listSport.map((sport, index) => {
+                            return (
+                              <Picker.Item
+                                label={sport.sportName}
+                                value={sport.idSport}
+                                key={index}
+                              />
+                            );
+                          })}
+                        </Picker>
+
+                        {this.state.selectedSport == -1 ? (
+                          <Text
+                            style={{
+                              marginTop: 10,
+                              color: 'red',
+                              fontSize: 14,
+                              paddingLeft: 5,
+                              fontStyle: 'italic',
+                            }}>
+                            Le type de sport doit être renseigné
+                          </Text>
+                        ) : null}
+                      </View>
+
+                      <Button
+                        style={{
+                          marginTop: 10,
+                          paddingHorizontal: 50,
+                          elevation: 0,
+                          alignSelf: 'center',
+                          borderColor: this.isErrorFormCreate()
+                            ? 'black'
+                            : ApiUtils.getColor(),
+                          borderWidth: 1,
+                          backgroundColor: this.isErrorFormCreate()
+                            ? 'transparent'
+                            : ApiUtils.getColor(),
+                        }}
+                        onPress={() => this.onClickCreateLiveOk()}
+                        disabled={this.isErrorFormCreate()}>
+                        <Text
+                          style={{
+                            color: this.isErrorFormCreate() ? 'black' : 'white',
+                          }}>
+                          C'est parti
+                        </Text>
+                      </Button>
+
+                      <View style={{marginTop: -5}}>
+                        <Text
+                          style={styles.ignoreActivityLink}
+                          onPress={() => this.toggleModalChooseSport()}>
+                          Annuler
+                        </Text>
+                      </View>
+
+                      <View style={{marginBottom: 300}} />
+                    </View>
+                  </ScrollView>
+                  <View
+                    style={{
+                      marginBottom: 0,
+                      position: 'absolute',
+                      bottom: Platform.OS == 'ios' ? 80 : 50,
+                      zIndex: 12,
+                      width: '100%',
+                      backgroundColor: 'white',
+                    }}
+                  />
+                </View>
+              </Root>
+              <Sponsors />
+              {/* ) : null} */}
+            </Modal>
+          
       </View>
     );
   }
