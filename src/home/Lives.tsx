@@ -1618,7 +1618,10 @@ const styles = StyleSheet.create({
 
     width: 60,
     height: 60,
-    backgroundColor: ApiUtils.getBackgroundColor(),
+    backgroundColor:
+      ApiUtils.getSecondColor() === ApiUtils.getBackgroundColor()
+        ? textAutoBackgroundColor
+        : ApiUtils.getSecondColor(),
     borderRadius: 30,
     textAlign: 'center',
     padding: 0,
