@@ -702,36 +702,26 @@ class Preferences extends Component {
                     message="L'adresse email n'est pas valide"
                   />
                 ) : null}
+
                 {this.state.isSexeAsk ? (
-                  <Text style={styles.label}>Sexe</Text>
-                ) : null}
-                {this.state.isSexeAsk ? (
-                  <View
-                    style={{
-                      display: 'flex',
-                      flexDirection: 'row',
-                      width: '80%',
-                      justifyContent: 'space-between',
-                      alignSelf: 'center',
-                    }}>
-                    <TouchableOpacity
+                  <View>
+                    <Text style={styles.label}>Sexe</Text>
+
+                    <View
                       style={{
                         display: 'flex',
                         flexDirection: 'row',
-                        width: '50%',
-                        justifyContent: 'space-around',
-                      }}
-                      onPress={() => {
-                        this.setState({
-                          userdata: {
-                            ...this.state.userdata,
-                            sexeUtilisateur: 'F',
-                          },
-                        });
+                        width: '80%',
+                        justifyContent: 'space-between',
+                        alignSelf: 'center',
                       }}>
-                      <Text>Femme</Text>
-                      <Radio
-                        selected={this.state.userdata.sexeUtilisateur == 'F'}
+                      <TouchableOpacity
+                        style={{
+                          display: 'flex',
+                          flexDirection: 'row',
+                          width: '30%',
+                          justifyContent: 'space-around',
+                        }}
                         onPress={() => {
                           this.setState({
                             userdata: {
@@ -739,27 +729,27 @@ class Preferences extends Component {
                               sexeUtilisateur: 'F',
                             },
                           });
+                        }}>
+                        <Text>Femme</Text>
+                        <Radio
+                          selected={this.state.userdata.sexeUtilisateur == 'F'}
+                          onPress={() => {
+                            this.setState({
+                              userdata: {
+                                ...this.state.userdata,
+                                sexeUtilisateur: 'F',
+                              },
+                            });
+                          }}
+                        />
+                      </TouchableOpacity>
+                      <TouchableOpacity
+                        style={{
+                          display: 'flex',
+                          flexDirection: 'row',
+                          width: '30%',
+                          justifyContent: 'space-around',
                         }}
-                      />
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                      style={{
-                        display: 'flex',
-                        flexDirection: 'row',
-                        width: '50%',
-                        justifyContent: 'space-around',
-                      }}
-                      onPress={() => {
-                        this.setState({
-                          userdata: {
-                            ...this.state.userdata,
-                            sexeUtilisateur: 'H',
-                          },
-                        });
-                      }}>
-                      <Text>Homme</Text>
-                      <Radio
-                        selected={this.state.userdata.sexeUtilisateur == 'H'}
                         onPress={() => {
                           this.setState({
                             userdata: {
@@ -767,23 +757,35 @@ class Preferences extends Component {
                               sexeUtilisateur: 'H',
                             },
                           });
+                        }}>
+                        <Text>Homme</Text>
+                        <Radio
+                          selected={this.state.userdata.sexeUtilisateur == 'H'}
+                          onPress={() => {
+                            this.setState({
+                              userdata: {
+                                ...this.state.userdata,
+                                sexeUtilisateur: 'H',
+                              },
+                            });
+                          }}
+                        />
+                      </TouchableOpacity>
+                      <TouchableOpacity
+                        style={{
+                          display: 'flex',
+                          flexDirection: 'row',
+                          width: '30%',
+                          justifyContent: 'space-around',
                         }}
-                      />
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                      style={{
-                        display: 'flex',
-                        flexDirection: 'row',
-                        width: '30%',
-                        justifyContent: 'space-around',
-                      }}
-                      onPress={() => this.setState({sexeUtilisateur: 'A'})}>
-                      <Text>Autre</Text>
-                      <Radio
-                        selected={this.state.sexeUtilisateur == 'A'}
-                        onPress={() => this.setState({sexeUtilisateur: 'A'})}
-                      />
-                    </TouchableOpacity>
+                        onPress={() => this.setState({sexeUtilisateur: 'A'})}>
+                        <Text>Autre</Text>
+                        <Radio
+                          selected={this.state.sexeUtilisateur == 'A'}
+                          onPress={() => this.setState({sexeUtilisateur: 'A'})}
+                        />
+                      </TouchableOpacity>
+                    </View>
                   </View>
                 ) : null}
 
