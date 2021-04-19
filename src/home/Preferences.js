@@ -32,7 +32,27 @@ import moment from 'moment';
 import {Platform} from 'react-native';
 import {Dimensions} from 'react-native';
 import VersionCheck from 'react-native-version-check';
-import {IsDemo, textAutoBackgroundColor} from './../globalsModifs';
+
+import {
+  TemplateNameAsk,
+  TemplateFirstNameAsk,
+  TemplateSexeAsk,
+  TemplateDdnAsk,
+  TemplateMailAsk,
+  TemplateTelAsk,
+  TemplateAdressAsk,
+  TemplatePostalAsk,
+  TemplateCityAsk,
+  TemplateCountryAsk,
+  TemplateTelVerifAsk,
+  TemplateChallengeClub,
+  TemplateChallengeFamille,
+  TemplateChallengeAutre,
+  TemplateChallengeEntreprise,
+  TemplateChallengeAutreName,
+  IsDemo,
+  textAutoBackgroundColor,
+} from './../globalsModifs';
 
 const mapStateToProps = (state) => {
   return {
@@ -126,6 +146,41 @@ class Preferences extends Component {
         '12',
       ],
       years: [],
+      errorCNIL: false,
+      isNameAsk: TemplateNameAsk,
+      nomUtilisateur: '',
+      isFirstNameAsk: TemplateFirstNameAsk,
+      prenomUtilisateur: '',
+      isSexeAsk: TemplateSexeAsk,
+      sexeUtilisateur: '',
+      isDdnAsk: TemplateDdnAsk,
+      dayDdn: '01',
+      monthDdn: '01',
+      yearDdn: '1980',
+      isMailAsk: TemplateMailAsk,
+      emailUtilisateur: '',
+      isTelAsk: TemplateTelAsk,
+      telUtilisateur: '',
+      isAdressAsk: TemplateAdressAsk,
+      adresseUtilisateur: '',
+      isPostalAsk: TemplatePostalAsk,
+      cpUtilisateur: '',
+      isCityAsk: TemplateCityAsk,
+      villeUtilisateur: '',
+      isCountryAsk: TemplateCountryAsk,
+      paysUtilisateur: '',
+      isTelVerifAsked: TemplateTelVerifAsk,
+      acceptChallengeTelUtilisateur: false,
+      isChallengeEntrepriseAsk: TemplateChallengeEntreprise,
+      clubEntreprise: '',
+      isChallengeClubAsk: TemplateChallengeClub,
+      clubClub: '',
+      isChallengeFamilleAsk: TemplateChallengeFamille,
+      clubFamille: '',
+      isChallengeAutreAsk: TemplateChallengeAutre,
+      clubAutre: '',
+      acceptChallengeNameUtilisateur: false,
+      acceptChallengeUtilisateur: false,
     };
   }
 
@@ -134,11 +189,11 @@ class Preferences extends Component {
   }
 
   didMount() {
-    let years = [];
-    for (let i = 2021; i > 1930; i--) {
-      years.push(i);
+    let yearsAll = [];
+    for (let i = 1930; i < 2021; i++) {
+      yearsAll.push(i.toString());
     }
-    this.setState({years: years}, () => this.fillDate());
+    this.setState({years: yearsAll});
 
     //  this.getInformations();
     this.setState({userdata: this.props.userData});
@@ -344,6 +399,15 @@ class Preferences extends Component {
     formData.append('nomUtilisateur', this.state.userdata.nomUtilisateur);
     formData.append('prenomUtilisateur', this.state.userdata.prenomUtilisateur);
     formData.append('emailUtilisateur', this.state.userdata.emailUtilisateur);
+    formData.append('sexeUtilisateur', this.state.userdata.sexeUtilisateur);
+    formData.append('telUtilisateur', this.state.userdata.telUtilisateur);
+    formData.append('cpUtilisateur', this.state.userdata.cpUtilisateur);
+    formData.append('villeUtilisateur', this.state.userdata.villeUtilisateur);
+    formData.append('paysUtilisateur', this.state.userdata.paysUtilisateur);
+    formData.append(
+      'adresseUtilisateur',
+      this.state.userdata.adresseUtilisateur,
+    );
 
     formData.append('telUtilisateur', this.state.userdata.telUtilisateur);
     formData.append('organisation', ApiUtils.getOrganisation());
@@ -554,70 +618,82 @@ class Preferences extends Component {
             </Header>
             <Content>
               <Form>
-                <Item stackedLabel style={{marginBottom: 5}}>
-                  <Label>Nom *</Label>
-                  <Input
-                    returnKeyType="next"
-                    clearButtonMode="always"
+                {this.state.isNameAsk ? (
+                  <Item stackedLabel style={{marginBottom: 5}}>
+                    <Label>Nom *</Label>
+                    <Input
+                      returnKeyType="next"
+                      clearButtonMode="always"
+                      value={this.state.userdata.nomUtilisateur}
+                      onChangeText={(phoneNumber) =>
+                        this.setState({
+                          userdata: {
+                            ...this.state.userdata,
+                            nomUtilisateur: phoneNumber,
+                          },
+                        })
+                      }
+                    />
+                  </Item>
+                ) : null}
+                {this.state.isNameAsk ? (
+                  <ErrorMessage
                     value={this.state.userdata.nomUtilisateur}
-                    onChangeText={(phoneNumber) =>
-                      this.setState({
-                        userdata: {
-                          ...this.state.userdata,
-                          nomUtilisateur: phoneNumber,
-                        },
-                      })
-                    }
+                    message="Le nom doit être renseigné"
                   />
-                </Item>
-                <ErrorMessage
-                  value={this.state.userdata.nomUtilisateur}
-                  message="Le nom doit être renseigné"
-                />
+                ) : null}
 
-                <Item stackedLabel style={{marginBottom: 5}}>
-                  <Label>Prénom *</Label>
-                  <Input
-                    returnKeyType="next"
-                    clearButtonMode="always"
+                {this.state.isFirstNameAsk ? (
+                  <Item stackedLabel style={{marginBottom: 5}}>
+                    <Label>Prénom *</Label>
+                    <Input
+                      returnKeyType="next"
+                      clearButtonMode="always"
+                      value={this.state.userdata.prenomUtilisateur}
+                      onChangeText={(phoneNumber) =>
+                        this.setState({
+                          userdata: {
+                            ...this.state.userdata,
+                            prenomUtilisateur: phoneNumber,
+                          },
+                        })
+                      }
+                    />
+                  </Item>
+                ) : null}
+                {this.state.isFirstNameAsk ? (
+                  <ErrorMessage
                     value={this.state.userdata.prenomUtilisateur}
-                    onChangeText={(phoneNumber) =>
-                      this.setState({
-                        userdata: {
-                          ...this.state.userdata,
-                          prenomUtilisateur: phoneNumber,
-                        },
-                      })
-                    }
+                    message="Le nom doit être renseigné"
                   />
-                </Item>
-                <ErrorMessage
-                  value={this.state.userdata.prenomUtilisateur}
-                  message="Le nom doit être renseigné"
-                />
+                ) : null}
 
-                <Item stackedLabel style={{marginBottom: 5}}>
-                  <Label>Email *</Label>
-                  <Input
-                    returnKeyType="next"
-                    clearButtonMode="always"
-                    textContentType="emailAddress"
-                    keyboardType="email-address"
+                {this.state.isMailAsk ? (
+                  <Item stackedLabel style={{marginBottom: 5}}>
+                    <Label>Email *</Label>
+                    <Input
+                      returnKeyType="next"
+                      clearButtonMode="always"
+                      textContentType="emailAddress"
+                      keyboardType="email-address"
+                      value={this.state.userdata.emailUtilisateur}
+                      onChangeText={(phoneNumber) =>
+                        this.setState({
+                          userdata: {
+                            ...this.state.userdata,
+                            emailUtilisateur: phoneNumber,
+                          },
+                        })
+                      }
+                    />
+                  </Item>
+                ) : null}
+                {this.state.isMailAsk ? (
+                  <ErrorMessage
                     value={this.state.userdata.emailUtilisateur}
-                    onChangeText={(phoneNumber) =>
-                      this.setState({
-                        userdata: {
-                          ...this.state.userdata,
-                          emailUtilisateur: phoneNumber,
-                        },
-                      })
-                    }
+                    message="L'adresse email doit être renseignée"
                   />
-                </Item>
-                <ErrorMessage
-                  value={this.state.userdata.emailUtilisateur}
-                  message="L'adresse email doit être renseignée"
-                />
+                ) : null}
 
                 {this.state.userdata.emailUtilisateur != '' &&
                 !this.validateEmail(this.state.userdata.emailUtilisateur) ? (
@@ -626,54 +702,25 @@ class Preferences extends Component {
                     message="L'adresse email n'est pas valide"
                   />
                 ) : null}
-
-                <Item stackedLabel style={{marginBottom: 5}}>
-                  <Label>Numéro de télephone * </Label>
-                  <Input
-                    returnKeyType="next"
-                    keyboardType="phone-pad"
-                    autoCompleteType="tel"
-                    clearButtonMode="always"
-                    value={this.state.userdata.telUtilisateur}
-                    onChangeText={(phoneNumber) =>
-                      this.setState({
-                        userdata: {
-                          ...this.state.userdata,
-                          telUtilisateur: phoneNumber,
-                        },
-                      })
-                    }
-                  />
-                </Item>
-
-                <Text style={styles.label}>Sexe</Text>
-
-                <View
-                  style={{
-                    display: 'flex',
-                    flexDirection: 'row',
-                    width: '80%',
-                    justifyContent: 'space-between',
-                    alignSelf: 'center',
-                  }}>
-                  <TouchableOpacity
+                {this.state.isSexeAsk ? (
+                  <Text style={styles.label}>Sexe</Text>
+                ) : null}
+                {this.state.isSexeAsk ? (
+                  <View
                     style={{
                       display: 'flex',
                       flexDirection: 'row',
-                      width: '50%',
-                      justifyContent: 'space-around',
-                    }}
-                    onPress={() => {
-                      this.setState({
-                        userdata: {
-                          ...this.state.userdata,
-                          sexeUtilisateur: 'F',
-                        },
-                      });
+                      width: '80%',
+                      justifyContent: 'space-between',
+                      alignSelf: 'center',
                     }}>
-                    <Text>Femme</Text>
-                    <Radio
-                      selected={this.state.userdata.sexeUtilisateur == 'F'}
+                    <TouchableOpacity
+                      style={{
+                        display: 'flex',
+                        flexDirection: 'row',
+                        width: '50%',
+                        justifyContent: 'space-around',
+                      }}
                       onPress={() => {
                         this.setState({
                           userdata: {
@@ -681,27 +728,27 @@ class Preferences extends Component {
                             sexeUtilisateur: 'F',
                           },
                         });
+                      }}>
+                      <Text>Femme</Text>
+                      <Radio
+                        selected={this.state.userdata.sexeUtilisateur == 'F'}
+                        onPress={() => {
+                          this.setState({
+                            userdata: {
+                              ...this.state.userdata,
+                              sexeUtilisateur: 'F',
+                            },
+                          });
+                        }}
+                      />
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                      style={{
+                        display: 'flex',
+                        flexDirection: 'row',
+                        width: '50%',
+                        justifyContent: 'space-around',
                       }}
-                    />
-                  </TouchableOpacity>
-                  <TouchableOpacity
-                    style={{
-                      display: 'flex',
-                      flexDirection: 'row',
-                      width: '50%',
-                      justifyContent: 'space-around',
-                    }}
-                    onPress={() => {
-                      this.setState({
-                        userdata: {
-                          ...this.state.userdata,
-                          sexeUtilisateur: 'H',
-                        },
-                      });
-                    }}>
-                    <Text>Homme</Text>
-                    <Radio
-                      selected={this.state.userdata.sexeUtilisateur == 'H'}
                       onPress={() => {
                         this.setState({
                           userdata: {
@@ -709,265 +756,274 @@ class Preferences extends Component {
                             sexeUtilisateur: 'H',
                           },
                         });
-                      }}
-                    />
-                  </TouchableOpacity>
-                  <TouchableOpacity
-                    style={{
-                      display: 'flex',
-                      flexDirection: 'row',
-                      width: '30%',
-                      justifyContent: 'space-around',
-                    }}
-                    onPress={() => this.setState({sexeUtilisateur: 'A'})}>
-                    <Text>Autre</Text>
-                    <Radio
-                      selected={this.state.sexeUtilisateur == 'A'}
-                      onPress={() => this.setState({sexeUtilisateur: 'A'})}
-                    />
-                  </TouchableOpacity>
-                </View>
-
-                {Platform.OS == 'ios' ? (
-                  <View>
-                    <Item stackedLabel style={{marginBottom: 5}}>
-                      <Label>Date de naissance</Label>
-                      <Label style={{fontSize: 12}}>
-                        Important pour les classements par catégorie
-                      </Label>
-                      <View style={[GlobalStyles.row]}>
-                        <Picker
-                          style={{
-                            width: Dimensions.get('screen').width / 3 - 10,
-                          }}
-                          mode="dropdown"
-                          accessibilityLabel={'Jour'}
-                          iosHeader={'Jour'}
-                          iosIcon={
-                            <Icon name="chevron-down" type="FontAwesome5" />
-                          }
-                          selectedValue={this.state.dayDdn}
-                          onValueChange={(value) => this.onValueDayddn(value)}
-                          placeholder={'Jour'}
-                          placeholderStyle={{
-                            color: ApiUtils.getColor(),
-                          }}
-                          placeholderIconColor={ApiUtils.getColor()}
-                          textStyle={{color: ApiUtils.getColor()}}
-                          itemStyle={{
-                            color: ApiUtils.getColor(),
-                            marginLeft: 0,
-                            paddingLeft: 10,
-                            borderBottomColor: ApiUtils.getColor(),
-                            borderBottomWidth: 1,
-                          }}
-                          itemTextStyle={{
-                            color: ApiUtils.getColor(),
-                            borderBottomColor: ApiUtils.getColor(),
-                            borderBottomWidth: 1,
-                          }}>
-                          {this.state.days.map((d) => {
-                            return <Picker.Item label={d} value={d} />;
-                          })}
-                        </Picker>
-                        <Picker
-                          style={{
-                            width: Dimensions.get('screen').width / 3 - 10,
-                          }}
-                          mode="dropdown"
-                          accessibilityLabel={'Mois'}
-                          iosHeader={'Mois'}
-                          iosIcon={
-                            <Icon name="chevron-down" type="FontAwesome5" />
-                          }
-                          selectedValue={this.state.monthDdn}
-                          onValueChange={(value) => this.onValueMonthddn(value)}
-                          placeholder={'Mois'}
-                          placeholderStyle={{
-                            color: ApiUtils.getColor(),
-                          }}
-                          placeholderIconColor={ApiUtils.getColor()}
-                          textStyle={{color: ApiUtils.getColor()}}
-                          itemStyle={{
-                            color: ApiUtils.getColor(),
-                            marginLeft: 0,
-                            paddingLeft: 10,
-                            borderBottomColor: ApiUtils.getColor(),
-                            borderBottomWidth: 1,
-                          }}
-                          itemTextStyle={{
-                            color: ApiUtils.getColor(),
-                            borderBottomColor: ApiUtils.getColor(),
-                            borderBottomWidth: 1,
-                          }}>
-                          {this.state.monthsString.map((month, index) => {
-                            return <Picker.Item label={month} value={month} />;
-                          })}
-                        </Picker>
-
-                        <Picker
-                          style={{
-                            width: Dimensions.get('screen').width / 3 - 10,
-                          }}
-                          mode="dropdown"
-                          accessibilityLabel={''}
-                          iosHeader={'Année'}
-                          iosIcon={
-                            <Icon name="chevron-down" type="FontAwesome5" />
-                          }
-                          selectedValue={this.state.yearDdn}
-                          onValueChange={(value) => this.onValueYearddn(value)}
-                          placeholder={'Année'}
-                          placeholderStyle={{
-                            color: ApiUtils.getColor(),
-                          }}
-                          placeholderIconColor={ApiUtils.getColor()}
-                          textStyle={{color: ApiUtils.getColor()}}
-                          itemStyle={{
-                            color: ApiUtils.getColor(),
-                            marginLeft: 0,
-                            paddingLeft: 10,
-                            borderBottomColor: ApiUtils.getColor(),
-                            borderBottomWidth: 1,
-                          }}
-                          itemTextStyle={{
-                            color: ApiUtils.getColor(),
-                            borderBottomColor: ApiUtils.getColor(),
-                            borderBottomWidth: 1,
-                          }}>
-                          {this.state.years.map((year) => {
-                            return (
-                              <Picker.Item
-                                label={year}
-                                value={year.toString()}
-                              />
-                            );
-                          })}
-                        </Picker>
-                      </View>
-                    </Item>
-                  </View>
-                ) : (
-                  <View>
-                    <Text style={styles.label}>Date de naissance</Text>
-                    {this.state.userdata != null &&
-                    !this.state.showDefaultDdn ? (
-                      <DatePicker
-                        style={{marginLeft: 20}}
-                        date={new Date(this.state.userdata.ddnUtilisateur)}
-                        defaultDate={
-                          this.state.showDefaultDdn
-                            ? new Date(this.props.userData.ddnUtilisateur)
-                            : null
-                        }
-                        confirmBtnText="Valider"
-                        cancelBtnText="Annuler"
-                        customStyles={{
-                          dateIcon: {
-                            position: 'absolute',
-                            left: 0,
-                            top: 4,
-                            marginLeft: 15,
-                          },
-                          dateInput: {
-                            marginLeft: 100,
-                          },
-                        }}
-                        onDateChange={(date) => {
-                          //  alert(date)
+                      }}>
+                      <Text>Homme</Text>
+                      <Radio
+                        selected={this.state.userdata.sexeUtilisateur == 'H'}
+                        onPress={() => {
                           this.setState({
                             userdata: {
                               ...this.state.userdata,
-                              ddnUtilisateur: date,
+                              sexeUtilisateur: 'H',
                             },
                           });
                         }}
                       />
-                    ) : null}
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                      style={{
+                        display: 'flex',
+                        flexDirection: 'row',
+                        width: '30%',
+                        justifyContent: 'space-around',
+                      }}
+                      onPress={() => this.setState({sexeUtilisateur: 'A'})}>
+                      <Text>Autre</Text>
+                      <Radio
+                        selected={this.state.sexeUtilisateur == 'A'}
+                        onPress={() => this.setState({sexeUtilisateur: 'A'})}
+                      />
+                    </TouchableOpacity>
                   </View>
-                )}
-
-                {this.state.userdata != null && this.state.showDefaultDdn ? (
-                  <DatePicker
-                    style={{marginLeft: 20}}
-                    date={new Date(this.state.userdata.ddnUtilisateur)}
-                    defaultDate={new Date(this.props.userData.ddnUtilisateur)}
-                    confirmBtnText="Valider"
-                    cancelBtnText="Annuler"
-                    customStyles={{
-                      dateIcon: {
-                        position: 'absolute',
-                        left: 0,
-                        top: 4,
-                        marginLeft: 15,
-                      },
-                      dateInput: {
-                        marginLeft: 100,
-                      },
-                      // ... You can check the source to find the other keys.
-                    }}
-                    onDateChange={(date) => {
-                      //  alert(date)
-                      this.setState({
-                        userdata: {
-                          ...this.state.userdata,
-                          ddnUtilisateur: date,
-                        },
-                      });
-                    }}
-                  />
                 ) : null}
 
-                <Item stackedLabel style={{marginBottom: 5}}>
-                  <Label>Adresse</Label>
-                  <Input
-                    returnKeyType="next"
-                    clearButtonMode="always"
-                    value={this.state.userdata.adresseUtilisateur}
-                    onChangeText={(phoneNumber) =>
-                      this.setState({
-                        userdata: {
-                          ...this.state.userdata,
-                          adresseUtilisateur: phoneNumber,
-                        },
-                      })
-                    }
-                  />
-                </Item>
+                {this.state.isTelAsk ? (
+                  <Item stackedLabel style={{marginBottom: 5}}>
+                    <Label>Numéro de télephone * </Label>
+                    <Input
+                      returnKeyType="next"
+                      keyboardType="phone-pad"
+                      autoCompleteType="tel"
+                      clearButtonMode="always"
+                      value={this.state.userdata.telUtilisateur}
+                      onChangeText={(phoneNumber) =>
+                        this.setState({
+                          userdata: {
+                            ...this.state.userdata,
+                            telUtilisateur: phoneNumber,
+                          },
+                        })
+                      }
+                    />
+                  </Item>
+                ) : null}
 
-                <Item stackedLabel style={{marginBottom: 5}}>
-                  <Label>Code Postal</Label>
-                  <Input
-                    returnKeyType="next"
-                    clearButtonMode="always"
-                    value={this.state.userdata.cpUtilisateur}
-                    onChangeText={(phoneNumber) =>
-                      this.setState({
-                        userdata: {
-                          ...this.state.userdata,
-                          cpUtilisateur: phoneNumber,
-                        },
-                      })
-                    }
-                  />
-                </Item>
+                {this.state.isDdnAsk ? (
+                  <Item stackedLabel style={{marginBottom: 5}}>
+                    <Label>Date de naissance</Label>
+                    <Label style={{fontSize: 12}}>
+                      Important pour les classements par catégorie
+                    </Label>
+                    <View style={[GlobalStyles.row]}>
+                      <Picker
+                        style={{width: Dimensions.get('screen').width / 3 - 10}}
+                        mode="dropdown"
+                        accessibilityLabel={'Jour'}
+                        iosHeader={'Jour'}
+                        iosIcon={
+                          <Icon name="chevron-down" type="FontAwesome5" />
+                        }
+                        selectedValue={this.state.dayDdn}
+                        onValueChange={(value) => this.onValueDayddn(value)}
+                        placeholder={'Jour'}
+                        placeholderStyle={{
+                          color: ApiUtils.getBackgroundColor(),
+                        }}
+                        placeholderIconColor={ApiUtils.getBackgroundColor()}
+                        textStyle={{color: ApiUtils.getBackgroundColor()}}
+                        itemStyle={{
+                          color: ApiUtils.getBackgroundColor(),
+                          marginLeft: 0,
+                          paddingLeft: 10,
+                          borderBottomColor: ApiUtils.getBackgroundColor(),
+                          borderBottomWidth: 1,
+                        }}
+                        itemTextStyle={{
+                          color: ApiUtils.getBackgroundColor(),
+                          borderBottomColor: ApiUtils.getBackgroundColor(),
+                          borderBottomWidth: 1,
+                        }}>
+                        {this.state.days.map((d) => {
+                          return <Picker.Item label={d} value={d} />;
+                        })}
+                      </Picker>
+                      <Picker
+                        style={{width: Dimensions.get('screen').width / 3 - 10}}
+                        mode="dropdown"
+                        accessibilityLabel={'Mois'}
+                        iosHeader={'Mois'}
+                        iosIcon={
+                          <Icon name="chevron-down" type="FontAwesome5" />
+                        }
+                        selectedValue={this.state.monthDdn}
+                        onValueChange={(value) => this.onValueMonthddn(value)}
+                        placeholder={'Mois'}
+                        placeholderStyle={{
+                          color: ApiUtils.getBackgroundColor(),
+                        }}
+                        placeholderIconColor={ApiUtils.getBackgroundColor()}
+                        textStyle={{color: ApiUtils.getBackgroundColor()}}
+                        itemStyle={{
+                          color: ApiUtils.getBackgroundColor(),
+                          marginLeft: 0,
+                          paddingLeft: 10,
+                          borderBottomColor: ApiUtils.getBackgroundColor(),
+                          borderBottomWidth: 1,
+                        }}
+                        itemTextStyle={{
+                          color: ApiUtils.getBackgroundColor(),
+                          borderBottomColor: ApiUtils.getBackgroundColor(),
+                          borderBottomWidth: 1,
+                        }}>
+                        {this.state.monthsString.map((month) => {
+                          return <Picker.Item label={month} value={month} />;
+                        })}
+                      </Picker>
 
-                <Item stackedLabel style={{marginBottom: 5}}>
-                  <Label>Ville</Label>
-                  <Input
-                    returnKeyType="next"
-                    clearButtonMode="always"
-                    value={this.state.userdata.villeUtilisateur}
-                    onChangeText={(phoneNumber) =>
-                      this.setState({
-                        userdata: {
-                          ...this.state.userdata,
-                          villeUtilisateur: phoneNumber,
-                        },
-                      })
-                    }
-                  />
-                </Item>
+                      <Picker
+                        style={{width: Dimensions.get('screen').width / 3 - 10}}
+                        mode="dropdown"
+                        accessibilityLabel={''}
+                        iosHeader={'Année'}
+                        iosIcon={
+                          <Icon name="chevron-down" type="FontAwesome5" />
+                        }
+                        selectedValue={this.state.yearDdn}
+                        onValueChange={(value) => this.onValueYearddn(value)}
+                        placeholder={'Année'}
+                        placeholderStyle={{
+                          color: ApiUtils.getBackgroundColor(),
+                        }}
+                        placeholderIconColor={ApiUtils.getBackgroundColor()}
+                        textStyle={{color: ApiUtils.getBackgroundColor()}}
+                        itemStyle={{
+                          color: ApiUtils.getBackgroundColor(),
+                          marginLeft: 0,
+                          paddingLeft: 10,
+                          borderBottomColor: ApiUtils.getBackgroundColor(),
+                          borderBottomWidth: 1,
+                        }}
+                        itemTextStyle={{
+                          color: ApiUtils.getBackgroundColor(),
+                          borderBottomColor: ApiUtils.getBackgroundColor(),
+                          borderBottomWidth: 1,
+                        }}>
+                        {this.state.years.map((year) => {
+                          return <Picker.Item label={year} value={year} />;
+                        })}
+                      </Picker>
+                    </View>
+                  </Item>
+                ) : null}
+
+                {this.state.isTelVerifAsk ? (
+                  <View
+                    style={{
+                      marginTop: 20,
+                      paddingLeft: 10,
+                      width: '80%',
+                      display: 'flex',
+                      flexDirection: 'row',
+                      justifyContent: 'space-between',
+                    }}>
+                    <Switch
+                      style={{paddingTop: 20}}
+                      onValueChange={(text) =>
+                        this.setState({
+                          userdata: {
+                            ...this.state.userdata,
+                            acceptChallengeTelUtilisateur: text,
+                          },
+                        })
+                      }
+                      value={
+                        this.state.userdata.acceptChallengeTelUtilisateur == 1
+                      }
+                    />
+                    <Text style={{marginLeft: 10}}>
+                      J’accepte l’utilisation de mon numéro de téléphone pour le
+                      tirage au sort des lots
+                    </Text>
+                  </View>
+                ) : null}
+
+                {this.state.isAdressAsk ? (
+                  <Item stackedLabel style={{marginBottom: 5}}>
+                    <Label>Adresse</Label>
+                    <Input
+                      returnKeyType="next"
+                      clearButtonMode="always"
+                      value={this.state.userdata.adresseUtilisateur}
+                      onChangeText={(phoneNumber) =>
+                        this.setState({
+                          userdata: {
+                            ...this.state.userdata,
+                            adresseUtilisateur: phoneNumber,
+                          },
+                        })
+                      }
+                    />
+                  </Item>
+                ) : null}
+
+                {this.state.isPostalAsk ? (
+                  <Item stackedLabel style={{marginBottom: 5}}>
+                    <Label>Code Postal</Label>
+                    <Input
+                      returnKeyType="next"
+                      clearButtonMode="always"
+                      value={this.state.userdata.cpUtilisateur}
+                      onChangeText={(phoneNumber) =>
+                        this.setState({
+                          userdata: {
+                            ...this.state.userdata,
+                            cpUtilisateur: phoneNumber,
+                          },
+                        })
+                      }
+                    />
+                  </Item>
+                ) : null}
+
+                {this.state.isCityAsk ? (
+                  <Item stackedLabel style={{marginBottom: 5}}>
+                    <Label>Ville</Label>
+                    <Input
+                      returnKeyType="next"
+                      clearButtonMode="always"
+                      value={this.state.userdata.villeUtilisateur}
+                      onChangeText={(phoneNumber) =>
+                        this.setState({
+                          userdata: {
+                            ...this.state.userdata,
+                            villeUtilisateur: phoneNumber,
+                          },
+                        })
+                      }
+                    />
+                  </Item>
+                ) : null}
+
+                {this.state.isCountyAsk ? (
+                  <Item stackedLabel style={{marginBottom: 5}}>
+                    <Label>Ville</Label>
+                    <Input
+                      autoCapitalize="characters"
+                      returnKeyType="next"
+                      textContentType="countryName"
+                      clearButtonMode="always"
+                      value={this.state.userdata.paysUtilisateur}
+                      onChangeText={(value) =>
+                        this.setState({
+                          userdata: {
+                            ...this.state.userdata,
+                            paysUtilisateur: value,
+                          },
+                        })
+                      }
+                    />
+                  </Item>
+                ) : null}
               </Form>
               <View
                 style={{

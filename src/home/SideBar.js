@@ -522,7 +522,7 @@ const styles = StyleSheet.create({
   body: {
     width: '100%',
     backgroundColor: ApiUtils.getBackgroundColor(), //E9E069
-    height: '140%',
+    height: '100%',
     paddingTop: 50,
     //  justifyContent: 'center',
   },
