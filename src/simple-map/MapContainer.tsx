@@ -134,10 +134,10 @@ class MapContainer extends Component<Props, State> {
   }
 
   async downloadData() {
-    this.getPhoneData();
+  //  this.getPhoneData();
     this.getNewVersion();
 
-    this.getinformationStation();
+   // this.getinformationStation();
   }
 
   async getinformationStation() {

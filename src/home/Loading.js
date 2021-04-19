@@ -29,7 +29,7 @@ export default class Loading extends Component {
             }}
           />
           <ActivityIndicator color="white" />
-          <Text style={{color: 'white', textAlign: 'center'}}>Chargement</Text>
+          <Text style={{color: 'black', textAlign: 'center'}}>Chargement</Text>
         </View>
       </Container>
     );

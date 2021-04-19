@@ -441,7 +441,6 @@ class Introduction extends Component {
                 noHeader={true}
                 onValidate={() => this.onClickNavigate('SimpleMap')}
               />
-
               {/* <View style={{height: 300}} /> */}
             </View>
           </Container>

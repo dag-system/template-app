@@ -43,7 +43,8 @@ class AskGpsModal extends Component<Props, State> {
 
   render = () => {
     return (
-      <ModalSmall isVisible={!this.props.isOkPopupGps}>
+      <ModalSmall >
+        <Text>fof</Text>
         <View style={{backgroundColor: 'white', padding: 20}}>
           <Text
             style={{
