@@ -8,7 +8,7 @@ import {check, request, PERMISSIONS, RESULTS} from 'react-native-permissions';
 const haversine = require('haversine');
 import DefaultProps from '../models/DefaultProps';
 
-import {TemplateDisplayName} from './../globalsModifs';
+import {TemplateDisplayName} from '../globalsModifs';
 
 const mapStateToProps = (state) => {
   return {

@@ -16,7 +16,7 @@ import {
   TemplateAppName,
   TemplateIdOrganisation,
   TemplateSportLive,
-} from './../globalsModifs';
+} from '../globalsModifs';
 import ApiUtils from '../ApiUtils';
 import Interest from '../models/Interest';
 

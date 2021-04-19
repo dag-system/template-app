@@ -51,7 +51,7 @@ import {
   TemplateAppName,
   TemplateIdOrganisation,
   TemplateSportLive,
-} from './../globalsModifs';
+} from '../globalsModifs';
 
 const mapStateToProps = (state) => {
   return {

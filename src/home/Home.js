@@ -42,7 +42,7 @@ import {Sponsors} from './Sponsors';
 import VersionCheck from 'react-native-version-check';
 import moment from 'moment';
 
-import {TemplateExpirationDate, TemplateIdOrganisation, TemplateIsPaying} from './../globalsModifs';
+import {TemplateExpirationDate, TemplateIdOrganisation, TemplateIsPaying} from '../globalsModifs';
 
 const mapStateToProps = (state) => {
   return {

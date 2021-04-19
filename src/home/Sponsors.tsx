@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {Dimensions, Image, View} from 'react-native';
 
-import {TemplateArrayImagesSponsorPath} from './../globalsModifs';
+import {TemplateArrayImagesSponsorPath} from '../globalsModifs';
 
 export class Sponsors extends Component {
   constructor(props) {

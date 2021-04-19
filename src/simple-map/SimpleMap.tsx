@@ -54,7 +54,7 @@ import {Dimensions} from 'react-native';
 import BatteryModal from '../home/BatteryModal';
 import DefaultProps from '../models/DefaultProps';
 
-import {TemplateDisplayName, TemplateSportLive} from './../globalsModifs';
+import {TemplateDisplayName, TemplateSportLive} from '../globalsModifs';
 
 const LATITUDE_DELTA = 0.00922;
 const LONGITUDE_DELTA = 0.00421;

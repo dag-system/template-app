@@ -33,7 +33,7 @@ import DefaultProps from '../models/DefaultProps';
 import {buildGPX, GarminBuilder} from 'gpx-builder';
 import {Point} from 'gpx-builder/dist/builder/BaseBuilder/models';
 import VersionCheck from 'react-native-version-check';
-import {TemplateSportLive} from './../globalsModifs';
+import {TemplateSportLive} from '../globalsModifs';
 import * as Animated from 'react-native-animatable';
 
 const mapStateToProps = (state) => {

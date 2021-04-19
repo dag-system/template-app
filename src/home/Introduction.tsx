@@ -40,7 +40,7 @@ import DeviceInfo from 'react-native-device-info';
 import VersionCheck from 'react-native-version-check';
 import BatteryModal from './BatteryModal';
 
-import {TemplateIdOrganisation} from './../globalsModifs';
+import {TemplateIdOrganisation} from '../globalsModifs';
 import AskGpsModal from './AskGpsModal';
 
 const mapStateToProps = (state) => {

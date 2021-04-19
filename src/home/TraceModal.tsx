@@ -47,7 +47,7 @@ import {FlatList} from 'react-native';
 import {check, request, PERMISSIONS, RESULTS} from 'react-native-permissions';
 import DefaultProps from '../models/DefaultProps';
 
-import {TemplateSportLive} from './../globalsModifs';
+import {TemplateSportLive} from '../globalsModifs';
 import Interest from '../models/Interest';
 
 const mapStateToProps = (state) => {

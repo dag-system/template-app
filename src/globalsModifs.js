@@ -1,4 +1,4 @@
-export const TemplateDisplayName = 'Template Test';
+export const TemplateDisplayName = 'INSALYON';
 
 export const IsDemo = true;
 
@@ -12,7 +12,7 @@ export const TemplateOrganisation = purgeString(
   romanizeString(TemplateDisplayName.toUpperCase()),
 );
 
-export const TemplateIdOrganisation = '9';
+export const TemplateIdOrganisation = '52';
 
 export const TemplateBackgroundColor = '#FFFFFF';
 export const TemplateSecondColor = '#FFFFFF';

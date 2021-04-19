@@ -33,7 +33,7 @@ import {TextInput} from 'react-native-gesture-handler';
 import DocumentPicker from 'react-native-document-picker';
 import DefaultProps from '../models/DefaultProps';
 
-import {TemplateSportLive} from './../globalsModifs';
+import {TemplateSportLive} from '../globalsModifs';
 
 const mapStateToProps = (state) => {
   return {

@@ -28,7 +28,7 @@ import {
   TemplateHasAppDonation,
   TemplateAppName,
   isDemo,
-} from './../globalsModifs';
+} from '../globalsModifs';
 
 export default class Sidebar extends Component {
   constructor(props) {
