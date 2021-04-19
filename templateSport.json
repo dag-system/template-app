@@ -26,7 +26,7 @@
   {
     "action": "REPLACE_TEXT",
     "filePath": "./src/globalsModifs.js",
-    "source": "export const TemplateDisplayName = \"Template Test\";",
+    "source": "export const TemplateDisplayName = 'Template Test';",
     "cible": "export const TemplateDisplayName = '$appName';",
     "datasource": "table.colonne",
     "env": "demo"
@@ -66,22 +66,6 @@
   {
     "action": "REPLACE_TEXT",
     "filePath": "./src/globalsModifs.js",
-    "source": "export const TemplateNameAsk = true;",
-    "cible": "export const TemplateNameAsk = $formLastName;",
-    "datasource": "table.colonne",
-    "env": "demo"
-  },
-  {
-    "action": "REPLACE_TEXT",
-    "filePath": "./src/globalsModifs.js",
-    "source": "export const TemplateFirstNameAsk = true;",
-    "cible": "export const TemplateFirstNameAsk = $formFirstName;",
-    "datasource": "table.colonne",
-    "env": "demo"
-  },
-  {
-    "action": "REPLACE_TEXT",
-    "filePath": "./src/globalsModifs.js",
     "source": "export const TemplateSexeAsk = true;",
     "cible": "export const TemplateSexeAsk = $formGender;",
     "datasource": "table.colonne"
@@ -91,14 +75,6 @@
     "filePath": "./src/globalsModifs.js",
     "source": "export const TemplateDdnAsk = true;",
     "cible": "export const TemplateDdnAsk = $formBirthDate;",
-    "datasource": "table.colonne",
-    "env": "demo"
-  },
-  {
-    "action": "REPLACE_TEXT",
-    "filePath": "./src/globalsModifs.js",
-    "source": "export const TemplateMailAsk = true;",
-    "cible": "export const TemplateMailAsk = $formEmail;",
     "datasource": "table.colonne",
     "env": "demo"
   },
@@ -170,7 +146,7 @@
     "action": "REPLACE_TEXT",
     "filePath": "./src/globalsModifs.js",
     "source": "export const TemplateChallengeAutre = true;",
-    "cible": "export const TemplateChallengeAutre = $otherChallenge;",
+    "cible": "export const TemplateChallengeAutre = $challengeRank;",
     "datasource": "table.colonne",
     "env": "demo"
   },
@@ -276,7 +252,7 @@
   },
   {
     "action": "REPLACE_TEXT",
-    "filePath": "./android/app/src/main/java/com/dag/templateAppName/app/MainActivity.java",
+    "filePath": "./android/app/src/main/java/com/dag/templateappname/app/MainActivity.java",
     "source": "dag.templateappname",
     "cible": "dag.$appNameLowerCased",
     "datasource": "table.colonne",
@@ -284,7 +260,7 @@
   },
   {
     "action": "REPLACE_TEXT",
-    "filePath": "./android/app/src/main/java/com/dag/templateAppName/app/MainApplication.java",
+    "filePath": "./android/app/src/main/java/com/dag/templateappname/app/MainApplication.java",
     "source": "dag.templateappname",
     "cible": "dag.$appNameLowerCased",
     "datasource": "table.colonne",
