@@ -252,7 +252,7 @@
   },
   {
     "action": "REPLACE_TEXT",
-    "filePath": "./android/app/src/main/java/com/dag/templateAppName/app/MainActivity.java",
+    "filePath": "./android/app/src/main/java/com/dag/templateappname/app/MainActivity.java",
     "source": "dag.templateappname",
     "cible": "dag.$appNameLowerCased",
     "datasource": "table.colonne",
@@ -260,7 +260,7 @@
   },
   {
     "action": "REPLACE_TEXT",
-    "filePath": "./android/app/src/main/java/com/dag/templateAppName/app/MainApplication.java",
+    "filePath": "./android/app/src/main/java/com/dag/templateappname/app/MainApplication.java",
     "source": "dag.templateappname",
     "cible": "dag.$appNameLowerCased",
     "datasource": "table.colonne",
