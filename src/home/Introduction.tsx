@@ -75,43 +75,11 @@ class Introduction extends Component {
   async downloadData() {
     // this.init();
     this.getPhoneData();
-    await this.getNewVersion();
-    await this.getLives(this.props.userData.idUtilisateur);
+    this.getNewVersion();
 
-    await this.getinformationStation();
+    this.getinformationStation();
   }
 
-  async getLives(idUtilisateur) {
-    this.setState({isLoading: true});
-    let formData = new FormData();
-    formData.append('method', 'getLives');
-    formData.append('auth', ApiUtils.getAPIAuth());
-    formData.append('idUtilisateur', idUtilisateur);
-
-    //fetch followCode API
-    fetch(ApiUtils.getAPIUrl(), {
-      method: 'POST',
-      headers: {
-        // Accept: 'application/json',
-        // 'Content-Type': 'application/json',
-      },
-      body: formData,
-    })
-      .then(ApiUtils.checkStatus)
-      .then((response) => response.json())
-      .then((responseJson) => {
-        var action = {type: 'GET_LIVES', data: responseJson};
-        this.props.dispatch(action);
-
-        this.setState({isLoading: false});
-      })
-      .catch((e) => {
-        console.log(e);
-        this.setState({isLoading: false});
-        ApiUtils.logError('getLives', e.message);
-      })
-      .then(() => this.setState({isLoading: false}));
-  }
 
   async getNewVersion() {
     VersionCheck.needUpdate({
@@ -309,6 +277,7 @@ class Introduction extends Component {
   }
 
   onClickNavigate(routeName) {
+ 
     this.props.navigation.navigate(routeName);
   }
 

@@ -141,6 +141,7 @@ class Lives extends Component<Props, State> {
   }
 
   async componentDidMountOk() {
+    this.getLives(this.props.userData.idUtilisateur);
     // if (this.props.isRecording) {
     //   this.goToMap();
     // } else {

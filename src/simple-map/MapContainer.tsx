@@ -52,8 +52,8 @@ class MapContainer extends Component<Props, State> {
     setTimeout(() => this.didMount(), 300);
   }
   didMount() {
-    this.closeDrawer();
-    this.downloadData();
+   this.closeDrawer();
+   this.downloadData();
     // if (this.props.currentLive == null) {
     //   this.props.navigation.navigate('Lives');
     // }

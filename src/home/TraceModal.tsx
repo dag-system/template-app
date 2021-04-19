@@ -71,7 +71,7 @@ class TraceModal extends Component {
   }
 
   componentDidMount() {
-    console.log(this.props.pointsInterets.length);
+    // console.log(this.props.pointsInterets.length);
   }
 
   closeTraceModal = () => {
