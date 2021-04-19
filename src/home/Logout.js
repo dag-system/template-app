@@ -6,6 +6,8 @@ import RNPusherPushNotifications from 'react-native-pusher-push-notifications';
 import Logo from '../assets/logo.png';
 import BackgroundGeolocation from 'react-native-background-geolocation';
 
+import {textAutoBackgroundColor, textAutoSecondColor} from './../globalsModifs';
+
 const mapStateToProps = (state) => {
   return {
     userData: state.userData,
@@ -39,7 +41,7 @@ class Logout extends Component {
 
   disconnect = () => {
     BackgroundGeolocation.stop();
-    // this.unSubscribe('debug-' + this.props.userData.idUtilisateur);
+ //   this.unSubscribe('debug-' + this.props.userData.idUtilisateur);
     var action = {type: 'LOGOUT', data: null};
     this.props.dispatch(action);
 
@@ -91,7 +93,7 @@ class Logout extends Component {
           style={{
             width: '80%',
             height: 45,
-            backgroundColor: ApiUtils.getColor(),
+            backgroundColor: ApiUtils.getSecondColor(),
             display: 'flex',
             justifyContent: 'center',
             alignItems: 'center',
@@ -103,7 +105,7 @@ class Logout extends Component {
           <Text
             style={{
               fontSize: 17,
-              color: ApiUtils.getSecondColor() ,
+              color: textAutoSecondColor,
             }}>
             Retourner sur la page d'accueil
           </Text>
