@@ -30,6 +30,7 @@ import {
   IsDemo,
   textAutoBackgroundColor,
   textAutoSecondColor,
+  TemplateArrayImagesPartenairesPath,
 } from './../globalsModifs';
 
 export default class Sidebar extends Component {
@@ -263,51 +264,53 @@ export default class Sidebar extends Component {
             </View>
           </TouchableHighlight>
 
-          <TouchableHighlight
-            underlayColor="rgba(255,255,255,1,0.6)"
-            onPress={() => this.onClickNavigate('Partenaires')}
-            style={{
-              width: '100%',
-              backgroundColor:
-                this.props.selected == 'Partenaires'
-                  ? '#E9E9E9'
-                  : 'transparent',
-            }}>
-            <View
+          {TemplateArrayImagesPartenairesPath.length > 0 ? (
+            <TouchableHighlight
+              underlayColor="rgba(255,255,255,1,0.6)"
+              onPress={() => this.onClickNavigate('Partenaires')}
               style={{
-                display: 'flex',
-                flexDirection: 'row',
-                justifyContent: 'flex-start',
-                flexWrap: 'wrap',
-                padding: 10,
+                width: '100%',
+                backgroundColor:
+                  this.props.selected == 'Partenaires'
+                    ? '#E9E9E9'
+                    : 'transparent',
               }}>
-              <Icon
-                name="handshake"
-                type="FontAwesome5"
-                style={[
-                  styles.icon,
-                  {
-                    color:
-                      this.props.selected == 'Partenaires'
-                        ? textAutoSecondColor
-                        : textAutoBackgroundColor,
-                  },
-                ]}
-              />
-              <Text
-                style={[
-                  styles.menuText,
-                  {
-                    color:
-                      this.props.selected == 'Partenaires'
-                        ? textAutoSecondColor
-                        : textAutoBackgroundColor,
-                  },
-                ]}>
-                Partenaires
-              </Text>
-            </View>
-          </TouchableHighlight>
+              <View
+                style={{
+                  display: 'flex',
+                  flexDirection: 'row',
+                  justifyContent: 'flex-start',
+                  flexWrap: 'wrap',
+                  padding: 10,
+                }}>
+                <Icon
+                  name="handshake"
+                  type="FontAwesome5"
+                  style={[
+                    styles.icon,
+                    {
+                      color:
+                        this.props.selected == 'Partenaires'
+                          ? textAutoSecondColor
+                          : textAutoBackgroundColor,
+                    },
+                  ]}
+                />
+                <Text
+                  style={[
+                    styles.menuText,
+                    {
+                      color:
+                        this.props.selected == 'Partenaires'
+                          ? textAutoSecondColor
+                          : textAutoBackgroundColor,
+                    },
+                  ]}>
+                  Partenaires
+                </Text>
+              </View>
+            </TouchableHighlight>
+          ) : null}
 
           {TemplateHasAppDonation ? (
             <TouchableOpacity
