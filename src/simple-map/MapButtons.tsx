@@ -41,6 +41,7 @@ const mapStateToProps = (state) => {
     isMoving: state.isMoving,
     userData: state.userData,
     coordinatesString: state.coordinatesString,
+    isGpsNotOk: state.isGpsNotOk,
   };
 };
 
@@ -50,6 +51,7 @@ interface Props extends DefaultProps {
   isMoving: boolean;
   userData: any;
   coordinatesString: string;
+  isGpsNotOk: boolean;
 }
 
 interface State {
@@ -85,6 +87,7 @@ class MapButtons extends Component<Props, State> {
 
   componentDidMount() {
     setTimeout(() => this.didMount(), 300);
+    console.log(this.props.isGpsNotOk);
   }
   didMount() {
     this.setState({
@@ -540,22 +543,41 @@ class MapButtons extends Component<Props, State> {
       <View style={{width: '100%'}}>
         <View style={{flex: 1, backgroundColor: 'transparent', width: '100%'}}>
           {!this.props.isRecording ? (
-            <Button
-              style={{
-                backgroundColor: '#39F800',
-                width: '100%',
-                height: '100%',
-                justifyContent: 'center',
-              }}
-              onPress={() => this.onstart()}>
-              <Text
-                style={[
-                  styles.buttonText,
-                  {color: 'black', textAlign: 'center'},
-                ]}>
-                DEMARRER
-              </Text>
-            </Button>
+            !this.props.isGpsNotOk ? (
+              <Button
+                style={{
+                  backgroundColor: '#39F800',
+                  width: '100%',
+                  height: '100%',
+                  justifyContent: 'center',
+                }}
+                onPress={() => this.onstart()}>
+                <Text
+                  style={[
+                    styles.buttonText,
+                    {color: 'black', textAlign: 'center'},
+                  ]}>
+                  DEMARRER
+                </Text>
+              </Button>
+            ) : (
+              <Button
+                style={{
+                  backgroundColor: '#eeeeee',
+                  width: '100%',
+                  height: '100%',
+                  justifyContent: 'center',
+                }}
+                onPress={() => console.log('gps pas prêt')}>
+                <Text
+                  style={[
+                    styles.buttonText,
+                    {color: '#888888', textAlign: 'center'},
+                  ]}>
+                  DEMARRER
+                </Text>
+              </Button>
+            )
           ) : (
             <View
               style={{
