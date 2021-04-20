@@ -307,7 +307,6 @@ class Lives extends Component<Props, State> {
   };
 
   onRefresh = () => {
-    alert('la');
     // this.init();
     // this.getPhoneData();
     this.getLives(this.props.userData.idUtilisateur);

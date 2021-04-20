@@ -7,7 +7,7 @@ import {
   Share,
   Image,
 } from 'react-native';
-import {Header, Body, Icon, Text, Left, Right} from 'native-base';
+import {Header, Body, Icon, Text, Left, Right, Button} from 'native-base';
 import ApiUtils from '../ApiUtils';
 import {connect} from 'react-redux';
 import GlobalStyles from '../styles';
@@ -227,46 +227,19 @@ class MapHeader extends Component<Props, State> {
   render() {
     return (
       <View>
-        <Header style={styles.header}>
-          <View
-            style={{
-              flex: 1,
-              width: '10%',
-            }}>
-            <TouchableOpacity
-              style={styles.goBackButton}
-              onPress={() => this.openDrawer()}>
+           <Header style={styles.header}>
+          <Left>
+            <Button style={styles.goBackButton} onPress={() =>this.openDrawer()}>
               <Icon style={styles.saveText} name="bars" type="FontAwesome5" />
-            </TouchableOpacity>
-          </View>
-          <View>
-            <TouchableOpacity
-              style={{
-                display: 'flex',
-                flexDirection: 'row',
-                justifyContent: 'center',
-                width: '100%',
-              }}
-              // style={{flex :1}}
-              onPress={() => this.openDrawer()}>
-              <Image
-                resizeMode="contain"
-                source={Logo}
-                style={styles.logoHeader}
-              />
-            </TouchableOpacity>
-          </View>
-          <View></View>
-          {/* <View style={{flexDirection: 'row', justifyContent: 'flex-end'}}>
-                {this.props.currentPosition ? (
-                  <TouchableOpacity
-                    style={[{marginLeft: 10}]}
-                    onPress={() => this.onClickShare()}>
-                    <Icon active name="share" type="FontAwesome5" />
-                  </TouchableOpacity>
-                ) : null}
-              </View> */}
+            </Button>
+          </Left>
+          <Body>
+          <Image resizeMode="contain" source={Logo} style={styles.logoHeader} />
+          </Body>
+          <Right></Right>
         </Header>
+     
+     
         {/* <View style={styles.statBanner}>
           <View>
             <Text style={styles.timeText}>{this.getCurrentTime()}</Text>

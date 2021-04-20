@@ -43,8 +43,7 @@ class AskGpsModal extends Component<Props, State> {
 
   render = () => {
     return (
-      <ModalSmall >
-        <Text>fof</Text>
+      <ModalSmall isVisible={true} >
         <View style={{backgroundColor: 'white', padding: 20}}>
           <Text
             style={{

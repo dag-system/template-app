@@ -49,6 +49,11 @@ export default class Sidebar extends Component {
       this.props.drawer._root.close();
     }
 
+    if(this.props.closeDrawer)
+    {
+      this.props.closeDrawer();
+    }
+
     this.props.navigation.navigate(routeName);
   }
 
@@ -138,6 +143,33 @@ export default class Sidebar extends Component {
               </Text>
             </View>
           </TouchableHighlight>
+
+          {/* <TouchableHighlight
+            underlayColor="rgba(255,255,255,1,0.6)"
+            onPress={() => this.onClickNavigate('Statistics')}
+            style={{
+              width: '100%',
+              backgroundColor:
+                this.props.selected == 'Statistics' ? '#E9E9E9' : 'transparent',
+            }}>
+            <View
+              style={{
+                display: 'flex',
+                flexDirection: 'row',
+                justifyContent: 'flex-start',
+                padding: 10,
+              }}>
+              <Icon
+                name="chart-pie"
+                type="FontAwesome5"
+                style={[styles.icon, {color: 'black'}]}
+              />
+              <Text style={[styles.menuText, {color: 'black'}]}>
+              Statistiques
+              </Text>
+            </View>
+          </TouchableHighlight> */}
+
 
           <TouchableHighlight
             underlayColor="rgba(255,255,255,1,0.6)"

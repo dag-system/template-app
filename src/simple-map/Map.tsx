@@ -447,7 +447,7 @@ class Map extends PureComponent<Props, State> {
             : null}
         </MapView>
         {/******** modal : Battery modal *****************/}
-        <Modal
+        {/* <Modal
           animationType={'none'}
           transparent={false}
           visible={this.state.ismodalBatteryOpen}
@@ -459,7 +459,7 @@ class Map extends PureComponent<Props, State> {
             onMap={true}
             onclose={() => this.closeModalBattery()}
           />
-        </Modal>
+        </Modal> */}
       </View>
     );
   }

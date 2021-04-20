@@ -23,6 +23,7 @@ import AskGpsModal from './home/AskGpsModal';
 import Paiement from './home/Paiement';
 import IsExpired from './home/IsExpired';
 import Introduction from './home/Introduction';
+import Statistics from './home/Statistics';
 
 export default class Navigator extends Component {
   componentDidMount() {}
@@ -35,79 +36,89 @@ export default class Navigator extends Component {
             animationEnabled: false,
           }}>
           <Stack.Screen name="Home" component={Home} headerMode="none" />
-          <Stack.Screen name="Introduction" component={Introduction} headerMode="none" />
+          <Stack.Screen
+            name="Introduction"
+            component={Introduction}
+            headerMode="none"
+          />
           <Stack.Screen name="Replay" component={Replay} headerMode="none" />
 
           <Stack.Screen
             name="AskGpsModal"
             component={AskGpsModal}
-            options={{
-              animationEnabled: false,
-            }}
+            // options={{
+            //   animationEnabled: false,
+            // }}
           />
           <Stack.Screen
             name="SimpleMap"
             component={MapContainer}
-            options={{
-              animationEnabled: false,
-            }}
+            // options={{
+            //   animationEnabled: false,
+            // }}
           />
           <Stack.Screen
             name="Lives"
             component={Lives}
             headerMode="none"
-            options={{
-              animationEnabled: false,
-            }}
+            // options={{
+            //   animationEnabled: false,
+            // }}
+          />
+
+          <Stack.Screen
+            name="Statistics"
+            component={Statistics}
+            headerMode="none"
           />
 
           <Stack.Screen
             name="IsExpired"
             component={IsExpired}
             headerMode="none"
-            options={{
-              animationEnabled: false,
-            }}
+            // options={{
+            //   animationEnabled: false,
+            // }}
           />
 
           <Stack.Screen
             name="Partenaires"
             component={Partenaires}
             headerMode="none"
-            options={{
-              animationEnabled: false,
-            }}
+            // options={{
+            //   animationEnabled: false,
+            // }}
           />
 
           <Stack.Screen
             name="Classement"
             component={Classement}
             headerMode="none"
-            options={{
-              animationEnabled: false,
-            }}
+            // options={{
+            //   animationEnabled: false,
+            // }}
           />
 
           <Stack.Screen
             name="LiveSummary"
             component={LiveSummary}
-            options={{
-              animationEnabled: false,
-            }}
+            // options={{
+            //   animationEnabled: false,
+            // }}
           />
           <Stack.Screen
             name="Paiement"
             component={Paiement}
-            options={{
-              animationEnabled: false,
-            }}
+            // options={{
+            //   animationEnabled: false,
+            // }}
           />
           <Stack.Screen
             name="LiveSummaryMap"
             component={LiveSummaryMap}
-            options={{
-              animationEnabled: false,
-            }}
+            // options={{
+            //   animationEnabled: false,
+            // }}
           />
           <Stack.Screen
             name="LiveSummaryFromSegment"
@@ -116,16 +127,16 @@ export default class Navigator extends Component {
           <Stack.Screen
             name="CreateNewLive"
             component={CreateNewLive}
-            options={{
-              animationEnabled: false,
-            }}
+            // options={{
+            //   animationEnabled: false,
+            // }}
           />
           <Stack.Screen
             name="Preferences"
             component={Preferences}
-            options={{
-              animationEnabled: false,
-            }}
+            // options={{
+            //   animationEnabled: false,
+            // }}
           />
           <Stack.Screen name="Help" component={Help} />
           <Stack.Screen name="Logout" component={Logout} />

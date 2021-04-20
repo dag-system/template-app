@@ -51,7 +51,7 @@ const mapStateToProps = (state) => {
     sports: state.sports,
     isOkPopupBAttery: state.isOkPopupBAttery,
     isOkPopupBAttery2: state.isOkPopupBAttery2,
-    isOkPopupGps : state.isOkPopupGps
+    isOkPopupGps: state.isOkPopupGps,
   };
 };
 
@@ -79,7 +79,6 @@ class Introduction extends Component {
 
     this.getinformationStation();
   }
-
 
   async getNewVersion() {
     VersionCheck.needUpdate({
@@ -277,7 +276,6 @@ class Introduction extends Component {
   }
 
   onClickNavigate(routeName) {
- 
     this.props.navigation.navigate(routeName);
   }
 
@@ -422,9 +420,7 @@ class Introduction extends Component {
           }>
           <Container style={{flex: 1}}>
             <View style={{flex: 1}}>
-              <BatteryModal
-                noHeader={true}
-              />
+              <BatteryModal noHeader={true} />
 
               {/* <View style={{height: 300}} /> */}
             </View>
@@ -433,7 +429,9 @@ class Introduction extends Component {
 
         <Modal
           visible={
-            this.props.isOkPopupBAttery2 && this.props.isOkPopupBAttery && !this.props.isOkPopupGps
+            this.props.isOkPopupBAttery2 &&
+            this.props.isOkPopupBAttery &&
+            !this.props.isOkPopupGps
           }>
           <Container style={{flex: 1}}>
             <View style={{flex: 1}}>
