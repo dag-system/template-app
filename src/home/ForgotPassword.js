@@ -222,10 +222,10 @@ class ForgotPassword extends ValidationComponent {
                 />
               </Button>
             </Left>
-            <Body style={{flex: 0}} />
-            <Right style={{flex: 1}}>
+            <Body>
               <Image resizeMode="contain" source={Logo} style={styles.logo} />
-            </Right>
+            </Body>
+            <Right></Right>
           </Header>
 
           <View style={styles.loginButtonSection}>
@@ -397,11 +397,10 @@ class ForgotPassword extends ValidationComponent {
               </View>
             ) : null}
           </View>
-      
         </Container>
-        <Footer style={{backgroundColor :'white', paddingBottom  :64}}>
-            <Sponsors />
-          </Footer>
+        <Footer style={{backgroundColor: 'white', paddingBottom: 64}}>
+          <Sponsors />
+        </Footer>
       </Root>
     );
   }

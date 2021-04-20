@@ -683,14 +683,10 @@ class Home extends Component {
                     />
                   </Button>
                 </Left>
-                <Body style={{flex: 0}} />
-                <Right style={{flex: 1}}>
-                  <Image
-                    resizeMode="contain"
-                    source={Logo}
-                    style={styles.logoHeader}
-                  />
-                </Right>
+                <Body>
+              <Image resizeMode="contain" source={Logo} style={styles.logoHeader} />
+            </Body>
+            <Right></Right>
               </Header>
 
               <KeyboardAvoidingView style={styles.followCodeLoginSection}>
@@ -706,7 +702,7 @@ class Home extends Component {
                 </Text>
 
                 {this.props.folocodes?.length > 0 ? (
-                  <View style={{flex: 1}}>
+                  <View >
                     <Picker
                       style={{width: 300}}
                       mode="dropdown"

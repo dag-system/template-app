@@ -403,10 +403,10 @@ class CreateAccount extends ValidationComponent {
                 />
               </Button>
             </Left>
-            <Body style={{flex: 0}} />
-            <Right style={{flex: 1}}>
+            <Body>
               <Image resizeMode="contain" source={Logo} style={styles.logo} />
-            </Right>
+            </Body>
+            <Right></Right>
           </Header>
           <Content>
             <KeyboardAvoidingView>
