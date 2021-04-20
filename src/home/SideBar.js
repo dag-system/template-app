@@ -74,71 +74,201 @@ export default class Sidebar extends Component {
 
   render() {
     return (
-      <Container>
-        <ScrollView style={styles.body}>
+      <ScrollView style={styles.body}>
+        <View
+          style={{
+            flexDirection: 'row',
+            justifyContent: 'center',
+            marginLeft: 0,
+          }}>
+          <Image
+            resizeMode="contain"
+            source={require('../assets/logo.png')}
+            style={styles.logo}
+          />
+        </View>
+
+        <TouchableHighlight
+          underlayColor="rgba(255,255,255,1,0.6)"
+          onPress={() => this.onClickNavigate('Lives')}
+          style={{
+            width: '100%',
+            backgroundColor:
+              this.props.selected == 'Lives' ? '#E9E9E9' : 'transparent',
+          }}>
           <View
             style={{
+              display: 'flex',
               flexDirection: 'row',
-              justifyContent: 'center',
-              marginLeft: 0,
+              justifyContent: 'flex-start',
+              padding: 10,
             }}>
-            <Image
-              resizeMode="contain"
-              source={require('../assets/logo.png')}
-              style={styles.logo}
+            <Icon
+              name="running"
+              type="FontAwesome5"
+              style={[
+                styles.icon,
+                {
+                  color:
+                    this.props.selected == 'Lives'
+                      ? textAutoSecondColor
+                      : textAutoBackgroundColor,
+                },
+              ]}
             />
+            <Text
+              style={[
+                styles.menuText,
+                {
+                  color:
+                    this.props.selected == 'Lives'
+                      ? textAutoSecondColor
+                      : textAutoBackgroundColor,
+                },
+              ]}>
+              Mes activités
+            </Text>
           </View>
+        </TouchableHighlight>
 
-          <TouchableHighlight
-            underlayColor="rgba(255,255,255,1,0.6)"
-            onPress={() => this.onClickNavigate('Lives')}
+        <TouchableHighlight
+          underlayColor="rgba(255,255,255,1,0.6)"
+          onPress={() => this.onClickNavigate('Preferences')}
+          style={{
+            width: '100%',
+            backgroundColor:
+              this.props.selected == 'Preferences' ? '#E9E9E9' : 'transparent',
+          }}>
+          <View
             style={{
-              width: '100%',
-              backgroundColor:
-                this.props.selected == 'Lives' ? '#E9E9E9' : 'transparent',
+              display: 'flex',
+              flexDirection: 'row',
+              justifyContent: 'flex-start',
+              padding: 10,
             }}>
-            <View
-              style={{
-                display: 'flex',
-                flexDirection: 'row',
-                justifyContent: 'flex-start',
-                padding: 10,
-              }}>
-              <Icon
-                name="running"
-                type="FontAwesome5"
-                style={[
-                  styles.icon,
-                  {
-                    color:
-                      this.props.selected == 'Lives'
-                        ? textAutoSecondColor
-                        : textAutoBackgroundColor,
-                  },
-                ]}
-              />
-              <Text
-                style={[
-                  styles.menuText,
-                  {
-                    color:
-                      this.props.selected == 'Lives'
-                        ? textAutoSecondColor
-                        : textAutoBackgroundColor,
-                  },
-                ]}>
-                Mes activités
-              </Text>
-            </View>
-          </TouchableHighlight>
+            <Icon
+              name="user"
+              type="FontAwesome5"
+              style={[
+                styles.icon,
+                {
+                  color:
+                    this.props.selected == 'Preferences'
+                      ? textAutoSecondColor
+                      : textAutoBackgroundColor,
+                },
+              ]}
+            />
+            <Text
+              style={[
+                styles.menuText,
+                {
+                  color:
+                    this.props.selected == 'Preferences'
+                      ? textAutoSecondColor
+                      : textAutoBackgroundColor,
+                },
+              ]}>
+              Mon profil
+            </Text>
+          </View>
+        </TouchableHighlight>
 
+        <TouchableHighlight
+          underlayColor="rgba(255,255,255,1,0.6)"
+          onPress={() => this.onClickNavigate('Classement')}
+          style={{
+            width: '100%',
+            backgroundColor:
+              this.props.selected == 'Classement' ? '#E9E9E9' : 'transparent',
+          }}>
+          <View
+            style={{
+              display: 'flex',
+              flexDirection: 'row',
+              justifyContent: 'flex-start',
+              padding: 10,
+            }}>
+            <Icon
+              name="trophy"
+              type="FontAwesome5"
+              style={[
+                styles.icon,
+                {
+                  color:
+                    this.props.selected == 'Classement'
+                      ? textAutoSecondColor
+                      : textAutoBackgroundColor,
+                },
+              ]}
+            />
+            <Text
+              style={[
+                styles.menuText,
+                {
+                  color:
+                    this.props.selected == 'Classement'
+                      ? textAutoSecondColor
+                      : textAutoBackgroundColor,
+                },
+              ]}>
+              Classement
+            </Text>
+          </View>
+        </TouchableHighlight>
+
+        <TouchableHighlight
+          underlayColor="rgba(255,255,255,1,0.6)"
+          onPress={() => this.onClickNavigate('Replay')}
+          style={{
+            width: '100%',
+            backgroundColor:
+              this.props.selected == 'Replay' ? '#E9E9E9' : 'transparent',
+          }}>
+          <View
+            style={{
+              display: 'flex',
+              flexDirection: 'row',
+              justifyContent: 'flex-start',
+              flexWrap: 'wrap',
+              padding: 10,
+            }}>
+            <Icon
+              name="chart-line"
+              type="FontAwesome5"
+              style={[
+                styles.icon,
+                {
+                  color:
+                    this.props.selected == 'Replay'
+                      ? textAutoSecondColor
+                      : textAutoBackgroundColor,
+                },
+              ]}
+            />
+            <Text
+              style={[
+                styles.menuText,
+                {
+                  color:
+                    this.props.selected == 'Replay'
+                      ? textAutoSecondColor
+                      : textAutoBackgroundColor,
+                },
+              ]}>
+              Comparateur
+            </Text>
+          </View>
+        </TouchableHighlight>
+
+        {TemplateArrayImagesPartenairesPath.length > 0 ? (
           <TouchableHighlight
             underlayColor="rgba(255,255,255,1,0.6)"
-            onPress={() => this.onClickNavigate('Preferences')}
+            onPress={() => this.onClickNavigate('Partenaires')}
             style={{
               width: '100%',
               backgroundColor:
-                this.props.selected == 'Preferences'
+                this.props.selected == 'Partenaires'
                   ? '#E9E9E9'
                   : 'transparent',
             }}>
@@ -147,103 +277,17 @@ export default class Sidebar extends Component {
                 display: 'flex',
                 flexDirection: 'row',
                 justifyContent: 'flex-start',
-                padding: 10,
-              }}>
-              <Icon
-                name="user"
-                type="FontAwesome5"
-                style={[
-                  styles.icon,
-                  {
-                    color:
-                      this.props.selected == 'Preferences'
-                        ? textAutoSecondColor
-                        : textAutoBackgroundColor,
-                  },
-                ]}
-              />
-              <Text
-                style={[
-                  styles.menuText,
-                  {
-                    color:
-                      this.props.selected == 'Preferences'
-                        ? textAutoSecondColor
-                        : textAutoBackgroundColor,
-                  },
-                ]}>
-                Mon profil
-              </Text>
-            </View>
-          </TouchableHighlight>
-
-          <TouchableHighlight
-            underlayColor="rgba(255,255,255,1,0.6)"
-            onPress={() => this.onClickNavigate('Classement')}
-            style={{
-              width: '100%',
-              backgroundColor:
-                this.props.selected == 'Classement' ? '#E9E9E9' : 'transparent',
-            }}>
-            <View
-              style={{
-                display: 'flex',
-                flexDirection: 'row',
-                justifyContent: 'flex-start',
-                padding: 10,
-              }}>
-              <Icon
-                name="trophy"
-                type="FontAwesome5"
-                style={[
-                  styles.icon,
-                  {
-                    color:
-                      this.props.selected == 'Classement'
-                        ? textAutoSecondColor
-                        : textAutoBackgroundColor,
-                  },
-                ]}
-              />
-              <Text
-                style={[
-                  styles.menuText,
-                  {
-                    color:
-                      this.props.selected == 'Classement'
-                        ? textAutoSecondColor
-                        : textAutoBackgroundColor,
-                  },
-                ]}>
-                Classement
-              </Text>
-            </View>
-          </TouchableHighlight>
-
-          <TouchableHighlight
-            underlayColor="rgba(255,255,255,1,0.6)"
-            onPress={() => this.onClickNavigate('Replay')}
-            style={{
-              width: '100%',
-              backgroundColor:
-                this.props.selected == 'Replay' ? '#E9E9E9' : 'transparent',
-            }}>
-            <View
-              style={{
-                display: 'flex',
-                flexDirection: 'row',
-                justifyContent: 'flex-start',
                 flexWrap: 'wrap',
                 padding: 10,
               }}>
               <Icon
-                name="chart-line"
+                name="handshake"
                 type="FontAwesome5"
                 style={[
                   styles.icon,
                   {
                     color:
-                      this.props.selected == 'Replay'
+                      this.props.selected == 'Partenaires'
                         ? textAutoSecondColor
                         : textAutoBackgroundColor,
                   },
@@ -254,135 +298,20 @@ export default class Sidebar extends Component {
                   styles.menuText,
                   {
                     color:
-                      this.props.selected == 'Replay'
+                      this.props.selected == 'Partenaires'
                         ? textAutoSecondColor
                         : textAutoBackgroundColor,
                   },
                 ]}>
-                Comparateur
+                Partenaires
               </Text>
             </View>
           </TouchableHighlight>
+        ) : null}
 
-          {TemplateArrayImagesPartenairesPath.length > 0 ? (
-            <TouchableHighlight
-              underlayColor="rgba(255,255,255,1,0.6)"
-              onPress={() => this.onClickNavigate('Partenaires')}
-              style={{
-                width: '100%',
-                backgroundColor:
-                  this.props.selected == 'Partenaires'
-                    ? '#E9E9E9'
-                    : 'transparent',
-              }}>
-              <View
-                style={{
-                  display: 'flex',
-                  flexDirection: 'row',
-                  justifyContent: 'flex-start',
-                  flexWrap: 'wrap',
-                  padding: 10,
-                }}>
-                <Icon
-                  name="handshake"
-                  type="FontAwesome5"
-                  style={[
-                    styles.icon,
-                    {
-                      color:
-                        this.props.selected == 'Partenaires'
-                          ? textAutoSecondColor
-                          : textAutoBackgroundColor,
-                    },
-                  ]}
-                />
-                <Text
-                  style={[
-                    styles.menuText,
-                    {
-                      color:
-                        this.props.selected == 'Partenaires'
-                          ? textAutoSecondColor
-                          : textAutoBackgroundColor,
-                    },
-                  ]}>
-                  Partenaires
-                </Text>
-              </View>
-            </TouchableHighlight>
-          ) : null}
-
-          {TemplateHasAppDonation ? (
-            <TouchableOpacity
-              onPress={() => this.onStartDonate()}
-              style={{width: '100%'}}>
-              <View
-                style={{
-                  display: 'flex',
-                  flexDirection: 'row',
-                  justifyContent: 'flex-start',
-                  padding: 10,
-                }}>
-                <Icon
-                  name="euro-sign"
-                  type="FontAwesome5"
-                  style={[styles.icon, {color: textAutoBackgroundColor}]}
-                />
-                <Text
-                  style={[styles.menuText, {color: textAutoBackgroundColor}]}>
-                  Faire un don
-                </Text>
-              </View>
-            </TouchableOpacity>
-          ) : null}
-
-          <TouchableHighlight
-            underlayColor="rgba(255,255,255,1,0.6)"
-            onPress={() => this.onClickNavigate('Help')}
-            style={{
-              width: '100%',
-              backgroundColor:
-                this.props.selected == 'Help' ? '#E9E9E9' : 'transparent',
-            }}>
-            <View
-              style={{
-                display: 'flex',
-                flexDirection: 'row',
-                justifyContent: 'flex-start',
-                flexWrap: 'wrap',
-                padding: 10,
-              }}>
-              <Icon
-                name="question-circle"
-                type="FontAwesome5"
-                style={[
-                  styles.icon,
-                  {
-                    color:
-                      this.props.selected == 'Help'
-                        ? textAutoSecondColor
-                        : textAutoBackgroundColor,
-                  },
-                ]}
-              />
-              <Text
-                style={[
-                  styles.menuText,
-                  {
-                    color:
-                      this.props.selected == 'Help'
-                        ? textAutoSecondColor
-                        : textAutoBackgroundColor,
-                  },
-                ]}>
-                Guide d'utilisation
-              </Text>
-            </View>
-          </TouchableHighlight>
-
-          <TouchableHighlight
-            underlayColor="rgba(255,255,255,1,0.6)"
-            onPress={() => this.onClickNavigate('Logout')}
+        {TemplateHasAppDonation ? (
+          <TouchableOpacity
+            onPress={() => this.onStartDonate()}
             style={{width: '100%'}}>
             <View
               style={{
@@ -392,131 +321,197 @@ export default class Sidebar extends Component {
                 padding: 10,
               }}>
               <Icon
-                name="power-off"
+                name="euro-sign"
                 type="FontAwesome5"
                 style={[styles.icon, {color: textAutoBackgroundColor}]}
               />
               <Text style={[styles.menuText, {color: textAutoBackgroundColor}]}>
-                Se déconnecter
+                Faire un don
               </Text>
             </View>
-          </TouchableHighlight>
+          </TouchableOpacity>
+        ) : null}
 
+        <TouchableHighlight
+          underlayColor="rgba(255,255,255,1,0.6)"
+          onPress={() => this.onClickNavigate('Help')}
+          style={{
+            width: '100%',
+            backgroundColor:
+              this.props.selected == 'Help' ? '#E9E9E9' : 'transparent',
+          }}>
           <View
             style={{
-              width: '100%',
-              marginTop: 50,
+              display: 'flex',
+              flexDirection: 'row',
+              justifyContent: 'flex-start',
+              flexWrap: 'wrap',
+              padding: 10,
             }}>
-            <TouchableHighlight
-              underlayColor="rgba(255,255,255,1,0.6)"
-              onPress={() =>
-                this.openLink(
-                  IsDemo === true
-                    ? 'http://dag-system.com/externalcontent/templatetest/service.pdf'
-                    : 'http://dag-system.com/externalcontent/' +
-                        TemplateAppName +
-                        '/confidentialite.pdf',
-                )
-              }
-              style={{width: '100%', height: 30}}>
-              <Text
-                style={[
-                  {
-                    color: textAutoBackgroundColor,
-                    textDecorationLine: 'underline',
-                    textAlign: 'center',
-                    fontSize: 12,
-                  },
-                ]}>
-                Politique de confidentialité
-              </Text>
-            </TouchableHighlight>
-            <TouchableHighlight
-              underlayColor="rgba(255,255,255,1,0.6)"
-              onPress={() =>
-                this.openLink(
-                  IsDemo === true
-                    ? 'http://dag-system.com/externalcontent/templatetest/service.pdf'
-                    : 'http://dag-system.com/externalcontent/' +
-                        TemplateAppName +
-                        '/service.pdf',
-                )
-              }
-              style={{width: '100%', height: 30}}>
-              <Text
-                style={[
-                  {
-                    color: textAutoBackgroundColor,
-                    textDecorationLine: 'underline',
-                    textAlign: 'center',
-                    fontSize: 12,
-                  },
-                ]}>
-                Conditions de service
-              </Text>
-            </TouchableHighlight>
-            <TouchableHighlight
-              underlayColor="rgba(255,255,255,1,0.6)"
-              onPress={() => this.openLink('https://www.dag-system.com/')}
-              style={{width: '100%', height: 35}}>
-              <Text
-                style={[
-                  {
-                    color: textAutoBackgroundColor,
-                    textDecorationLine: 'underline',
-                    textAlign: 'center',
-                  },
-                ]}>
-                Powered by DAG System
-              </Text>
-            </TouchableHighlight>
+            <Icon
+              name="question-circle"
+              type="FontAwesome5"
+              style={[
+                styles.icon,
+                {
+                  color:
+                    this.props.selected == 'Help'
+                      ? textAutoSecondColor
+                      : textAutoBackgroundColor,
+                },
+              ]}
+            />
+            <Text
+              style={[
+                styles.menuText,
+                {
+                  color:
+                    this.props.selected == 'Help'
+                      ? textAutoSecondColor
+                      : textAutoBackgroundColor,
+                },
+              ]}>
+              Guide d'utilisation
+            </Text>
+          </View>
+        </TouchableHighlight>
+
+        <TouchableHighlight
+          underlayColor="rgba(255,255,255,1,0.6)"
+          onPress={() => this.onClickNavigate('Logout')}
+          style={{width: '100%'}}>
+          <View
+            style={{
+              display: 'flex',
+              flexDirection: 'row',
+              justifyContent: 'flex-start',
+              padding: 10,
+            }}>
+            <Icon
+              name="power-off"
+              type="FontAwesome5"
+              style={[styles.icon, {color: textAutoBackgroundColor}]}
+            />
+            <Text style={[styles.menuText, {color: textAutoBackgroundColor}]}>
+              Se déconnecter
+            </Text>
+          </View>
+        </TouchableHighlight>
+
+        <View
+          style={{
+            width: '100%',
+            marginTop: 50,
+          }}>
+          <TouchableHighlight
+            underlayColor="rgba(255,255,255,1,0.6)"
+            onPress={() =>
+              this.openLink(
+                IsDemo === true
+                  ? 'http://dag-system.com/externalcontent/templatetest/service.pdf'
+                  : 'http://dag-system.com/externalcontent/' +
+                      TemplateAppName +
+                      '/confidentialite.pdf',
+              )
+            }
+            style={{width: '100%', height: 30}}>
             <Text
               style={[
                 {
                   color: textAutoBackgroundColor,
+                  textDecorationLine: 'underline',
                   textAlign: 'center',
-                  fontSize: 13,
+                  fontSize: 12,
                 },
               ]}>
-              Version V {VersionCheck.getCurrentVersion()}
+              Politique de confidentialité
             </Text>
-          </View>
+          </TouchableHighlight>
+          <TouchableHighlight
+            underlayColor="rgba(255,255,255,1,0.6)"
+            onPress={() =>
+              this.openLink(
+                IsDemo === true
+                  ? 'http://dag-system.com/externalcontent/templatetest/service.pdf'
+                  : 'http://dag-system.com/externalcontent/' +
+                      TemplateAppName +
+                      '/service.pdf',
+              )
+            }
+            style={{width: '100%', height: 30}}>
+            <Text
+              style={[
+                {
+                  color: textAutoBackgroundColor,
+                  textDecorationLine: 'underline',
+                  textAlign: 'center',
+                  fontSize: 12,
+                },
+              ]}>
+              Conditions de service
+            </Text>
+          </TouchableHighlight>
+          <TouchableHighlight
+            underlayColor="rgba(255,255,255,1,0.6)"
+            onPress={() => this.openLink('https://www.dag-system.com/')}
+            style={{width: '100%', height: 35}}>
+            <Text
+              style={[
+                {
+                  color: textAutoBackgroundColor,
+                  textDecorationLine: 'underline',
+                  textAlign: 'center',
+                },
+              ]}>
+              Powered by DAG System
+            </Text>
+          </TouchableHighlight>
+          <Text
+            style={[
+              {
+                color: textAutoBackgroundColor,
+                textAlign: 'center',
+                fontSize: 13,
+                marginBottom: 20,
+              },
+            ]}>
+            Version V {VersionCheck.getCurrentVersion()}
+          </Text>
+        </View>
 
-          <Modal
-            visible={this.state.isVisibleDonateModal}
-            onRequestClose={() => this.onCloseDonate()}>
-            <Header style={styles.header}>
-              <Left>
-                <Button
-                  style={styles.drawerButton}
-                  onPress={() => this.onCloseDonate()}>
-                  <Icon
-                    style={styles.saveText}
-                    name="chevron-left"
-                    type="FontAwesome5"
-                  />
-                </Button>
-              </Left>
-              <Body style={{flex: 0}} />
-              <Right style={{flex: 1}}>
-                <Image
-                  resizeMode="contain"
-                  source={Logo}
-                  style={styles.logoHeader}
+        <Modal
+          visible={this.state.isVisibleDonateModal}
+          onRequestClose={() => this.onCloseDonate()}>
+          <Header style={styles.header}>
+            <Left>
+              <Button
+                style={styles.drawerButton}
+                onPress={() => this.onCloseDonate()}>
+                <Icon
+                  style={styles.saveText}
+                  name="chevron-left"
+                  type="FontAwesome5"
                 />
-              </Right>
-            </Header>
-            <WebviewJetCode
-              uri={
-                'http://dag-system.com/externalcontent/' +
-                TemplateAppName +
-                '/jetcode_don.html'
-              }
-            />
-          </Modal>
-          <View style={{height: 100}}></View>
-        </ScrollView>
-      </Container>
+              </Button>
+            </Left>
+            <Body style={{flex: 0}} />
+            <Right style={{flex: 1}}>
+              <Image
+                resizeMode="contain"
+                source={Logo}
+                style={styles.logoHeader}
+              />
+            </Right>
+          </Header>
+          <WebviewJetCode
+            uri={
+              'http://dag-system.com/externalcontent/' +
+              TemplateAppName +
+              '/jetcode_don.html'
+            }
+          />
+        </Modal>
+      </ScrollView>
     );
   }
 }
@@ -526,7 +521,6 @@ const styles = StyleSheet.create({
     width: '100%',
     backgroundColor: ApiUtils.getBackgroundColor(), //E9E069
     height: '100%',
-    paddingTop: 50,
     //  justifyContent: 'center',
   },
   logo: {
@@ -535,6 +529,7 @@ const styles = StyleSheet.create({
     marginLeft: 25,
     marginRight: 25,
     marginBottom: 20,
+    marginTop: 50,
   },
   menuText: {
     marginLeft: 30,
