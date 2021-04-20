@@ -789,7 +789,7 @@ class Preferences extends Component {
 
             {this.state.isTelAsk ? (
               <Item stackedLabel style={{marginBottom: 15}}>
-                <Label>Numéro de télephone * </Label>
+                <Label>Numéro de télephone</Label>
                 <Input
                   returnKeyType="next"
                   keyboardType="phone-pad"
