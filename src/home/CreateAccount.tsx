@@ -412,77 +412,68 @@ class CreateAccount extends ValidationComponent {
           <Content>
             <KeyboardAvoidingView>
               <Form>
-                {this.state.isNameAsk ? (
-                  <Item stackedLabel style={{marginBottom: 5}}>
-                    <Label>Nom *</Label>
-                    <Input
-                      //  autoCapitalize="characters"
-                      ref="nomUtilisateur"
-                      returnKeyType="next"
-                      textContentType="familyName"
-                      clearButtonMode="always"
-                      value={this.state.nomUtilisateur}
-                      onChangeText={(value) =>
-                        this.setState({nomUtilisateur: value})
-                      }
-                    />
-                  </Item>
-                ) : null}
+                <Item stackedLabel style={{marginBottom: 5}}>
+                  <Label>Nom *</Label>
+                  <Input
+                    //  autoCapitalize="characters"
+                    ref="nomUtilisateur"
+                    returnKeyType="next"
+                    textContentType="familyName"
+                    clearButtonMode="always"
+                    value={this.state.nomUtilisateur}
+                    onChangeText={(value) =>
+                      this.setState({nomUtilisateur: value})
+                    }
+                  />
+                </Item>
 
                 {this.isFieldInError('nomUtilisateur') &&
-                  this.state.isNameAsk &&
                   this.getErrorsInField(
                     'nomUtilisateur',
                   ).map((errorMessage) => (
                     <Text style={styles.error}>{errorMessage}</Text>
                   ))}
 
-                {this.state.isFirstNameAsk ? (
-                  <Item stackedLabel style={{marginBottom: 5}}>
-                    <Label>Prénom *</Label>
-                    <Input
-                      //  autoCapitalize="characters"
-                      ref="prenomUtilisateur"
-                      returnKeyType="next"
-                      textContentType="name"
-                      clearButtonMode="always"
-                      value={this.state.prenomUtilisateur}
-                      onChangeText={(value) =>
-                        this.setState({prenomUtilisateur: value})
-                      }
-                    />
-                  </Item>
-                ) : null}
+                <Item stackedLabel style={{marginBottom: 5}}>
+                  <Label>Prénom *</Label>
+                  <Input
+                    //  autoCapitalize="characters"
+                    ref="prenomUtilisateur"
+                    returnKeyType="next"
+                    textContentType="name"
+                    clearButtonMode="always"
+                    value={this.state.prenomUtilisateur}
+                    onChangeText={(value) =>
+                      this.setState({prenomUtilisateur: value})
+                    }
+                  />
+                </Item>
                 {this.isFieldInError('prenomUtilisateur') &&
-                  this.state.isFirstNameAsk &&
                   this.getErrorsInField(
                     'prenomUtilisateur',
                   ).map((errorMessage) => (
                     <Text style={styles.error}>{errorMessage}</Text>
                   ))}
 
-                {this.state.isMailAsk ? (
-                  <Item stackedLabel style={{marginBottom: 5}}>
-                    <Label>Email *</Label>
-                    <Input
-                      ref="emailUtilisateur"
-                      autoCompleteType="email"
-                      returnKeyType="next"
-                      textContentType="emailAddress"
-                      keyboardType="email-address"
-                      clearButtonMode="always"
-                      value={this.state.emailUtilisateur}
-                      onChangeText={(value) =>
-                        this.setState({
-                          emailUtilisateur: value.replace(/\s+/g, ''),
-                        })
-                      }
-                    />
-                  </Item>
-                ) : null}
+                <Item stackedLabel style={{marginBottom: 5}}>
+                  <Label>Email *</Label>
+                  <Input
+                    ref="emailUtilisateur"
+                    autoCompleteType="email"
+                    returnKeyType="next"
+                    textContentType="emailAddress"
+                    keyboardType="email-address"
+                    clearButtonMode="always"
+                    value={this.state.emailUtilisateur}
+                    onChangeText={(value) =>
+                      this.setState({
+                        emailUtilisateur: value.replace(/\s+/g, ''),
+                      })
+                    }
+                  />
+                </Item>
 
                 {this.isFieldInError('emailUtilisateur') &&
-                  this.state.isMailAsk &&
                   this.getErrorsInField(
                     'emailUtilisateur',
                   ).map((errorMessage) => (
