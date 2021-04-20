@@ -795,7 +795,7 @@ class MapButtons extends Component<Props, State> {
                     </Button>
                   )}
 
-                  <View style={{marginTop: -5}}>
+                  <View style={{marginTop: 10}}>
                     <Text
                       style={styles.ignoreActivityLink}
                       onPress={() => this.ignoreActivity()}>

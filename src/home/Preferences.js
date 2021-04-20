@@ -553,13 +553,11 @@ class Preferences extends Component {
         }>
         <Container>
           <Header style={{backgroundColor: ApiUtils.getBackgroundColor()}}>
-            <Left>
-              <Button
+            <Left style={{flex: 1, width: '30%'}}>
+              <TouchableOpacity
                 style={{
                   backgroundColor: 'transparent',
                   width: '100%',
-                  marginTop: 0,
-                  paddingTop: 0,
                   shadowOffset: {height: 0, width: 0},
                   shadowOpacity: 0,
                   elevation: 0,
@@ -567,10 +565,10 @@ class Preferences extends Component {
                 onPress={() => this.onDrawer()}>
                 <Icon
                   style={{color: textAutoBackgroundColor}}
-                  name="chevron-left"
+                  name="bars"
                   type="FontAwesome5"
                 />
-              </Button>
+              </TouchableOpacity>
             </Left>
             <Right>
               {this.state.isLoading ? (
