@@ -44,7 +44,7 @@ import RNPusherPushNotifications from 'react-native-pusher-push-notifications';
 import NotificationModal from './NotificationModal';
 import Help from './Help';
 
-import {TemplateSportLive} from '../globalsModifs';
+import {TemplateSportLive, textAutoBackgroundColor} from '../globalsModifs';
 
 const mapStateToProps = (state) => {
   return {
@@ -1421,7 +1421,11 @@ const styles = StyleSheet.create({
 
     width: 60,
     height: 60,
-    backgroundColor: ApiUtils.getColor(),
+    backgroundColor:
+      ApiUtils.getSecondColor() === ApiUtils.getBackgroundColor()
+        ? textAutoBackgroundColor
+        : ApiUtils.getSecondColor(),
+
     borderRadius: 30,
     textAlign: 'center',
     padding: 0,
@@ -1436,7 +1440,10 @@ const styles = StyleSheet.create({
     height: 30,
     width: 30,
     fontSize: 30,
-    color: 'white',
+    color:
+      ApiUtils.getBackgroundColor() === '#FFFFFF'
+        ? 'white'
+        : textAutoBackgroundColor,
     // marginLeft: -3,
     alignSelf: 'center',
     zIndex: 10,

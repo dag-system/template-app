@@ -2,7 +2,7 @@ export const TemplateDisplayName = 'INSALYON';
 
 export const IsDemo = true;
 
-export const TemplateExpirationDate = new Date();
+export const TemplateExpirationDate = new Date('2030-01-01');
 
 export const TemplateAppName = purgeString(
   romanizeString(TemplateDisplayName.toLowerCase()),

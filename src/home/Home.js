@@ -241,8 +241,6 @@ class Home extends Component {
         formData.append('folocode', this.state.followCode);
       }
 
-      console.log(formData);
-
       //fetch followCode API
       fetch(ApiUtils.getAPIUrl(), {
         method: 'POST',

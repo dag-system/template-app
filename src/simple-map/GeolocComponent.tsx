@@ -26,7 +26,6 @@ export default function GeolocComponent(props: Props) {
   );
 
   useEffect(() => {
-    console.log("use effect geoloc component")
     BackgroundGeolocation.removeAllListeners(() => {
       requestMotionPermission();
       Geolocation.setRNConfiguration({
@@ -245,10 +244,10 @@ export default function GeolocComponent(props: Props) {
   };
 
   const onLocation = (location: Location) => {
-    //  addMarker(location);
-    console.log('on locaiton event');
-    console.log(location);
-    console.log('on locaiton event is moving : ' + isMoving);
+    // //  addMarker(location);
+    // console.log('on locaiton event');
+    // console.log(location);
+    // console.log('on locaiton event is moving : ' + isMoving);
     if (isMoving) {
       addMarker(location);
       props.onUpdatePosition(location);

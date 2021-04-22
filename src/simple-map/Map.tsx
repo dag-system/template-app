@@ -110,30 +110,6 @@ const Map = forwardRef((props, ref) => {
   //     }
   //   }
   // }
-
-  useEffect(() => {
-    if (polylines.length > 0) {
-      let firstPolyline = polylines[0];
-      if (firstPolyline.positionsTrace.length != 0) {
-        if (mapRef?.current != null) {
-          mapRef?.current.fitToCoordinates(firstPolyline.positionsTrace, {
-            edgePadding: {top: 10, right: 10, bottom: 10, left: 10},
-            animated: true,
-          });
-        }
-      }
-    }
-  }, []);
-
-  useImperativeHandle(ref, () => ({
-    onCenter() {
-      onClickGetCurrentPosition();
-    },
-    onUpdatePosition(pos: any) {
-      onUpdatePosition(pos);
-    },
-  }));
-
   const [currentInteret, setCurrentInteret] = useState<Interest>();
   const [currentPolyline, setCurrentPolyline] = useState<PolylineModel>();
   const [isModalInterestVisible, setIsModalInterestVisible] = useState(false);
@@ -152,6 +128,29 @@ const Map = forwardRef((props, ref) => {
     coordinatesString,
   } = useSelector((state: AppState) => state);
 
+  // useEffect(() => {
+  //   if (polylines.length > 0) {
+  //     let firstPolyline = polylines[0];
+  //     if (firstPolyline.positionsTrace.length != 0) {
+  //       if (mapRef?.current != null) {
+  //         mapRef?.current.fitToCoordinates(firstPolyline.positionsTrace, {
+  //           edgePadding: {top: 10, right: 10, bottom: 10, left: 10},
+  //           animated: true,
+  //         });
+  //       }
+  //     }
+  //   }
+  // }, [polylines]);
+
+  useImperativeHandle(ref, () => ({
+    onCenter() {
+      onClickGetCurrentPosition();
+    },
+    onUpdatePosition(pos: any) {
+      onUpdatePosition(pos);
+    },
+  }));
+
   const centerMapOnTrace = (polyline: PolylineModel) => {
     if (polyline.positionsTrace.length != 0) {
       mapRef?.current?.fitToCoordinates(polyline.positionsTrace, {
@@ -161,7 +160,19 @@ const Map = forwardRef((props, ref) => {
     }
     selectPolyline(polyline);
   };
-
+  const centerMapOnFirstTrace = () => {
+    if (polylines.length > 0) {
+      let firstPolyline = polylines[0];
+      if (firstPolyline.positionsTrace.length != 0) {
+        if (mapRef?.current != null) {
+          mapRef?.current.fitToCoordinates(firstPolyline.positionsTrace, {
+            edgePadding: {top: 10, right: 10, bottom: 10, left: 10},
+            animated: true,
+          });
+        }
+      }
+    }
+  };
   const centerOnPoi = (interest: Interest) => {
     setCenter(interest.coordinates);
   };
@@ -402,6 +413,7 @@ const Map = forwardRef((props, ref) => {
           latitudeDelta: LATITUDE_DELTA_CLOSE,
           longitudeDelta: LONGITUDE_DELTA_CLOSE,
         }}
+        onLayout={() => centerMapOnFirstTrace()}
         toolbarEnabled={false}>
         {coordinatesString != '' ? (
           <Polyline

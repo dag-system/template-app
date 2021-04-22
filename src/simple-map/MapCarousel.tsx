@@ -31,7 +31,6 @@ export default function MapCarousel() {
     let totalTime = 0;
     let totalDplus = 0;
 
-    console.log(lives);
     lives.forEach((live) => {
       let infos = getLiveStatsInfo(live.statsLive);
       if (infos != null) {
@@ -82,8 +81,6 @@ export default function MapCarousel() {
       subTitle2: totalDplus + ' m',
     });
 
-    console.log(currentCarouselItems);
-
     setCarouselItems(currentCarouselItems);
     // this.setState({carouselItems: carouselItems});
   }, [lives, statistics]);
@@ -126,7 +123,7 @@ export default function MapCarousel() {
             width: 0,
             height: 5,
           },
-          elevation : 20,
+          elevation: 20,
           shadowOpacity: 0.34,
           shadowRadius: 6.27,
         }}>

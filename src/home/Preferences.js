@@ -154,9 +154,18 @@ class Preferences extends Component {
       isSexeAsk: TemplateSexeAsk,
       sexeUtilisateur: '',
       isDdnAsk: TemplateDdnAsk,
-      dayDdn: '01',
-      monthDdn: '01',
-      yearDdn: '1980',
+      dayDdn:
+        this.props.userData.ddnUtilisateur !== null
+          ? this.props.userData.ddnUtilisateur.split('-')[2]
+          : 1,
+      monthDdn:
+        this.props.userData.ddnUtilisateur !== null
+          ? this.props.userData.ddnUtilisateur.split('-')[1]
+          : 1,
+      yearDdn:
+        this.props.userData.ddnUtilisateur !== null
+          ? this.props.userData.ddnUtilisateur.split('-')[0]
+          : 1980,
       isMailAsk: TemplateMailAsk,
       emailUtilisateur: '',
       isTelAsk: TemplateTelAsk,
@@ -186,11 +195,13 @@ class Preferences extends Component {
 
   componentDidMount() {
     setTimeout(() => this.didMount(), 300);
+
+    console.log(this.props.userData);
   }
 
   didMount() {
     let yearsAll = [];
-    for (let i = 1930; i < 2021; i++) {
+    for (let i = 1930; i <= new Date().getFullYear() - 3; i++) {
       yearsAll.push(i.toString());
     }
     this.setState({years: yearsAll});
@@ -228,6 +239,7 @@ class Preferences extends Component {
     if (this.props.userData.ddnUtilisateur != '0000-00-00') {
       this.setState({showDefaultDdn: true});
 
+      console.log(this.props.userData.ddnUtilisateur);
       if (this.props.userData.ddnUtilisateur != null) {
         var day = moment(this.props.userData.ddnUtilisateur).format('DD');
         this.onValueDayddn(day);
@@ -407,9 +419,23 @@ class Preferences extends Component {
       'adresseUtilisateur',
       this.state.userdata.adresseUtilisateur,
     );
-
     formData.append('telUtilisateur', this.state.userdata.telUtilisateur);
     formData.append('organisation', ApiUtils.getOrganisation());
+
+    if (
+      this.state.yearDdn != undefined &&
+      this.state.monthDdn != undefined &&
+      this.state.dayDdn != undefined
+    ) {
+      formData.append(
+        'ddnUtilisateur',
+        this.state.yearDdn +
+          '-' +
+          this.state.monthDdn +
+          '-' +
+          this.state.dayDdn,
+      );
+    }
 
     var acceptChallengeTelUtilisateur = 0;
     if (this.state.userdata.acceptChallengeTelUtilisateur) {
@@ -420,47 +446,8 @@ class Preferences extends Component {
       'acceptChallengeTelUtilisateur',
       acceptChallengeTelUtilisateur,
     );
-
-    if (Platform.OS == 'ios') {
-      if (
-        this.state.yearDdn != undefined &&
-        this.state.monthDdn != undefined &&
-        this.state.dayDdn != undefined
-      ) {
-        formData.append(
-          'ddnUtilisateur',
-          this.state.yearDdn +
-            '-' +
-            this.state.monthDdn +
-            '-' +
-            this.state.dayDdn,
-        );
-      } else {
-        formData.append('ddnUtilisateur', '');
-      }
-    } else {
-      var finalDate = moment(this.state.ddnUtilisateur).format('YYYY-MM-DD');
-      formData.append('ddnUtilisateur', finalDate);
-    }
-    formData.append('sexeUtilisateur', this.state.userdata.sexeUtilisateur);
-
-    formData.append(
-      'adresseUtilisateur',
-      this.state.userdata.adresseUtilisateur,
-    );
-    formData.append('cpUtilisateur', this.state.userdata.cpUtilisateur);
-    formData.append('villeUtilisateur', this.state.userdata.villeUtilisateur);
-    formData.append('paysUtilisateur', this.state.userdata.paysUtilisateur);
-
-    let clubs = [];
-
-    formData.append('clubsUtilisateur', JSON.stringify(clubs));
-
     var acceptChallengeNameUtilisateur = 0;
-    if (
-      this.state.userdata.acceptChallengeNameUtilisateur ||
-      this.state.userdata.acceptChallengeNameUtilisateur
-    ) {
+    if (this.state.userdata.acceptChallengeNameUtilisateur) {
       acceptChallengeNameUtilisateur = 1;
     }
 
@@ -468,10 +455,6 @@ class Preferences extends Component {
       'acceptChallengeNameUtilisateur',
       acceptChallengeNameUtilisateur,
     );
-
-    if (withPassword) {
-      formData.append('passUtilisateur', md5(this.state.newPassword));
-    }
 
     fetch(ApiUtils.getAPIUrl(), {
       method: 'POST',
@@ -578,454 +561,446 @@ class Preferences extends Component {
           />
         }>
         <Container>
-          <Root>
-            <Header style={styles.header}>
-              <Left>
+          <Header style={{backgroundColor: ApiUtils.getBackgroundColor()}}>
+            <Left style={{flex: 1, width: '30%'}}>
+              <TouchableOpacity
+                style={{
+                  backgroundColor: 'transparent',
+                  width: '100%',
+                  shadowOffset: {height: 0, width: 0},
+                  shadowOpacity: 0,
+                  elevation: 0,
+                }}
+                onPress={() => this.onDrawer()}>
+                <Icon
+                  style={{color: textAutoBackgroundColor}}
+                  name="bars"
+                  type="FontAwesome5"
+                />
+              </TouchableOpacity>
+            </Left>
+            <Right>
+              {this.state.isLoading ? (
+                <View
+                  style={{
+                    marginTop: 10,
+                    marginBottom: 20,
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    flexDirection: 'row',
+                    display: 'flex',
+                  }}>
+                  <Spinner color="black" />
+                  <Text style={{marginLeft: 5}}>Enregistrement en cours</Text>
+                </View>
+              ) : (
                 <Button
-                  style={styles.drawerButton}
-                  onPress={() => this.onDrawer()}>
-                  <Icon
-                    style={styles.saveText}
-                    name="bars"
-                    type="FontAwesome5"
-                  />
+                  style={{
+                    backgroundColor: 'transparent',
+                    shadowOffset: {height: 0, width: 0},
+                    shadowOpacity: 0,
+                    elevation: 0,
+                  }}
+                  onPress={() => this.onClickValidate()}
+                  disabled={this.isErrorForm()}>
+                  <Text style={[{color: textAutoBackgroundColor}]}>
+                    ENREGISTRER
+                  </Text>
                 </Button>
-              </Left>
-              <Right>
-                {this.state.isLoading ? (
-                  <View
+              )}
+            </Right>
+          </Header>
+          <Content
+            style={{
+              padding: 10,
+            }}>
+            <Item stackedLabel>
+              <Label>Nom *</Label>
+              <Input
+                returnKeyType="next"
+                clearButtonMode="always"
+                value={this.state.userdata.nomUtilisateur}
+                onChangeText={(phoneNumber) =>
+                  this.setState({
+                    userdata: {
+                      ...this.state.userdata,
+                      nomUtilisateur: phoneNumber,
+                    },
+                  })
+                }
+              />
+            </Item>
+            <ErrorMessage
+              value={this.state.userdata.nomUtilisateur}
+              message="Le nom doit être renseigné"
+            />
+
+            <Item stackedLabel style={{marginBottom: 5}}>
+              <Label>Prénom *</Label>
+              <Input
+                returnKeyType="next"
+                clearButtonMode="always"
+                value={this.state.userdata.prenomUtilisateur}
+                onChangeText={(phoneNumber) =>
+                  this.setState({
+                    userdata: {
+                      ...this.state.userdata,
+                      prenomUtilisateur: phoneNumber,
+                    },
+                  })
+                }
+              />
+            </Item>
+            <ErrorMessage
+              value={this.state.userdata.prenomUtilisateur}
+              message="Le nom doit être renseigné"
+            />
+
+            <Item stackedLabel style={{marginBottom: 5}}>
+              <Label>Email *</Label>
+              <Input
+                returnKeyType="next"
+                clearButtonMode="always"
+                textContentType="emailAddress"
+                keyboardType="email-address"
+                value={this.state.userdata.emailUtilisateur}
+                onChangeText={(phoneNumber) =>
+                  this.setState({
+                    userdata: {
+                      ...this.state.userdata,
+                      emailUtilisateur: phoneNumber,
+                    },
+                  })
+                }
+              />
+            </Item>
+            <ErrorMessage
+              value={this.state.userdata.emailUtilisateur}
+              message="L'adresse email doit être renseignée"
+            />
+            {this.state.userdata.emailUtilisateur != '' &&
+            !this.validateEmail(this.state.userdata.emailUtilisateur) ? (
+              <ErrorMessage
+                value={''}
+                message="L'adresse email n'est pas valide"
+              />
+            ) : null}
+
+            {this.state.isSexeAsk ? (
+              <View style={{marginBottom: 15}}>
+                <Text
+                  style={{
+                    marginTop: 5,
+                    marginBottom: 10,
+                    color: 'gray',
+                    fontSize: 16,
+                  }}>
+                  Sexe
+                </Text>
+
+                <View
+                  style={{
+                    display: 'flex',
+                    flexDirection: 'row',
+                    width: '100%',
+                    justifyContent: 'space-between',
+                    alignSelf: 'center',
+                  }}>
+                  <TouchableOpacity
                     style={{
-                      marginTop: 10,
-                      marginBottom: 20,
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      flexDirection: 'row',
                       display: 'flex',
+                      flexDirection: 'row',
+                      width: '30%',
+                      justifyContent: 'space-around',
+                    }}
+                    onPress={() => {
+                      this.setState({
+                        userdata: {
+                          ...this.state.userdata,
+                          sexeUtilisateur: 'F',
+                        },
+                      });
                     }}>
-                    <Spinner color="black" />
-                    <Text style={{marginLeft: 5}}>Enregistrement en cours</Text>
-                  </View>
-                ) : (
-                  <Button
-                    style={styles.saveButton}
-                    onPress={() => this.onClickValidate()}
-                    disabled={this.isErrorForm()}>
-                    <Text style={[styles.saveText]}>ENREGISTRER</Text>
-                  </Button>
-                )}
-              </Right>
-            </Header>
-            <Content>
-              <Form>
-                {this.state.isNameAsk ? (
-                  <Item stackedLabel style={{marginBottom: 5}}>
-                    <Label>Nom *</Label>
-                    <Input
-                      returnKeyType="next"
-                      clearButtonMode="always"
-                      value={this.state.userdata.nomUtilisateur}
-                      onChangeText={(phoneNumber) =>
+                    <Text>Femme</Text>
+                    <Radio
+                      selected={this.state.userdata.sexeUtilisateur == 'F'}
+                      onPress={() => {
                         this.setState({
                           userdata: {
                             ...this.state.userdata,
-                            nomUtilisateur: phoneNumber,
+                            sexeUtilisateur: 'F',
                           },
-                        })
-                      }
+                        });
+                      }}
                     />
-                  </Item>
-                ) : null}
-                {this.state.isNameAsk ? (
-                  <ErrorMessage
-                    value={this.state.userdata.nomUtilisateur}
-                    message="Le nom doit être renseigné"
-                  />
-                ) : null}
-
-                {this.state.isFirstNameAsk ? (
-                  <Item stackedLabel style={{marginBottom: 5}}>
-                    <Label>Prénom *</Label>
-                    <Input
-                      returnKeyType="next"
-                      clearButtonMode="always"
-                      value={this.state.userdata.prenomUtilisateur}
-                      onChangeText={(phoneNumber) =>
-                        this.setState({
-                          userdata: {
-                            ...this.state.userdata,
-                            prenomUtilisateur: phoneNumber,
-                          },
-                        })
-                      }
-                    />
-                  </Item>
-                ) : null}
-                {this.state.isFirstNameAsk ? (
-                  <ErrorMessage
-                    value={this.state.userdata.prenomUtilisateur}
-                    message="Le nom doit être renseigné"
-                  />
-                ) : null}
-
-                {this.state.isMailAsk ? (
-                  <Item stackedLabel style={{marginBottom: 5}}>
-                    <Label>Email *</Label>
-                    <Input
-                      returnKeyType="next"
-                      clearButtonMode="always"
-                      textContentType="emailAddress"
-                      keyboardType="email-address"
-                      value={this.state.userdata.emailUtilisateur}
-                      onChangeText={(phoneNumber) =>
-                        this.setState({
-                          userdata: {
-                            ...this.state.userdata,
-                            emailUtilisateur: phoneNumber,
-                          },
-                        })
-                      }
-                    />
-                  </Item>
-                ) : null}
-                {this.state.isMailAsk ? (
-                  <ErrorMessage
-                    value={this.state.userdata.emailUtilisateur}
-                    message="L'adresse email doit être renseignée"
-                  />
-                ) : null}
-
-                {this.state.userdata.emailUtilisateur != '' &&
-                !this.validateEmail(this.state.userdata.emailUtilisateur) ? (
-                  <ErrorMessage
-                    value={''}
-                    message="L'adresse email n'est pas valide"
-                  />
-                ) : null}
-
-                {this.state.isSexeAsk ? (
-                  <View>
-                    <Text style={styles.label}>Sexe</Text>
-
-                    <View
-                      style={{
-                        display: 'flex',
-                        flexDirection: 'row',
-                        width: '80%',
-                        justifyContent: 'space-between',
-                        alignSelf: 'center',
-                      }}>
-                      <TouchableOpacity
-                        style={{
-                          display: 'flex',
-                          flexDirection: 'row',
-                          width: '30%',
-                          justifyContent: 'space-around',
-                        }}
-                        onPress={() => {
-                          this.setState({
-                            userdata: {
-                              ...this.state.userdata,
-                              sexeUtilisateur: 'F',
-                            },
-                          });
-                        }}>
-                        <Text>Femme</Text>
-                        <Radio
-                          selected={this.state.userdata.sexeUtilisateur == 'F'}
-                          onPress={() => {
-                            this.setState({
-                              userdata: {
-                                ...this.state.userdata,
-                                sexeUtilisateur: 'F',
-                              },
-                            });
-                          }}
-                        />
-                      </TouchableOpacity>
-                      <TouchableOpacity
-                        style={{
-                          display: 'flex',
-                          flexDirection: 'row',
-                          width: '30%',
-                          justifyContent: 'space-around',
-                        }}
-                        onPress={() => {
-                          this.setState({
-                            userdata: {
-                              ...this.state.userdata,
-                              sexeUtilisateur: 'H',
-                            },
-                          });
-                        }}>
-                        <Text>Homme</Text>
-                        <Radio
-                          selected={this.state.userdata.sexeUtilisateur == 'H'}
-                          onPress={() => {
-                            this.setState({
-                              userdata: {
-                                ...this.state.userdata,
-                                sexeUtilisateur: 'H',
-                              },
-                            });
-                          }}
-                        />
-                      </TouchableOpacity>
-                      <TouchableOpacity
-                        style={{
-                          display: 'flex',
-                          flexDirection: 'row',
-                          width: '30%',
-                          justifyContent: 'space-around',
-                        }}
-                        onPress={() => this.setState({sexeUtilisateur: 'A'})}>
-                        <Text>Autre</Text>
-                        <Radio
-                          selected={this.state.sexeUtilisateur == 'A'}
-                          onPress={() => this.setState({sexeUtilisateur: 'A'})}
-                        />
-                      </TouchableOpacity>
-                    </View>
-                  </View>
-                ) : null}
-
-                {this.state.isTelAsk ? (
-                  <Item stackedLabel style={{marginBottom: 5}}>
-                    <Label>Numéro de télephone * </Label>
-                    <Input
-                      returnKeyType="next"
-                      keyboardType="phone-pad"
-                      autoCompleteType="tel"
-                      clearButtonMode="always"
-                      value={this.state.userdata.telUtilisateur}
-                      onChangeText={(phoneNumber) =>
-                        this.setState({
-                          userdata: {
-                            ...this.state.userdata,
-                            telUtilisateur: phoneNumber,
-                          },
-                        })
-                      }
-                    />
-                  </Item>
-                ) : null}
-
-                {this.state.isDdnAsk ? (
-                  <Item stackedLabel style={{marginBottom: 5}}>
-                    <Label>Date de naissance</Label>
-                    <Label style={{fontSize: 12}}>
-                      Important pour les classements par catégorie
-                    </Label>
-                    <View style={[GlobalStyles.row]}>
-                      <Picker
-                        style={{width: Dimensions.get('screen').width / 3 - 10}}
-                        mode="dropdown"
-                        accessibilityLabel={'Jour'}
-                        iosHeader={'Jour'}
-                        iosIcon={
-                          <Icon name="chevron-down" type="FontAwesome5" />
-                        }
-                        selectedValue={this.state.dayDdn}
-                        onValueChange={(value) => this.onValueDayddn(value)}
-                        placeholder={'Jour'}
-                        placeholderStyle={{
-                          color: ApiUtils.getBackgroundColor(),
-                        }}
-                        placeholderIconColor={ApiUtils.getBackgroundColor()}
-                        textStyle={{color: ApiUtils.getBackgroundColor()}}
-                        itemStyle={{
-                          color: ApiUtils.getBackgroundColor(),
-                          marginLeft: 0,
-                          paddingLeft: 10,
-                          borderBottomColor: ApiUtils.getBackgroundColor(),
-                          borderBottomWidth: 1,
-                        }}
-                        itemTextStyle={{
-                          color: ApiUtils.getBackgroundColor(),
-                          borderBottomColor: ApiUtils.getBackgroundColor(),
-                          borderBottomWidth: 1,
-                        }}>
-                        {this.state.days.map((d) => {
-                          return <Picker.Item label={d} value={d} />;
-                        })}
-                      </Picker>
-                      <Picker
-                        style={{width: Dimensions.get('screen').width / 3 - 10}}
-                        mode="dropdown"
-                        accessibilityLabel={'Mois'}
-                        iosHeader={'Mois'}
-                        iosIcon={
-                          <Icon name="chevron-down" type="FontAwesome5" />
-                        }
-                        selectedValue={this.state.monthDdn}
-                        onValueChange={(value) => this.onValueMonthddn(value)}
-                        placeholder={'Mois'}
-                        placeholderStyle={{
-                          color: ApiUtils.getBackgroundColor(),
-                        }}
-                        placeholderIconColor={ApiUtils.getBackgroundColor()}
-                        textStyle={{color: ApiUtils.getBackgroundColor()}}
-                        itemStyle={{
-                          color: ApiUtils.getBackgroundColor(),
-                          marginLeft: 0,
-                          paddingLeft: 10,
-                          borderBottomColor: ApiUtils.getBackgroundColor(),
-                          borderBottomWidth: 1,
-                        }}
-                        itemTextStyle={{
-                          color: ApiUtils.getBackgroundColor(),
-                          borderBottomColor: ApiUtils.getBackgroundColor(),
-                          borderBottomWidth: 1,
-                        }}>
-                        {this.state.monthsString.map((month) => {
-                          return <Picker.Item label={month} value={month} />;
-                        })}
-                      </Picker>
-
-                      <Picker
-                        style={{width: Dimensions.get('screen').width / 3 - 10}}
-                        mode="dropdown"
-                        accessibilityLabel={''}
-                        iosHeader={'Année'}
-                        iosIcon={
-                          <Icon name="chevron-down" type="FontAwesome5" />
-                        }
-                        selectedValue={this.state.yearDdn}
-                        onValueChange={(value) => this.onValueYearddn(value)}
-                        placeholder={'Année'}
-                        placeholderStyle={{
-                          color: ApiUtils.getBackgroundColor(),
-                        }}
-                        placeholderIconColor={ApiUtils.getBackgroundColor()}
-                        textStyle={{color: ApiUtils.getBackgroundColor()}}
-                        itemStyle={{
-                          color: ApiUtils.getBackgroundColor(),
-                          marginLeft: 0,
-                          paddingLeft: 10,
-                          borderBottomColor: ApiUtils.getBackgroundColor(),
-                          borderBottomWidth: 1,
-                        }}
-                        itemTextStyle={{
-                          color: ApiUtils.getBackgroundColor(),
-                          borderBottomColor: ApiUtils.getBackgroundColor(),
-                          borderBottomWidth: 1,
-                        }}>
-                        {this.state.years.map((year) => {
-                          return <Picker.Item label={year} value={year} />;
-                        })}
-                      </Picker>
-                    </View>
-                  </Item>
-                ) : null}
-
-                {this.state.isTelVerifAsk ? (
-                  <View
+                  </TouchableOpacity>
+                  <TouchableOpacity
                     style={{
-                      marginTop: 20,
+                      display: 'flex',
+                      flexDirection: 'row',
+                      width: '30%',
+                      justifyContent: 'space-around',
+                    }}
+                    onPress={() => {
+                      this.setState({
+                        userdata: {
+                          ...this.state.userdata,
+                          sexeUtilisateur: 'H',
+                        },
+                      });
+                    }}>
+                    <Text>Homme</Text>
+                    <Radio
+                      selected={this.state.userdata.sexeUtilisateur == 'H'}
+                      onPress={() => {
+                        this.setState({
+                          userdata: {
+                            ...this.state.userdata,
+                            sexeUtilisateur: 'H',
+                          },
+                        });
+                      }}
+                    />
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    style={{
+                      display: 'flex',
+                      flexDirection: 'row',
+                      width: '30%',
+                      justifyContent: 'space-around',
+                    }}
+                    onPress={() => {
+                      this.setState({
+                        userdata: {
+                          ...this.state.userdata,
+                          sexeUtilisateur: 'A',
+                        },
+                      });
+                    }}>
+                    <Text>Autre</Text>
+                    <Radio
+                      selected={this.state.userdata.sexeUtilisateur == 'A'}
+                      onPress={() => {
+                        this.setState({
+                          userdata: {
+                            ...this.state.userdata,
+                            sexeUtilisateur: 'A',
+                          },
+                        });
+                      }}
+                    />
+                  </TouchableOpacity>
+                </View>
+              </View>
+            ) : null}
+
+            {this.state.isTelAsk ? (
+              <Item stackedLabel style={{marginBottom: 15}}>
+                <Label>Numéro de télephone</Label>
+                <Input
+                  returnKeyType="next"
+                  keyboardType="phone-pad"
+                  autoCompleteType="tel"
+                  clearButtonMode="always"
+                  value={this.state.userdata.telUtilisateur}
+                  onChangeText={(phoneNumber) =>
+                    this.setState({
+                      userdata: {
+                        ...this.state.userdata,
+                        telUtilisateur: phoneNumber,
+                      },
+                    })
+                  }
+                />
+              </Item>
+            ) : null}
+
+            {this.state.isDdnAsk ? (
+              <Item stackedLabel style={{marginBottom: 15}}>
+                <Label>Date de naissance</Label>
+                <Label style={{fontSize: 12}}>
+                  Important pour les classements par catégorie
+                </Label>
+                <View
+                  style={{
+                    display: 'flex',
+                    flexDirection: 'row',
+                  }}>
+                  <Picker
+                    mode="dropdown"
+                    accessibilityLabel={'Jour'}
+                    iosHeader={'Jour'}
+                    iosIcon={<Icon name="chevron-down" type="FontAwesome5" />}
+                    selectedValue={this.state.dayDdn}
+                    onValueChange={(value) => this.onValueDayddn(value)}
+                    placeholder={'Jour'}
+                    placeholderStyle={{
+                      color: ApiUtils.getBackgroundColor(),
+                    }}
+                    placeholderIconColor={ApiUtils.getBackgroundColor()}
+                    textStyle={{color: ApiUtils.getBackgroundColor()}}
+                    itemStyle={{
+                      color: ApiUtils.getBackgroundColor(),
+                      marginLeft: 0,
                       paddingLeft: 10,
-                      width: '80%',
-                      display: 'flex',
-                      flexDirection: 'row',
-                      justifyContent: 'space-between',
+                      borderBottomColor: ApiUtils.getBackgroundColor(),
+                      borderBottomWidth: 1,
+                    }}
+                    itemTextStyle={{
+                      color: ApiUtils.getBackgroundColor(),
+                      borderBottomColor: ApiUtils.getBackgroundColor(),
+                      borderBottomWidth: 1,
                     }}>
-                    <Switch
-                      style={{paddingTop: 20}}
-                      onValueChange={(text) =>
-                        this.setState({
-                          userdata: {
-                            ...this.state.userdata,
-                            acceptChallengeTelUtilisateur: text,
-                          },
-                        })
-                      }
-                      value={
-                        this.state.userdata.acceptChallengeTelUtilisateur == 1
-                      }
-                    />
-                    <Text style={{marginLeft: 10}}>
-                      J’accepte l’utilisation de mon numéro de téléphone pour le
-                      tirage au sort des lots
-                    </Text>
-                  </View>
-                ) : null}
+                    {this.state.days.map((d) => {
+                      return <Picker.Item label={d} value={d} />;
+                    })}
+                  </Picker>
+                  <Picker
+                    mode="dropdown"
+                    accessibilityLabel={'Mois'}
+                    iosHeader={'Mois'}
+                    iosIcon={<Icon name="chevron-down" type="FontAwesome5" />}
+                    selectedValue={this.state.monthDdn}
+                    onValueChange={(value) => this.onValueMonthddn(value)}
+                    placeholder={'Mois'}
+                    placeholderStyle={{
+                      color: ApiUtils.getBackgroundColor(),
+                    }}
+                    placeholderIconColor={ApiUtils.getBackgroundColor()}
+                    textStyle={{color: ApiUtils.getBackgroundColor()}}
+                    itemStyle={{
+                      color: ApiUtils.getBackgroundColor(),
+                      marginLeft: 0,
+                      paddingLeft: 10,
+                      borderBottomColor: ApiUtils.getBackgroundColor(),
+                      borderBottomWidth: 1,
+                    }}
+                    itemTextStyle={{
+                      color: ApiUtils.getBackgroundColor(),
+                      borderBottomColor: ApiUtils.getBackgroundColor(),
+                      borderBottomWidth: 1,
+                    }}>
+                    {this.state.monthsString.map((month) => {
+                      return <Picker.Item label={month} value={month} />;
+                    })}
+                  </Picker>
 
-                {this.state.isAdressAsk ? (
-                  <Item stackedLabel style={{marginBottom: 5}}>
-                    <Label>Adresse</Label>
-                    <Input
-                      returnKeyType="next"
-                      clearButtonMode="always"
-                      value={this.state.userdata.adresseUtilisateur}
-                      onChangeText={(phoneNumber) =>
-                        this.setState({
-                          userdata: {
-                            ...this.state.userdata,
-                            adresseUtilisateur: phoneNumber,
-                          },
-                        })
-                      }
-                    />
-                  </Item>
-                ) : null}
+                  <Picker
+                    mode="dropdown"
+                    accessibilityLabel={''}
+                    iosHeader={'Année'}
+                    iosIcon={<Icon name="chevron-down" type="FontAwesome5" />}
+                    selectedValue={this.state.yearDdn}
+                    onValueChange={(value) => this.onValueYearddn(value)}
+                    placeholder={'Année'}
+                    placeholderStyle={{
+                      color: ApiUtils.getBackgroundColor(),
+                    }}
+                    placeholderIconColor={ApiUtils.getBackgroundColor()}
+                    textStyle={{color: ApiUtils.getBackgroundColor()}}
+                    itemStyle={{
+                      color: ApiUtils.getBackgroundColor(),
+                      marginLeft: 0,
+                      paddingLeft: 10,
+                      borderBottomColor: ApiUtils.getBackgroundColor(),
+                      borderBottomWidth: 1,
+                    }}
+                    itemTextStyle={{
+                      color: ApiUtils.getBackgroundColor(),
+                      borderBottomColor: ApiUtils.getBackgroundColor(),
+                      borderBottomWidth: 1,
+                    }}>
+                    {this.state.years.map((year) => {
+                      return <Picker.Item label={year} value={year} />;
+                    })}
+                  </Picker>
+                </View>
+              </Item>
+            ) : null}
 
-                {this.state.isPostalAsk ? (
-                  <Item stackedLabel style={{marginBottom: 5}}>
-                    <Label>Code Postal</Label>
-                    <Input
-                      returnKeyType="next"
-                      clearButtonMode="always"
-                      value={this.state.userdata.cpUtilisateur}
-                      onChangeText={(phoneNumber) =>
-                        this.setState({
-                          userdata: {
-                            ...this.state.userdata,
-                            cpUtilisateur: phoneNumber,
-                          },
-                        })
-                      }
-                    />
-                  </Item>
-                ) : null}
+            {this.state.isAdressAsk ? (
+              <Item stackedLabel style={{marginBottom: 15}}>
+                <Label>Adresse</Label>
+                <Input
+                  returnKeyType="next"
+                  clearButtonMode="always"
+                  value={this.state.userdata.adresseUtilisateur}
+                  onChangeText={(value) =>
+                    this.setState({
+                      userdata: {
+                        ...this.state.userdata,
+                        adresseUtilisateur: value,
+                      },
+                    })
+                  }
+                />
+              </Item>
+            ) : null}
 
-                {this.state.isCityAsk ? (
-                  <Item stackedLabel style={{marginBottom: 5}}>
-                    <Label>Ville</Label>
-                    <Input
-                      returnKeyType="next"
-                      clearButtonMode="always"
-                      value={this.state.userdata.villeUtilisateur}
-                      onChangeText={(phoneNumber) =>
-                        this.setState({
-                          userdata: {
-                            ...this.state.userdata,
-                            villeUtilisateur: phoneNumber,
-                          },
-                        })
-                      }
-                    />
-                  </Item>
-                ) : null}
+            {this.state.isPostalAsk ? (
+              <Item stackedLabel style={{marginBottom: 15}}>
+                <Label>Code Postal</Label>
+                <Input
+                  returnKeyType="next"
+                  clearButtonMode="always"
+                  value={this.state.userdata.cpUtilisateur}
+                  onChangeText={(phoneNumber) =>
+                    this.setState({
+                      userdata: {
+                        ...this.state.userdata,
+                        cpUtilisateur: phoneNumber,
+                      },
+                    })
+                  }
+                />
+              </Item>
+            ) : null}
 
-                {this.state.isCountyAsk ? (
-                  <Item stackedLabel style={{marginBottom: 5}}>
-                    <Label>Ville</Label>
-                    <Input
-                      autoCapitalize="characters"
-                      returnKeyType="next"
-                      textContentType="countryName"
-                      clearButtonMode="always"
-                      value={this.state.userdata.paysUtilisateur}
-                      onChangeText={(value) =>
-                        this.setState({
-                          userdata: {
-                            ...this.state.userdata,
-                            paysUtilisateur: value,
-                          },
-                        })
-                      }
-                    />
-                  </Item>
-                ) : null}
-              </Form>
+            {this.state.isCityAsk ? (
+              <Item stackedLabel style={{marginBottom: 15}}>
+                <Label>Ville</Label>
+                <Input
+                  returnKeyType="next"
+                  clearButtonMode="always"
+                  value={
+                    this.state.userdata.villeUtilisateur !== null
+                      ? this.state.userdata.villeUtilisateur
+                      : ''
+                  }
+                  onChangeText={(phoneNumber) =>
+                    this.setState({
+                      userdata: {
+                        ...this.state.userdata,
+                        villeUtilisateur: phoneNumber,
+                      },
+                    })
+                  }
+                />
+              </Item>
+            ) : null}
+
+            {this.state.isCountyAsk ? (
+              <Item stackedLabel style={{marginBottom: 5}}>
+                <Label>Ville</Label>
+                <Input
+                  autoCapitalize="characters"
+                  returnKeyType="next"
+                  textContentType="countryName"
+                  clearButtonMode="always"
+                  value={this.state.userdata.paysUtilisateur}
+                  onChangeText={(value) =>
+                    this.setState({
+                      userdata: {
+                        ...this.state.userdata,
+                        paysUtilisateur: value,
+                      },
+                    })
+                  }
+                />
+              </Item>
+            ) : null}
+
+            {this.state.isTelVerifAsked ? (
               <View
                 style={{
                   marginTop: 20,
@@ -1036,132 +1011,54 @@ class Preferences extends Component {
                   justifyContent: 'space-between',
                 }}>
                 <Switch
-                  tyle={{paddingTop: 20}}
+                  style={{paddingTop: 20}}
                   onValueChange={(text) =>
                     this.setState({
                       userdata: {
                         ...this.state.userdata,
-                        acceptChallengeNameUtilisateur: text,
+                        acceptChallengeTelUtilisateur: text,
                       },
                     })
                   }
-                  value={
-                    this.state.userdata.acceptChallengeNameUtilisateur == 1
-                  }
+                  value={this.state.userdata.acceptChallengeTelUtilisateur == 1}
                 />
                 <Text style={{marginLeft: 10}}>
-                  J'accepte que mon nom apparaisse dans le classement
+                  J’accepte l’utilisation de mon numéro de téléphone à des fins
+                  commerciales
                 </Text>
               </View>
+            ) : null}
 
-              {ApiUtils.ISDEBUG() ? (
-                <Text
-                  full
-                  style={{textAlign: 'center', fontSize: 12, marginTop: 30}}>
-                  Debug version {VersionCheck.getCurrentVersion()}
-                </Text>
-              ) : IsDemo ? (
-                <Text
-                  full
-                  style={{textAlign: 'center', fontSize: 12, marginTop: 30}}>
-                  Demo version {VersionCheck.getCurrentVersion()}
-                </Text>
-              ) : (
-                <Text
-                  full
-                  style={{
-                    textAlign: 'center',
-                    fontSize: 12,
-                    marginTop: 30,
-                    marginBottom: 100,
-                  }}>
-                  Version V {VersionCheck.getCurrentVersion()}
-                </Text>
-              )}
-            </Content>
-          </Root>
+            <View
+              style={{
+                marginTop: 10,
+                marginBottom: 40,
+                paddingLeft: 10,
+                width: '80%',
+                display: 'flex',
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+              }}>
+              <Switch
+                onValueChange={(text) =>
+                  this.setState({
+                    userdata: {
+                      ...this.state.userdata,
+                      acceptChallengeNameUtilisateur: text,
+                    },
+                  })
+                }
+                value={this.state.userdata.acceptChallengeNameUtilisateur == 1}
+              />
+              <Text style={{marginLeft: 10}}>
+                J'accepte que mon nom apparaisse dans le classement
+              </Text>
+            </View>
+          </Content>
         </Container>
       </Drawer>
     );
   }
 }
-
-const styles = StyleSheet.create({
-  header: {
-    backgroundColor: ApiUtils.getBackgroundColor(),
-  },
-  title: {
-    width: '25%',
-  },
-  saveButton: {
-    backgroundColor: 'transparent',
-    marginTop: 0,
-    paddingTop: 0,
-    shadowOffset: {height: 0, width: 0},
-    shadowOpacity: 0,
-    elevation: 0,
-  },
-  drawerButton: {
-    backgroundColor: 'transparent',
-    width: '100%',
-    marginTop: 0,
-    paddingTop: 0,
-    shadowOffset: {height: 0, width: 0},
-    shadowOpacity: 0,
-    elevation: 0,
-  },
-  saveText: {
-    color: textAutoBackgroundColor,
-  },
-  body: {
-    width: '100%',
-    backgroundColor: 'white',
-  },
-  inputCode: {
-    borderBottomColor: 'black',
-    borderBottomWidth: 1,
-    fontStyle: 'italic',
-    height: 20,
-    padding: 0,
-    marginLeft: 5,
-    marginRight: 5,
-    marginBottom: 5,
-    marginTop: 5,
-    fontSize: 12,
-  },
-  label: {
-    padding: 5,
-    paddingLeft: 15,
-    marginTop: 10,
-    marginBottom: 10,
-    color: 'gray',
-    fontSize: 16,
-  },
-  p: {
-    fontSize: 12,
-    marginBottom: 5,
-  },
-  url: {
-    fontSize: 12,
-  },
-  button: {
-    marginBottom: 10,
-  },
-  loginButtonSection: {
-    width: '100%',
-    marginTop: 5,
-    height: '200%',
-  },
-  scrollcontent: {
-    height: '80%',
-  },
-  container: {
-    width: '100%',
-  },
-  icon: {
-    width: 24,
-    height: 24,
-  },
-});
 
 export default connect(mapStateToProps)(Preferences);

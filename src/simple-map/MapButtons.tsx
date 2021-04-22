@@ -6,6 +6,8 @@ import {
   Platform,
   Alert,
   Modal,
+  LayoutChangeEvent,
+  LayoutRectangle,
 } from 'react-native';
 import {
   Header,
@@ -51,6 +53,11 @@ export default function MapButtons(props: Props) {
   const [selectedSport, setSelectedSport] = useState(-1);
   const [comments, setComments] = useState('');
   const [spinner, setSpinner] = useState(false);
+  const [
+    extraButtonPosition,
+    setExtraButtonPosition,
+  ] = useState<LayoutRectangle>();
+
   const [
     acceptChallengeNameUtilisateur,
     setAcceptChallengeNameUtilisateur,
@@ -271,6 +278,12 @@ export default function MapButtons(props: Props) {
     setSelectedSport(value);
   };
 
+  const onToggleExtrasButtonLayout = (event: LayoutChangeEvent) => {
+    const layout = event.nativeEvent.layout;
+    setExtraButtonPosition(layout);
+    console.log(layout);
+  };
+
   const onClickGetCurrentPosition = () => {
     props.onCenter();
   };
@@ -334,11 +347,13 @@ export default function MapButtons(props: Props) {
         left: 0,
         right: 0,
         bottom: Platform.OS == 'ios' ? 110 : 70,
-        paddingTop: 50,
+        paddingTop: isOpenExtraButtons ? 100 : 0,
         zIndex: 1000,
         justifyContent: 'center',
+        // borderBottomColor : 'black',
+        // borderWidth :1
       }}>
-      <View>
+      <View key="gpsInfoMessage">
         {isGpsNotOk ? (
           <View
             style={{
@@ -411,7 +426,7 @@ export default function MapButtons(props: Props) {
               style={{
                 marginBottom: 0,
                 position: 'absolute',
-
+                left: extraButtonPosition != null ? extraButtonPosition?.x : 0,
                 bottom: 80,
               }}>
               {isRecording ? null : (
@@ -510,6 +525,9 @@ export default function MapButtons(props: Props) {
           ) : null}
 
           <TouchableOpacity
+            onLayout={(event: LayoutChangeEvent) =>
+              onToggleExtrasButtonLayout(event)
+            }
             onPress={() => toggleExtraButtons()}
             style={{
               alignSelf: 'center',

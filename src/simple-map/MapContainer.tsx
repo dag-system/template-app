@@ -50,7 +50,7 @@ export default function MapContainer() {
     return unsubscribe;
   }, [isRecording]);
 
-  const onUpdatePosition = (pos : any) => {
+  const onUpdatePosition = (pos: any) => {
     mapRef?.current?.onUpdatePosition(pos);
   };
 
@@ -134,8 +134,7 @@ export default function MapContainer() {
     getLives(userData.idUtilisateur);
   };
 
-  const getLives = (idUtilisateur : number) => {
-    console.log('ici');
+  const getLives = (idUtilisateur: number) => {
     let formData = new FormData();
     formData.append('method', 'getLives');
     formData.append('auth', ApiUtils.getAPIAuth());
@@ -187,8 +186,8 @@ export default function MapContainer() {
         if (result.traces != null && result.traces.length != 0) {
           var tracesArray = Object.values(result.traces);
 
-          var finalTraceArray : any[] = [];
-          var finalinterestArray : any = [];
+          var finalTraceArray: any[] = [];
+          var finalinterestArray: any = [];
           if (tracesArray != null && tracesArray.length != 0) {
             tracesArray.forEach((trace: any) => {
               var finalTrace = trace;

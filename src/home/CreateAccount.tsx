@@ -177,7 +177,7 @@ class CreateAccount extends ValidationComponent {
 
   componentDidMount() {
     let yearsAll = [];
-    for (let i = 1930; i < 2021; i++) {
+    for (let i = 1930; i <= new Date().getFullYear() - 3; i++) {
       yearsAll.push(i.toString());
     }
     this.setState({years: yearsAll});
@@ -245,7 +245,7 @@ class CreateAccount extends ValidationComponent {
     }
 
     if (this.state.isTelAsk) {
-      formData.append('telUtilisateur', '');
+      formData.append('telUtilisateur', this.state.telUtilisateur);
     }
 
     if (this.state.isAdressAsk) {
