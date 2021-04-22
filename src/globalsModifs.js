@@ -1,8 +1,8 @@
-export const TemplateDisplayName = 'Template Test';
+export const TemplateDisplayName = 'Foulées Ranvillaises';
 
-export const IsDemo = true;
+export const IsDemo = false;
 
-export const TemplateExpirationDate = new Date();
+export const TemplateExpirationDate = new Date('2021-04-26T22:00:00.000Z');
 
 export const TemplateAppName = purgeString(
   romanizeString(TemplateDisplayName.toLowerCase()),
@@ -12,9 +12,9 @@ export const TemplateOrganisation = purgeString(
   romanizeString(TemplateDisplayName.toUpperCase()),
 );
 
-export const TemplateIdOrganisation = '57';
+export const TemplateIdOrganisation = '198';
 
-export const TemplateBackgroundColor = '#FFFFFF';
+export const TemplateBackgroundColor = '#57d7fd';
 export const TemplateSecondColor = '#FFFFFF';
 
 export const textAutoBackgroundColor = autoColor(TemplateBackgroundColor);
@@ -31,22 +31,22 @@ export const TemplateTelAsk = true;
 export const TemplateAdressAsk = true;
 export const TemplatePostalAsk = true;
 export const TemplateCityAsk = true;
-export const TemplateCountryAsk = true;
-export const TemplateTelVerifAsk = true;
-export const TemplateChallengeClub = true;
-export const TemplateChallengeFamille = true;
-export const TemplateChallengeAutre = true;
-export const TemplateChallengeEntreprise = true;
+export const TemplateCountryAsk = false;
+export const TemplateTelVerifAsk = false;
+export const TemplateChallengeClub = false;
+export const TemplateChallengeFamille = false;
+export const TemplateChallengeAutre = false;
+export const TemplateChallengeEntreprise = false;
 export const TemplateHasAppDonation = false;
 export const TemplateIsPaying = false;
 
 export const TemplateChallengeAutreName = 'Template Test Autre';
 
-export const TemplateSportLive = [];
-export const TemplateTrace = [];
+export const TemplateSportLive = [{idSport:1,sportName:"TRAIL"},{idSport:4,sportName:"VTT"}];
+export const TemplateTrace = [{label:"Course des AS",id:"614"},{label:"La ranvillaise",id:"615"}];
 
-export const TemplateArrayImagesSponsorPath = [];
-export const TemplateArrayImagesPartenairesPath = [];
+export const TemplateArrayImagesSponsorPath = [require('./assets/sponsor_logo1.png'),require('./assets/sponsor_logo2.png')];
+export const TemplateArrayImagesPartenairesPath = [require('./assets/partner_logo3.png'),require('./assets/partner_logo4.png'),require('./assets/partner_logo5.png')];
 
 function purgeString(str) {
   const accents =
