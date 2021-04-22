@@ -154,9 +154,18 @@ class Preferences extends Component {
       isSexeAsk: TemplateSexeAsk,
       sexeUtilisateur: '',
       isDdnAsk: TemplateDdnAsk,
-      dayDdn: this.props.userData.ddnUtilisateur.split('-')[2],
-      monthDdn: this.props.userData.ddnUtilisateur.split('-')[1],
-      yearDdn: this.props.userData.ddnUtilisateur.split('-')[0],
+      dayDdn:
+        this.props.userData.ddnUtilisateur !== null
+          ? this.props.userData.ddnUtilisateur.split('-')[2]
+          : 1,
+      monthDdn:
+        this.props.userData.ddnUtilisateur !== null
+          ? this.props.userData.ddnUtilisateur.split('-')[1]
+          : 1,
+      yearDdn:
+        this.props.userData.ddnUtilisateur !== null
+          ? this.props.userData.ddnUtilisateur.split('-')[0]
+          : 1980,
       isMailAsk: TemplateMailAsk,
       emailUtilisateur: '',
       isTelAsk: TemplateTelAsk,
@@ -851,9 +860,7 @@ class Preferences extends Component {
                     accessibilityLabel={'Mois'}
                     iosHeader={'Mois'}
                     iosIcon={<Icon name="chevron-down" type="FontAwesome5" />}
-                    selectedValue={
-                      this.props.userData.ddnUtilisateur.split('-')[1]
-                    }
+                    selectedValue={this.state.monthDdn}
                     onValueChange={(value) => this.onValueMonthddn(value)}
                     placeholder={'Mois'}
                     placeholderStyle={{
@@ -883,9 +890,7 @@ class Preferences extends Component {
                     accessibilityLabel={''}
                     iosHeader={'Année'}
                     iosIcon={<Icon name="chevron-down" type="FontAwesome5" />}
-                    selectedValue={
-                      this.props.userData.ddnUtilisateur.split('-')[0]
-                    }
+                    selectedValue={this.state.yearDdn}
                     onValueChange={(value) => this.onValueYearddn(value)}
                     placeholder={'Année'}
                     placeholderStyle={{
