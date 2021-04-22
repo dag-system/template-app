@@ -43,14 +43,11 @@ export default class Sidebar extends Component {
   componentDidMount() {}
 
   onClickNavigate(routeName) {
-    // this.props.drawer.close()
     if (this.props.drawer != null && this.props.drawer._root != null) {
-      console.log('close')
       this.props.drawer._root.close();
     }
 
-    if(this.props.closeDrawer)
-    {
+    if (this.props.closeDrawer) {
       this.props.closeDrawer();
     }
 
@@ -112,9 +109,7 @@ export default class Sidebar extends Component {
                 type="FontAwesome5"
                 style={[styles.icon, {color: 'black'}]}
               />
-              <Text style={[styles.menuText, {color: 'black'}]}>
-              Carte
-              </Text>
+              <Text style={[styles.menuText, {color: 'black'}]}>Carte</Text>
             </View>
           </TouchableHighlight>
 
@@ -169,7 +164,6 @@ export default class Sidebar extends Component {
               </Text>
             </View>
           </TouchableHighlight> */}
-
 
           <TouchableHighlight
             underlayColor="rgba(255,255,255,1,0.6)"
@@ -488,41 +482,41 @@ export default class Sidebar extends Component {
             </Text>
           </View>
 
-      <View style={{height : 100}}></View>
+          <View style={{height: 100}}></View>
         </ScrollView>
 
         <Modal
-            visible={this.state.isVisibleDonateModal}
-            onRequestClose={() => this.onCloseDonate()}>
-            <Header style={styles.header}>
-              <Left>
-                <Button
-                  style={styles.drawerButton}
-                  onPress={() => this.onCloseDonate()}>
-                  <Icon
-                    style={styles.saveText}
-                    name="chevron-left"
-                    type="FontAwesome5"
-                  />
-                </Button>
-              </Left>
-              <Body style={{flex: 0}} />
-              <Right style={{flex: 1}}>
-                <Image
-                  resizeMode="contain"
-                  source={Logo}
-                  style={styles.logoHeader}
+          visible={this.state.isVisibleDonateModal}
+          onRequestClose={() => this.onCloseDonate()}>
+          <Header style={styles.header}>
+            <Left>
+              <Button
+                style={styles.drawerButton}
+                onPress={() => this.onCloseDonate()}>
+                <Icon
+                  style={styles.saveText}
+                  name="chevron-left"
+                  type="FontAwesome5"
                 />
-              </Right>
-            </Header>
-            <WebviewJetCode
-              uri={
-                'http://dag-system.com/externalcontent/' +
-                TemplateAppName +
-                '/jetcode_don.html'
-              }
-            />
-          </Modal>
+              </Button>
+            </Left>
+            <Body style={{flex: 0}} />
+            <Right style={{flex: 1}}>
+              <Image
+                resizeMode="contain"
+                source={Logo}
+                style={styles.logoHeader}
+              />
+            </Right>
+          </Header>
+          <WebviewJetCode
+            uri={
+              'http://dag-system.com/externalcontent/' +
+              TemplateAppName +
+              '/jetcode_don.html'
+            }
+          />
+        </Modal>
       </Container>
     );
   }

@@ -1,55 +1,52 @@
-import React, {Component} from 'react';
+import React, {Component, useEffect} from 'react';
 import {View, Platform, Alert} from 'react-native';
 import ApiUtils from '../ApiUtils';
-import {connect} from 'react-redux';
+import {connect, useDispatch, useSelector} from 'react-redux';
 import Geolocation from '@react-native-community/geolocation';
-import BackgroundGeolocation from 'react-native-background-geolocation';
+import BackgroundGeolocation, {
+  Config,
+  Location,
+  LocationError,
+} from 'react-native-background-geolocation';
 import {check, request, PERMISSIONS, RESULTS} from 'react-native-permissions';
 const haversine = require('haversine');
 import DefaultProps from '../models/DefaultProps';
 
 import {TemplateDisplayName} from '../globalsModifs';
+import AppState from '../models/AppState';
 
-const mapStateToProps = (state) => {
-  return {
-    isRecording: state.isRecording,
-    currentLive: state.currentLive,
-    userData: state.userData,
-    coordinates: state.coordinates,
-    isMoving: state.isMoving,
-    odometer: state.odometer,
-  };
-};
-
-interface Props extends DefaultProps {
-  isRecording: boolean;
-  currentLive: any;
-  userData: any;
-  dates: any[];
-  odometer: any;
-  isMoving: boolean;
+interface Props {
+  onUpdatePosition(location: any): void;
 }
 
-interface State {}
+export default function GeolocComponent(props: Props) {
+  const dispatch = useDispatch();
+  const {currentLive, isRecording, odometer, userData, isMoving} = useSelector(
+    (state: AppState) => state,
+  );
 
-class GeolocComponent extends Component<Props, State> {
-  constructor(props) {
-    super(props);
+  useEffect(() => {
+    console.log("use effect geoloc component")
+    BackgroundGeolocation.removeAllListeners(() => {
+      requestMotionPermission();
+      Geolocation.setRNConfiguration({
+        authorizationLevel: 'always',
+        skipPermissionRequests: false,
+      });
+      configGeoloc();
+    });
+  }, [isRecording, isMoving]);
 
-    this.state = {};
-  }
-
-  requestMotionPermission() {
+  const requestMotionPermission = () => {
     check(PERMISSIONS.IOS.MOTION)
       .then((result) => {
         switch (result) {
           case RESULTS.UNAVAILABLE:
             break;
           case RESULTS.DENIED:
-            this.askMotionPermission();
+            askMotionPermission();
             break;
-          case RESULTS.LIMITED:
-            break;
+
           case RESULTS.GRANTED:
             break;
           case RESULTS.BLOCKED:
@@ -58,9 +55,9 @@ class GeolocComponent extends Component<Props, State> {
         }
       })
       .catch(() => {});
-  }
+  };
 
-  askMotionPermission() {
+  const askMotionPermission = () => {
     request(PERMISSIONS.IOS.MOTION).then((result) => {
       if (result == RESULTS.DENIED) {
         Alert.alert(
@@ -70,41 +67,9 @@ class GeolocComponent extends Component<Props, State> {
         // Sentry.captureMessage("Motion Permission refusée");
       }
     });
-  }
+  };
 
-  componentDidMount() {
-    setTimeout(() => this.didMount(), 300);
-  }
-  didMount() {
-    // if (this.props.currentLive == null) {
-    //   //  this.onDisconnect(false);
-    //   this.props.navigation.navigate('Lives');
-    // } else {
-      this.requestMotionPermission();
-      Geolocation.setRNConfiguration({
-        authorizationLevel: 'always',
-        skipPermissionRequests: false,
-      });
-      this.configGeoloc();
-    // }
-  }
-
-  componentWillUnmount() {
-    BackgroundGeolocation.removeAllListeners();
-  }
-
-  async calcDistance(oldLatLong, newLatLng) {
-    var dist = haversine(oldLatLong, newLatLng);
-
-    var odometerDataNew = {
-      odometer: this.props.odometer + dist,
-    };
-
-    var action = {type: 'UPDATE_ODOMETER', data: odometerDataNew};
-    this.props.dispatch(action);
-  }
-
-  configureGeofences() {
+  const configureGeofences = () => {
     let geofences = [
       {
         identifier: 'foo',
@@ -125,35 +90,23 @@ class GeolocComponent extends Component<Props, State> {
     ];
 
     BackgroundGeolocation.addGeofences(geofences);
-  }
+  };
 
-  configGeoloc() {
-    var idLive = this.props.currentLive?.idLive;
+  const configGeoloc = () => {
+    var idLive = currentLive?.idLive;
 
-    let config = {
+    let config: Config = {
       debug: false,
       distanceFilter: 10,
       url: ApiUtils.getAPIUrl(),
       httpRootProperty: '.',
       httpTimeout: 300000,
 
-      params: {
-        method: 'createPositions2',
-        idLive: idLive,
-        auth: ApiUtils.getAPIAuth(),
-        idUtilisateur: this.props.userData.idUtilisateur,
-      },
-      extras: {
-        method: 'createPositions2',
-        idLive: idLive,
-        auth: ApiUtils.getAPIAuth(),
-        idUtilisateur: this.props.userData.idUtilisateur,
-      },
       notification: {
         sticky: true,
         title: TemplateDisplayName,
         text: 'Suivi de votre position en cours',
-        channelImportance: BackgroundGeolocation.NOTIFICATION_PRIORITY_LOW,
+        // channelImportance: BackgroundGeolocation.NOTIFICATION_PRIORITY_LOW,
       },
       enableHeadless: true,
       locationAuthorizationRequest: 'Always',
@@ -189,6 +142,21 @@ class GeolocComponent extends Component<Props, State> {
       desiredOdometerAccuracy: 10,
     };
 
+    if (isRecording) {
+      config.params = {
+        method: 'createPositions2',
+        idLive: idLive,
+        auth: ApiUtils.getAPIAuth(),
+        idUtilisateur: userData.idUtilisateur,
+      };
+      config.extras = {
+        method: 'createPositions2',
+        idLive: idLive,
+        auth: ApiUtils.getAPIAuth(),
+        idUtilisateur: userData.idUtilisateur,
+      };
+    }
+
     BackgroundGeolocation.reset(
       config,
       () => {},
@@ -196,9 +164,6 @@ class GeolocComponent extends Component<Props, State> {
     );
 
     BackgroundGeolocation.ready(config, () => {
-      this.setState({
-        libelleLive: ApiUtils.getLibelleLive(),
-      });
       BackgroundGeolocation.start(() => {
         BackgroundGeolocation.changePace(true);
       });
@@ -206,12 +171,12 @@ class GeolocComponent extends Component<Props, State> {
       BackgroundGeolocation.setConfig(config).then(() => {});
     });
 
-    this.configureGeofences();
+    configureGeofences();
     // Step 1:  Listen to events:
     BackgroundGeolocation.on(
       'location',
-      (loc) => this.onLocation(loc),
-      this.onLocationError.bind(this),
+      (loc: Location) => onLocation(loc),
+      (error: LocationError) => onLocationError(error),
     );
 
     BackgroundGeolocation.onAuthorization((authorizationEvent) => {
@@ -260,16 +225,16 @@ class GeolocComponent extends Component<Props, State> {
         persist: true,
       }).then(() => {});
     });
-  }
+  };
 
-  onLocationError(error) {
+  const onLocationError = (error: LocationError) => {
     // Sentry.captureMessage('location Error', JSON.stringify(error));
     ApiUtils.logError(
       'Location Error' +
         'ErrorCode : ' +
         error +
         ' idLive : ' +
-        this.props.currentLive?.idLive +
+        currentLive?.idLive +
         ' ' +
         Platform.OS,
       '',
@@ -277,12 +242,16 @@ class GeolocComponent extends Component<Props, State> {
     if (error == 0) {
       // alert('Nous ne trouvons pas votre position');
     }
-  }
+  };
 
-  onLocation(location) {
-    if (this.props.isMoving) {
-      this.addMarker(location);
-      this.props.onUpdatePosition(location);
+  const onLocation = (location: Location) => {
+    //  addMarker(location);
+    console.log('on locaiton event');
+    console.log(location);
+    console.log('on locaiton event is moving : ' + isMoving);
+    if (isMoving) {
+      addMarker(location);
+      props.onUpdatePosition(location);
     } else {
       let isGpsNotOk = location.coords.speed == -1;
       let data = {
@@ -290,32 +259,24 @@ class GeolocComponent extends Component<Props, State> {
         isGpsNotOk: isGpsNotOk,
       };
       var action = {type: 'UPDATE_GPS_OK', data: data};
-      this.props.dispatch(action);
+      dispatch(action);
     }
-  }
+  };
 
-  async addMarker(location) {
-    var coordinate = {
-      uuid: location.uuid,
-      latitude: location.coords.latitude,
-      longitude: location.coords.longitude,
-      timestamp: location.timestamp,
-      speed: location.coords.speed,
-    };
+  const addMarker = (location: any) => {
+    if (isMoving) {
+      var coordinate = {
+        uuid: location.uuid,
+        latitude: location.coords.latitude,
+        longitude: location.coords.longitude,
+        timestamp: location.timestamp,
+        speed: location.coords.speed,
+      };
 
-    // if (this.props.coordinates.length > 0) {
-    //   var lastPos = this.props.coordinates[this.props.coordinates.length - 1];
-    //   var newPost = coordinate;
-    //   this.calcDistance(lastPos, newPost);
-    // }
+      var action = {type: 'ADD_COORDINATE', data: coordinate};
+      dispatch(action);
+    }
+  };
 
-    var action = {type: 'ADD_COORDINATE', data: coordinate};
-    this.props.dispatch(action);
-  }
-
-  render() {
-    return <View></View>;
-  }
+  return <View></View>;
 }
-
-export default connect(mapStateToProps)(GeolocComponent);

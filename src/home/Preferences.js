@@ -228,7 +228,6 @@ class Preferences extends Component {
     if (this.props.userData.ddnUtilisateur != '0000-00-00') {
       this.setState({showDefaultDdn: true});
 
-      console.log(this.props.userData.ddnUtilisateur);
       if (this.props.userData.ddnUtilisateur != null) {
         var day = moment(this.props.userData.ddnUtilisateur).format('DD');
         this.onValueDayddn(day);

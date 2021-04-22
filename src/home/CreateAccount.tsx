@@ -74,6 +74,7 @@ class CreateAccount extends ValidationComponent {
     this.deviceLocale = 'fr';
 
     this.state = {
+      error: false,
       days: [
         '01',
         '02',
@@ -319,7 +320,6 @@ class CreateAccount extends ValidationComponent {
       .then((res) => ApiUtils.checkStatus(res))
       .then((response) => response.json())
       .then((responseJson) => {
-        console.log('LOOOOG FOLOMI : ', responseJson);
         this.setState({isLoading: false});
         if (responseJson.codeErreur == 'SUCCESS') {
           var action = {type: 'LOGIN', data: responseJson};

@@ -38,7 +38,6 @@ class NotificationModal extends Component<Props, State> {
 
   seeNotificationLive = () => {
     // this.getFirstLocation();
-    console.log(this.props.idLive);
     let live = {
       idLive: this.props.idLive,
     };

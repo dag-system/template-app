@@ -6,22 +6,18 @@ var DomParser = require('react-native-html-parser').DOMParser;
 import GPXTrack from './GPXTrack.js';
 
 export default class GPXDocument {
-
   /**
    * Parse the gpx xml string and store the results internally
    * @param {string} xmlString The xml string to parse
    */
   constructor(xmlString) {
-
-    try{
+    try {
       let doc = new DomParser().parseFromString(xmlString, 'text/html');
-      console.log(doc.getElementsByTagName('trk'));
-  
+
       var test = doc.getElementsByTagName('trk');
-  
+
       this.parsedGPX = doc;
-    }catch(e)
-    {
+    } catch (e) {
       // alert(e)
     }
 
@@ -36,21 +32,16 @@ export default class GPXDocument {
    * Get the tracks for all tracks in the gpx file
    */
   async getTracks() {
-
     var tracks = this.parsedGPX.getElementsByTagName('trk');
 
     // let tracks = this.parsedGPX.find('/ns:gpx/ns:trk', GPXDocument.GPX_NS);
 
+    if (tracks === undefined) throw new Error('Unable read tracks');
 
-    if (tracks === undefined)
-      throw new Error('Unable read tracks');
-
-    
     var tracksArray = [];
     for (let i = 0; i < tracks.length; i++) {
       const element = tracks[i];
       tracksArray.push(element);
-
     }
     // Use the map function to get an array with the name of each track if it exists
     return tracksArray.map((val) => {
@@ -61,4 +52,4 @@ export default class GPXDocument {
 
 // The mean radius of the earth in miles
 GPXDocument.MEAN_RAD_MI = 3958.7613;
-GPXDocument.GPX_NS = { ns: 'http://www.topografix.com/GPX/1/1' };
+GPXDocument.GPX_NS = {ns: 'http://www.topografix.com/GPX/1/1'};

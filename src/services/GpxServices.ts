@@ -47,9 +47,9 @@ export default class GpxService {
   }
 
   static paceDisplay(pace) {
-    var hours = Math.floor((pace % (60 * 60 )) / (60 * 60));
-    var minutes = Math.floor((pace % ( 60 * 60)) / ( 60));
-    var seconds = Math.floor((pace % (60)) / 1);
+    var hours = Math.floor((pace % (60 * 60)) / (60 * 60));
+    var minutes = Math.floor((pace % (60 * 60)) / 60);
+    var seconds = Math.floor((pace % 60) / 1);
     return GpxService.formattedTime(hours, minutes, seconds);
   }
 
@@ -68,22 +68,18 @@ export default class GpxService {
     if (seconds < 10) {
       secondsDisplay = '0' + seconds;
     }
-    console.log( hoursDisplay + ':' + minutesDisplay + ':' + secondsDisplay);
 
-    if(hours > 0)
-    {
-        return hoursDisplay + ':' + minutesDisplay + ':' + secondsDisplay;
-    }else{
-        return  minutesDisplay + ':' + secondsDisplay;
+    if (hours > 0) {
+      return hoursDisplay + ':' + minutesDisplay + ':' + secondsDisplay;
+    } else {
+      return minutesDisplay + ':' + secondsDisplay;
     }
-   
   }
 
   static convertDureeToSec(duree: string) {
     //00:08:52
 
     if (duree != undefined && duree != '0') {
-      console.log(duree);
       let split = duree.split(':');
       let hours = Number(split[0]);
       let minutes = Number(split[1]);

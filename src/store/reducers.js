@@ -28,8 +28,8 @@ const initialState = {
   isOkPopupBAttery2: false,
   userClubs: [],
   isGpsNotOk: true,
-  phoneData : null,
-  notifications :[]
+  phoneData: null,
+  notifications: [],
 };
 
 const initialMockState = {
@@ -62,10 +62,7 @@ const initialMockState = {
   folocodes: [],
   isOkPopupGps: false,
   isOkPopupBAttery: false,
-  notifications :[
-    {type : "newEffort",
-     idLive : 12  }
-  ]
+  notifications: [{type: 'newEffort', idLive: 12}],
 };
 
 const reducer = (state = initialState, action) => {
@@ -81,7 +78,7 @@ const reducer = (state = initialState, action) => {
       }
       let folocodes = JSON.parse(JSON.stringify(state.folocodes));
       if (
-        folocodes.filter(f => f.folocode == newFolocode.folocode).length == 0
+        folocodes.filter((f) => f.folocode == newFolocode.folocode).length == 0
       ) {
         folocodes.push(newFolocode);
       }
@@ -91,7 +88,6 @@ const reducer = (state = initialState, action) => {
         folocodes: folocodes,
         userData: action.data,
       };
-      console.log(nextState.folocodes);
       return nextState || state;
     }
     case 'LOGOUT': {
@@ -125,24 +121,21 @@ const reducer = (state = initialState, action) => {
     }
 
     case 'ADD_NOTIFICATION': {
-      let notifs= JSON.parse(JSON.stringify(state.notifications));
-      if(notifs.filter(n=> n.idLive == action.data.idLive).length == 0)
-      {
+      let notifs = JSON.parse(JSON.stringify(state.notifications));
+      if (notifs.filter((n) => n.idLive == action.data.idLive).length == 0) {
         let nextState = {
           ...state,
           notifications: [...state.notifications, action.data],
         };
         return nextState || state;
-      }else{
+      } else {
         return state;
       }
-
     }
 
     case 'DELETE_NOTIFICATION': {
-      let notifs= [];
-      console.log(notifs);
-      notifs =  state.notifications.filter(n => n.idLive != action.data);
+      let notifs = [];
+      notifs = state.notifications.filter((n) => n.idLive != action.data);
       let nextState = {
         ...state,
         notifications: notifs,
@@ -157,8 +150,6 @@ const reducer = (state = initialState, action) => {
       };
       return nextState || state;
     }
-
-
 
     case 'VIEW_POPUPAIDE': {
       let nextState = {
@@ -193,7 +184,7 @@ const reducer = (state = initialState, action) => {
     }
     case 'DELETE_LIVE': {
       var currentLives = new Object(state.lives);
-      currentLives = currentLives.filter(l => l.idLive != action.data);
+      currentLives = currentLives.filter((l) => l.idLive != action.data);
       let nextState = {
         ...state,
         lives: currentLives,
@@ -221,7 +212,7 @@ const reducer = (state = initialState, action) => {
     case 'SAVE_CURRENT_LIVE': {
       let nextState = {
         ...state,
-        currentLive: action.data,
+        currentLiveSummary: action.data,
       };
       // alert(JSON.stringify(action.data));
 
@@ -271,7 +262,7 @@ const reducer = (state = initialState, action) => {
     case 'SAVE_COORDINATES': {
       let nextState = {
         ...state,
-       // coordinates: action.data,
+        // coordinates: action.data,
         coordinatesString: JSON.stringify(action.data),
       };
 
@@ -282,7 +273,7 @@ const reducer = (state = initialState, action) => {
       let nextState = {
         ...state,
         isGpsNotOk: action.data.isGpsNotOk,
-        currentPosition : action.data.location.coords
+        currentPosition: action.data.location.coords,
       };
       return nextState || state;
     }
@@ -317,7 +308,7 @@ const reducer = (state = initialState, action) => {
     case 'IGNORE_LIVE': {
       let lives = JSON.parse(JSON.stringify(state.lives));
 
-      lives = lives.filter(l => l.idLive != action.data);
+      lives = lives.filter((l) => l.idLive != action.data);
 
       let nextState = {
         ...state,
@@ -333,15 +324,13 @@ const reducer = (state = initialState, action) => {
         coordinatesString: '[]',
         markers: [],
         dates: [],
-        showsUserLocation: false,
         isRecording: false,
         isMoving: false,
         odometer: 0,
-        pointsInterets: [],
-        polylines: [],
         nomStation: null,
         descriptionStation: null,
         currentPosition: null,
+        currentLive: null,
       };
 
       return nextState || state;
@@ -373,17 +362,6 @@ const reducer = (state = initialState, action) => {
       return nextState || state;
     }
 
-    case 'UPDATE_INVITES': {
-      var newLive = new Object(state.currentLive);
-      newLive.invites = action.data;
-      let nextState = {
-        ...state,
-        currentLive: newLive,
-      };
-
-      return nextState || state;
-    }
-
     case 'UPDATE_STATION_DATA': {
       let nextState = {
         ...state,
@@ -391,11 +369,9 @@ const reducer = (state = initialState, action) => {
         nomStation: action.data.nomStation,
         descriptionStation: action.data.descriptionStation,
         pointsInterets: action.data.pointsInterets,
-        challenges : action.data.challenges
+        challenges: action.data.challenges,
+        statistics : action.data.statistics
       };
-      console.log(nextState.pointsInterets);
-      console.log(nextState.pointsInterets);
-      console.log("interets");
       return nextState || state;
     }
 
@@ -410,10 +386,32 @@ const reducer = (state = initialState, action) => {
       return nextState || state;
     }
 
+    case 'SET_DEMO_TRACE': {
+      var traces = new Object(state.polylines);
+
+      var trace = traces.filter(
+        (pol) => pol.nomTrace == action.data.nomTrace,
+      )[0];
+
+      let nextState = {
+        ...state,
+        demoTrace: trace,
+        isDemoMode: true,
+      };
+      return nextState || state;
+    }
+    case 'REFRESH': {
+      let nextState = {
+        ...state,
+        refresh: action.data,
+      };
+      return nextState || state;
+    }
+
     case 'TOGGLE_TRACE': {
       var traces = new Object(state.polylines);
 
-      var trace = traces.filter(pol => pol.nomTrace == action.data)[0];
+      var trace = traces.filter((pol) => pol.nomTrace == action.data)[0];
       trace.isActive = !trace.isActive;
 
       let nextState = {

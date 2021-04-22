@@ -1,155 +1,123 @@
-import React, {Component} from 'react';
+import React, {Component, useEffect, useState} from 'react';
 import {
-  Platform,
   StyleSheet,
-  Linking,
   View,
-  PermissionsAndroid,
   Image,
-  ActivityIndicator,
   ScrollView,
-  Share as ShareRn,
   TouchableHighlight,
   TouchableOpacity,
-  Dimensions,
-  Alert,
-  Modal,
 } from 'react-native';
-import {
-  Container,
-  Header,
-  Left,
-  Body,
-  Right,
-  Text,
-  Button,
-  Fab,
-  Icon,
-  Content,
-  Root,
-  Toast,
-} from 'native-base';
-import AutoHeightWebView from 'react-native-autoheight-webview';
-import WebView from 'react-native-webview';
+import {Text, Button} from 'native-base';
 
-import MapView, {Polyline} from 'react-native-maps';
 import ApiUtils from '../ApiUtils';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import {connect} from 'react-redux';
-import RNFetchBlob from 'rn-fetch-blob';
-import Share from 'react-native-share';
-import Logo from '../assets/logo.png';
-import GlobalStyles from '../styles';
-import {Sponsors} from './Sponsors';
+import {connect, useDispatch, useSelector} from 'react-redux';
 import {ReactNativeModal as ModalSmall} from 'react-native-modal';
 import {Icon as IconElement} from 'react-native-elements';
 import {FlatList} from 'react-native';
-import {check, request, PERMISSIONS, RESULTS} from 'react-native-permissions';
-import DefaultProps from '../models/DefaultProps';
-
-import {TemplateSportLive} from '../globalsModifs';
+import AppState from '../models/AppState';
 import Interest from '../models/Interest';
+import Polyline from '../models/Polyline';
 
-const mapStateToProps = (state) => {
-  return {
-    userData: state.userData,
-    currentLive: state.currentLive,
-    currentMapStyle: state.currentMapStyle,
-    polylines: state.polylines,
-    sports: state.sports,
-    pointsInterets: state.pointsInterets,
-  };
-};
+interface Props {
+  isDemo: boolean;
+  onClose(): void;
+  isVisible: boolean;
+  centerOnTrace(trace: Polyline): void;
+  centerOnPoi(poi: Interest): void;
+  showDemoTrace(trace: Polyline): void;
+}
 
-class TraceModal extends Component {
-  constructor(props) {
-    super(props);
+export default function TraceModal(props: Props) {
+  const [tabVisible, setTabVisible] = useState('traces');
+  const {polylines, pointsInterets} = useSelector((state: AppState) => state);
+  const dispatch = useDispatch();
 
-    this.state = {
-      tabVisible: 'traces',
-    };
-  }
+  useEffect(() => {
+    if (props.isDemo) setTabVisible('traces');
+  }, [props.isDemo]);
 
-  componentDidMount() {
-    // console.log(this.props.pointsInterets.length);
-  }
-
-  closeTraceModal = () => {
-    this.props.onClose();
+  const closeTraceModal = () => {
+    props.onClose();
   };
 
-  toggleTrace(traceName) {
+  const toggleTrace = (traceName) => {
     var action = {type: 'TOGGLE_TRACE', data: traceName};
-    this.props.dispatch(action);
-    this.setState({refresh: !this.state.refresh});
-  }
+    dispatch(action);
+  };
 
-  render() {
-    return (
-      /******** modal5 : Traces list  *****************/
+  const showDemoTrace = (trace: Polyline) => {
+    var action = {type: 'SET_DEMO_TRACE', data: trace};
+    dispatch(action);
+    props.showDemoTrace(trace);
+  };
 
-      <ModalSmall
-        isVisible={this.props.isVisible}
-        // onSwipeComplete={() => this.setState({isVisible: false})}
-        // swipeDirection={'left'}
-      >
-        <View
+  // render() {
+  return (
+    /******** modal5 : Traces list  *****************/
+
+    <ModalSmall
+      isVisible={props.isVisible}
+      // onSwipeComplete={() => this.setState({isVisible: false})}
+      // swipeDirection={'left'}
+    >
+      <View
+        style={{
+          marginTop: 22,
+          display: 'flex',
+          flexDirection: 'row-reverse',
+          backgroundColor: 'white',
+          marginRight: 0,
+          borderTopLeftRadius: 20,
+          borderTopRightRadius: 20,
+        }}>
+        <Button
           style={{
-            marginTop: 22,
-            display: 'flex',
-            flexDirection: 'row-reverse',
-            backgroundColor: 'white',
-            marginRight: 0,
-            borderTopLeftRadius: 20,
-            borderTopRightRadius: 20,
+            backgroundColor: 'transparent',
+            elevation: 0,
+            marginRight: 10,
+          }}
+          onPress={() => {
+            closeTraceModal();
           }}>
-          <Button
+          <IconElement name="times-circle" type="font-awesome" />
+        </Button>
+      </View>
+
+      <View
+        style={{
+          backgroundColor: 'white',
+          display: 'flex',
+          flexDirection: 'row',
+          justifyContent: 'space-around',
+          // paddingHorizontal: 20,
+        }}>
+        <TouchableOpacity
+          style={{
+            justifyContent: 'center',
+            width: props.isDemo ? '100%' : '50%',
+            borderBottomColor: 'black',
+            borderBottomWidth: tabVisible == 'traces' ? 1 : 0,
+            paddingBottom: 10,
+          }}
+          onPress={() => setTabVisible('traces')}>
+          <Text
             style={{
-              backgroundColor: 'transparent',
-              elevation: 0,
-              marginRight: 10,
-            }}
-            onPress={() => {
-              this.closeTraceModal();
+              textAlign: 'center',
             }}>
-            <IconElement name="times-circle" type="font-awesome" />
-          </Button>
-        </View>
+            Parcours
+          </Text>
+        </TouchableOpacity>
 
-        <View
-          style={{
-            backgroundColor: 'white',
-            display: 'flex',
-            flexDirection: 'row',
-            justifyContent: 'space-around',
-            // paddingHorizontal: 20,
-          }}>
+        {props.isDemo ? null : (
           <TouchableOpacity
             style={{
               justifyContent: 'center',
               width: '50%',
               borderBottomColor: 'black',
-              borderBottomWidth: this.state.tabVisible == 'traces' ? 1 : 0,
+              borderBottomWidth: tabVisible == 'interests' ? 1 : 0,
               paddingBottom: 10,
             }}
-            onPress={() => this.setState({tabVisible: 'traces'})}>
-            <Text
-              style={{
-                textAlign: 'center',
-              }}>
-              Parcours
-            </Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            style={{
-              justifyContent: 'center',
-              width: '50%',
-              borderBottomColor: 'black',
-              borderBottomWidth: this.state.tabVisible == 'interests' ? 1 : 0,
-              paddingBottom: 10,
-            }}
-            onPress={() => this.setState({tabVisible: 'interests'})}>
+            onPress={() => setTabVisible('interests')}>
             <Text
               style={{
                 textAlign: 'center',
@@ -157,68 +125,68 @@ class TraceModal extends Component {
               Points d'interets
             </Text>
           </TouchableOpacity>
-        </View>
-        <ScrollView
-          style={{
-            marginTop: 0,
-            backgroundColor: 'white',
-            paddingBottom: 200,
-            borderBottomLeftRadius: 20,
-            borderBottomRightRadius: 20,
-          }}>
-          <View style={{flex: 1, paddingLeft: 10, paddingRight: 10}}>
-            {this.state.tabVisible == 'traces' ? (
-              <FlatList
-                style={{
-                  height: '100%',
-                  width: '100%',
-                  padding: 0,
-                  marginTop: 5,
-                  paddingBottom: 200,
-                }}
-                data={this.props.polylines}
-                renderItem={({item}) => (
-                  <TouchableHighlight
-                    underlayColor="rgba(255,255,255,1,0.6)"
-                    // underlayColor='rgba(192,192,192,1,0.6)'
-                    // onPress={this.viewLive.bind(this, item)}
-                  >
-                    <View>
-                      <View style={styles.traceLine}>
-                        <View
-                          style={{
-                            width: 20,
-                            height: 7,
-                            marginTop: 25,
-                            marginRight: 3,
-                            backgroundColor: item.couleurTrace,
-                          }}
-                        />
-                        <View
-                          style={{
-                            width: '70%',
-                            paddingTop: 10,
-                            display: 'flex',
-                            flexDirection: 'column',
-                          }}>
-                          <Text
-                            style={{fontWeight: 'bold'}}
-                            numberOfLines={1}
-                            ellipsizeMode="tail">
-                            {item.nomTrace}
-                          </Text>
-                          <Text
-                            style={{fontSize: 14}}
-                            numberOfLines={1}
-                            ellipsizeMode="tail">
-                            {item.sportTrace} - {item.distanceTrace}km -
-                            {item.dplusTrace}D+
-                          </Text>
-                        </View>
-                        <Button
+        )}
+      </View>
+      <ScrollView
+        style={{
+          marginTop: 0,
+          backgroundColor: 'white',
+          paddingBottom: 200,
+          borderBottomLeftRadius: 20,
+          borderBottomRightRadius: 20,
+        }}>
+        <View style={{flex: 1, paddingLeft: 10, paddingRight: 10}}>
+
+          {props.isDemo?<Text style={{marginTop : 10,textAlign : 'center'}}>Choisissez le parcours à prévisualiser :</Text> :null}
+          {tabVisible == 'traces' ? (
+            <FlatList
+              style={{
+                height: '100%',
+                width: '100%',
+                padding: 0,
+                marginTop: 5,
+                paddingBottom: 200,
+              }}
+              data={polylines}
+              renderItem={({item}) => (
+                <TouchableOpacity onPress={() => props.isDemo ? showDemoTrace(item) :null}>
+                  <View>
+                    <View style={styles.traceLine}>
+                      <View
+                        style={{
+                          width: 20,
+                          height: 7,
+                          marginTop: 25,
+                          marginRight: 3,
+                          backgroundColor: item.couleurTrace,
+                        }}
+                      />
+                      <View
+                        style={{
+                          width: '70%',
+                          paddingTop: 10,
+                          display: 'flex',
+                          flexDirection: 'column',
+                        }}>
+                        <Text
+                          style={{fontWeight: 'bold'}}
+                          numberOfLines={1}
+                          ellipsizeMode="tail">
+                          {item.nomTrace}
+                        </Text>
+                        <Text
+                          style={{fontSize: 14}}
+                          numberOfLines={1}
+                          ellipsizeMode="tail">
+                          {item.sportTrace} - {item.distanceTrace}km -
+                          {item.dplusTrace}D+
+                        </Text>
+                      </View>
+                      {props.isDemo ? null :
+                        (<Button
                           style={styles.buttonHideTrace}
                           onPress={() => {
-                            this.toggleTrace(item.nomTrace);
+                            toggleTrace(item.nomTrace);
                           }}>
                           {!item.isActive ? (
                             <IconElement name="eye-slash" type="font-awesome" />
@@ -226,7 +194,9 @@ class TraceModal extends Component {
                             <IconElement name="eye" type="font-awesome" />
                           )}
                         </Button>
+                      )}
 
+                      {!props.isDemo ? (
                         <Button
                           style={{
                             backgroundColor: 'transparent',
@@ -238,7 +208,7 @@ class TraceModal extends Component {
                             justifyContent: 'center',
                           }}
                           onPress={() => {
-                            this.props.centerOnTrace(item);
+                            props.centerOnTrace(item);
                           }}>
                           <View>
                             <IconElement
@@ -249,70 +219,62 @@ class TraceModal extends Component {
                               name="search-plus"
                               type="font-awesome"
                             />
-                            {/* <Icon active name="md-locate" style={styles.title} /> */}
-                            {/* <Icon style={{ alignSelf: 'center' }} active name="times-circle" type='font-awesome' /> */}
                           </View>
                         </Button>
-                        {/* <Text style={{ width: 180 }}> Folocode : {item.folocodeUtilisateur} </Text>  */}
-                      </View>
+                      ) : null}
                     </View>
-                  </TouchableHighlight>
-                )}
-                keyExtractor={(item, index) => index.toString()}
-              />
-            ) : (
-              <FlatList
-                style={{
-                  height: '100%',
-                  width: '100%',
-                  padding: 0,
-                  marginTop: 5,
-                  paddingBottom: 200,
-                }}
-                data={this.props.pointsInterets}
-                renderItem={({item}) => (
-                  <TouchableHighlight
-                    underlayColor="rgba(255,255,255,1,0.6)"
-                    // underlayColor='rgba(192,192,192,1,0.6)'
-                    // onPress={this.viewLive.bind(this, item)}
-                  >
-                    <View>
-                      <View style={styles.traceLine}>
-                        <View
-                          style={{
-                            width: '70%',
-                            paddingTop: 10,
-                            display: 'flex',
-                            flexDirection: 'row',
-                          }}>
-                          {item.photoInteret != null &&
-                          item.photoInteret != '' ? (
-                            <Image
-                              style={{height: 100, width: 100, marginRight : 10,}}
-                              source={{
-                                uri: `data:image/png;base64,${item.photoInteret}`,
-                              }}
-                            />
-                          ) : null}
-                          <View style={{justifyContent: 'center'}}>
-                            <Text
-                              style={{fontWeight: 'bold'}}
-                              numberOfLines={1}
-                              ellipsizeMode="tail">
-                              {item.libelleInteret}
-                            </Text>
-                            <Text
+                  </View>
+                </TouchableOpacity>
+              )}
+              keyExtractor={(item, index) => index.toString()}
+            />
+          ) : (
+            <FlatList
+              style={{
+                height: '100%',
+                width: '100%',
+                padding: 0,
+                marginTop: 5,
+                paddingBottom: 200,
+              }}
+              data={pointsInterets}
+              renderItem={({item}) => (
+                <TouchableHighlight underlayColor="rgba(255,255,255,1,0.6)">
+                  <View>
+                    <View style={styles.traceLine}>
+                      <View
+                        style={{
+                          width: '70%',
+                          paddingTop: 10,
+                          display: 'flex',
+                          flexDirection: 'row',
+                        }}>
+                        {item.photoInteret != null &&
+                        item.photoInteret != '' ? (
+                          <Image
+                            style={{height: 100, width: 100, marginRight: 10}}
+                            source={{
+                              uri: `data:image/png;base64,${item.photoInteret}`,
+                            }}
+                          />
+                        ) : null}
+                        <View style={{justifyContent: 'center'}}>
+                          <Text
+                            style={{fontWeight: 'bold'}}
+                            numberOfLines={1}
+                            ellipsizeMode="tail">
+                            {item.libelleInteret}
+                          </Text>
+                          <Text
                             style={{fontSize: 14}}
                             numberOfLines={1}
                             ellipsizeMode="tail">
                             {item.descriptionInteret}
                           </Text>
-                          </View>
-
-                       
                         </View>
+                      </View>
 
-                        {/* <Button
+                      {/* <Button
                           style={styles.buttonHideTrace}
                           onPress={() => {
                             this.toggleTrace(item.nomTrace);
@@ -324,42 +286,43 @@ class TraceModal extends Component {
                           )}
                         </Button> */}
 
-                        <Button
-                          style={{
-                            backgroundColor: 'transparent',
-                            zIndex: 1,
-                            elevation: 0,
-                            marginRight: 0,
-                            height: 40,
-                            width: 40,
-                            justifyContent: 'center',
-                          }}
-                          onPress={() => {
-                            this.props.centerOnPoi(item);
-                          }}>
-                          <View>
-                            <IconElement
-                              style={{
-                                alignSelf: 'center',
-                                color: 'black',
-                              }}
-                              name="search-plus"
-                              type="font-awesome"
-                            />
-                          </View>
-                        </Button>
-                      </View>
+                      <Button
+                        style={{
+                          backgroundColor: 'transparent',
+                          zIndex: 1,
+                          elevation: 0,
+                          marginRight: 0,
+                          height: 40,
+                          width: 40,
+                          justifyContent: 'center',
+                        }}
+                        onPress={() => {
+                          props.centerOnPoi(item);
+                        }}>
+                        <View>
+                          <IconElement
+                            style={{
+                              alignSelf: 'center',
+                              color: 'black',
+                            }}
+                            name="search-plus"
+                            type="font-awesome"
+                          />
+                        </View>
+                      </Button>
                     </View>
-                  </TouchableHighlight>
-                )}
-                keyExtractor={(item, index) => index.toString()}
-              />
-            )}
-          </View>
-        </ScrollView>
-      </ModalSmall>
-    );
-  }
+                  </View>
+                </TouchableHighlight>
+              )}
+              keyExtractor={(item, index) => index.toString()}
+            />
+          )}
+        </View>
+      </ScrollView>
+    </ModalSmall>
+  );
+
+  // }
 }
 
 const styles = StyleSheet.create({
@@ -472,5 +435,3 @@ const styles = StyleSheet.create({
     elevation: 0,
   },
 });
-
-export default connect(mapStateToProps)(TraceModal);

@@ -104,15 +104,13 @@ class Replay extends Component {
     setTimeout(() => this.didMount(), 300);
     this._unsubscribe = this.props.navigation.addListener('blur', () => {
       // do something
-      
+
       this.componentWillUnmount();
     });
   }
 
   didMount() {
-
-    if(this.props.polylines.length > 0)
-    {
+    if (this.props.polylines.length > 0) {
       let firstPolyline = this.props.polylines[0];
       if (firstPolyline.positionsTrace.length != 0) {
         this.refs.map.fitToCoordinates(firstPolyline.positionsTrace, {
@@ -120,9 +118,7 @@ class Replay extends Component {
           animated: true,
         });
       }
-
     }
-
   }
 
   componentWillUnmount() {
@@ -421,14 +417,10 @@ class Replay extends Component {
   readGpxFile(filePath, index) {
     // var path = this.normalize(filePath);
     var _this = this;
-    console.log(filePath);
 
     RNFetchBlob.fs
       .readFile(filePath, 'utf8')
       .then((data) => {
-        // alert('ok')
-        // console.log(data);
-        // handle the data ..
 
         try {
           var test = new GPXDocument(data);
@@ -1243,8 +1235,7 @@ class Replay extends Component {
                     latitudeDelta: LATITUDE_DELTA,
                     longitudeDelta: LONGITUDE_DELTA,
                   }}
-                   onLayout={() => this.centerMap()}
-                >
+                  onLayout={() => this.centerMap()}>
                   {this.state.coordinates != null &&
                   this.state.coordinates.length > 0 ? (
                     <MapView.Polyline

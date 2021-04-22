@@ -1,7 +1,7 @@
-import React, {Component} from 'react';
+import React, {Component, useEffect, useRef, useState} from 'react';
 import {StyleSheet, Platform, Linking, Alert} from 'react-native';
 import {Container, Drawer, Footer, View} from 'native-base';
-import {connect} from 'react-redux';
+import {connect, useDispatch, useSelector} from 'react-redux';
 import MapHeader from './MapHeader';
 import MapButtons from './MapButtons';
 import Map from './Map';
@@ -12,6 +12,7 @@ import TraceModal from '../home/TraceModal';
 import {Sponsors} from '../home/Sponsors';
 import VersionCheck from 'react-native-version-check';
 import DeviceInfo from 'react-native-device-info';
+import {useNavigation, useFocusEffect} from '@react-navigation/core';
 import {
   TemplateAppName,
   TemplateIdOrganisation,
@@ -19,89 +20,82 @@ import {
 } from '../globalsModifs';
 import ApiUtils from '../ApiUtils';
 import Interest from '../models/Interest';
-
-const mapStateToProps = (state) => {
-  return {
-    currentLive: state.currentLive,
-  };
-};
-
-interface Props extends DefaultProps {
-  currentLive: any;
-}
+import AppState from '../models/AppState';
+import PhoneData from '../models/PhoneData';
 
 interface State {
   isModalTraceVisible: boolean;
+  isDemo: boolean;
 }
 
-class MapContainer extends Component<Props, State> {
-  drawer: Drawer;
-  map: React.RefObject<unknown>;
-  constructor(props) {
-    super(props);
-    this.map = React.createRef();
-    this.state = {
-      isModalTraceVisible: false,
-    };
-    this._unsubscribe = this.props.navigation.addListener('focus', () => {
-      this.componentDidMount();
+export default function MapContainer() {
+  const dispatch = useDispatch();
+
+  let drawer: any;
+
+  const [isModalTraceVisible, setIsModalTraceVisible] = useState(false);
+  const [isDemo, setIsDemo] = useState(false);
+  const mapRef = useRef<any>(null);
+  const geolocComponent = useRef<any>(null);
+
+  const navigation = useNavigation();
+  const {isRecording, userData} = useSelector((state: AppState) => state);
+
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('focus', () => {
+      // do something
+      downloadData();
     });
-  }
 
-  componentDidMount() {
-    setTimeout(() => this.didMount(), 300);
-  }
-  didMount() {
-   this.downloadData();
-    // if (this.props.currentLive == null) {
-    //   this.props.navigation.navigate('Lives');
-    // }
-  }
+    return unsubscribe;
+  }, [isRecording]);
 
-  onUpdatePosition = (pos) => {
-    if (this.map != null && this.map.current != null) {
-      this.map.current.onUpdatePosition(pos);
-    }
+  const onUpdatePosition = (pos : any) => {
+    mapRef?.current?.onUpdatePosition(pos);
   };
 
-  onCenter = () => {
-    if (this.map != null && this.map.current != null) {
-      this.map.current.onCenter();
-    }
+  const onCenter = () => {
+    mapRef?.current?.onCenter();
   };
 
-  closeDrawer = () => {
-    if (this.drawer != null && this.drawer._root != null)
-      this.drawer._root.close();
+  const onStart = () => {
+    geolocComponent.current.configGeoloc();
   };
 
-  onDrawer = () => {
-    this.drawer._root.open();
+  const closeDrawer = () => {
+    if (drawer != null && drawer._root != null) drawer._root.close();
   };
 
-  openTraceModal = () => {
-    this.setState({isModalTraceVisible: true});
+  const onDrawer = () => {
+    drawer._root.open();
+    // drawerRef.current.open();
   };
 
-  closeTraceModal = () => {
-    this.setState({isModalTraceVisible: false});
+  const openTraceModal = (isDemo: boolean) => {
+    setIsModalTraceVisible(true);
+    setIsDemo(isDemo);
   };
 
-  centerOnTrace = (trace: any) => {
-    this.closeTraceModal();
-    if (this.map != null && this.map.current != null) {
-      this.map.current.centerMapOnTrace(trace);
-    }
+  const closeTraceModal = () => {
+    setIsModalTraceVisible(false);
   };
 
-  centerOnPoi = (interest : Interest) => {
-    this.closeTraceModal();
-    if (this.map != null && this.map.current != null) {
-      this.map.current.centerOnPoi(interest);
-    }
-  }
+  const centerOnTrace = (trace: any) => {
+    closeTraceModal();
+    mapRef.current.centerMapOnTrace(trace);
+  };
 
-  getPhoneData() {
+  const showDemoTrace = (trace: any) => {
+    closeTraceModal();
+    navigation.navigate('DemoMap');
+  };
+
+  const centerOnPoi = (interest: Interest) => {
+    closeTraceModal();
+    mapRef.current.centerOnPoi(interest);
+  };
+
+  const getPhoneData = () => {
     let brand = DeviceInfo.getBrand();
 
     let androidId = DeviceInfo.getAndroidIdSync();
@@ -116,7 +110,7 @@ class MapContainer extends Component<Props, State> {
     let hardware = DeviceInfo.getHardwareSync();
     let apiLevel = DeviceInfo.getApiLevelSync();
 
-    let data = {
+    let data: PhoneData = {
       brand: brand,
       androidId: androidId,
       systemVersion: systemVersion,
@@ -129,17 +123,46 @@ class MapContainer extends Component<Props, State> {
     };
 
     var action = {type: 'UPDATE_PHONE_DATA', data: data};
-    this.props.dispatch(action);
-  }
+    dispatch(action);
+  };
 
-  async downloadData() {
-  //  this.getPhoneData();
-    this.getNewVersion();
+  const downloadData = () => {
+    getPhoneData();
+    getNewVersion();
 
-   // this.getinformationStation();
-  }
+    getinformationStation();
+    getLives(userData.idUtilisateur);
+  };
 
-  async getinformationStation() {
+  const getLives = (idUtilisateur : number) => {
+    console.log('ici');
+    let formData = new FormData();
+    formData.append('method', 'getLives');
+    formData.append('auth', ApiUtils.getAPIAuth());
+    formData.append('idUtilisateur', idUtilisateur);
+
+    //fetch followCode API
+    fetch(ApiUtils.getAPIUrl(), {
+      method: 'POST',
+      headers: {
+        // Accept: 'application/json',
+        // 'Content-Type': 'application/json',
+      },
+      body: formData,
+    })
+      .then(ApiUtils.checkStatus)
+      .then((response) => response.json())
+      .then((responseJson) => {
+        var action = {type: 'GET_LIVES', data: responseJson};
+        dispatch(action);
+      })
+      .catch((e) => {
+        console.log(e);
+        ApiUtils.logError('getLives', e.message);
+      });
+  };
+
+  const getinformationStation = () => {
     const formData = new FormData();
     formData.append('method', 'getInformationStation');
     formData.append('auth', ApiUtils.getAPIAuth());
@@ -164,8 +187,8 @@ class MapContainer extends Component<Props, State> {
         if (result.traces != null && result.traces.length != 0) {
           var tracesArray = Object.values(result.traces);
 
-          var finalTraceArray = []; // new Object(this.props.polylines);
-          var finalinterestArray = [];
+          var finalTraceArray : any[] = [];
+          var finalinterestArray : any = [];
           if (tracesArray != null && tracesArray.length != 0) {
             tracesArray.forEach((trace: any) => {
               var finalTrace = trace;
@@ -190,13 +213,13 @@ class MapContainer extends Component<Props, State> {
 
           var challengesArray = Object.values(result.challenges);
 
-          var finalChallengesArray = []; // new Object(this.props.polylines);
+          var finalChallengesArray: any[] = [];
 
           if (challengesArray != null && challengesArray.length != 0) {
-            challengesArray.forEach((challenge) => {
-              var finalChallenge = challenge;
+            challengesArray.forEach((challenge: any) => {
+              var finalChallenge: any = challenge;
 
-              var positionArray = Object.values(challenge.positionsTrace);
+              var positionArray: any = Object.values(challenge.positionsTrace);
               challenge.positionsTrace = positionArray;
 
               finalChallenge = {
@@ -236,7 +259,6 @@ class MapContainer extends Component<Props, State> {
                 description: '',
               };
 
-              console.log(finalInterest.libelleInteret);
               if (
                 finalInterest.descriptionInteret == null &&
                 interest.externalData != null
@@ -264,24 +286,32 @@ class MapContainer extends Component<Props, State> {
               }
             });
           }
+
           var station = {
             nomStation: result.nomStation,
             descriptionStation: result.descriptionStation,
             polylines: finalTraceArray,
             pointsInterets: finalinterestArray,
             challenges: finalChallengesArray,
+            statistics: {
+              nbKmTotal: result.nbKmTotal,
+              nbActivites: result.nbActivites,
+              nbUtilisateurs: result.nbUtilisateurs,
+              nbClasses: result.nbClasses,
+              nbKmEfforts: result.nbKmEfforts,
+            },
           };
 
           var action = {type: 'UPDATE_STATION_DATA', data: station};
-          this.props.dispatch(action);
+          dispatch(action);
         }
       })
       // .catch(e => alert('test', JSON.stringify(e)))
       .then();
-  }
+  };
 
-  async getNewVersion() {
-    if (!this.props.isRecording) {
+  const getNewVersion = () => {
+    if (!isRecording) {
       VersionCheck.needUpdate({
         depth: Platform.OS == 'android' ? 3 : 2,
       }).then((res) => {
@@ -304,52 +334,49 @@ class MapContainer extends Component<Props, State> {
         }
       });
     }
-  }
+  };
 
-  render() {
-    return (
-      <Drawer
-        ref={(ref) => {
-          this.drawer = ref;
-        }}
-        content={
-          <Sidebar
-            navigation={this.props.navigation}
-            drawer={this.drawer}
-            selected="Map"
-            closeDrawer={this.closeDrawer}
-          />
-        }>
-        <Container style={styles.container}>
-          <GeolocComponent
-            onUpdatePosition={(pos) => this.onUpdatePosition(pos)}
-          />
-          <MapHeader
-            navigation={this.props.navigation}
-            ondrawer={() => this.onDrawer()}
-          />
-          <MapButtons
-            navigation={this.props.navigation}
-            onCenter={() => this.onCenter()}
-            openTraceModal={() => this.openTraceModal()}
-            closeTraceModal={() => this.closeTraceModal()}
-          />
-          <Map ref={this.map} />
+  return (
+    <Drawer
+      ref={(ref) => {
+        drawer = ref;
+      }}
+      // ref={drawerRef}
+      content={
+        <Sidebar
+          navigation={navigation}
+          drawer={drawer}
+          selected="Map"
+          closeDrawer={closeDrawer}
+        />
+      }>
+      <Container style={styles.container}>
+        <GeolocComponent onUpdatePosition={(pos) => onUpdatePosition(pos)} />
+        <MapHeader navigation={navigation} ondrawer={() => onDrawer()} />
+        <MapButtons
+          onCenter={() => onCenter()}
+          openTraceModal={(isDemo) => openTraceModal(isDemo)}
+          onStart={() => {
+            onStart();
+          }}
+        />
+        <Map ref={mapRef} />
 
-          <Footer style={{backgroundColor: 'white', paddingBottom: 64}}>
-            <Sponsors />
-          </Footer>
+        <Footer style={{backgroundColor: 'white', paddingBottom: 64}}>
+          <Sponsors />
+        </Footer>
 
-          <TraceModal
-            isVisible={this.state.isModalTraceVisible}
-            onClose={() => this.closeTraceModal()}
-            centerOnTrace={(trace) => this.centerOnTrace(trace)}
-            centerOnPoi={(poi) => this.centerOnPoi(poi)}
-          />
-        </Container>
-      </Drawer>
-    );
-  }
+        <TraceModal
+          isVisible={isModalTraceVisible}
+          onClose={() => closeTraceModal()}
+          centerOnTrace={(trace) => centerOnTrace(trace)}
+          showDemoTrace={(trace) => showDemoTrace(trace)}
+          centerOnPoi={(poi) => centerOnPoi(poi)}
+          isDemo={isDemo}
+        />
+      </Container>
+    </Drawer>
+  );
 }
 
 const styles = StyleSheet.create({
@@ -366,4 +393,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default connect(mapStateToProps)(MapContainer);
+// export default connect(mapStateToProps)(MapContainer);

@@ -40,10 +40,7 @@ class WebViewJetCode extends Component {
   componentWillUnmount() {}
 
   getWebViewMessage(event) {
-    console.log(event.nativeEvent.data);
-
     var eventData = JSON.parse(event.nativeEvent.data);
-    console.log(eventData);
     if (eventData.type == 'resize_height') {
       let height = eventData.height;
       // console.log('heigth', eventData.height);
@@ -52,12 +49,15 @@ class WebViewJetCode extends Component {
 
     if (eventData.type == 'payResult') {
       let amount = 2;
-      
+
       var action = {type: 'ADD_PAYRESULT', data: eventData};
       this.props.dispatch(action);
 
-      this.setPaiementOk(this.props.userData.idUtilisateur,amount,ApiUtils.getIdStation());
-
+      this.setPaiementOk(
+        this.props.userData.idUtilisateur,
+        amount,
+        ApiUtils.getIdStation(),
+      );
 
       //this.downloadPayResult(eventData);
     }
@@ -68,7 +68,6 @@ class WebViewJetCode extends Component {
   }
 
   downloadPayResult(purchase) {
-    console.log(purchase.customerId);
     fetch(purchase.url, {
       method: 'POST',
       headers: {
@@ -83,7 +82,6 @@ class WebViewJetCode extends Component {
       .then(ApiUtils.checkStatus)
       .then((response) => response.json())
       .then((responseJson) => {
-        console.log(responseJson);
         var action = {type: 'UPDATE_PAY_RESULT', data: responseJson};
         this.props.dispatch(action);
       })

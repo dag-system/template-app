@@ -47,6 +47,13 @@ import {Icon as IconElement} from 'react-native-elements';
 import {FlatList} from 'react-native';
 import {check, request, PERMISSIONS, RESULTS} from 'react-native-permissions';
 import DefaultProps from '../models/DefaultProps';
+import {
+  VictoryArea,
+  VictoryAxis,
+  VictoryBar,
+  VictoryChart,
+  VictoryTheme,
+} from 'victory-native';
 
 import {TemplateSportLive} from '../globalsModifs';
 import GpxService from '../services/GpxServices';
@@ -54,7 +61,7 @@ import GpxService from '../services/GpxServices';
 const mapStateToProps = (state) => {
   return {
     userData: state.userData,
-    currentLive: state.currentLive,
+    currentLiveSummary: state.currentLiveSummary,
     currentMapStyle: state.currentMapStyle,
     polylines: state.polylines,
     sports: state.sports,
@@ -66,7 +73,7 @@ const LONGITUDE_DELTA = 0.001221;
 
 interface Props extends DefaultProps {
   userData: any;
-  currentLive: any;
+  currentLiveSummary: any;
   currentMapStyle: string;
   polylines: any[];
   sports: any[];
@@ -97,6 +104,7 @@ interface State {
   refresh: boolean;
   isOpenReplayModal: boolean;
   splits: any[];
+  speedData: any[];
 }
 
 class LiveSummary extends Component<Props, State> {
@@ -128,11 +136,12 @@ class LiveSummary extends Component<Props, State> {
       currentPolyline: null,
       isModalTraceVisible: false,
       isOpenReplayModal: false,
+      speedData: [],
     };
   }
 
   componentDidMount() {
-    this.loadLive(this.props.currentLive.idLive);
+    this.loadLive(this.props.currentLiveSummary.idLive);
   }
 
   loadLive(idLive) {
@@ -277,7 +286,6 @@ class LiveSummary extends Component<Props, State> {
         let status = res.info().status;
 
         if (status == 200) {
-          console.log(status);
           console.log(res.path());
           _this.shareToFiles(res.path());
         }
@@ -308,7 +316,7 @@ class LiveSummary extends Component<Props, State> {
 
     this.setState({coordinates: coordinates}, () => this.centerMap());
 
-    var live = this.props.currentLive;
+    var live = this.props.currentLiveSummary;
     live.coordinates = coordinates;
 
     var action = {type: 'SAVE_CURRENT_LIVE', data: live};
@@ -321,27 +329,40 @@ class LiveSummary extends Component<Props, State> {
     let dist = 0;
     let splits = [];
     let startPoint = coordinates[0];
+    let speedData = [];
 
     for (let i = 1; i < coordinates.length; i++) {
-      dist += GpxService.calculateDistBetweenTwoPoints(
+      let currentDist = GpxService.calculateDistBetweenTwoPoints(
         coordinates[i],
         coordinates[i - 1],
       );
+      dist += currentDist;
+
+      let currentTime = GpxService.calculateTimeBetweenTwoPoints(
+        coordinates[i],
+        coordinates[i - 1],
+      );
+      let currentSpeed = GpxService.convertTokmH(
+        GpxService.calculateSpeed(currentDist, currentTime),
+      );
+      speedData.push({index: i, speed: currentSpeed, totalDist: dist});
       if (dist > 1000) {
         let time = GpxService.calculateTimeBetweenTwoPoints(
           coordinates[i],
           startPoint,
         );
-        let speed = 
-        GpxService.convertTokmH(GpxService.calculateSpeed(dist,time));
+        let speed = GpxService.convertTokmH(
+          GpxService.calculateSpeed(dist, time),
+        );
+
         let pace = GpxService.speedToPace(speed);
         time = GpxService.paceDisplay(time);
-        splits.push({time: time, dist: dist, speed: speed, pace : pace});
+        splits.push({time: time, dist: dist, speed: speed, pace: pace});
         dist = GpxService.calculateDistBetweenTwoPoints(
           coordinates[i],
           coordinates[i - 1],
         );
-        startPoint = coordinates[i-1];
+        startPoint = coordinates[i - 1];
       }
 
       if (i == coordinates.length - 1) {
@@ -349,19 +370,20 @@ class LiveSummary extends Component<Props, State> {
           coordinates[i],
           startPoint,
         );
-  
-        let speed = 
-        GpxService.convertTokmH(GpxService.calculateSpeed(dist,time));
+
+        let speed = GpxService.convertTokmH(
+          GpxService.calculateSpeed(dist, time),
+        );
         let pace = GpxService.speedToPace(speed);
         time = GpxService.paceDisplay(time);
-        splits.push({time: time, dist: dist, speed: speed, pace : pace});
-        
+        splits.push({time: time, dist: dist, speed: speed, pace: pace});
+
         dist = 0;
         startPoint = coordinates[i];
       }
     }
-    console.log(splits);
-    this.setState({splits: splits});
+    // console.log(splits);
+    this.setState({splits: splits, speedData: speedData});
   }
 
   getSports(idSport) {
@@ -542,7 +564,6 @@ class LiveSummary extends Component<Props, State> {
   requestMediaLibraryPermission(url, name) {
     check(PERMISSIONS.IOS.MEDIA_LIBRARY)
       .then((result) => {
-        console.log(result);
         switch (result) {
           case RESULTS.UNAVAILABLE:
             this.onDownloadFileok(url, name);
@@ -737,7 +758,7 @@ class LiveSummary extends Component<Props, State> {
                   <Text style={{textAlign: 'center'}} />
                   <TouchableOpacity
                     onPress={() =>
-                      this.loadLive(this.props.currentLive.idLive)
+                      this.loadLive(this.props.currentLiveSummary.idLive)
                     }>
                     <Text
                       style={{
@@ -748,7 +769,7 @@ class LiveSummary extends Component<Props, State> {
                   </TouchableOpacity>
                   <TouchableOpacity
                     onPress={() =>
-                      this.loadLive(this.props.currentLive.idLive)
+                      this.loadLive(this.props.currentLiveSummary.idLive)
                     }>
                     <Text
                       style={{
@@ -777,7 +798,7 @@ class LiveSummary extends Component<Props, State> {
                       </Text>
                       <TouchableOpacity
                         onPress={() =>
-                          this.loadLive(this.props.currentLive.idLive)
+                          this.loadLive(this.props.currentLiveSummary.idLive)
                         }>
                         <Text
                           style={{
@@ -1275,20 +1296,61 @@ class LiveSummary extends Component<Props, State> {
 
                   {this.state.splits != null && this.state.splits.length > 0 ? (
                     <View>
+                      <VictoryChart
+                        // theme={VictoryTheme.material}
+                          
+                        >
+                        <VictoryArea 
+                          data={this.state.speedData}
+                          x="dist"
+                          y="speed"
+                        />
+                        <VictoryAxis
+                          dependentAxis
+                          label="Vitesse (km/h)"
+                          fixLabelOverlap={true}
+                          style={{
+                            axis: {stroke: "#756f6a"},
+                            axisLabel: {fontSize: 20, padding: 30},
+                            // grid: {stroke: ({ tick }) => tick > 0.5 ? "red" : "grey"},
+                            ticks: {stroke: "grey", size: 0},
+                            tickLabels: {fontSize: 15, padding: 5}
+                          }}
+                        />
+                        <VictoryAxis
+                          label="Distance km"
+                          style={{
+                            axis: {stroke: "#756f6a"},
+                            axisLabel: {fontSize: 20, padding: 30},
+                            // grid: {stroke: ({ tick }) => tick > 0.5 ? "red" : "grey"},
+                            ticks: {stroke: "grey", size: 0},
+                            tickLabels: {fontSize: 15, padding: 5}
+                            
+                          }}
+                          tickFormat={(t) => (t/100).toFixed(1)}
+                        />
+                      </VictoryChart>
                       <Text>Intervalles</Text>
                       {this.state.splits.map((split, index) => {
                         return (
-                          <View 
+                          <View
                             style={{
                               display: 'flex',
                               flexDirection: 'row',
                               justifyContent: 'space-around',
                             }}>
                             {/* <Text>{index} </Text> */}
-                            <Text>{split.dist > 1000 ? index+1 : (split.dist / 1000).toFixed(2)} km </Text>
+                            <Text>
+                              {split.dist > 1000
+                                ? index + 1
+                                : (split.dist / 1000).toFixed(2)}{' '}
+                              km{' '}
+                            </Text>
                             <Text>{split.time} s </Text>
                             <Text>{split.speed?.toFixed(1)} km/h </Text>
-                            <Text>{split.dist > 1000 ? split.time : split.pace}/km</Text>
+                            <Text>
+                              {split.dist > 1000 ? split.time : split.pace}/km
+                            </Text>
                           </View>
                         );
                       })}
@@ -1510,7 +1572,7 @@ class LiveSummary extends Component<Props, State> {
                       style={{fontWeight: 'bold'}}
                       numberOfLines={1}
                       ellipsizeMode="tail">
-                      {this.props.currentLive?.libelleLive}
+                      {this.props.currentLiveSummary?.libelleLive}
                     </Text>
                     <Text
                       style={{fontSize: 14}}

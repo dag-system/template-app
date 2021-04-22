@@ -24,6 +24,7 @@ import Paiement from './home/Paiement';
 import IsExpired from './home/IsExpired';
 import Introduction from './home/Introduction';
 import Statistics from './home/Statistics';
+import DemoMap from './simple-map/DemoMap';
 
 export default class Navigator extends Component {
   componentDidMount() {}
@@ -94,6 +95,14 @@ export default class Navigator extends Component {
             name="Classement"
             component={Classement}
             headerMode="none"
+            // options={{
+            //   animationEnabled: false,
+            // }}
+          />
+
+          <Stack.Screen
+            name="DemoMap"
+            component={DemoMap}
             // options={{
             //   animationEnabled: false,
             // }}

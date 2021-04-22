@@ -61,10 +61,8 @@ class Partenaires extends Component<Props, State> {
 
   checkIsConnected = () => {
     if (this.props.userData != null && ApiUtils.hasPaid(this.props.userData)) {
-      console.log('test');
       this.onClickNavigate('Lives');
     } else {
-      console.log('ici');
     }
   };
 

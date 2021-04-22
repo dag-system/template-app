@@ -434,7 +434,7 @@ class Introduction extends Component {
             !this.props.isOkPopupGps
           }>
           <Container style={{flex: 1}}>
-            <View style={{flex: 1}}>
+            <View style={{flex: 1, justifyContent :'center'}}>
               <AskGpsModal
                 noHeader={true}
                 onValidate={() => this.onClickNavigate('SimpleMap')}

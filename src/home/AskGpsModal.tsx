@@ -14,7 +14,7 @@ interface Props {
   dispatch: Dispatch;
   navigation: any;
   isOkPopupGps: boolean;
-  onValidate() : void;
+  onValidate(): void;
 }
 
 interface State {
@@ -38,35 +38,47 @@ class AskGpsModal extends Component<Props, State> {
     this.props.dispatch(action);
 
     this.props.onValidate();
- //  this.props.navigation.navigate('SimpleMap');
+    //  this.props.navigation.navigate('SimpleMap');
   };
 
   render = () => {
     return (
-      <ModalSmall isVisible={true} >
-        <View style={{backgroundColor: 'white', padding: 20}}>
-          <Text
-            style={{
-              textAlign: 'center',
-              fontWeight: 'bold',
-              marginTop: 0,
-              marginBottom: 20,
-            }}>
-            Accès à votre position GPS en arrière plan
-          </Text>
-          <Text style={{textAlign: 'justify'}}>
-            L'application a besoin d'accèder à votre position en arrière plan
-            pour pouvoir enregistrer la totalité de votre activité. Nous
-            enregistrons votre position GPS même quand l'application est arretée
-            ou en arrière plan.
-          </Text>
-          <TouchableOpacity
-            onPress={this.onAcceptGps}
-            style={{justifyContent: 'flex-end', marginTop: 30}}>
-            <Text style={{textAlign: 'right'}}>Ok</Text>
-          </TouchableOpacity>
-        </View>
-      </ModalSmall>
+      // <ModalSmall isVisible={true} >
+      <View
+        style={{
+          backgroundColor: 'white',
+          padding: 40,
+          elevation: 20,
+          shadowColor: '#000',
+          shadowOffset: {
+            width: 0,
+            height: 5,
+          },
+          shadowOpacity: 0.34,
+          shadowRadius: 6.27,
+        }}>
+        <Text
+          style={{
+            textAlign: 'center',
+            fontWeight: 'bold',
+            marginTop: 0,
+            marginBottom: 20,
+          }}>
+          Accès à votre position GPS en arrière plan
+        </Text>
+        <Text style={{textAlign: 'justify'}}>
+          L'application a besoin d'accèder à votre position en arrière plan pour
+          pouvoir enregistrer la totalité de votre activité. Nous enregistrons
+          votre position GPS même quand l'application est arretée ou en arrière
+          plan.
+        </Text>
+        <TouchableOpacity
+          onPress={this.onAcceptGps}
+          style={{justifyContent: 'flex-end', marginTop: 30}}>
+          <Text style={{textAlign: 'right'}}>Ok</Text>
+        </TouchableOpacity>
+      </View>
+      // </ModalSmall>
     );
   };
 }

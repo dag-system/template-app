@@ -156,12 +156,9 @@ class ForgotPassword extends ValidationComponent {
       .then((response) => response.json())
       .then((responseJson) => {
         if (responseJson.codeErreur == 'SUCCESS') {
-          console.log('test');
-          console.log(responseJson);
           var folocodes = Object.values(responseJson);
           this.setState({folocodes: folocodes});
         } else {
-          console.log(responseJson.message);
           Toast.show({
             text: responseJson.message,
             buttonText: 'Ok',

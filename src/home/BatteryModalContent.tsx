@@ -60,7 +60,6 @@ class BatteryModalContent extends Component {
       BackgroundGeolocation.deviceSettings
         .showIgnoreBatteryOptimizations()
         .then((request: DeviceSettingsRequest) => {
-          console.log(`- Screen seen? ${request.seen} ${request.lastSeenAt}`);
           console.log(
             `- Device: ${request.manufacturer} ${request.model} ${request.version}`,
           );
@@ -96,7 +95,6 @@ class BatteryModalContent extends Component {
       .catch((error) => {
         // Sentry.captureMessage(JSON.stringify(error));
         this.setState({hasDeviceSettingsAvailable: false});
-        console.log(error);
       });
   }
 

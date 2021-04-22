@@ -37,21 +37,14 @@ import BatteryModal from './BatteryModal';
 import {Sponsors} from './Sponsors';
 import UploadGpx from './UploadGpx';
 import {Platform} from 'react-native';
-import {Linking} from 'react-native';
 import {Alert} from 'react-native';
 import DefaultProps from '../models/DefaultProps';
 import VersionCheck from 'react-native-version-check';
 import RNPusherPushNotifications from 'react-native-pusher-push-notifications';
 import NotificationModal from './NotificationModal';
-import DeviceInfo from 'react-native-device-info';
-import BackgroundGeolocation from 'react-native-background-geolocation';
 import Help from './Help';
 
-import {
-  TemplateAppName,
-  TemplateIdOrganisation,
-  TemplateSportLive,
-} from '../globalsModifs';
+import {TemplateSportLive} from '../globalsModifs';
 
 const mapStateToProps = (state) => {
   return {
@@ -197,17 +190,11 @@ class Lives extends Component<Props, State> {
     console.log('LALA');
 
     if (notification.data != null) {
-      console.log(notification.data.TSLocationManager);
-
       if (notification.data.TSLocationManager == 'true') {
-        console.log('ici');
         return;
       }
     }
-
-    console.log(notification);
     if (Platform.OS == 'ios') {
-      console.log(notification.userInfo.data.notification);
       let actionData = notification.userInfo.data.notification;
       var action = {
         type: 'ADD_NOTIFICATION',
@@ -221,8 +208,6 @@ class Lives extends Component<Props, State> {
 
       switch (notification.appState) {
         case 'inactive':
-          console.log('inactive');
-
           this.setState({
             isVisibleNotifcationModal: true,
             idLiveNotif: actionData.idLive,
@@ -235,7 +220,6 @@ class Lives extends Component<Props, State> {
         // background: App is in background and notification is received.
         //             You can fetch required data here don't do anything with UI
         case 'active':
-          console.log('active');
           // App is foreground and notification is received. Show a alert or something.
           this.setState({
             isVisibleNotifcationModal: true,
@@ -247,8 +231,6 @@ class Lives extends Component<Props, State> {
           break;
       }
     } else {
-      console.log('data: handleNotification (android)');
-
       if (notification.data != '') {
         let datastring = notification.data.notification;
         let data = JSON.parse(datastring);
@@ -287,7 +269,6 @@ class Lives extends Component<Props, State> {
   };
 
   seeNotificationLive = (notif) => {
-    console.log(notif);
     let live = {
       idLive: notif.idLive,
     };
@@ -302,9 +283,7 @@ class Lives extends Component<Props, State> {
     this.onClickNavigate('LiveSummary');
   };
 
-  onSubscriptionsChanged = (interests) => {
-    console.log('CALLBACK: onSubscriptionsChanged');
-  };
+  onSubscriptionsChanged = (interests) => {};
 
   onRefresh = () => {
     // this.init();

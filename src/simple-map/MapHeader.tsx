@@ -1,20 +1,13 @@
 import React, {Component} from 'react';
-import {
-  StyleSheet,
-  TouchableOpacity,
-  View,
-  Alert,
-  Share,
-  Image,
-} from 'react-native';
-import {Header, Body, Icon, Text, Left, Right, Button} from 'native-base';
+import {StyleSheet, View, Share, Image} from 'react-native';
+import {Header, Body, Icon, Left, Right, Button} from 'native-base';
 import ApiUtils from '../ApiUtils';
 import {connect} from 'react-redux';
-import GlobalStyles from '../styles';
 import DefaultProps from '../models/DefaultProps';
-import BackgroundGeolocation from 'react-native-background-geolocation';
 import Logo from '../assets/logo.png';
-const mapStateToProps = (state) => {
+import {formattedTime} from '../services/HoursService';
+import AppState from '../models/AppState';
+const mapStateToProps = (state: AppState) => {
   return {
     isRecording: state.isRecording,
     currentLive: state.currentLive,
@@ -38,8 +31,8 @@ interface Props extends DefaultProps {
 interface State {}
 
 class MapHeader extends Component<Props, State> {
-  interval: number;
-  constructor(props) {
+  interval: any;
+  constructor(props: any) {
     super(props);
 
     this.state = {};
@@ -50,39 +43,7 @@ class MapHeader extends Component<Props, State> {
   }
   didMount() {
     clearInterval(this.interval);
-    // this.interval = setInterval(() => this.setState({test: 1}), 1100);
   }
-
-  // componentWillUnmount() {
-  //   clearInterval(this.interval);
-  // }
-
-  // goBackOk() {
-  //   BackgroundGeolocation.stop();
-  //   var action = {type: 'CLEAR_MAP', data: null};
-  //   this.props.dispatch(action);
-
-  //   this.props.navigation.navigate('Lives');
-  // }
-
-  // goBack() {
-  //   if (this.props.isRecording) {
-  //     Alert.alert(
-  //       "Quitter l'activité",
-  //       "Si vous quittez l'activité vous allez perdre les données enregistrées. Etes-vous sûr de quitter l'activité ?",
-  //       [
-  //         {
-  //           text: 'Annuler',
-  //           style: 'cancel',
-  //         },
-  //         {text: 'Quitter', onPress: () => this.goBackOk()},
-  //       ],
-  //       {cancelable: false},
-  //     );
-  //   } else {
-  //     this.goBackOk();
-  //   }
-  // }
 
   onClickShare() {
     Share.share(
@@ -98,25 +59,6 @@ class MapHeader extends Component<Props, State> {
         dialogTitle: 'Suivez ma position en direct ! ',
       },
     );
-  }
-
-  formattedTime(hours, minutes, seconds) {
-    var hoursDisplay = hours;
-    if (hours < 10) {
-      hoursDisplay = '0' + hours;
-    }
-
-    var minutesDisplay = minutes;
-    if (minutes < 10) {
-      minutesDisplay = '0' + minutes;
-    }
-
-    var secondsDisplay = seconds;
-    if (seconds < 10) {
-      secondsDisplay = '0' + seconds;
-    }
-
-    return hoursDisplay + ':' + minutesDisplay + ':' + secondsDisplay;
   }
 
   getCurrentTime() {
@@ -138,7 +80,7 @@ class MapHeader extends Component<Props, State> {
           (currentTime % (1000 * 60 * 60)) / (1000 * 60),
         );
         var seconds = Math.floor((currentTime % (1000 * 60)) / 1000);
-        return this.formattedTime(hours, minutes, seconds);
+        return formattedTime(hours, minutes, seconds);
       } else {
         var currentTime = 0;
         for (var i = 0; i < this.props.dates.length - 1; i++) {
@@ -158,7 +100,7 @@ class MapHeader extends Component<Props, State> {
           (currentTime % (1000 * 60 * 60)) / (1000 * 60),
         );
         var seconds = Math.floor((currentTime % (1000 * 60)) / 1000);
-        return this.formattedTime(hours, minutes, seconds);
+        return formattedTime(hours, minutes, seconds);
       }
     }
   }
@@ -227,39 +169,23 @@ class MapHeader extends Component<Props, State> {
   render() {
     return (
       <View>
-           <Header style={styles.header}>
+        <Header style={styles.header}>
           <Left>
-            <Button style={styles.goBackButton} onPress={() =>this.openDrawer()}>
+            <Button
+              style={styles.goBackButton}
+              onPress={() => this.openDrawer()}>
               <Icon style={styles.saveText} name="bars" type="FontAwesome5" />
             </Button>
           </Left>
           <Body>
-          <Image resizeMode="contain" source={Logo} style={styles.logoHeader} />
+            <Image
+              resizeMode="contain"
+              source={Logo}
+              style={styles.logoHeader}
+            />
           </Body>
           <Right></Right>
         </Header>
-     
-     
-        {/* <View style={styles.statBanner}>
-          <View>
-            <Text style={styles.timeText}>{this.getCurrentTime()}</Text>
-          </View>
-
-          <View>
-            <Text style={styles.timeText}>{this.getSpeed()} km/h</Text>
-          </View>
-          <View>
-            <Text style={styles.timeText}>
-              {this.props.odometer?.toFixed(2)} km
-            </Text>
-          </View>
-        </View> */}
-        {/* 
-        <View style={styles.liveNameBanner}>
-          <Text style={styles.liveNameText}>
-            {this.props.currentLive?.libelleLive}
-          </Text>
-        </View> */}
       </View>
     );
   }
@@ -293,7 +219,7 @@ const styles = StyleSheet.create({
     paddingBottom: 10,
     // height: 80
   },
- 
+
   liveNameBanner: {
     backgroundColor: 'white',
     borderTopColor: '#D5D5D5',
