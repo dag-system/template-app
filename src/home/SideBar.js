@@ -147,7 +147,7 @@ export default class Sidebar extends Component {
               padding: 10,
             }}>
             <Icon
-              name="user"
+              name="user-alt"
               type="FontAwesome5"
               style={[
                 styles.icon,

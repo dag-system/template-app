@@ -1,8 +1,8 @@
-export const TemplateDisplayName = 'Template Test';
+export const TemplateDisplayName = "Activ'toi by FSGT ";
 
-export const IsDemo = true;
+export const IsDemo = false;
 
-export const TemplateExpirationDate = new Date();
+export const TemplateExpirationDate = new Date('2021-04-30T22:00:00.000Z');
 
 export const TemplateAppName = purgeString(
   romanizeString(TemplateDisplayName.toLowerCase()),
@@ -12,9 +12,9 @@ export const TemplateOrganisation = purgeString(
   romanizeString(TemplateDisplayName.toUpperCase()),
 );
 
-export const TemplateIdOrganisation = '57';
+export const TemplateIdOrganisation = '338';
 
-export const TemplateBackgroundColor = '#FFFFFF';
+export const TemplateBackgroundColor = '#004899';
 export const TemplateSecondColor = '#FFFFFF';
 
 export const textAutoBackgroundColor = autoColor(TemplateBackgroundColor);
@@ -28,22 +28,26 @@ export const TemplateSexeAsk = true;
 export const TemplateDdnAsk = true;
 export const TemplateMailAsk = true;
 export const TemplateTelAsk = true;
-export const TemplateAdressAsk = true;
+export const TemplateAdressAsk = false;
 export const TemplatePostalAsk = true;
 export const TemplateCityAsk = true;
-export const TemplateCountryAsk = true;
-export const TemplateTelVerifAsk = true;
+export const TemplateCountryAsk = false;
+export const TemplateTelVerifAsk = false;
 export const TemplateChallengeClub = true;
 export const TemplateChallengeFamille = true;
-export const TemplateChallengeAutre = true;
+export const TemplateChallengeAutre = false;
 export const TemplateChallengeEntreprise = true;
 export const TemplateHasAppDonation = false;
 export const TemplateIsPaying = false;
 
 export const TemplateChallengeAutreName = 'Template Test Autre';
 
-export const TemplateSportLive = [];
-export const TemplateTrace = [];
+export const TemplateSportLive = [
+  {idSport: 13, sportName: 'MARCHE'},
+  {idSport: 24, sportName: 'Course à pied'},
+  {idSport: 27, sportName: 'Course à pied'},
+];
+export const TemplateTrace = [{label: "Vivi'berge Vitry sur Seine", id: '605'}];
 
 export const TemplateArrayImagesSponsorPath = [];
 export const TemplateArrayImagesPartenairesPath = [];

@@ -315,7 +315,6 @@ class UploadGpx extends Component<Props, State> {
                 style={{
                   flexDirection: 'row',
                   justifyContent: 'flex-start',
-                  width: '100%',
                   paddingRight: 0,
                   paddingLeft: 0,
                   marginTop: 20,
@@ -329,11 +328,9 @@ class UploadGpx extends Component<Props, State> {
                     name="chevron-left"
                     type="FontAwesome5"
                   />
-                  {/* <Text style={styles.saveText}>Précedent</Text> */}
                 </Button>
               </View>
             </Left>
-            <Body style={{flex: 0}} />
             <Right style={{flex: 1}}>
               <Image resizeMode="contain" source={Logo} style={styles.logo} />
             </Right>
@@ -586,6 +583,7 @@ const styles = StyleSheet.create({
     width: '100%',
     height: 50,
     alignSelf: 'center',
+    marginRight: '50%',
   },
   bold: {
     fontWeight: 'bold',

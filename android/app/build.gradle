@@ -131,7 +131,7 @@ android {
     }
 
     defaultConfig {
-            applicationId "com.dag.templateappname.app"
+            applicationId "com.dag.activtoibyfsgt.app"
             minSdkVersion rootProject.ext.minSdkVersion
             targetSdkVersion rootProject.ext.targetSdkVersion
             versionCode 547
