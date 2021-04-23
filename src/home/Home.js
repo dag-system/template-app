@@ -713,7 +713,7 @@ class Home extends Component {
                 {this.props.folocodes?.length > 0 ? (
                   <View>
                     <Picker
-                      style={{width: 300}}
+                      style={{width: 300, height: 100}}
                       mode="dropdown"
                       accessibilityLabel={'Choisir le Code'}
                       iosHeader={'Choisir le Code'}
@@ -761,16 +761,18 @@ class Home extends Component {
                   <Text style={{textAlign: 'center'}}>ou </Text>
                 ) : null}
 
-                <TextInput
-                  style={styles.inputCode}
-                  placeholder="Entrez votre code"
-                  placeholderTextColor="black"
-                  value={this.state.followCode}
-                  onChangeText={(followCode) =>
-                    this.setState({followCode: followCode})
-                  }
-                  clearButtonMode="always"
-                />
+                <View style={{display: 'flex', flexDirection: 'row', justifyContent :'center'}}>
+                  <TextInput
+                    style={styles.inputCode}
+                    placeholder="Entrez votre code"
+                    placeholderTextColor="black"
+                    value={this.state.followCode}
+                    onChangeText={(followCode) =>
+                      this.setState({followCode: followCode})
+                    }
+                    clearButtonMode="always"
+                  />
+                </View>
 
                 <View
                   style={{
@@ -879,13 +881,13 @@ const styles = StyleSheet.create({
     borderBottomLeftRadius: 100,
   },
   followCodeLoginSection: {
-    flex: 1,
+    // flex: 1,
     backgroundColor: 'white',
     width: '100%',
-    height: '140%',
-    alignItems: 'center',
+    // height: '100%',
+    //alignItems: 'center',
     paddingTop: 30,
-    paddingBottom: 200,
+    // paddingBottom: 200,
   },
   inputCode: {
     borderBottomWidth: 1,

@@ -31,7 +31,7 @@ export default function MapCarousel() {
   const [activeSlide, setActiveSlide] = useState(0);
 
   const dispatch = useDispatch();
-  const {lives, statistics, userData, challenges} = useSelector(
+  const {lives, statistics, userData, challenges,isRecording} = useSelector(
     (state: AppState) => state,
   );
 
@@ -82,10 +82,10 @@ export default function MapCarousel() {
 
     currentCarouselItems.push({
       id: 'nbKm',
-      title1: 'Nombre de km parcourus',
+      title1: 'Nb km parcourus',
       subTitle1: totalKm.toFixed(1) + ' km',
-      title2: 'Nombre de km parcourus total ',
-      subTitle2: statistics?.nbKmTotal + ' km',
+      title2: 'Nb km parcourus total ',
+      subTitle2: statistics?.nbKmTotal != null ? statistics?.nbKmTotal + ' km' : "- km",
     });
 
     // currentCarouselItems.push({
@@ -97,7 +97,7 @@ export default function MapCarousel() {
 
     setCarouselItems(currentCarouselItems);
     // this.setState({carouselItems: carouselItems});
-  }, [lives, statistics]);
+  }, [lives, statistics, isRecording]);
 
   const getLiveStatsInfo = (json: string | undefined): LiveStatInfos => {
     if (json != undefined) {

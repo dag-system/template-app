@@ -141,7 +141,7 @@ class LiveSummary extends Component<Props, State> {
   }
 
   componentDidMount() {
-    this.loadLive(this.props.currentLiveSummary.idLive);
+    setTimeout(() => this.loadLive(this.props.currentLiveSummary.idLive), 300);
   }
 
   loadLive(idLive) {
@@ -168,7 +168,7 @@ class LiveSummary extends Component<Props, State> {
         // alert(JSON.stringify(responseJson.segmentEfforts.length));
         // this.setState({ segmentEfforts: responseJson.segmentEfforts });
         this.setState({statsLive: responseJson.statsLive});
- 
+
         var action = {type: 'SAVE_CURRENT_LIVE', data: responseJson};
 
         this.props.dispatch(action);
@@ -924,9 +924,16 @@ class LiveSummary extends Component<Props, State> {
                                   </View>
                                 </View>
                                 <View>
-                                  {segment.isValid !=null && segment.isValid != 1 ? (
-                                    <Text style={{textAlign: 'center', marginTop : 5}}>
-                                      Le parcours effectué n'a pas été consideré comme complet. Il n'apparait donc pas dans le classment.
+                                  {segment.isValid != null &&
+                                  segment.isValid != 1 ? (
+                                    <Text
+                                      style={{
+                                        textAlign: 'center',
+                                        marginTop: 5,
+                                      }}>
+                                      Le parcours effectué n'a pas été consideré
+                                      comme complet. Cette activité n'est donc
+                                      pas dans le classement.
                                     </Text>
                                   ) : null}
                                 </View>
