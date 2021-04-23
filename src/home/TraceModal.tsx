@@ -40,7 +40,7 @@ export default function TraceModal(props: Props) {
     props.onClose();
   };
 
-  const toggleTrace = (traceName) => {
+  const toggleTrace = (traceName : string) => {
     var action = {type: 'TOGGLE_TRACE', data: traceName};
     dispatch(action);
   };

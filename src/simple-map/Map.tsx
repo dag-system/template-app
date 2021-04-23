@@ -76,49 +76,12 @@ interface State {
 }
 
 const Map = forwardRef((props, ref) => {
-  // constructor(props : any) {
-  //   super(props);
-
-  //   this.state = {
-  //     ismodalBatteryOpen: false,
-  //     isModalTraceVisible: false,
-  //     currentPolyline: null,
-  //     refresh: false,
-  //     currentInteret: null,
-  //     isModalInterestVisible: false,
-  //   };
-  // }
-
-  // componentDidMount() {
-  //   setTimeout(() => this.didMount(), 300);
-
-  //   // alert(this.props.userData.ddnUtilisateur)
-  //   //   alert(new Date(this.props.userData.ddnUtilisateur))
-
-  //   // setTimeout(() => this.setState({ userdata: { ...this.state.userdata, ddnUtilisateur: this.state.userdata.ddnUtilisateur) }} ), 100)
-  // }
-  // didMount() {
-  //   if (this.props.polylines.length > 0) {
-  //     let firstPolyline = this.props.polylines[0];
-  //     if (firstPolyline.positionsTrace.length != 0) {
-  //       if (this.refs.map != null) {
-  //         this.refs.map.fitToCoordinates(firstPolyline.positionsTrace, {
-  //           edgePadding: {top: 10, right: 10, bottom: 10, left: 10},
-  //           animated: true,
-  //         });
-  //       }
-  //     }
-  //   }
-  // }
   const [currentInteret, setCurrentInteret] = useState<Interest>();
   const [currentPolyline, setCurrentPolyline] = useState<PolylineModel>();
   const [isModalInterestVisible, setIsModalInterestVisible] = useState(false);
   const [isModalBatteryOpen, setIsModalBatteryOpen] = useState(false);
 
   const mapRef = useRef<MapView>(null);
-  // const mapRef = useRef<MapView>(null);
-
-  // const navigation = useNavigation();
   const {
     pointsInterets,
     currentMapStyle,
@@ -128,26 +91,18 @@ const Map = forwardRef((props, ref) => {
     coordinatesString,
   } = useSelector((state: AppState) => state);
 
-  // useEffect(() => {
-  //   if (polylines.length > 0) {
-  //     let firstPolyline = polylines[0];
-  //     if (firstPolyline.positionsTrace.length != 0) {
-  //       if (mapRef?.current != null) {
-  //         mapRef?.current.fitToCoordinates(firstPolyline.positionsTrace, {
-  //           edgePadding: {top: 10, right: 10, bottom: 10, left: 10},
-  //           animated: true,
-  //         });
-  //       }
-  //     }
-  //   }
-  // }, [polylines]);
-
   useImperativeHandle(ref, () => ({
     onCenter() {
       onClickGetCurrentPosition();
     },
     onUpdatePosition(pos: any) {
       onUpdatePosition(pos);
+    },
+    centerMapOnTrace(polyline: PolylineModel) {
+      centerMapOnTrace(polyline);
+    },
+    centerOnPoi(interest: Interest) {
+      centerOnPoi(interest);
     },
   }));
 

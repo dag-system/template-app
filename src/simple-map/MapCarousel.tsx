@@ -7,9 +7,16 @@ import Carousel, {Pagination} from 'react-native-snap-carousel';
 import GpxService from '../services/GpxServices';
 import AppState from '../models/AppState';
 import LiveStatInfos from '../models/LiveStatInfos';
-
+import ApiUtils from '../ApiUtils';
 interface State {}
 
+interface CarouselItem {
+  id: string;
+  title1: string;
+  subTitle1: string;
+  title2: string;
+  subTitle2: string;
+}
 export default function MapCarousel() {
   // constructor(props) {
   //   super(props);
@@ -20,17 +27,22 @@ export default function MapCarousel() {
   //   };
   // }
 
-  const [carouselItems, setCarouselItems] = useState<any[]>([]);
+  const [carouselItems, setCarouselItems] = useState<CarouselItem[]>([]);
   const [activeSlide, setActiveSlide] = useState(0);
 
   const dispatch = useDispatch();
-  const {lives, statistics} = useSelector((state: AppState) => state);
+  const {lives, statistics, userData, challenges} = useSelector(
+    (state: AppState) => state,
+  );
 
   useEffect(() => {
     let totalKm = 0;
     let totalTime = 0;
     let totalDplus = 0;
 
+    challenges?.forEach((c) => {
+      loadSegment(c.idChallenge);
+    });
     lives.forEach((live) => {
       let infos = getLiveStatsInfo(live.statsLive);
       if (infos != null) {
@@ -40,12 +52,13 @@ export default function MapCarousel() {
       }
     });
 
-    let currentCarouselItems = [];
+    let currentCarouselItems: CarouselItem[] = [];
 
     //1 - nombre activites
     currentCarouselItems.push({
+      id: 'nbActivites',
       title1: "Nombre d'activités",
-      subTitle1: lives.length,
+      subTitle1: lives.length.toString(),
       title2: "Nombre d'activités total",
       subTitle2: statistics?.nbActivites,
     });
@@ -68,18 +81,19 @@ export default function MapCarousel() {
     // Nombre de classés (tous parcours confondus - les miens – ceux de tous les utilisateurs)
 
     currentCarouselItems.push({
+      id: 'nbKm',
       title1: 'Nombre de km parcourus',
       subTitle1: totalKm.toFixed(1) + ' km',
       title2: 'Nombre de km parcourus total ',
       subTitle2: statistics?.nbKmTotal + ' km',
     });
 
-    currentCarouselItems.push({
-      title1: "Nombre d'activités",
-      subTitle1: lives.length,
-      title2: 'D+ total',
-      subTitle2: totalDplus + ' m',
-    });
+    // currentCarouselItems.push({
+    //   title1: "Nombre d'activités",
+    //   subTitle1: lives.length,
+    //   title2: 'D+ total',
+    //   subTitle2: totalDplus + ' m',
+    // });
 
     setCarouselItems(currentCarouselItems);
     // this.setState({carouselItems: carouselItems});
@@ -96,6 +110,53 @@ export default function MapCarousel() {
         duree: '00:00:00',
       };
     }
+  };
+
+  const loadSegment = (idSegment: number) => {
+    let formData = new FormData();
+    formData.append('method', 'getSegmentDetail');
+    formData.append('auth', ApiUtils.getAPIAuth());
+    formData.append('idSegment', idSegment);
+    formData.append('idUtilisateur', userData.idUtilisateur);
+
+    //fetch followCode API
+    fetch(ApiUtils.getAPIUrl(), {
+      method: 'POST',
+      headers: {},
+      body: formData,
+    })
+      .then(ApiUtils.checkStatus)
+      .then((response) => response.json()) //;
+      .then((responseJson) => {
+        console.log(responseJson);
+
+        let newCarouselItem: CarouselItem = {
+          id: idSegment.toString(),
+          title1: responseJson.nomSegment + ' : ',
+          subTitle1: responseJson.efforts.bestEffort !=null ? responseJson.efforts.bestEffort.tempsEffort : "Pas de temps",
+          title2: responseJson.nomSegment + ' 1er :' + '',
+          subTitle2: responseJson.classement !=null && responseJson.classement.length > 0 ?responseJson.classement[0].tempsEffort : "",
+        };
+
+        // console.log(newCarouselItem);
+
+        setCarouselItems((value: CarouselItem[]) => {
+          if (value.filter((c) => c.id == idSegment.toString()).length == 0) {
+            return [...value, newCarouselItem];
+          } else {
+            return [...value];
+          }
+        });
+        // this.saveCoordinates(responseJson.coords); // TO DO
+        // this.getBestSegment(responseJson);
+      })
+
+      .catch((e) => {
+        ApiUtils.logError('get segment', JSON.stringify(e.message));
+        console.log(e);
+        if (e.message == 'Timeout' || e.message == 'Network request failed') {
+        }
+      });
   };
 
   const getDplus = (infos: LiveStatInfos) => {

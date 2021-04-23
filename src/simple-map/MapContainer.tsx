@@ -82,7 +82,8 @@ export default function MapContainer() {
 
   const centerOnTrace = (trace: any) => {
     closeTraceModal();
-    mapRef.current.centerMapOnTrace(trace);
+
+    mapRef?.current?.centerMapOnTrace(trace);
   };
 
   const showDemoTrace = (trace: any) => {
@@ -92,7 +93,7 @@ export default function MapContainer() {
 
   const centerOnPoi = (interest: Interest) => {
     closeTraceModal();
-    mapRef.current.centerOnPoi(interest);
+    mapRef?.current?.centerOnPoi(interest);
   };
 
   const getPhoneData = () => {

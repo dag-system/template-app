@@ -4,6 +4,7 @@ import Live from './Live';
 import {MapTypes} from 'react-native-maps';
 import UserData from './UserDate';
 import PhoneData from './PhoneData';
+import Challenge from './Challenge';
 
 export default class AppState {
   lives: Live[];
@@ -22,4 +23,5 @@ export default class AppState {
   statistics: any;
   dates: any;
   currentPosition: any;
+  challenges? : Challenge[];
 }

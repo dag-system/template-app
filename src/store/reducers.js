@@ -370,7 +370,7 @@ const reducer = (state = initialState, action) => {
         descriptionStation: action.data.descriptionStation,
         pointsInterets: action.data.pointsInterets,
         challenges: action.data.challenges,
-        statistics : action.data.statistics
+        statistics: action.data.statistics,
       };
       return nextState || state;
     }
