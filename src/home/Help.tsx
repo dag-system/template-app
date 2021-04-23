@@ -31,6 +31,11 @@ import VideoModal from './VideoModal';
 import Video from 'react-native-video';
 import VideoPrez from '../assets/tuto.mp4';
 
+import {
+  TemplateBackgroundColor,
+  textAutoBackgroundColor,
+  textAutoSecondColor,
+} from '../globalsModifs';
 const mapStateToProps = (state) => {
   return {
     userData: state.userData,
@@ -185,8 +190,8 @@ class Help extends Component {
               </Text>
 
               <Text style={{marginTop: 10}}>
-                Entrainez-vous et affrontez vos amis et collègues
-                en toute sécurité, et sans jamais vous croiser !
+                Entrainez-vous et affrontez vos amis et collègues en toute
+                sécurité, et sans jamais vous croiser !
               </Text>
 
               <Text style={{marginTop: 10}}>
@@ -226,7 +231,7 @@ class Help extends Component {
                     flexDirection: 'row',
                   }}>
                   <Icon
-                    style={{marginTop: -5, color: 'white'}}
+                      style={{marginTop: -5, color: textAutoSecondColor}}
                     name="expand-alt"
                     type="FontAwesome5"
                   />
@@ -250,7 +255,7 @@ class Help extends Component {
                   // style={[this.state.isFullScreen ? styles.video : styles.fullScreenVideo,{height : 10}]}
                 />
               ) : null}
-          
+
               {/* {!this.props.noHeader ? ( */}
               {!this.props.noHeader ? (
                 <View style={{height: '100%'}}>
@@ -275,8 +280,8 @@ class Help extends Component {
                     // paddingBottom: 200,
                     marginTop: 10,
                     justifyContent: 'center',
-                    borderColor: ApiUtils.getColor(),
-                    backgroundColor: ApiUtils.getColor(),
+                    borderColor: TemplateBackgroundColor,
+                    backgroundColor: TemplateBackgroundColor,
                     padding: 10,
                     borderWidth: 1,
                     marginBottom: 75,
@@ -285,7 +290,7 @@ class Help extends Component {
                     style={{
                       textAlign: 'center',
                       textTransform: 'uppercase',
-                      color: 'white',
+                      color: textAutoBackgroundColor,
                     }}>
                     C'est parti
                   </Text>

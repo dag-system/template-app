@@ -17,6 +17,13 @@ import {Sponsors} from './Sponsors';
 import BatteryModalContent from './BatteryModalContent';
 import ApiUtils from '../ApiUtils';
 
+import {
+  textAutoBackgroundColor,
+  textAutoSecondColor,
+  TemplateSecondColor,
+} from '../globalsModifs';
+
+
 const mapStateToProps = (state) => {
   return {
     userData: state.userData,
@@ -144,7 +151,8 @@ const styles = StyleSheet.create({
     elevation: 0,
   },
   drawerButton: {
-    backgroundColor: 'transparent',
+    backgroundColor: TemplateSecondColor,
+    color: textAutoSecondColor,
     width: '100%',
     marginTop: 0,
     paddingTop: 0,

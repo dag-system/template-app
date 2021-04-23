@@ -11,6 +11,13 @@ import {Dimensions} from 'react-native';
 import {connect} from 'react-redux';
 // import * as Sentry from '@sentry/react-native';
 
+import {
+  TemplateBackgroundColor,
+  TemplateSecondColor,
+  textAutoBackgroundColor,
+  textAutoSecondColor,
+} from '../globalsModifs';
+
 const mapStateToProps = (state) => {
   return {
     userData: state.userData,
@@ -116,7 +123,6 @@ class BatteryModalContent extends Component {
         // User clicked [Confirm] button.  Execute the redirect to settings screen:
       })
       .catch((error) => {
-     
         // Depending on Manufacturer/Model/OS Version, a Device may not implement
         // a particular Settings screen.
         console.log(error);
@@ -143,9 +149,7 @@ class BatteryModalContent extends Component {
     var action = {type: 'VIEW_POPUPBATTERY', data: null};
     this.props.dispatch(action);
 
-
-    if(this.props.onValidate)
-    {    
+    if (this.props.onValidate) {
       this.props.onValidate();
     }
   };
@@ -229,7 +233,7 @@ class BatteryModalContent extends Component {
                   flexDirection: 'row',
                   justifyContent: 'space-between',
                 }}>
-                <H2 style={{marginTop : 5}}>Etape 1</H2>
+                <H2 style={{marginTop: 5}}>Etape 1</H2>
                 <Icon
                   name={
                     this.state.isVisibleStep1 ? 'chevron-up' : 'chevron-down'
@@ -252,8 +256,8 @@ class BatteryModalContent extends Component {
                         // paddingBottom: 200,
                         marginTop: 10,
                         justifyContent: 'center',
-                        borderColor: ApiUtils.getColor(),
-                        backgroundColor: ApiUtils.getColor(),
+                        borderColor: textAutoSecondColor,
+                        backgroundColor: TemplateSecondColor,
                         padding: 10,
                         borderWidth: 1,
                       }}
@@ -262,7 +266,7 @@ class BatteryModalContent extends Component {
                         style={{
                           textAlign: 'center',
                           textTransform: 'uppercase',
-                          color: 'white',
+                          color: textAutoSecondColor,
                         }}>
                         Ouvrir les paramètres
                       </Text>
@@ -278,7 +282,10 @@ class BatteryModalContent extends Component {
                 <Text> 3. Cliquer sur "Lancement d'application"</Text>
                 <Text>4. Rechercher et désactiver l’appli « My Cross »</Text>
                 <Text>5. Cliquer sur OK en vérifiant que tout soit activé</Text>
-                <Text>6. Retourner dans les reglages batterie et désactiver l'économiseur de batterie</Text>
+                <Text>
+                  6. Retourner dans les reglages batterie et désactiver
+                  l'économiseur de batterie
+                </Text>
 
                 <Text style={{fontWeight: 'bold', marginTop: 10}}>
                   SAMSUNG (Galaxy S8 et inférieur : Galaxy A5, Galaxy S7, Galaxy
@@ -308,7 +315,7 @@ class BatteryModalContent extends Component {
                 <Text>
                   9. Vérifier que l'application l’appli « My Cross » ne soit pas
                   dans la liste, sinon supprimer-là à l'aide de la corbeille en
-                  haut à droite{' '}
+                  haut à droite
                 </Text>
 
                 <Text style={{fontWeight: 'bold', marginTop: 10}}>
@@ -337,7 +344,10 @@ class BatteryModalContent extends Component {
                 <Text>
                   5. Sélectionner les 3 champs qui vont s'afficher en popup
                 </Text>
-                <Text>6. Retourner dans les reglages batterie et désactiver l'économiseur de batterie</Text>
+                <Text>
+                  6. Retourner dans les reglages batterie et désactiver
+                  l'économiseur de batterie
+                </Text>
 
                 <Text style={{fontWeight: 'bold', marginTop: 10}}>
                   {' '}
@@ -427,8 +437,8 @@ class BatteryModalContent extends Component {
                       // paddingBottom: 200,
                       marginTop: 10,
                       justifyContent: 'center',
-                      borderColor: ApiUtils.getColor(),
-                      backgroundColor: ApiUtils.getColor(),
+                      borderColor: textAutoSecondColor,
+                      backgroundColor: TemplateSecondColor,
                       padding: 10,
                       borderWidth: 1,
                     }}>
@@ -436,14 +446,14 @@ class BatteryModalContent extends Component {
                       style={{
                         textAlign: 'center',
                         textTransform: 'uppercase',
-                        color: 'white',
+                        color: textAutoSecondColor,
                       }}>
                       Désactiver l'optimisation de la batterie
                     </Text>
                   </TouchableOpacity>
                 ) : (
                   <Text style={{color: 'green'}}>
-                    L'optimisation de la batterie est bien désactivée  &nbsp;
+                    L'optimisation de la batterie est bien désactivée &nbsp;
                     <Icon
                       name="check"
                       type="FontAwesome5"
@@ -526,8 +536,8 @@ class BatteryModalContent extends Component {
               // paddingBottom: 200,
               marginTop: 10,
               justifyContent: 'center',
-              borderColor: ApiUtils.getColor(),
-              backgroundColor: ApiUtils.getColor(),
+              borderColor: TemplateBackgroundColor,
+              backgroundColor: TemplateBackgroundColor,
               padding: 10,
               borderWidth: 1,
             }}>
@@ -535,7 +545,7 @@ class BatteryModalContent extends Component {
               style={{
                 textAlign: 'center',
                 textTransform: 'uppercase',
-                color: 'white',
+                color: textAutoBackgroundColor,
               }}>
               C'est parti
             </Text>
