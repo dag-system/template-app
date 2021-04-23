@@ -168,6 +168,7 @@ class LiveSummary extends Component<Props, State> {
         // alert(JSON.stringify(responseJson.segmentEfforts.length));
         // this.setState({ segmentEfforts: responseJson.segmentEfforts });
         this.setState({statsLive: responseJson.statsLive});
+ 
         var action = {type: 'SAVE_CURRENT_LIVE', data: responseJson};
 
         this.props.dispatch(action);
@@ -922,6 +923,13 @@ class LiveSummary extends Component<Props, State> {
                                     </Text>
                                   </View>
                                 </View>
+                                <View>
+                                  {segment.isValid !=null && segment.isValid != 1 ? (
+                                    <Text style={{textAlign: 'center', marginTop : 5}}>
+                                      Le parcours effectué n'a pas été consideré comme complet. Il n'apparait donc pas dans le classment.
+                                    </Text>
+                                  ) : null}
+                                </View>
                               </View>
                             </TouchableOpacity>
                           </View>
@@ -1297,10 +1305,9 @@ class LiveSummary extends Component<Props, State> {
                   {this.state.splits != null && this.state.splits.length > 0 ? (
                     <View>
                       <VictoryChart
-                        // theme={VictoryTheme.material}
-                          
-                        >
-                        <VictoryArea 
+                      // theme={VictoryTheme.material}
+                      >
+                        <VictoryArea
                           data={this.state.speedData}
                           x="dist"
                           y="speed"
@@ -1310,24 +1317,23 @@ class LiveSummary extends Component<Props, State> {
                           label="Vitesse (km/h)"
                           fixLabelOverlap={true}
                           style={{
-                            axis: {stroke: "#756f6a"},
+                            axis: {stroke: '#756f6a'},
                             axisLabel: {fontSize: 20, padding: 30},
                             // grid: {stroke: ({ tick }) => tick > 0.5 ? "red" : "grey"},
-                            ticks: {stroke: "grey", size: 0},
-                            tickLabels: {fontSize: 15, padding: 5}
+                            ticks: {stroke: 'grey', size: 0},
+                            tickLabels: {fontSize: 15, padding: 5},
                           }}
                         />
                         <VictoryAxis
                           label="Distance km"
                           style={{
-                            axis: {stroke: "#756f6a"},
+                            axis: {stroke: '#756f6a'},
                             axisLabel: {fontSize: 20, padding: 30},
                             // grid: {stroke: ({ tick }) => tick > 0.5 ? "red" : "grey"},
-                            ticks: {stroke: "grey", size: 0},
-                            tickLabels: {fontSize: 15, padding: 5}
-                            
+                            ticks: {stroke: 'grey', size: 0},
+                            tickLabels: {fontSize: 15, padding: 5},
                           }}
-                          tickFormat={(t) => (t/100).toFixed(1)}
+                          tickFormat={(t) => (t / 100).toFixed(1)}
                         />
                       </VictoryChart>
                       <Text>Intervalles</Text>
