@@ -213,7 +213,7 @@
     "action": "REPLACE_TEXT",
     "filePath": "./android/app/_BUCK",
     "source": "dag.templateappname",
-    "cible": "dag.templatesport",
+    "cible": "dag.activtoibyfsgt",
     "datasource": "table.colonne",
     "env": "prod"
   },
@@ -221,7 +221,7 @@
     "action": "REPLACE_TEXT",
     "filePath": "./android/app/build.gradle",
     "source": "dag.templateappname",
-    "cible": "dag.templatesport",
+    "cible": "dag.activtoibyfsgt",
     "datasource": "table.colonne",
     "env": "prod"
   },
@@ -229,7 +229,7 @@
     "action": "REPLACE_TEXT",
     "filePath": "./android/app/google-services.json",
     "source": "dag.templateappname",
-    "cible": "dag.templatesport",
+    "cible": "dag.activtoibyfsgt",
     "datasource": "table.colonne",
     "env": "prod"
   },
@@ -245,7 +245,7 @@
     "action": "REPLACE_TEXT",
     "filePath": "./android/app/src/main/AndroidManifest.xml",
     "source": "dag.templateappname",
-    "cible": "dag.templatesport",
+    "cible": "dag.activtoibyfsgt",
     "datasource": "table.colonne",
     "env": "prod"
   },
@@ -253,7 +253,7 @@
     "action": "REPLACE_TEXT",
     "filePath": "./android/app/src/main/java/com/dag/templateappname/app/MainActivity.java",
     "source": "dag.templateappname",
-    "cible": "dag.templatesport",
+    "cible": "dag.activtoibyfsgt",
     "datasource": "table.colonne",
     "env": "prod"
   },
@@ -261,7 +261,7 @@
     "action": "REPLACE_TEXT",
     "filePath": "./android/app/src/main/java/com/dag/templateappname/app/MainApplication.java",
     "source": "dag.templateappname",
-    "cible": "dag.templatesport",
+    "cible": "dag.activtoibyfsgt",
     "datasource": "table.colonne",
     "env": "prod"
   },
@@ -269,7 +269,7 @@
     "action": "REPLACE_TEXT",
     "filePath": "./ios/Folomi.xcodeproj/project.pbxproj",
     "source": "dag.templateappname",
-    "cible": "dag.templatesport",
+    "cible": "dag.activtoibyfsgt",
     "datasource": "table.colonne",
     "env": "prod"
   },
@@ -277,7 +277,7 @@
     "action": "REPLACE_FOLDER_NAME",
     "filePath": "./android/app/src/main/java/com/dag",
     "source": "templateappname",
-    "cible": "templatesport",
+    "cible": "activtoibyfsgt",
     "datasource": "table.colonne",
     "env": "prod"
   }
