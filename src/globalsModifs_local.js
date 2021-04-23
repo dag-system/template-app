@@ -1,27 +1,18 @@
 export const TemplateDisplayName = 'Template Test';
-
 export const IsDemo = true;
-
 export const TemplateExpirationDate = new Date();
-
 export const TemplateAppName = purgeString(
   romanizeString(TemplateDisplayName.toLowerCase()),
 );
-
 export const TemplateOrganisation = purgeString(
   romanizeString(TemplateDisplayName.toUpperCase()),
 );
-
-export const TemplateIdOrganisation = '9';
-
+export const TemplateIdOrganisation = '57';
 export const TemplateBackgroundColor = '#FFFFFF';
 export const TemplateSecondColor = '#FFFFFF';
-
 export const textAutoBackgroundColor = autoColor(TemplateBackgroundColor);
 export const textAutoSecondColor = autoColor(TemplateSecondColor);
-
 export const TemplateSiteLink = 'www.dag-system.com';
-
 export const TemplateNameAsk = true;
 export const TemplateFirstNameAsk = true;
 export const TemplateSexeAsk = true;
@@ -39,15 +30,11 @@ export const TemplateChallengeAutre = true;
 export const TemplateChallengeEntreprise = true;
 export const TemplateHasAppDonation = false;
 export const TemplateIsPaying = false;
-
 export const TemplateChallengeAutreName = 'Template Test Autre';
-
-export const TemplateSportLive = [{idSport : 14, name :"cross"}];
+export const TemplateSportLive = [];
 export const TemplateTrace = [];
-
 export const TemplateArrayImagesSponsorPath = [];
 export const TemplateArrayImagesPartenairesPath = [];
-
 function purgeString(str) {
   const accents =
     'ÀÁÂÃÄÅàáâãäåÒÓÔÕÕÖØòóôõöøÈÉÊËèéêëðÇçÐÌÍÎÏìíîïÙÚÛÜùúûüÑñŠšŸÿýŽž\' ,*-_#|/="~';
@@ -63,7 +50,6 @@ function purgeString(str) {
   }
   return str.join('');
 }
-
 function autoColor(color) {
   max = hexToRgb(color).r + hexToRgb(color).g + hexToRgb(color).b;
   if (max > (3 * 256) / 2) {
@@ -72,7 +58,6 @@ function autoColor(color) {
     return '#FFFFFF';
   }
 }
-
 function hexToRgb(hex) {
   var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
   return result
@@ -83,7 +68,6 @@ function hexToRgb(hex) {
       }
     : null;
 }
-
 function romanizeString(str) {
   let res = str.match(/\d+/g);
   if (res != null) {
@@ -93,7 +77,6 @@ function romanizeString(str) {
   }
   return str;
 }
-
 function romanize(num) {
   var lookup = {
       M: 1000,
