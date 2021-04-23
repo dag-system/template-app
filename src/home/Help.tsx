@@ -231,7 +231,7 @@ class Help extends Component {
                     flexDirection: 'row',
                   }}>
                   <Icon
-                      style={{marginTop: -5, color: textAutoSecondColor}}
+                    style={{marginTop: -5, color: textAutoSecondColor}}
                     name="expand-alt"
                     type="FontAwesome5"
                   />
@@ -280,8 +280,8 @@ class Help extends Component {
                     // paddingBottom: 200,
                     marginTop: 10,
                     justifyContent: 'center',
-                    borderColor: TemplateBackgroundColor,
-                    backgroundColor: TemplateBackgroundColor,
+                    borderColor: ApiUtils.getBackgroundColor(),
+                    backgroundColor: ApiUtils.getBackgroundColor(),
                     padding: 10,
                     borderWidth: 1,
                     marginBottom: 75,
@@ -332,7 +332,7 @@ const styles = StyleSheet.create({
     elevation: 0,
   },
   saveText: {
-    color: 'black',
+    color: textAutoBackgroundColor,
   },
   body: {
     width: '100%',

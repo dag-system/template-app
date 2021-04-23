@@ -46,6 +46,7 @@ import {
   TemplateExpirationDate,
   TemplateIdOrganisation,
   TemplateIsPaying,
+  textAutoBackgroundColor,
 } from '../globalsModifs';
 
 const mapStateToProps = (state) => {
@@ -563,7 +564,7 @@ class Home extends Component {
                         GlobalStyles.button,
                         {
                           marginTop: 0,
-                          borderColor: 'black',
+                          borderColor: textAutoBackgroundColor,
                           opacity: 1,
                           width: '80%',
                           padding: 10,
@@ -574,7 +575,7 @@ class Home extends Component {
                         style={{
                           textAlign: 'center',
                           fontWeight: 'bold',
-                          color: 'black',
+                          color: textAutoBackgroundColor,
                           textTransform: 'uppercase',
                         }}>
                         Créer un compte
@@ -593,12 +594,11 @@ class Home extends Component {
                         GlobalStyles.button,
                         {
                           marginTop: 10,
-                          borderColor: 'black',
+                          borderColor: textAutoBackgroundColor,
                           opacity: 1,
                           width: '80%',
-                          borderColor: 'black',
                           padding: 10,
-                          backgroundColor: 'black',
+                          backgroundColor: textAutoBackgroundColor,
                         },
                       ]}
                       onPress={() => this.openModalLogin()}>
@@ -624,10 +624,10 @@ class Home extends Component {
                       style={[
                         {
                           marginTop: 10,
-                          borderColor: 'black',
+                          borderColor: textAutoBackgroundColor,
                           opacity: 1,
                           width: '80%',
-                          borderColor: 'black',
+                          borderColor: textAutoBackgroundColor,
                           padding: 2,
                         },
                       ]}
@@ -636,7 +636,7 @@ class Home extends Component {
                         style={{
                           textAlign: 'center',
                           textDecorationLine: 'underline',
-                          color: 'black',
+                          color: textAutoBackgroundColor,
                           textTransform: 'uppercase',
                         }}>
                         J'ai oublié mon code ?
@@ -647,7 +647,7 @@ class Home extends Component {
                   <Text
                     style={[
                       {
-                        color: 'black',
+                        color: textAutoBackgroundColor,
                         textAlign: 'center',
                         fontSize: 13,
                         marginTop: 30,
@@ -658,7 +658,7 @@ class Home extends Component {
                   <Text
                     style={[
                       {
-                        color: 'black',
+                        color: textAutoBackgroundColor,
                         textAlign: 'center',
                         fontSize: 13,
                         marginTop: 5,

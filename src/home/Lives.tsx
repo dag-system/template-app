@@ -1309,10 +1309,7 @@ class Lives extends Component<Props, State> {
 
 const styles = StyleSheet.create({
   header: {
- backgroundColor:
-      ApiUtils.getBackgroundColor() === '#FFFFFF'
-        ? 'black'
-        : ApiUtils.getBackgroundColor(),
+    backgroundColor: ApiUtils.getBackgroundColor(),
     width: '100%',
     borderBottomColor: '#D3D3D3',
     borderBottomWidth: 1,
@@ -1399,9 +1396,9 @@ const styles = StyleSheet.create({
     width: 60,
     height: 60,
     backgroundColor:
-    ApiUtils.getBackgroundColor() === "#FFFFFF"
-      ? 'black'
-      : ApiUtils.getBackgroundColor(),
+      ApiUtils.getBackgroundColor() === '#FFFFFF'
+        ? 'black'
+        : ApiUtils.getBackgroundColor(),
 
     borderRadius: 30,
     textAlign: 'center',

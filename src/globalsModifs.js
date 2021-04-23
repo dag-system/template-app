@@ -8,7 +8,7 @@ export const TemplateOrganisation = purgeString(
   romanizeString(TemplateDisplayName.toUpperCase()),
 );
 export const TemplateIdOrganisation = '57';
-export const TemplateBackgroundColor = '#FFFFFF';
+export const TemplateBackgroundColor = '#123456';
 export const TemplateSecondColor = '#FFFFFF';
 export const textAutoBackgroundColor = autoColor(TemplateBackgroundColor);
 export const textAutoSecondColor = autoColor(TemplateSecondColor);
