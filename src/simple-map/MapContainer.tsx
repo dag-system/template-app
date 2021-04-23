@@ -17,6 +17,7 @@ import {
   TemplateAppName,
   TemplateIdOrganisation,
   TemplateSportLive,
+  TemplateArrayImagesSponsorPath,
 } from '../globalsModifs';
 import ApiUtils from '../ApiUtils';
 import Interest from '../models/Interest';
@@ -362,9 +363,11 @@ export default function MapContainer() {
         />
         <Map ref={mapRef} />
 
-        <Footer style={{backgroundColor: 'white', paddingBottom: 64}}>
-          <Sponsors />
-        </Footer>
+        {TemplateArrayImagesSponsorPath.length > 0 ? (
+          <Footer style={{backgroundColor: 'white', paddingBottom: 64}}>
+            <Sponsors />
+          </Footer>
+        ) : null}
 
         <TraceModal
           isVisible={isModalTraceVisible}

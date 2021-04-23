@@ -42,6 +42,7 @@ import Sidebar from './SideBar';
 import {isPointInPolygon} from 'geolib';
 
 import haversine from 'haversine-distance';
+import {textAutoBackgroundColor} from '../globalsModifs';
 const mapStateToProps = (state) => {
   return {
     userData: state.userData,
@@ -421,7 +422,6 @@ class Replay extends Component {
     RNFetchBlob.fs
       .readFile(filePath, 'utf8')
       .then((data) => {
-
         try {
           var test = new GPXDocument(data);
 
@@ -1507,7 +1507,7 @@ class Replay extends Component {
 
 const styles = StyleSheet.create({
   header: {
-    backgroundColor: 'white',
+    backgroundColor: ApiUtils.getBackgroundColor(),
     width: '100%',
     borderBottomColor: '#D3D3D3',
     borderBottomWidth: 1,
@@ -1562,7 +1562,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   saveText: {
-    color: 'black',
+    color: textAutoBackgroundColor,
     paddingLeft: 0,
     marginLeft: 5,
     marginRight: -5,

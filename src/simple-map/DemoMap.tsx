@@ -341,7 +341,7 @@ export default function DemoMap() {
             <TouchableOpacity
               onPress={() => togglePause()}
               style={[
-                styles.button,
+                styles.buttonRound,
                 {backgroundColor: isPaused ? 'green' : 'orange'},
               ]}>
               <Text style={{color: 'white'}}>
@@ -352,7 +352,7 @@ export default function DemoMap() {
             {currentMarkerIndex != 0 ? (
               <TouchableOpacity
                 onPress={() => stopDemo()}
-                style={[styles.button, {backgroundColor: 'red'}]}>
+                style={[styles.buttonRound, {backgroundColor: 'red'}]}>
                 <Text style={{color: 'white'}}>Stop</Text>
               </TouchableOpacity>
             ) : null}
@@ -402,5 +402,21 @@ const styles = StyleSheet.create({
     },
     shadowOpacity: 0.7,
     shadowRadius: 6.27,
+  },
+  buttonRound: {
+    elevation: 20,
+    borderRadius: 500,
+    height: 60,
+    width: 60,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 5,
+      height: 5,
+    },
+    shadowOpacity: 0.7,
+    shadowRadius: 6.27,
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });

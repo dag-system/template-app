@@ -7,6 +7,7 @@ import DefaultProps from '../models/DefaultProps';
 import Logo from '../assets/logo.png';
 import {formattedTime} from '../services/HoursService';
 import AppState from '../models/AppState';
+import {textAutoBackgroundColor} from '../globalsModifs';
 const mapStateToProps = (state: AppState) => {
   return {
     isRecording: state.isRecording,
@@ -191,6 +192,8 @@ class MapHeader extends Component<Props, State> {
   }
 }
 
+console.log('COULEEEEEEEEEEUR', textAutoBackgroundColor);
+
 const styles = StyleSheet.create({
   goBackButton: {
     backgroundColor: 'transparent',
@@ -204,7 +207,7 @@ const styles = StyleSheet.create({
     paddingLeft: 0,
   },
   saveText: {
-    color: 'black',
+    color: textAutoBackgroundColor,
     paddingLeft: 0,
     marginLeft: 0,
     marginRight: -5,
@@ -213,7 +216,7 @@ const styles = StyleSheet.create({
   },
 
   header: {
-    backgroundColor: 'white',
+    backgroundColor: ApiUtils.getBackgroundColor(),
     paddingLeft: 10,
     paddingTop: 10,
     paddingBottom: 10,
@@ -244,6 +247,7 @@ const styles = StyleSheet.create({
     // width: '10%',
     height: 50,
     width: '100%',
+    marginLeft: '30%',
     // width : 100
     // marginRight: '2%',
   },
