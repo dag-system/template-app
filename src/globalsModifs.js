@@ -65,6 +65,9 @@ function purgeString(str) {
 }
 
 function autoColor(color) {
+  if (color == '') {
+    return '#000000';
+  }
   max = hexToRgb(color).r + hexToRgb(color).g + hexToRgb(color).b;
   if (max > (3 * 256) / 2) {
     return '#000000';

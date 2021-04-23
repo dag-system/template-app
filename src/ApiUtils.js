@@ -63,7 +63,7 @@ var ApiUtils = {
     return ISDEBUG;
   },
   getBackgroundColor() {
-    return TemplateBackgroundColor;
+    return TemplateBackgroundColor !='' ? TemplateBackgroundColor  : "#ffffff" ;
   },
   getSecondColor() {
     return TemplateSecondColor;
