@@ -42,7 +42,11 @@ import {Sponsors} from './Sponsors';
 import VersionCheck from 'react-native-version-check';
 import moment from 'moment';
 
-import {TemplateExpirationDate, TemplateIdOrganisation, TemplateIsPaying} from '../globalsModifs';
+import {
+  TemplateExpirationDate,
+  TemplateIdOrganisation,
+  TemplateIsPaying,
+} from '../globalsModifs';
 
 const mapStateToProps = (state) => {
   return {
@@ -109,12 +113,11 @@ class Home extends Component {
 
     // #stop BackroundGeolocation and remove-listeners when Home Screen is rendered.
     this.setState({selectedFolocode: -1});
-    if (ApiUtils.isExpired() ) {
-      this.onClickNavigate('IsExpired')
+    if (ApiUtils.isExpired()) {
+      this.onClickNavigate('IsExpired');
       return;
     }
     if (this.props.userData != null) {
-    
       if (TemplateIsPaying) {
         if (ApiUtils.hasPaid(this.props.userData)) {
           this.onClickNavigate('SimpleMap');
@@ -194,12 +197,12 @@ class Home extends Component {
 
           if (TemplateIsPaying) {
             if (ApiUtils.hasPaid(responseJson)) {
-              this.onClickNavigate('SimpleMap');
+              this.onClickNavigate('Introduction');
             } else {
               this.onClickNavigate('Paiement');
             }
           } else {
-            this.onClickNavigate('SimpleMap');
+            this.onClickNavigate('Introduction');
           }
 
           // ApiUtils.setLogged().then(this.saveUserInfo(responseJson, false));
@@ -266,12 +269,12 @@ class Home extends Component {
 
             if (TemplateIsPaying) {
               if (ApiUtils.hasPaid(responseJson)) {
-                this.onClickNavigate('SimpleMap');
+                this.onClickNavigate('Introduction');
               } else {
                 this.onClickNavigate('Paiement');
               }
             } else {
-              this.onClickNavigate('SimpleMap');
+              this.onClickNavigate('Introduction');
             }
           } else {
             alert("Votre folocode n'est pas valide");
@@ -408,33 +411,32 @@ class Home extends Component {
             });
           }
 
+          //challenges
 
-                  //challenges 
+          var challengesArray = Object.values(result.challenges);
 
-                  var challengesArray = Object.values(result.challenges);
-          
-                  var finalChallengesArray = []; // new Object(this.props.polylines);
-                
-                  if (challengesArray != null && challengesArray.length != 0) {
-                    challengesArray.forEach((challenge) => {
-                      var finalChallenge= challenge;
-        
-                      var positionArray = Object.values(challenge.positionsTrace);
-                      challenge.positionsTrace = positionArray;
-        
-                      finalChallenge = {
-                        positionsTrace: positionArray,
-                        idChallenge: finalChallenge.idChallenge,
-                        libelleChallenge: finalChallenge.libelleChallenge,
-                        distanceChallenge: finalChallenge.distanceChallenge,
-                        gpxChallenge: finalChallenge.gpxChallenge,
-                        dateDebutChallenge: finalChallenge.dateDebutChallenge,
-                        dateFinChallenge: finalChallenge.dateFinChallenge,
-                      };
-        
-                      finalChallengesArray.push(finalChallenge);
-                    });
-                  }
+          var finalChallengesArray = []; // new Object(this.props.polylines);
+
+          if (challengesArray != null && challengesArray.length != 0) {
+            challengesArray.forEach((challenge) => {
+              var finalChallenge = challenge;
+
+              var positionArray = Object.values(challenge.positionsTrace);
+              challenge.positionsTrace = positionArray;
+
+              finalChallenge = {
+                positionsTrace: positionArray,
+                idChallenge: finalChallenge.idChallenge,
+                libelleChallenge: finalChallenge.libelleChallenge,
+                distanceChallenge: finalChallenge.distanceChallenge,
+                gpxChallenge: finalChallenge.gpxChallenge,
+                dateDebutChallenge: finalChallenge.dateDebutChallenge,
+                dateFinChallenge: finalChallenge.dateFinChallenge,
+              };
+
+              finalChallengesArray.push(finalChallenge);
+            });
+          }
 
           if (
             result.pointsInterets != null &&
@@ -496,7 +498,7 @@ class Home extends Component {
             descriptionStation: result.descriptionStation,
             polylines: finalTraceArray,
             pointsInterets: finalinterestArray,
-             challenges : finalChallengesArray
+            challenges: finalChallengesArray,
           };
 
           var action = {type: 'UPDATE_STATION_DATA', data: station};
@@ -642,26 +644,31 @@ class Home extends Component {
                     </TouchableOpacity>
                   </View>
 
-                <Text
-              style={[
-                {
-                  color: 'black',
-                  textAlign: 'center',
-                  fontSize: 13,
-                  marginTop : 30
-                },
-              ]}>
-              Version V {VersionCheck.getCurrentVersion()} 
-            </Text>
-            <Text
-              style={[
-                {
-                  color: 'black',
-                  textAlign: 'center',
-                  fontSize: 13,
-                  marginTop : 5
-                },
-              ]}>Expiration le {moment(TemplateExpirationDate.toISOString()).format('DD/MM/YYYY')}</Text>
+                  <Text
+                    style={[
+                      {
+                        color: 'black',
+                        textAlign: 'center',
+                        fontSize: 13,
+                        marginTop: 30,
+                      },
+                    ]}>
+                    Version V {VersionCheck.getCurrentVersion()}
+                  </Text>
+                  <Text
+                    style={[
+                      {
+                        color: 'black',
+                        textAlign: 'center',
+                        fontSize: 13,
+                        marginTop: 5,
+                      },
+                    ]}>
+                    Expiration le{' '}
+                    {moment(TemplateExpirationDate.toISOString()).format(
+                      'DD/MM/YYYY',
+                    )}
+                  </Text>
                 </ImageBackground>
               </View>
             </KeyboardAvoidingView>
@@ -682,9 +689,13 @@ class Home extends Component {
                   </Button>
                 </Left>
                 <Body>
-              <Image resizeMode="contain" source={Logo} style={styles.logoHeader} />
-            </Body>
-            <Right></Right>
+                  <Image
+                    resizeMode="contain"
+                    source={Logo}
+                    style={styles.logoHeader}
+                  />
+                </Body>
+                <Right></Right>
               </Header>
 
               <KeyboardAvoidingView style={styles.followCodeLoginSection}>
@@ -700,7 +711,7 @@ class Home extends Component {
                 </Text>
 
                 {this.props.folocodes?.length > 0 ? (
-                  <View >
+                  <View>
                     <Picker
                       style={{width: 300}}
                       mode="dropdown"
@@ -794,21 +805,18 @@ class Home extends Component {
                         fontWeight: 'bold',
                         textAlign: 'center',
                         color:
-                        this.state.followCode == '' && this.state.selectedFolocode == -1 ? 'black' : 'white',
+                          this.state.followCode == '' &&
+                          this.state.selectedFolocode == -1
+                            ? 'black'
+                            : 'white',
                       }}>
                       CONNEXION
                     </Text>
                   </TouchableOpacity>
                 </View>
 
-
                 <View style={{marginBottom: 0}} />
-
-          
-
               </KeyboardAvoidingView>
-
-        
 
               <Sponsors />
             </Modal>

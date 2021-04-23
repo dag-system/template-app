@@ -328,7 +328,7 @@ class CreateAccount extends ValidationComponent {
           if (TemplateIsPaying) {
             this.onClickNavigate('Paiement');
           } else {
-            this.onClickNavigate('Lives');
+            this.onClickNavigate('Introduction');
           }
         } else {
           Toast.show({

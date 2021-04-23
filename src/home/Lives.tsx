@@ -1141,7 +1141,7 @@ class Lives extends Component<Props, State> {
             </TouchableHighlight>
 
             <Sponsors />
-            
+
             <Modal
               visible={this.state.uploadGpxVisible}
               onRequestClose={() => this.closeGpxModal()}>
@@ -1309,7 +1309,10 @@ class Lives extends Component<Props, State> {
 
 const styles = StyleSheet.create({
   header: {
-    backgroundColor: 'white',
+ backgroundColor:
+      ApiUtils.getBackgroundColor() === '#FFFFFF'
+        ? 'black'
+        : ApiUtils.getBackgroundColor(),
     width: '100%',
     borderBottomColor: '#D3D3D3',
     borderBottomWidth: 1,
@@ -1335,7 +1338,7 @@ const styles = StyleSheet.create({
     elevation: 0,
   },
   saveText: {
-    color: 'black',
+    color: textAutoBackgroundColor,
   },
   container: {
     flex: 1,
@@ -1396,9 +1399,9 @@ const styles = StyleSheet.create({
     width: 60,
     height: 60,
     backgroundColor:
-      ApiUtils.getSecondColor() === ApiUtils.getBackgroundColor()
-        ? textAutoBackgroundColor
-        : ApiUtils.getSecondColor(),
+    ApiUtils.getBackgroundColor() === "#FFFFFF"
+      ? 'black'
+      : ApiUtils.getBackgroundColor(),
 
     borderRadius: 30,
     textAlign: 'center',

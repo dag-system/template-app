@@ -55,7 +55,7 @@ import {
   VictoryTheme,
 } from 'victory-native';
 
-import {TemplateSportLive} from '../globalsModifs';
+import {TemplateSportLive, textAutoBackgroundColor} from '../globalsModifs';
 import GpxService from '../services/GpxServices';
 
 const mapStateToProps = (state) => {
@@ -1719,7 +1719,7 @@ class LiveSummary extends Component<Props, State> {
 
 const styles = StyleSheet.create({
   header: {
-    backgroundColor: 'white',
+    backgroundColor: ApiUtils.getBackgroundColor(),
     width: '100%',
     borderBottomColor: '#D3D3D3',
     borderBottomWidth: 1,
@@ -1774,7 +1774,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   saveText: {
-    color: 'black',
+    color: textAutoBackgroundColor,
     paddingLeft: 0,
     marginLeft: 5,
     marginRight: -5,
