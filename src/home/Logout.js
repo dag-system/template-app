@@ -36,11 +36,12 @@ class Logout extends Component {
   };
 
   onClickNavigate(routeName) {
-    this.props.navigation.navigate('Home');
+    this.props.navigation.navigate(routeName);
   }
 
   disconnect = () => {
     BackgroundGeolocation.stop();
+    // this.unSubscribe('debug-' + this.props.userData.idUtilisateur);
     var action = {type: 'LOGOUT', data: null};
     this.props.dispatch(action);
 
@@ -74,7 +75,7 @@ class Logout extends Component {
               fontSize: 21,
               marginBottom: 15,
             }}>
-            Vous vous êtes déconnecté.
+            Vous allez être déconnecté.
           </Text>
         </View>
         <View>
@@ -83,12 +84,12 @@ class Logout extends Component {
               fontSize: 17,
               textAlign: 'center',
             }}>
-            Vous vous êtes bien déconnecté, vous pouvez vous reconnecter sur un
-            autre compte si vous les souhaitez.
+            Vous allez être déconnecté, si vous ne souhaitez pas vous
+            deconnectez, cliquer sur le bouton de retour.
           </Text>
         </View>
         <TouchableOpacity
-          onPress={() => this.disconnect()}
+          onPress={() => this.onClickNavigate('Lives')}
           style={{
             width: '80%',
             height: 45,
@@ -97,8 +98,8 @@ class Logout extends Component {
             justifyContent: 'center',
             alignItems: 'center',
             marginTop: 50,
-            marginBottom: 150,
-            borderColor: 'black',
+            marginBottom: 20,
+            borderColor: textAutoSecondColor,
             borderWidth: 1,
           }}>
           <Text
@@ -106,7 +107,25 @@ class Logout extends Component {
               fontSize: 17,
               color: textAutoSecondColor,
             }}>
-            Retourner sur la page d'accueil
+            Retourner à mes activités
+          </Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          onPress={() => this.disconnect()}
+          style={{
+            width: '80%',
+            height: 35,
+            backgroundColor: ApiUtils.getSecondColor(),
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}>
+          <Text
+            style={{
+              fontSize: 17,
+              color: 'red',
+            }}>
+            Se déconnecter
           </Text>
         </TouchableOpacity>
       </View>
