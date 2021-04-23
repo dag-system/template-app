@@ -1,86 +1,46 @@
-import React, {Component} from 'react';
-import {
-  Platform,
-  StyleSheet,
-  Alert,
-  Linking,
-  View,
-  TextInput,
-  Image,
-  FlatList,
-  TouchableHighlight,
-  ActivityIndicator,
-  Modal,
-} from 'react-native';
-import {
-  Container,
-  Header,
-  Content,
-  Footer,
-  Left,
-  Body,
-  Right,
-  Card,
-  CardItem,
-  Text,
-  H1,
-  Button,
-  Title,
-  Form,
-  Item,
-  Input,
-  Label,
-  H3,
-} from 'native-base';
-import {connect} from 'react-redux';
+import React, {useEffect} from 'react';
+import {Platform, Alert, Linking, View, Modal} from 'react-native';
+import {Container, Content} from 'native-base';
+import {useDispatch, useSelector} from 'react-redux';
 import ApiUtils from '../ApiUtils';
 import Help from './Help';
-import RNPusherPushNotifications from 'react-native-pusher-push-notifications';
 import DeviceInfo from 'react-native-device-info';
 import VersionCheck from 'react-native-version-check';
 import BatteryModal from './BatteryModal';
 
 import {TemplateIdOrganisation} from '../globalsModifs';
 import AskGpsModal from './AskGpsModal';
+import Polyline from '../models/Polyline';
+import Interest from '../models/Interest';
+import Challenge from '../models/Challenge';
+import AppState from '../models/AppState';
+import {useNavigation} from '@react-navigation/core';
 
-const mapStateToProps = (state) => {
-  return {
-    userData: state.userData,
-    recordingState: state.recordingState,
-    lives: state.lives,
-    sports: state.sports,
-    isOkPopupBAttery: state.isOkPopupBAttery,
-    isOkPopupBAttery2: state.isOkPopupBAttery2,
-    isOkPopupGps: state.isOkPopupGps,
-  };
-};
+export default function Introduction() {
+  const navigation = useNavigation();
+  const dispatch = useDispatch();
+  const {
+    userData,
+    isOkPopupBAttery,
+    isOkPopupBAttery2,
+    isOkPopupGps,
+  } = useSelector((state: AppState) => state);
 
-class Introduction extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {};
-  }
-
-  componentDidMount() {
-    setTimeout(() => this.didMount(), 300);
-  }
-
-  didMount() {
-    if (this.props.userData != null && this.props.isOkPopupBAttery) {
-      this.onClickNavigate('SimpleMap');
+  useEffect(() => {
+    if (userData != null && isOkPopupBAttery) {
+      onClickNavigate('SimpleMap');
     }
-    this.downloadData();
-  }
+    downloadData();
+  }, [navigation]);
 
-  async downloadData() {
-    // this.init();
-    this.getPhoneData();
-    this.getNewVersion();
+  const downloadData = () => {
+    getPhoneData();
+    getNewVersion();
 
-    this.getinformationStation();
-  }
+    getinformationStation();
+  };
 
-  async getNewVersion() {
+  const getNewVersion = () => {
     VersionCheck.needUpdate({
       depth: Platform.OS == 'android' ? 3 : 2,
     }).then((res) => {
@@ -102,9 +62,9 @@ class Introduction extends Component {
         );
       }
     });
-  }
+  };
 
-  async getinformationStation() {
+  const getinformationStation = () => {
     const formData = new FormData();
     formData.append('method', 'getInformationStation');
     formData.append('auth', ApiUtils.getAPIAuth());
@@ -129,8 +89,8 @@ class Introduction extends Component {
         if (result.traces != null && result.traces.length != 0) {
           var tracesArray = Object.values(result.traces);
 
-          var finalTraceArray = []; // new Object(this.props.polylines);
-          var finalinterestArray = [];
+          var finalTraceArray: Polyline[] = []; // new Object(this.props.polylines);
+          var finalinterestArray: Interest[] = [];
           if (tracesArray != null && tracesArray.length != 0) {
             tracesArray.forEach((trace: any) => {
               var finalTrace = trace;
@@ -153,9 +113,9 @@ class Introduction extends Component {
 
           //challenges
 
-          var challengesArray = Object.values(result.challenges);
+          var challengesArray: Challenge[] = Object.values(result.challenges);
 
-          var finalChallengesArray = []; // new Object(this.props.polylines);
+          var finalChallengesArray: Challenge[] = []; // new Object(this.props.polylines);
 
           if (challengesArray != null && challengesArray.length != 0) {
             challengesArray.forEach((challenge) => {
@@ -237,14 +197,14 @@ class Introduction extends Component {
           };
 
           var action = {type: 'UPDATE_STATION_DATA', data: station};
-          this.props.dispatch(action);
+          dispatch(action);
         }
       })
       // .catch(e => alert('test', JSON.stringify(e)))
       .then();
-  }
+  };
 
-  getPhoneData() {
+  const getPhoneData = () => {
     let brand = DeviceInfo.getBrand();
 
     let androidId = DeviceInfo.getAndroidIdSync();
@@ -272,187 +232,38 @@ class Introduction extends Component {
     };
 
     var action = {type: 'UPDATE_PHONE_DATA', data: data};
-    this.props.dispatch(action);
-  }
-
-  onClickNavigate(routeName) {
-    this.props.navigation.navigate(routeName);
-  }
-
-  init = () => {
-    RNPusherPushNotifications.setInstanceId(
-      '653e46e5-9ff8-48ae-9591-feaa4054023e',
-    );
-
-    RNPusherPushNotifications.on('registered', () => {
-      this.subscribe('debug-' + this.props.userData.idUtilisateur);
-      RNPusherPushNotifications.on('notification', this.handleNotification);
-    });
+    dispatch(action);
   };
 
-  subscribe = (interest) => {
-    console.log(`Subscribing to "${interest}"`);
-    RNPusherPushNotifications.subscribe(
-      interest,
-      (statusCode, response) => {
-        console.error(statusCode, response);
-      },
-      () => {
-        console.log(`CALLBACK: Subscribed to ${interest}`);
-      },
-    );
+  const onClickNavigate = (routeName: string) => {
+    navigation.navigate(routeName);
   };
 
-  handleNotification = (notification) => {
-    console.log('LALA');
+  return (
+    <Content style={{backgroundColor: ApiUtils.getBackgroundColor()}}>
+      <Modal visible={!isOkPopupBAttery}>
+        <Container style={{flex: 1}}>
+          <View style={{flex: 1}}>
+            <Help noHeader={true} />
+          </View>
+        </Container>
+      </Modal>
 
-    if (notification.data != null) {
-      console.log(notification.data.TSLocationManager);
+      <Modal visible={!isOkPopupBAttery2 && isOkPopupBAttery}>
+        <Container style={{flex: 1}}>
+          <View style={{flex: 1}}>
+            <BatteryModal noHeader={true} />
+          </View>
+        </Container>
+      </Modal>
 
-      if (notification.data.TSLocationManager == 'true') {
-        console.log('ici');
-        return;
-      }
-    }
-
-    console.log(notification);
-    if (Platform.OS == 'ios') {
-      console.log(notification.userInfo.data.notification);
-      let actionData = notification.userInfo.data.notification;
-      var action = {
-        type: 'ADD_NOTIFICATION',
-        data: actionData,
-      };
-      let idLive = actionData.idLive;
-
-      let live = {
-        idLive: idLive,
-      };
-
-      switch (notification.appState) {
-        case 'inactive':
-          console.log('inactive');
-          // this.props.dispatch(action);
-          // var actionSaveLive = {type: 'SAVE_CURRENT_LIVE', data: live};
-
-          // this.props.dispatch(actionSaveLive);
-
-          // this.onClickNavigate('LiveSummary');
-
-          this.setState({
-            isVisibleNotifcationModal: true,
-            idLiveNotif: actionData.idLive,
-          });
-          this.props.dispatch(action);
-
-        // inactive: App came in foreground by clicking on notification.
-        //           Use notification.userInfo for redirecting to specific view controller
-        case 'background':
-        // background: App is in background and notification is received.
-        //             You can fetch required data here don't do anything with UI
-        case 'active':
-          console.log('active');
-          // App is foreground and notification is received. Show a alert or something.
-          this.setState({
-            isVisibleNotifcationModal: true,
-            idLiveNotif: actionData.idLive,
-          });
-          this.props.dispatch(action);
-        default:
-          break;
-      }
-    } else {
-      console.log('data: handleNotification (android)');
-
-      if (notification.data != '') {
-        let datastring = notification.data.notification;
-        let data = JSON.parse(datastring);
-
-        let idLive = data.idLive;
-        let live = {
-          idLive: idLive,
-        };
-
-        let actionData = JSON.parse(notification.data.notification);
-        var action = {
-          type: 'ADD_NOTIFICATION',
-          data: actionData,
-        };
-
-        if (notification.data.collapse_key != null) {
-          //from notification click
-          if (!this.props.isRecording) {
-            var actionSaveLive = {type: 'SAVE_CURRENT_LIVE', data: live};
-
-            this.props.dispatch(actionSaveLive);
-
-            this.onClickNavigate('LiveSummary');
-          } else {
-            this.props.dispatch(action);
-          }
-        } else {
-          this.setState({
-            isVisibleNotifcationModal: true,
-            idLiveNotif: data.idLive,
-          });
-          this.props.dispatch(action);
-        }
-      }
-    }
-  };
-
-  render() {
-    return (
-      <Content style={{backgroundColor: ApiUtils.getBackgroundColor()}}>
-        <Modal visible={!this.props.isOkPopupBAttery}>
-          <Container style={{flex: 1}}>
-            <View style={{flex: 1}}>
-              <Help noHeader={true} />
-
-              {/* <View style={{height: 300}} /> */}
-            </View>
-          </Container>
-        </Modal>
-
-        <Modal
-          visible={
-            !this.props.isOkPopupBAttery2 && this.props.isOkPopupBAttery
-          }>
-          <Container style={{flex: 1}}>
-            <View style={{flex: 1}}>
-              <BatteryModal noHeader={true} />
-
-              {/* <View style={{height: 300}} /> */}
-            </View>
-          </Container>
-        </Modal>
-
-        <Modal
-          visible={
-            this.props.isOkPopupBAttery2 &&
-            this.props.isOkPopupBAttery &&
-            !this.props.isOkPopupGps
-          }>
-          <Container style={{flex: 1}}>
-            <View style={{flex: 1, justifyContent :'center'}}>
-              <AskGpsModal
-                noHeader={true}
-                onValidate={() => this.onClickNavigate('SimpleMap')}
-              />
-              {/* <View style={{height: 300}} /> */}
-            </View>
-          </Container>
-        </Modal>
-      </Content>
-    );
-  }
+      <Modal visible={isOkPopupBAttery2 && isOkPopupBAttery && !isOkPopupGps}>
+        <Container style={{flex: 1}}>
+          <View style={{flex: 1, justifyContent: 'center'}}>
+            <AskGpsModal onValidate={() => onClickNavigate('SimpleMap')} />
+          </View>
+        </Container>
+      </Modal>
+    </Content>
+  );
 }
-
-const styles = StyleSheet.create({
-  icon: {
-    width: 24,
-    height: 24,
-  },
-});
-
-export default connect(mapStateToProps)(Introduction);

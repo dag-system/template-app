@@ -23,5 +23,8 @@ export default class AppState {
   statistics: any;
   dates: any;
   currentPosition: any;
-  challenges? : Challenge[];
+  challenges?: Challenge[];
+  isOkPopupBAttery: boolean;
+  isOkPopupBAttery2: boolean;
+  isOkPopupGps: boolean;
 }

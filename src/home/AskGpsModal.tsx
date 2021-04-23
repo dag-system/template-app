@@ -12,7 +12,6 @@ const mapStateToProps = (state) => {
 
 interface Props {
   dispatch: Dispatch;
-  navigation: any;
   isOkPopupGps: boolean;
   onValidate(): void;
 }
@@ -33,12 +32,10 @@ class AskGpsModal extends Component<Props, State> {
   }
 
   onAcceptGps = () => {
-    // this.getFirstLocation();
     var action = {type: 'VIEW_POPUPGPS', data: null};
     this.props.dispatch(action);
 
     this.props.onValidate();
-    //  this.props.navigation.navigate('SimpleMap');
   };
 
   render = () => {
