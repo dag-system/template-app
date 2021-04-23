@@ -30,7 +30,11 @@ import BatteryModalContent from './BatteryModalContent';
 import VideoModal from './VideoModal';
 import Video from 'react-native-video';
 import VideoPrez from '../assets/tuto.mp4';
-import {textAutoBackgroundColor} from '../globalsModifs';
+import {
+  TemplateBackgroundColor,
+  textAutoBackgroundColor,
+  textAutoSecondColor,
+} from '../globalsModifs';
 
 const mapStateToProps = (state) => {
   return {
@@ -225,11 +229,12 @@ class Help extends Component {
                     flexDirection: 'row',
                   }}>
                   <Icon
-                    style={{marginTop: -5, color: 'white'}}
+                    style={{marginTop: -5, color: textAutoSecondColor}}
                     name="expand-alt"
                     type="FontAwesome5"
                   />
-                  <Text style={{textAlign: 'center', color: 'white'}}>
+                  <Text
+                    style={{textAlign: 'center', color: textAutoSecondColor}}>
                     {' '}
                     Voir en grand
                   </Text>
@@ -274,8 +279,8 @@ class Help extends Component {
                     // paddingBottom: 200,
                     marginTop: 10,
                     justifyContent: 'center',
-                    borderColor: ApiUtils.getColor(),
-                    backgroundColor: ApiUtils.getColor(),
+                    borderColor: TemplateBackgroundColor,
+                    backgroundColor: TemplateBackgroundColor,
                     padding: 10,
                     borderWidth: 1,
                     marginBottom: 75,
@@ -284,7 +289,7 @@ class Help extends Component {
                     style={{
                       textAlign: 'center',
                       textTransform: 'uppercase',
-                      color: 'white',
+                      color: textAutoBackgroundColor,
                     }}>
                     C'est parti
                   </Text>

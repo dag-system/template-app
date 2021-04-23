@@ -666,7 +666,7 @@ class CreateAccount extends ValidationComponent {
                   </Item>
                 ) : null}
 
-                {this.state.isTelVerifAsk ? (
+                {this.state.isTelVerifAsked && this.state.isTelAsk ? (
                   <View
                     style={{
                       marginTop: 20,
