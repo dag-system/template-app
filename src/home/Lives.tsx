@@ -1141,33 +1141,7 @@ class Lives extends Component<Props, State> {
             </TouchableHighlight>
 
             <Sponsors />
-
-            <Modal
-              visible={
-                !this.props.isOkPopupBAttery || this.state.isOpenModalHelp
-              }>
-              <Container style={{flex: 1}}>
-                <View style={{flex: 1}}>
-                  <Help noHeader={true} />
-
-                  {/* <View style={{height: 300}} /> */}
-                </View>
-              </Container>
-            </Modal>
-
-            <Modal
-              visible={
-                !this.props.isOkPopupBAttery2 && this.props.isOkPopupBAttery
-              }>
-              <Container style={{flex: 1}}>
-                <View style={{flex: 1}}>
-                  <BatteryModal noHeader={true} />
-
-                  {/* <View style={{height: 300}} /> */}
-                </View>
-              </Container>
-            </Modal>
-
+            
             <Modal
               visible={this.state.uploadGpxVisible}
               onRequestClose={() => this.closeGpxModal()}>
