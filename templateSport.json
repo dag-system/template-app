@@ -58,6 +58,14 @@
   {
     "action": "REPLACE_TEXT",
     "filePath": "./src/globalsModifs.js",
+    "source": "export const TemplateSecondColor = '#FFFFFF';",
+    "cible": "export const TemplateBackgroundColor = '$colorSecond';",
+    "datasource": "table.colonne",
+    "env": "demo"
+  },
+  {
+    "action": "REPLACE_TEXT",
+    "filePath": "./src/globalsModifs.js",
     "source": "export const TemplateSiteLink = 'www.dag-system.com';",
     "cible": "export const TemplateSiteLink = '$website';",
     "datasource": "table.colonne",
