@@ -1,8 +1,8 @@
-export const TemplateDisplayName = 'Template Test';
+export const TemplateDisplayName = 'Jeux du Val-de-Marne';
 
-export const IsDemo = true;
+export const IsDemo = false;
 
-export const TemplateExpirationDate = new Date();
+export const TemplateExpirationDate = new Date('2021-05-06T22:00:00.000Z');
 
 export const TemplateAppName = purgeString(
   romanizeString(TemplateDisplayName.toLowerCase()),
@@ -12,9 +12,9 @@ export const TemplateOrganisation = purgeString(
   romanizeString(TemplateDisplayName.toUpperCase()),
 );
 
-export const TemplateIdOrganisation = '57';
+export const TemplateIdOrganisation = '362';
 
-export const TemplateBackgroundColor = '#FFFFFF';
+export const TemplateBackgroundColor = '#009DE0';
 export const TemplateSecondColor = '#FFFFFF';
 
 export const textAutoBackgroundColor = autoColor(TemplateBackgroundColor);
@@ -25,27 +25,35 @@ export const TemplateSiteLink = 'www.dag-system.com';
 export const TemplateNameAsk = true;
 export const TemplateFirstNameAsk = true;
 export const TemplateSexeAsk = true;
-export const TemplateDdnAsk = true;
+export const TemplateDdnAsk = false;
 export const TemplateMailAsk = true;
-export const TemplateTelAsk = true;
+export const TemplateTelAsk = false;
 export const TemplateAdressAsk = true;
 export const TemplatePostalAsk = true;
 export const TemplateCityAsk = true;
-export const TemplateCountryAsk = true;
+export const TemplateCountryAsk = false;
 export const TemplateTelVerifAsk = true;
-export const TemplateChallengeClub = true;
-export const TemplateChallengeFamille = true;
-export const TemplateChallengeAutre = true;
-export const TemplateChallengeEntreprise = true;
+export const TemplateChallengeClub = false;
+export const TemplateChallengeFamille = false;
+export const TemplateChallengeAutre = false;
+export const TemplateChallengeEntreprise = false;
 export const TemplateHasAppDonation = false;
 export const TemplateIsPaying = false;
 
 export const TemplateChallengeAutreName = 'Template Test Autre';
 
-export const TemplateSportLive = [];
-export const TemplateTrace = [];
+export const TemplateSportLive = [
+  {idSport: 13, sportName: 'MARCHE'},
+  {idSport: 24, sportName: 'Course à pied'},
+  {idSport: 27, sportName: 'Course à pied'},
+];
+export const TemplateTrace = [{label: 'Ne pas afficher ', id: '616'}];
 
-export const TemplateArrayImagesSponsorPath = [];
+export const TemplateArrayImagesSponsorPath = [
+  require('./assets/sponsor_logo1.png'),
+  require('./assets/sponsor_logo2.png'),
+  require('./assets/sponsor_logo3.png'),
+];
 export const TemplateArrayImagesPartenairesPath = [];
 
 function purgeString(str) {

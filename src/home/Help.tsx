@@ -24,6 +24,7 @@ import ApiUtils from '../ApiUtils';
 import {connect} from 'react-redux';
 import Sidebar from './SideBar';
 import Logo from '../assets/logo.png';
+import Logovdm from '../assets/logovdm.png';
 import GlobalStyles from '../styles';
 import {Sponsors} from './Sponsors';
 import BatteryModalContent from './BatteryModalContent';
@@ -165,7 +166,21 @@ class Help extends Component {
                   </TouchableOpacity>
                 </Left>
                 <Body style={{flex: 0}} />
-                <Right style={{flex: 1}} />
+                <Right style={{flex: 1}}>
+                  <Text style={{color: textAutoBackgroundColor}}>
+                    Course des jeux du val de marne
+                  </Text>
+                  <Image
+                    resizeMode="contain"
+                    source={Logovdm}
+                    style={{
+                      width: '50%',
+                      height: 50,
+                      marginRight: '10%',
+                      marginLeft: 15,
+                    }}
+                  />
+                </Right>
               </Header>
             )}
 
@@ -180,19 +195,41 @@ class Help extends Component {
                   color: ApiUtils.getColor(),
                   marginTop: 10,
                 }}>
-                Bienvenue sur votre application sportive !
+                Bienvenue sur l’application officielle de la Course des Jeux du
+                Val-de-Marne
               </Text>
-
               <Text style={{marginTop: 10}}>
-                Entrainez-vous et affrontez vos amis et collègues en toute
-                sécurité, et sans jamais vous croiser !
+                Félicitations !!! Tu vas pouvoir participer à une course
+                organisée dans le cadre des 55ès Jeux du Val-de-Marne, proposée
+                par le Département du Val-de-Marne. Tu contribueras activement
+                au défi collectif qui consiste à réaliser le maximum de
+                kilomètres en courant ou en marchant afin de relier
+                virtuellement le Val-de-Marne à Tokyo
               </Text>
+              <Text style={{marginTop: 10}}>
+                Plusieurs distances te sont proposées : 2 , 5 ou 9.4 km mais
+                réalise ce dont tu te sens capable sans contrainte de temps. Tu
+                pourras courir pendant toute la quinzaine des Jeux du
+                Val-de-Marne (du 22 mai au 6 juin 2021). Si tu veux profiter
+                d’un lieu sympa, tu peux découvrir un des parcs départementaux
+                proche de chez toi, en cliquant sur le lien :
+              </Text>
+              <TouchableOpacity
+                onPress={() =>
+                  this.openLink(
+                    'https://www.valdemarne.fr/vivre-en-val-de-marne/nature-et-sport',
+                  )
+                }>
+                <Text>
+                  https://www.valdemarne.fr/vivre-en-val-de-marne/nature-et-sport
+                </Text>
+              </TouchableOpacity>
+              <Text style={{marginTop: 10}}>N’hésite plus, fonce et cours</Text>
 
               <Text style={{marginTop: 10}}>
                 Découvrez le fonctionnement de l'application dans la vidéo
                 ci-dessous :
               </Text>
-
               <Modal visible={this.state.isVideoFullScreen} style={{flex: 1}}>
                 <TouchableOpacity
                   style={{
@@ -210,7 +247,6 @@ class Help extends Component {
 
                 <VideoModal />
               </Modal>
-
               <TouchableOpacity
                 style={{
                   position: 'relative',
@@ -235,7 +271,6 @@ class Help extends Component {
                   </Text>
                 </View>
               </TouchableOpacity>
-
               {!this.state.isVideoFullScreen ? (
                 <Video
                   source={VideoPrez} // Can be a URL or a local file.
@@ -249,16 +284,13 @@ class Help extends Component {
                   // style={[this.state.isFullScreen ? styles.video : styles.fullScreenVideo,{height : 10}]}
                 />
               ) : null}
-
               {/* {!this.props.noHeader ? ( */}
               {!this.props.noHeader ? (
                 <View style={{height: '100%'}}>
                   <BatteryModalContent noHeader={false} isInline={true} />
                 </View>
               ) : null}
-
               {/* // ) : null} */}
-
               {this.props.noHeader ? (
                 <Text style={{textAlign: 'center', marginTop: 10}}>
                   Vous retrouverez ces informations dans le menu d'aide

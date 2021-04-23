@@ -217,7 +217,7 @@ export default class Sidebar extends Component {
           </View>
         </TouchableHighlight>
 
-        <TouchableHighlight
+        {/* <TouchableHighlight
           underlayColor="rgba(255,255,255,1,0.6)"
           onPress={() => this.onClickNavigate('Replay')}
           style={{
@@ -259,7 +259,7 @@ export default class Sidebar extends Component {
               Comparateur
             </Text>
           </View>
-        </TouchableHighlight>
+        </TouchableHighlight> */}
 
         {TemplateArrayImagesPartenairesPath.length > 0 ? (
           <TouchableHighlight

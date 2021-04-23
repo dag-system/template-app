@@ -27,6 +27,7 @@ import {
 import ApiUtils from '../ApiUtils';
 import {connect} from 'react-redux';
 import Logo from '../assets/logo.png';
+import Logovdm from '../assets/logovdm.png';
 import {Sponsors} from './Sponsors';
 import ErrorMessage from './ErrorMessage';
 import {TextInput} from 'react-native-gesture-handler';
@@ -335,7 +336,19 @@ class UploadGpx extends Component<Props, State> {
             </Left>
             <Body style={{flex: 0}} />
             <Right style={{flex: 1}}>
-              <Image resizeMode="contain" source={Logo} style={styles.logo} />
+              <Text style={{color: textAutoBackgroundColor}}>
+                Course des jeux du val de marne
+              </Text>
+              <Image
+                resizeMode="contain"
+                source={Logovdm}
+                style={{
+                  width: '50%',
+                  height: 50,
+                  marginRight: '10%',
+                  marginLeft: 15,
+                }}
+              />
             </Right>
           </Header>
           <Content style={styles.body} scrollEnabled={true}>

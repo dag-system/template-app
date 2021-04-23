@@ -23,6 +23,7 @@ import {
   Picker,
 } from 'native-base';
 import Logo from '../assets/logo.png';
+import Logovdm from '../assets/logovdm.png';
 import {Button as ButtonElement} from 'react-native-elements';
 import {connect} from 'react-redux';
 import ApiUtils from '../ApiUtils';
@@ -226,7 +227,19 @@ class ForgotPassword extends ValidationComponent {
             </Left>
             <Body style={{flex: 0}} />
             <Right style={{flex: 1}}>
-              <Image resizeMode="contain" source={Logo} style={styles.logo} />
+              <Text style={{color: textAutoBackgroundColor}}>
+                Course des jeux du val de marne
+              </Text>
+              <Image
+                resizeMode="contain"
+                source={Logovdm}
+                style={{
+                  width: '50%',
+                  height: 50,
+                  marginRight: '80%',
+                  marginLeft: 15,
+                }}
+              />
             </Right>
           </Header>
 

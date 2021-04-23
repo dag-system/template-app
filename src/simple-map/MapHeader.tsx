@@ -244,17 +244,7 @@ class MapHeader extends Component<Props, State> {
                     elevation: 0,
                     justifyContent: 'center',
                   }}
-                  onPress={() => this.goBack()}>
-                  <View style={[GlobalStyles.row]}>
-                    <Text style={{color: textAutoBackgroundColor}}>
-                      {this.props.userData.nomUtilisateur}
-                    </Text>
-                    <Text
-                      style={{color: textAutoBackgroundColor, marginLeft: 5}}>
-                      {this.props.userData.prenomUtilisateur}
-                    </Text>
-                  </View>
-                </TouchableOpacity>
+                  onPress={() => this.goBack()}></TouchableOpacity>
               </View>
               <View style={{flexDirection: 'row', justifyContent: 'flex-end'}}>
                 {this.props.currentPosition ? (

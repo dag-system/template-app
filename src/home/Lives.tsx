@@ -29,6 +29,7 @@ import {
 import Swipeout from 'react-native-swipeout';
 import ApiUtils from '../ApiUtils';
 import Logo from '../assets/logo.png';
+import Logovdm from '../assets/logovdm.png';
 import Sidebar from './SideBar';
 import {connect} from 'react-redux';
 import GlobalStyles from '../styles';
@@ -957,8 +958,26 @@ class Lives extends Component<Props, State> {
                   />
                 </TouchableOpacity>
               </Left>
-              <Right style={{flex: 1, width: '100%'}}>
-                <Image resizeMode="contain" source={Logo} style={styles.logo} />
+              <Right
+                style={{
+                  flex: 1,
+                  width: '100%',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                }}>
+                <Text style={{color: textAutoBackgroundColor}}>
+                  Course des jeux du val de marne
+                </Text>
+                <Image
+                  resizeMode="contain"
+                  source={Logovdm}
+                  style={{
+                    width: '50%',
+                    height: 50,
+                    marginRight: '80%',
+                    marginLeft: 15,
+                  }}
+                />
               </Right>
             </Header>
 

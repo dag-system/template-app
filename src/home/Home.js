@@ -34,6 +34,7 @@ import DeviceInfo from 'react-native-device-info';
 
 import ApiUtils from '../ApiUtils';
 import Logo from '../assets/logo.png';
+import Logobg from '../assets/logobg.png';
 import Loading from './Loading';
 import {Modal} from 'react-native';
 import WebviewJetCode from './WebviewJetCode';
@@ -525,14 +526,16 @@ class Home extends Component {
           />
 
           <Content style={[styles.body]} scrollEnabled={true}>
-            <KeyboardAvoidingView style={styles.loginButtonSection}>
+            <View style={styles.loginButtonSection}>
               <View
                 style={{
                   zIndex: 10,
                   alignItems: 'center',
                   backgroundColor: ApiUtils.getBackgroundColor(),
                 }}>
-                <ImageBackground style={{width: '100%', minHeight: 10}}>
+                <ImageBackground
+                  source={Logobg}
+                  style={{width: '100%', minHeight: 10}}>
                   <TouchableHighlight
                     underlayColor="transparent"
                     onPress={() => this.pressLogo()}
@@ -674,7 +677,7 @@ class Home extends Component {
                   </Text>
                 </ImageBackground>
               </View>
-            </KeyboardAvoidingView>
+            </View>
 
             <Modal
               visible={this.state.isVisibleModalLogin}
@@ -701,7 +704,7 @@ class Home extends Component {
                 </Right>
               </Header>
 
-              <KeyboardAvoidingView style={styles.followCodeLoginSection}>
+              <View style={styles.followCodeLoginSection}>
                 <Text
                   style={{
                     fontWeight: 'bold',
@@ -819,7 +822,7 @@ class Home extends Component {
                 </View>
 
                 <View style={{marginBottom: 0}} />
-              </KeyboardAvoidingView>
+              </View>
 
               <Sponsors />
             </Modal>
