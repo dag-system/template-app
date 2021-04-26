@@ -1,5 +1,5 @@
 import React, {useEffect} from 'react';
-import {Platform, Alert, Linking, View, Modal} from 'react-native';
+import {Platform, Alert, Linking, View, Modal, BackHandler} from 'react-native';
 import {Container, Content} from 'native-base';
 import {useDispatch, useSelector} from 'react-redux';
 import ApiUtils from '../ApiUtils';
@@ -15,6 +15,12 @@ import Interest from '../models/Interest';
 import Challenge from '../models/Challenge';
 import AppState from '../models/AppState';
 import {useNavigation} from '@react-navigation/core';
+import {
+  CommonActions,
+  ParamListBase,
+  StackActions,
+} from '@react-navigation/native';
+import {NavigationActions} from '@react-navigation/compat';
 
 export default function Introduction() {
   const navigation = useNavigation();
@@ -236,7 +242,12 @@ export default function Introduction() {
   };
 
   const onClickNavigate = (routeName: string) => {
-    navigation.navigate(routeName);
+    navigation.dispatch(
+      CommonActions.reset({
+        index: 0,
+        routes: [{name: 'Home'}, {name: routeName}],
+      }),
+    );
   };
 
   return (

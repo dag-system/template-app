@@ -179,7 +179,7 @@ class BatteryModalContent extends Component {
             textDecorationLine: 'underline',
             marginTop: 30,
           }}>
-          Réglages Batterie - Important avant de faitre votre activité
+          Réglages Batterie - Important avant de faire votre activité
         </H2>
 
         <Icon
@@ -246,7 +246,7 @@ class BatteryModalContent extends Component {
                 <Text>
                   Lisez les instructions pour votre modèle de téléphone
                   {this.state.hasDeviceSettingsAvailable
-                    ? 'puis cliquez sur le bouton suivant  : '
+                    ? ' puis cliquez sur le bouton suivant  : '
                     : ''}
                 </Text>
                 {this.state.showPowerManager ? (
@@ -536,7 +536,7 @@ class BatteryModalContent extends Component {
               // paddingBottom: 200,
               marginTop: 10,
               justifyContent: 'center',
-              borderColor: TemplateBackgroundColor,
+              borderColor: textAutoBackgroundColor,
               backgroundColor: TemplateBackgroundColor,
               padding: 10,
               borderWidth: 1,

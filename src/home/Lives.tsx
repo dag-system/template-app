@@ -44,7 +44,11 @@ import RNPusherPushNotifications from 'react-native-pusher-push-notifications';
 import NotificationModal from './NotificationModal';
 import Help from './Help';
 
-import {TemplateSportLive, textAutoBackgroundColor} from '../globalsModifs';
+import {
+  TemplateBackgroundColor,
+  TemplateSportLive,
+  textAutoBackgroundColor,
+} from '../globalsModifs';
 
 const mapStateToProps = (state) => {
   return {
@@ -1249,13 +1253,9 @@ class Lives extends Component<Props, State> {
                           paddingHorizontal: 50,
                           elevation: 0,
                           alignSelf: 'center',
-                          borderColor: this.isErrorFormCreate()
-                            ? 'black'
-                            : ApiUtils.getColor(),
+                          borderColor: textAutoBackgroundColor,
                           borderWidth: 1,
-                          backgroundColor: this.isErrorFormCreate()
-                            ? 'transparent'
-                            : ApiUtils.getColor(),
+                          backgroundColor: TemplateBackgroundColor,
                         }}
                         onPress={() => this.onClickCreateLiveOk()}
                         disabled={this.isErrorFormCreate()}>

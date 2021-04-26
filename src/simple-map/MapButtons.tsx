@@ -33,7 +33,11 @@ import {ScrollView, TextInput} from 'react-native-gesture-handler';
 import {buildGPX, GarminBuilder} from 'gpx-builder';
 import {Point} from 'gpx-builder/dist/builder/BaseBuilder/models';
 import VersionCheck from 'react-native-version-check';
-import {TemplateSportLive} from '../globalsModifs';
+import {
+  TemplateBackgroundColor,
+  TemplateSportLive,
+  textAutoBackgroundColor,
+} from '../globalsModifs';
 import * as Animated from 'react-native-animatable';
 import AppState from '../models/AppState';
 import {useNavigation} from '@react-navigation/core';
@@ -761,13 +765,9 @@ export default function MapButtons(props: Props) {
                     paddingHorizontal: 50,
                     elevation: 0,
                     alignSelf: 'center',
-                    borderColor: isErrorFormCreate()
-                      ? 'black'
-                      : ApiUtils.getColor(),
+                    borderColor: textAutoBackgroundColor,
                     borderWidth: 1,
-                    backgroundColor: isErrorFormCreate()
-                      ? 'transparent'
-                      : ApiUtils.getColor(),
+                    backgroundColor: TemplateBackgroundColor,
                   }}
                   onPress={() => onClickCreateLiveOk()}
                   disabled={isErrorFormCreate()}>
