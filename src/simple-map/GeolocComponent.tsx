@@ -159,9 +159,9 @@ class GeolocComponent extends Component<Props, State> {
       locationAuthorizationRequest: 'Always',
       backgroundPermissionRationale: {
         title:
-          'Authoriser {applicationName} a accèder à votre position en arrière plan',
+          'Autoriser {applicationName} à accèder à votre position en arrière plan',
         message:
-          "Pour enregistrer votre activiité même quand l'application est en arrière plan, merci d'autoriser {backgroundPermissionOptionLabel}",
+          "Pour enregistrer votre activité même quand l'application est en arrière plan, merci d'autoriser {backgroundPermissionOptionLabel}",
         positiveAction: 'Autoriser {backgroundPermissionOptionLabel}',
         negativeAction: 'Annuler',
       },

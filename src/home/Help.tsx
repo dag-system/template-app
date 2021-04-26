@@ -30,7 +30,10 @@ import BatteryModalContent from './BatteryModalContent';
 import VideoModal from './VideoModal';
 import Video from 'react-native-video';
 import VideoPrez from '../assets/tuto.mp4';
-import {textAutoBackgroundColor} from '../globalsModifs';
+import {
+  TemplateBackgroundColor,
+  textAutoBackgroundColor,
+} from '../globalsModifs';
 
 const mapStateToProps = (state) => {
   return {
@@ -274,8 +277,8 @@ class Help extends Component {
                     // paddingBottom: 200,
                     marginTop: 10,
                     justifyContent: 'center',
-                    borderColor: ApiUtils.getColor(),
-                    backgroundColor: ApiUtils.getColor(),
+                    borderColor: textAutoBackgroundColor,
+                    backgroundColor: TemplateBackgroundColor,
                     padding: 10,
                     borderWidth: 1,
                     marginBottom: 75,

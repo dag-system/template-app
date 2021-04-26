@@ -37,16 +37,29 @@ export const TemplateChallengeClub = false;
 export const TemplateChallengeFamille = false;
 export const TemplateChallengeAutre = false;
 export const TemplateChallengeEntreprise = false;
-export const TemplateHasAppDonation = false;
+export const TemplateHasAppDonation = true;
 export const TemplateIsPaying = false;
 
 export const TemplateChallengeAutreName = 'Template Test Autre';
 
-export const TemplateSportLive = [{idSport:1,sportName:"TRAIL"},{idSport:4,sportName:"VTT"}];
-export const TemplateTrace = [{label:"Course des AS",id:"614"},{label:"La ranvillaise",id:"615"}];
+export const TemplateSportLive = [
+  {idSport: 1, sportName: 'TRAIL'},
+  {idSport: 4, sportName: 'VTT'},
+];
+export const TemplateTrace = [
+  {label: 'Course des AS', id: '614'},
+  {label: 'La ranvillaise', id: '615'},
+];
 
-export const TemplateArrayImagesSponsorPath = [require('./assets/sponsor_logo1.png'),require('./assets/sponsor_logo2.png')];
-export const TemplateArrayImagesPartenairesPath = [require('./assets/partner_logo3.png'),require('./assets/partner_logo4.png'),require('./assets/partner_logo5.png')];
+export const TemplateArrayImagesSponsorPath = [
+  require('./assets/sponsor_logo1.png'),
+  require('./assets/sponsor_logo2.png'),
+];
+export const TemplateArrayImagesPartenairesPath = [
+  require('./assets/partner_logo3.png'),
+  require('./assets/partner_logo4.png'),
+  require('./assets/partner_logo5.png'),
+];
 
 function purgeString(str) {
   const accents =

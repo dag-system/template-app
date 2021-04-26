@@ -9,6 +9,10 @@ import BackgroundGeolocation, {
 } from 'react-native-background-geolocation';
 import {Dimensions} from 'react-native';
 import {connect} from 'react-redux';
+import {
+  TemplateBackgroundColor,
+  textAutoBackgroundColor,
+} from '../globalsModifs';
 // import * as Sentry from '@sentry/react-native';
 
 const mapStateToProps = (state) => {
@@ -118,7 +122,6 @@ class BatteryModalContent extends Component {
         // User clicked [Confirm] button.  Execute the redirect to settings screen:
       })
       .catch((error) => {
-     
         // Depending on Manufacturer/Model/OS Version, a Device may not implement
         // a particular Settings screen.
         console.log(error);
@@ -171,7 +174,7 @@ class BatteryModalContent extends Component {
             textDecorationLine: 'underline',
             marginTop: 30,
           }}>
-          Réglages Batterie - Important avant de faitre votre activité
+          Réglages Batterie - Important avant de faire votre activité
         </H2>
 
         <Icon
@@ -225,7 +228,7 @@ class BatteryModalContent extends Component {
                   flexDirection: 'row',
                   justifyContent: 'space-between',
                 }}>
-                <H2 style={{marginTop : 5}}>Etape 1</H2>
+                <H2 style={{marginTop: 5}}>Etape 1</H2>
                 <Icon
                   name={
                     this.state.isVisibleStep1 ? 'chevron-up' : 'chevron-down'
@@ -238,7 +241,7 @@ class BatteryModalContent extends Component {
                 <Text>
                   Lisez les instructions pour votre modèle de téléphone
                   {this.state.hasDeviceSettingsAvailable
-                    ? 'puis cliquez sur le bouton suivant  : '
+                    ? ' puis cliquez sur le bouton suivant  : '
                     : ''}
                 </Text>
                 {this.state.showPowerManager ? (
@@ -274,7 +277,10 @@ class BatteryModalContent extends Component {
                 <Text> 3. Cliquer sur "Lancement d'application"</Text>
                 <Text>4. Rechercher et désactiver l’appli « My Cross »</Text>
                 <Text>5. Cliquer sur OK en vérifiant que tout soit activé</Text>
-                <Text>6. Retourner dans les reglages batterie et désactiver l'économiseur de batterie</Text>
+                <Text>
+                  6. Retourner dans les reglages batterie et désactiver
+                  l'économiseur de batterie
+                </Text>
 
                 <Text style={{fontWeight: 'bold', marginTop: 10}}>
                   SAMSUNG (Galaxy S8 et inférieur : Galaxy A5, Galaxy S7, Galaxy
@@ -333,7 +339,10 @@ class BatteryModalContent extends Component {
                 <Text>
                   5. Sélectionner les 3 champs qui vont s'afficher en popup
                 </Text>
-                <Text>6. Retourner dans les reglages batterie et désactiver l'économiseur de batterie</Text>
+                <Text>
+                  6. Retourner dans les reglages batterie et désactiver
+                  l'économiseur de batterie
+                </Text>
 
                 <Text style={{fontWeight: 'bold', marginTop: 10}}>
                   {' '}
@@ -439,7 +448,7 @@ class BatteryModalContent extends Component {
                   </TouchableOpacity>
                 ) : (
                   <Text style={{color: 'green'}}>
-                    L'optimisation de la batterie est bien désactivée  &nbsp;
+                    L'optimisation de la batterie est bien désactivée &nbsp;
                     <Icon
                       name="check"
                       type="FontAwesome5"
@@ -522,8 +531,8 @@ class BatteryModalContent extends Component {
               // paddingBottom: 200,
               marginTop: 10,
               justifyContent: 'center',
-              borderColor: ApiUtils.getColor(),
-              backgroundColor: ApiUtils.getColor(),
+              borderColor: textAutoBackgroundColor,
+              backgroundColor: TemplateBackgroundColor,
               padding: 10,
               borderWidth: 1,
             }}>
