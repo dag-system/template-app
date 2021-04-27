@@ -134,7 +134,7 @@ android {
             applicationId "com.dag.fouleesranvillaises.app"
             minSdkVersion rootProject.ext.minSdkVersion
             targetSdkVersion rootProject.ext.targetSdkVersion
-            versionCode 548
+            versionCode 549
             versionName "1.0.37"
     }
     splits {
