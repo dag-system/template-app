@@ -1,6 +1,6 @@
 export const TemplateDisplayName = 'Template Test';
 export const IsDemo = true;
-export const TemplateExpirationDate = new Date();
+export const TemplateExpirationDate = new Date(); // Fait
 export const TemplateAppName = purgeString(
   romanizeString(TemplateDisplayName.toLowerCase()),
 );
@@ -8,11 +8,11 @@ export const TemplateOrganisation = purgeString(
   romanizeString(TemplateDisplayName.toUpperCase()),
 );
 export const TemplateIdOrganisation = '57';
-export const TemplateBackgroundColor = '#FFFFFF';
+export const TemplateBackgroundColor = '#FFFFFF'; //Fait
 export const TemplateSecondColor = '#FFFFFF';
 export const textAutoBackgroundColor = autoColor(TemplateBackgroundColor);
 export const textAutoSecondColor = autoColor(TemplateSecondColor);
-export const TemplateSiteLink = 'www.dag-system.com';
+export const TemplateSiteLink = 'www.dag-system.com'; // A faite
 export const TemplateNameAsk = true;
 export const TemplateFirstNameAsk = true;
 export const TemplateSexeAsk = true;

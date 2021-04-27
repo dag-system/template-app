@@ -609,7 +609,7 @@ class Home extends Component {
                           color: ApiUtils.getBackgroundColor(),
                           textTransform: 'uppercase',
                         }}>
-                        J'ai déjà un compte
+                        Je me connecte
                       </Text>
                     </TouchableOpacity>
                   </View>
@@ -705,7 +705,7 @@ class Home extends Component {
                     textTransform: 'uppercase',
                     textAlign: 'center',
                     marginTop: 30,
-                    color: ApiUtils.getColor(),
+                    color: ApiUtils.getBackgroundColor(),
                   }}>
                   Vous avez déjà un compte ?
                 </Text>
@@ -761,7 +761,12 @@ class Home extends Component {
                   <Text style={{textAlign: 'center'}}>ou </Text>
                 ) : null}
 
-                <View style={{display: 'flex', flexDirection: 'row', justifyContent :'center'}}>
+                <View
+                  style={{
+                    display: 'flex',
+                    flexDirection: 'row',
+                    justifyContent: 'center',
+                  }}>
                   <TextInput
                     style={styles.inputCode}
                     placeholder="Entrez votre code"
@@ -810,7 +815,7 @@ class Home extends Component {
                           this.state.followCode == '' &&
                           this.state.selectedFolocode == -1
                             ? 'black'
-                            : 'white',
+                            : textAutoBackgroundColor,
                       }}>
                       CONNEXION
                     </Text>
