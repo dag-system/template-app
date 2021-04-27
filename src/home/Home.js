@@ -47,6 +47,7 @@ import {
   TemplateIdOrganisation,
   TemplateIsPaying,
   textAutoBackgroundColor,
+  textAutoSecondColor,
 } from './../globalsModifs';
 
 const mapStateToProps = (state) => {
@@ -708,7 +709,7 @@ class Home extends Component {
                     textTransform: 'uppercase',
                     textAlign: 'center',
                     marginTop: 30,
-                    color: textAutoBackgroundColor,
+                    color: textAutoSecondColor,
                   }}>
                   Vous avez déjà un compte ?
                 </Text>
@@ -725,20 +726,20 @@ class Home extends Component {
                       onValueChange={this.onValueFolocodeChange.bind(this)}
                       placeholder={'Choisissez le Code'}
                       placeholderStyle={{
-                        color: textAutoBackgroundColor,
+                        color: textAutoSecondColor,
                       }}
-                      placeholderIconColor={textAutoBackgroundColor}
-                      textStyle={{color: textAutoBackgroundColor}}
+                      placeholderIconColor={textAutoSecondColor}
+                      textStyle={{color: textAutoSecondColor}}
                       itemStyle={{
-                        color: textAutoBackgroundColor,
+                        color: textAutoSecondColor,
                         marginLeft: 0,
                         paddingLeft: 10,
-                        borderBottomColor: textAutoBackgroundColor,
+                        borderBottomColor: textAutoSecondColor,
                         borderBottomWidth: 1,
                       }}
                       itemTextStyle={{
-                        color: textAutoBackgroundColor,
-                        borderBottomColor: textAutoBackgroundColor,
+                        color: textAutoSecondColor,
+                        borderBottomColor: textAutoSecondColor,
                         borderBottomWidth: 1,
                       }}>
                       <Picker.Item label="Choisissez le Code" value={-1} />

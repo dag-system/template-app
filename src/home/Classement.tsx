@@ -134,7 +134,7 @@ class Classement extends Component<Props, State> {
                   marginBottom: 10,
                   textTransform: 'uppercase',
                 }}>
-                Résultat du challenge de votre application
+                Résultats du challenge de votre application
               </Text>
 
               {TemplateSiteLink !== 'www.dag-system.com' ? (
