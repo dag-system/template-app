@@ -489,7 +489,7 @@ class UploadGpx extends Component<Props, State> {
                         });
                       }}>
                       <Text style={{marginLeft: 10}}>
-                        J'accepte que mon nom apparaisse dans le classement
+                        J'accepte que mon nom apparaisse dans les résultats
                       </Text>
                     </TouchableOpacity>
                   </View>

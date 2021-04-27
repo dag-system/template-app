@@ -212,7 +212,7 @@ export default class Sidebar extends Component {
                       : textAutoBackgroundColor,
                 },
               ]}>
-              Classement
+              Résultats
             </Text>
           </View>
         </TouchableHighlight>

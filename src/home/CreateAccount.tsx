@@ -543,7 +543,7 @@ class CreateAccount extends ValidationComponent {
                   <Item stackedLabel style={{marginBottom: 5}}>
                     <Label>Date de naissance</Label>
                     <Label style={{fontSize: 12}}>
-                      Important pour les classements par catégorie
+                      Important pour les résultats par catégorie
                     </Label>
                     <View style={[GlobalStyles.row]}>
                       <Picker
@@ -838,7 +838,7 @@ class CreateAccount extends ValidationComponent {
                       })
                     }>
                     <Text style={{marginLeft: 10}}>
-                      Je souhaite voir mon nom apparaître dans le classement
+                      Je souhaite voir mon nom apparaître dans les résultats
                     </Text>
                   </TouchableOpacity>
                 </View>

@@ -548,8 +548,8 @@ class Home extends Component {
                         resizeMode="contain"
                         source={Logo}
                         style={{
-                          height: 200,
-                          width: 200,
+                          height: 290,
+                          width: 290,
                         }}
                       />
                     </Animated.View>
@@ -869,10 +869,10 @@ const styles = StyleSheet.create({
   },
   logo: {
     width: '70%',
-    height: 100,
+    height: 200,
     alignSelf: 'center',
     marginTop: Platform.OS == 'ios' ? 20 : 25,
-    marginTop: 75,
+    marginTop: 50,
     marginBottom: 100,
   },
   loginButtonSection: {
