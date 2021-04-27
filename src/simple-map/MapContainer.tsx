@@ -1,33 +1,26 @@
-import React, {Component, useEffect, useRef, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {StyleSheet, Platform, Linking, Alert} from 'react-native';
-import {Container, Drawer, Footer, View} from 'native-base';
-import {connect, useDispatch, useSelector} from 'react-redux';
+import {Container, Drawer, Footer} from 'native-base';
+import {useDispatch, useSelector} from 'react-redux';
 import MapHeader from './MapHeader';
 import MapButtons from './MapButtons';
 import Map from './Map';
 import GeolocComponent from './GeolocComponent';
-import DefaultProps from '../models/DefaultProps';
 import Sidebar from '../home/SideBar';
 import TraceModal from '../home/TraceModal';
 import {Sponsors} from '../home/Sponsors';
 import VersionCheck from 'react-native-version-check';
 import DeviceInfo from 'react-native-device-info';
-import {useNavigation, useFocusEffect} from '@react-navigation/core';
+import {useNavigation} from '@react-navigation/core';
 import {
-  TemplateAppName,
   TemplateIdOrganisation,
-  TemplateSportLive,
   TemplateArrayImagesSponsorPath,
 } from '../globalsModifs';
 import ApiUtils from '../ApiUtils';
 import Interest from '../models/Interest';
 import AppState from '../models/AppState';
 import PhoneData from '../models/PhoneData';
-
-interface State {
-  isModalTraceVisible: boolean;
-  isDemo: boolean;
-}
+import Geolocation from 'react-native-geolocation-service';
 
 export default function MapContainer() {
   const dispatch = useDispatch();
@@ -44,7 +37,8 @@ export default function MapContainer() {
 
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
-      // do something
+      // do somethin
+      watchPosition();
       downloadData();
     });
 
@@ -95,6 +89,30 @@ export default function MapContainer() {
   const centerOnPoi = (interest: Interest) => {
     closeTraceModal();
     mapRef?.current?.centerOnPoi(interest);
+  };
+
+  const watchPosition = () => {
+    Geolocation.watchPosition(
+      (location) => {
+        console.log('position');
+        console.log(location);
+        let isGpsNotOk = location.coords.speed == -1;
+        let data = {
+          location: location,
+          isGpsNotOk: isGpsNotOk,
+        };
+        var action = {type: 'UPDATE_GPS_OK', data: data};
+        dispatch(action);
+      },
+      (error) => {
+        // See error code charts below.
+        console.log('error geoloc');
+        console.log(error.code, error.message);
+      },
+      {
+        enableHighAccuracy: true,
+      },
+    );
   };
 
   const getPhoneData = () => {
@@ -316,7 +334,7 @@ export default function MapContainer() {
       VersionCheck.needUpdate({
         depth: Platform.OS == 'android' ? 3 : 2,
       }).then((res) => {
-        if (res.isNeeded) {
+        if (res != null && res.isNeeded) {
           Alert.alert(
             'Nouvelle version disponible',
             "Une nouvelle version de l'application est disponible",

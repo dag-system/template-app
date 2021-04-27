@@ -133,7 +133,7 @@ class Classement extends Component<Props, State> {
                   marginBottom: 10,
                   textTransform: 'uppercase',
                 }}>
-                Classement du challenge de votre application
+                Résultats du challenge de votre application
               </Text>
 
               {TemplateSiteLink !== 'www.dag-system.com' ? (
@@ -144,13 +144,13 @@ class Classement extends Component<Props, State> {
                       textAlign: 'center',
                       color: ApiUtils.getBackgroundColor(),
                     }}>
-                    Retrouvez tous les classements sur notre site internet : A
+                    Retrouvez tous les résultats sur notre site internet : A
                     RENTRER
                   </Text>
                 </TouchableOpacity>
               ) : null}
 
-              {this.state.isPortrait ? (
+              {/* {this.state.isPortrait ? (
                 <View>
                   <Image
                     source={Rotate}
@@ -161,7 +161,7 @@ class Classement extends Component<Props, State> {
                     Tourner votre écran pour voir plus d'infos
                   </Text>
                 </View>
-              ) : null}
+              ) : null} */}
 
               <AutoHeightWebView
                 source={{

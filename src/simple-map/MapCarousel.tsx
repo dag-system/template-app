@@ -128,7 +128,6 @@ export default function MapCarousel() {
       .then(ApiUtils.checkStatus)
       .then((response) => response.json()) //;
       .then((responseJson) => {
-        console.log(responseJson);
 
         let newCarouselItem: CarouselItem = {
           id: idSegment.toString(),

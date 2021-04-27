@@ -285,7 +285,6 @@ export default function MapButtons(props: Props) {
   const onToggleExtrasButtonLayout = (event: LayoutChangeEvent) => {
     const layout = event.nativeEvent.layout;
     setExtraButtonPosition(layout);
-    console.log(layout);
   };
 
   const onClickGetCurrentPosition = () => {

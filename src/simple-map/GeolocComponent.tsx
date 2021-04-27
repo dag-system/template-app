@@ -32,7 +32,9 @@ export default function GeolocComponent(props: Props) {
         authorizationLevel: 'always',
         skipPermissionRequests: false,
       });
-      configGeoloc();
+      if (isRecording) {
+        configGeoloc();
+      }
     });
   }, [isRecording, isMoving]);
 
