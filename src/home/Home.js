@@ -761,7 +761,12 @@ class Home extends Component {
                   <Text style={{textAlign: 'center'}}>ou </Text>
                 ) : null}
 
-                <View style={{display: 'flex', flexDirection: 'row', justifyContent :'center'}}>
+                <View
+                  style={{
+                    display: 'flex',
+                    flexDirection: 'row',
+                    justifyContent: 'center',
+                  }}>
                   <TextInput
                     style={styles.inputCode}
                     placeholder="Entrez votre code"
@@ -806,11 +811,7 @@ class Home extends Component {
                       style={{
                         fontWeight: 'bold',
                         textAlign: 'center',
-                        color:
-                          this.state.followCode == '' &&
-                          this.state.selectedFolocode == -1
-                            ? 'black'
-                            : 'white',
+                        color: textAutoBackgroundColor,
                       }}>
                       CONNEXION
                     </Text>
