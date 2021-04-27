@@ -178,7 +178,7 @@ class LiveSummary extends Component<Props, State> {
 
         for (let i = 0; i < jsonSport.length; i++) {
           if (jsonSport[i].idSport == responseJson.idSport) {
-            libelleSport = jsonSport[i].SportName;
+            libelleSport = jsonSport[i].sportName;
           }
         }
 
@@ -933,7 +933,7 @@ class LiveSummary extends Component<Props, State> {
                                       }}>
                                       Le parcours effectué n'a pas été consideré
                                       comme complet. Cette activité n'est donc
-                                      pas dans le classement.
+                                      pas dans les résultats.
                                     </Text>
                                   ) : null}
                                 </View>

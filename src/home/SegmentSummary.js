@@ -490,7 +490,7 @@ class SegmentSummary extends Component {
                     style={{
                       color: 'white',
                     }}>
-                    Accédez au classement
+                    Accédez aux résultats
                   </Text>
                 </TouchableOpacity>
               </View>

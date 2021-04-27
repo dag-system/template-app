@@ -192,8 +192,6 @@ class MapHeader extends Component<Props, State> {
   }
 }
 
-console.log('COULEEEEEEEEEEUR', textAutoBackgroundColor);
-
 const styles = StyleSheet.create({
   goBackButton: {
     backgroundColor: 'transparent',

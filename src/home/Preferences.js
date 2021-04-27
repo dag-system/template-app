@@ -819,7 +819,7 @@ class Preferences extends Component {
               <Item stackedLabel style={{marginBottom: 15}}>
                 <Label>Date de naissance</Label>
                 <Label style={{fontSize: 12}}>
-                  Important pour les classements par catégorie
+                  Important pour les résultats par catégorie
                 </Label>
                 <View
                   style={{
@@ -1051,7 +1051,7 @@ class Preferences extends Component {
                 value={this.state.userdata.acceptChallengeNameUtilisateur == 1}
               />
               <Text style={{marginLeft: 10}}>
-                J'accepte que mon nom apparaisse dans le classement
+                J'accepte que mon nom apparaisse dans les résultats
               </Text>
             </View>
           </Content>

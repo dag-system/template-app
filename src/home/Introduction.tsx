@@ -1,5 +1,5 @@
 import React, {useEffect} from 'react';
-import {Platform, Alert, Linking, View, Modal, BackHandler} from 'react-native';
+import {Platform, Alert, Linking, View, Modal} from 'react-native';
 import {Container, Content} from 'native-base';
 import {useDispatch, useSelector} from 'react-redux';
 import ApiUtils from '../ApiUtils';
@@ -8,19 +8,15 @@ import DeviceInfo from 'react-native-device-info';
 import VersionCheck from 'react-native-version-check';
 import BatteryModal from './BatteryModal';
 
-import {TemplateIdOrganisation} from '../globalsModifs';
+import {TemplateDisplayName, TemplateIdOrganisation} from '../globalsModifs';
 import AskGpsModal from './AskGpsModal';
 import Polyline from '../models/Polyline';
 import Interest from '../models/Interest';
 import Challenge from '../models/Challenge';
 import AppState from '../models/AppState';
 import {useNavigation} from '@react-navigation/core';
-import {
-  CommonActions,
-  ParamListBase,
-  StackActions,
-} from '@react-navigation/native';
-import {NavigationActions} from '@react-navigation/compat';
+import {CommonActions} from '@react-navigation/native';
+import BackgroundGeolocation, { Config } from 'react-native-background-geolocation';
 
 export default function Introduction() {
   const navigation = useNavigation();
@@ -250,6 +246,128 @@ export default function Introduction() {
     );
   };
 
+  const configGeoloc = () => {
+ 
+    let config: Config = {
+      debug: false,
+      distanceFilter: 10,
+      url: ApiUtils.getAPIUrl(),
+      httpRootProperty: '.',
+      httpTimeout: 300000,
+
+      notification: {
+        sticky: true,
+        title: TemplateDisplayName,
+        text: 'Suivi de votre position en cours',
+        // channelImportance: BackgroundGeolocation.NOTIFICATION_PRIORITY_LOW,
+      },
+      enableHeadless: true,
+      locationAuthorizationRequest: 'Always',
+      backgroundPermissionRationale: {
+        title:
+          'Autoriser {applicationName} à accèder à votre position en arrière plan',
+        message:
+          "Pour enregistrer votre activité même quand l'application est en arrière plan, merci d'autoriser {backgroundPermissionOptionLabel}",
+        positiveAction: 'Autoriser {backgroundPermissionOptionLabel}',
+        negativeAction: 'Annuler',
+      },
+      autoSync: true,
+      autoSyncThreshold: 5,
+      batchSync: true,
+      preventSuspend: true,
+      maxRecordsToPersist: -1,
+      stopOnTerminate: false, //TODO TO DO
+      startOnBoot: true,
+      reset: true,
+      foregroundService: true,
+      disableElasticity: true,
+      logLevel: BackgroundGeolocation.LOG_LEVEL_VERBOSE,
+      disableStopDetection: true,
+      disableMotionActivityUpdates: true,
+      stationaryRadius: 5,
+      maxDaysToPersist: 4,
+      heartbeatInterval: 20,
+      stopTimeout: Platform.OS == 'ios' ? 60 : 5,
+      desiredAccuracy:
+        Platform.OS == 'ios'
+          ? BackgroundGeolocation.DESIRED_ACCURACY_NAVIGATION
+          : BackgroundGeolocation.DESIRED_ACCURACY_HIGH,
+      desiredOdometerAccuracy: 10,
+    };
+
+    BackgroundGeolocation.reset(
+      config,
+      () => {},
+      () => {},
+    );
+
+    BackgroundGeolocation.ready(config, () => {
+      BackgroundGeolocation.start(() => {
+
+        BackgroundGeolocation.changePace(true);
+        BackgroundGeolocation.stop();
+        onClickNavigate('SimpleMap');
+      });
+
+      BackgroundGeolocation.setConfig(config).then(() => {});
+    });
+
+    // configureGeofences();
+    // Step 1:  Listen to events:
+    // BackgroundGeolocation.on(
+    //   'location',
+    //   (loc: Location) => onLocation(loc),
+    //   (error: LocationError) => onLocationError(error),
+    // );
+
+    BackgroundGeolocation.onAuthorization((authorizationEvent) => {
+      if (authorizationEvent.success) {
+        // Sentry.captureMessage("[authorization] SUCCESS: ");
+      } else {
+        // Sentry.captureMessage("[authorization] FAILURE: " + JSON.stringify(authorizationEvent.error));
+      }
+    });
+
+    BackgroundGeolocation.onGeofence((event) => {
+      console.log('[onGeofence] ', event);
+    });
+
+    BackgroundGeolocation.onProviderChange(async (event) => {
+      if (
+        event.accuracyAuthorization ==
+        BackgroundGeolocation.ACCURACY_AUTHORIZATION_REDUCED
+      ) {
+        // Supply "Purpose" key from Info.plist as 1st argument.
+        try {
+          let accuracyAuthorization = await BackgroundGeolocation.requestTemporaryFullAccuracy(
+            'Delivery',
+          );
+          if (
+            accuracyAuthorization ==
+            BackgroundGeolocation.ACCURACY_AUTHORIZATION_FULL
+          ) {
+          } else {
+            // Sentry.captureMessage("[requestTemporaryFullAccuracy] DENIED: ");
+          }
+        } catch (error) {
+          // Sentry.captureMessage("[requestTemporaryFullAccuracy] FAILED TO SHOW DIALOG: ");
+          console.warn(
+            '[requestTemporaryFullAccuracy] FAILED TO SHOW DIALOG: ',
+            error,
+          );
+        }
+      }
+    });
+
+    BackgroundGeolocation.onHeartbeat(() => {
+      // You could request a new location if you wish.
+      BackgroundGeolocation.getCurrentPosition({
+        samples: 3,
+        persist: true,
+      }).then(() => {});
+    });
+  };
+
   return (
     <Content style={{backgroundColor: ApiUtils.getBackgroundColor()}}>
       <Modal visible={!isOkPopupBAttery}>
@@ -271,7 +389,11 @@ export default function Introduction() {
       <Modal visible={isOkPopupBAttery2 && isOkPopupBAttery && !isOkPopupGps}>
         <Container style={{flex: 1}}>
           <View style={{flex: 1, justifyContent: 'center'}}>
-            <AskGpsModal onValidate={() => onClickNavigate('SimpleMap')} />
+            <AskGpsModal onValidate={() => 
+              {
+                configGeoloc();
+                
+              }} />
           </View>
         </Container>
       </Modal>

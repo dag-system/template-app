@@ -20,7 +20,9 @@ class Logout extends Component {
     this.state = {};
   }
 
-  componentDidMount() {}
+  componentDidMount() {
+    BackgroundGeolocation.stop();
+  }
 
   unSubscribe = (interest) => {
     console.log(`Subscribing to "${interest}"`);

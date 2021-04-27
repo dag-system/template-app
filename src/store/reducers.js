@@ -329,7 +329,7 @@ const reducer = (state = initialState, action) => {
         odometer: 0,
         nomStation: null,
         descriptionStation: null,
-        currentPosition: null,
+        // currentPosition: null,
         currentLive: null,
       };
 
