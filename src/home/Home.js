@@ -47,6 +47,7 @@ import {
   TemplateIdOrganisation,
   TemplateIsPaying,
   textAutoBackgroundColor,
+  textAutoSecondColor,
 } from './../globalsModifs';
 
 const mapStateToProps = (state) => {
