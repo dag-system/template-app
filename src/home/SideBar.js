@@ -407,6 +407,28 @@ export default class Sidebar extends Component {
             underlayColor="rgba(255,255,255,1,0.6)"
             onPress={() =>
               this.openLink(
+                'http://dag-system.com/externalcontent/' +
+                  TemplateAppName +
+                  '/reglement.pdf',
+              )
+            }
+            style={{width: '100%', height: 30}}>
+            <Text
+              style={[
+                {
+                  color: textAutoBackgroundColor,
+                  textDecorationLine: 'underline',
+                  textAlign: 'center',
+                  fontSize: 12,
+                },
+              ]}>
+              Règlement de l'application
+            </Text>
+          </TouchableHighlight>
+          <TouchableHighlight
+            underlayColor="rgba(255,255,255,1,0.6)"
+            onPress={() =>
+              this.openLink(
                 IsDemo === true
                   ? 'http://dag-system.com/externalcontent/templatetest/service.pdf'
                   : 'http://dag-system.com/externalcontent/' +

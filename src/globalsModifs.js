@@ -1,4 +1,4 @@
-export const TemplateDisplayName = "Activ'toi by FSGT ";
+export const TemplateDisplayName = "Activ'toi by FSGT";
 
 export const IsDemo = false;
 
@@ -45,12 +45,24 @@ export const TemplateChallengeAutreName = 'Template Test Autre';
 export const TemplateSportLive = [
   {idSport: 13, sportName: 'MARCHE'},
   {idSport: 24, sportName: 'Course à pied'},
-  {idSport: 27, sportName: 'Course à pied'},
 ];
-export const TemplateTrace = [{label: "Vivi'berge Vitry sur Seine", id: '605'}];
 
 export const TemplateArrayImagesSponsorPath = [];
-export const TemplateArrayImagesPartenairesPath = [];
+export const TemplateArrayImagesPartenairesPath = [
+  require('./assets/siaap.jpg'),
+  require('./assets/ivry.jpg'),
+  require('./assets/vdm.jpg'),
+  require('./assets/ssd.jpg'),
+  require('./assets/fsgt_ligue.png'),
+  require('./assets/fsgt94.png'),
+  require('./assets/fsgt93.png'),
+  require('./assets/fsgt92.png'),
+  require('./assets/logo_es_vitry.png'),
+  require('./assets/us_ivry.png'),
+  require('./assets/teamv.jpg'),
+  require('./assets/meute.png'),
+  require('./assets/usma.png'),
+];
 
 function purgeString(str) {
   const accents =

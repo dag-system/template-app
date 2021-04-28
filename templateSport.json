@@ -203,13 +203,6 @@
     "env": "demo"
   },
   {
-    "action": "REPLACE_TABLE_TRACE",
-    "filePath": "./src/globalsModifs.js",
-    "source": "export const TemplateTrace = [{label:Vivi'berge Vitry sur Seine,id:605}];",
-    "datasource": "table.colonne",
-    "env": "demo"
-  },
-  {
     "action": "REPLACE_TEXT",
     "filePath": "./android/app/_BUCK",
     "source": "dag.templateappname",
