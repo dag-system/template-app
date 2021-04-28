@@ -212,13 +212,6 @@
     "env": "demo"
   },
   {
-    "action": "REPLACE_TABLE_TRACE",
-    "filePath": "./src/globalsModifs.js",
-    "source": "export const TemplateTrace = [];",
-    "datasource": "table.colonne",
-    "env": "demo"
-  },
-  {
     "action": "REPLACE_TEXT",
     "filePath": "./android/app/_BUCK",
     "source": "dag.templateappname",
