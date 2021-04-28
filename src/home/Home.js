@@ -708,7 +708,7 @@ class Home extends Component {
                     textTransform: 'uppercase',
                     textAlign: 'center',
                     marginTop: 30,
-                    color: textAutoBackgroundColor,
+                    color: ApiUtils.getBackgroundColor(),
                   }}>
                   Vous avez déjà un compte ?
                 </Text>
@@ -725,20 +725,20 @@ class Home extends Component {
                       onValueChange={this.onValueFolocodeChange.bind(this)}
                       placeholder={'Choisissez le Code'}
                       placeholderStyle={{
-                        color: textAutoBackgroundColor,
+                        color: ApiUtils.getBackgroundColor(),
                       }}
-                      placeholderIconColor={textAutoBackgroundColor}
-                      textStyle={{color: textAutoBackgroundColor}}
+                      placeholderIconColor={ApiUtils.getBackgroundColor()}
+                      textStyle={{color: ApiUtils.getBackgroundColor()}}
                       itemStyle={{
-                        color: textAutoBackgroundColor,
+                        color: ApiUtils.getBackgroundColor(),
                         marginLeft: 0,
                         paddingLeft: 10,
-                        borderBottomColor: textAutoBackgroundColor,
+                        borderBottomColor: ApiUtils.getBackgroundColor(),
                         borderBottomWidth: 1,
                       }}
                       itemTextStyle={{
-                        color: textAutoBackgroundColor,
-                        borderBottomColor: textAutoBackgroundColor,
+                        color: ApiUtils.getBackgroundColor(),
+                        borderBottomColor: ApiUtils.getBackgroundColor(),
                         borderBottomWidth: 1,
                       }}>
                       <Picker.Item label="Choisissez le Code" value={-1} />
