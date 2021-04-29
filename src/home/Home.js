@@ -705,7 +705,7 @@ class Home extends Component {
                     textTransform: 'uppercase',
                     textAlign: 'center',
                     marginTop: 30,
-                    color: ApiUtils.getColor(),
+                    color: 'black',
                   }}>
                   Vous avez déjà un compte ?
                 </Text>

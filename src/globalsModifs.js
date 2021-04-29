@@ -28,13 +28,30 @@ export const TemplateChallengeClub = false;
 export const TemplateChallengeFamille = false;
 export const TemplateChallengeAutre = false;
 export const TemplateChallengeEntreprise = false;
-export const TemplateHasAppDonation = false;
+export const TemplateHasAppDonation = true;
 export const TemplateIsPaying = false;
 export const TemplateChallengeAutreName = 'Template Test Autre';
-export const TemplateSportLive = [{idSport:24,sportName:"Course à pied"}];
-export const TemplateTrace = [{label:"5 km PMR Six-Fours",id:"676"},{label:"10 km PMR Six-Fours",id:"677"}];
-export const TemplateArrayImagesSponsorPath = [require('./assets/sponsor_logo1.png'),require('./assets/sponsor_logo2.png'),require('./assets/sponsor_logo3.png'),require('./assets/sponsor_logo4.png')];
-export const TemplateArrayImagesPartenairesPath = [require('./assets/partner_logo5.png'),require('./assets/partner_logo6.png'),require('./assets/partner_logo7.png'),require('./assets/partner_logo8.png'),require('./assets/partner_logo9.png'),require('./assets/partner_logo10.png'),require('./assets/partner_logo11.png'),require('./assets/partner_logo12.png')];
+export const TemplateSportLive = [{idSport: 24, sportName: 'Course à pied'}];
+export const TemplateTrace = [
+  {label: '5 km PMR Six-Fours', id: '676'},
+  {label: '10 km PMR Six-Fours', id: '677'},
+];
+export const TemplateArrayImagesSponsorPath = [
+  require('./assets/sponsor_logo1.png'),
+  require('./assets/sponsor_logo2.png'),
+  require('./assets/sponsor_logo3.png'),
+  require('./assets/sponsor_logo4.png'),
+];
+export const TemplateArrayImagesPartenairesPath = [
+  require('./assets/partner_logo5.png'),
+  require('./assets/partner_logo6.png'),
+  require('./assets/partner_logo7.png'),
+  require('./assets/partner_logo8.png'),
+  require('./assets/partner_logo9.png'),
+  require('./assets/partner_logo10.png'),
+  require('./assets/partner_logo11.png'),
+  require('./assets/partner_logo12.png'),
+];
 function purgeString(str) {
   const accents =
     'ÀÁÂÃÄÅàáâãäåÒÓÔÕÕÖØòóôõöøÈÉÊËèéêëðÇçÐÌÍÎÏìíîïÙÚÛÜùúûüÑñŠšŸÿýŽž\' ,*-_#|/="~';
