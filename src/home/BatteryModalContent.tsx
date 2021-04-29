@@ -175,7 +175,7 @@ class BatteryModalContent extends Component {
           style={{
             textAlign: 'center',
             fontWeight: 'bold',
-            color: ApiUtils.getColor(),
+            color: 'black',
             textDecorationLine: 'underline',
             marginTop: 30,
           }}>
@@ -210,7 +210,7 @@ class BatteryModalContent extends Component {
           style={{
             textAlign: 'center',
             fontWeight: 'bold',
-            color: ApiUtils.getColor(),
+            color: 'black',
             textDecorationLine: 'underline',
             marginTop: 30,
           }}>
