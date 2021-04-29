@@ -57,11 +57,13 @@ export const TemplateArrayImagesPartenairesPath = [
   require('./assets/fsgt94.png'),
   require('./assets/fsgt93.png'),
   require('./assets/fsgt92.png'),
+  require('./assets/fsgt_paris.jpg'),
   require('./assets/logo_es_vitry.png'),
   require('./assets/us_ivry.png'),
   require('./assets/teamv.jpg'),
   require('./assets/meute.png'),
   require('./assets/usma.png'),
+  require('./assets/esc.jpg'),
 ];
 
 function purgeString(str) {
