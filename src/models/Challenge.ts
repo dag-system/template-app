@@ -6,4 +6,5 @@ export default class Challenge {
   gpxChallenge: any;
   dateDebutChallenge: any;
   dateFinChallenge: any;
+  isActive: boolean;
 }

@@ -426,6 +426,7 @@ class Home extends Component {
               challenge.positionsTrace = positionArray;
 
               finalChallenge = {
+                isActive : true,
                 positionsTrace: positionArray,
                 idChallenge: finalChallenge.idChallenge,
                 libelleChallenge: finalChallenge.libelleChallenge,
@@ -815,7 +816,7 @@ class Home extends Component {
                           this.state.followCode == '' &&
                           this.state.selectedFolocode == -1
                             ? 'black'
-                            : textAutoBackgroundColor,
+                            : 'white',
                       }}>
                       CONNEXION
                     </Text>

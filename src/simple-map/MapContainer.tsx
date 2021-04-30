@@ -110,7 +110,7 @@ export default function MapContainer() {
         console.log(error.code, error.message);
       },
       {
-        enableHighAccuracy: true,
+        enableHighAccuracy: true,interval : 100, distanceFilter : 0
       },
     );
   };
@@ -242,6 +242,7 @@ export default function MapContainer() {
               challenge.positionsTrace = positionArray;
 
               finalChallenge = {
+                isActive : true,
                 positionsTrace: positionArray,
                 idChallenge: finalChallenge.idChallenge,
                 libelleChallenge: finalChallenge.libelleChallenge,

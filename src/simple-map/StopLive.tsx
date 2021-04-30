@@ -51,7 +51,10 @@ export default function StopActivity(props: Props) {
       setLibelleLive(currentLive.libelleLive);
       setSelectedSport(currentLive.idSport);
     }
-    setAcceptChallengeNameUtilisateur(userData.acceptChallengeNameUtilisateur);
+    setAcceptChallengeNameUtilisateur(
+      userData.acceptChallengeNameUtilisateur == 1 ||
+        userData.acceptChallengeNameUtilisateur == true,
+    );
   }, [currentLive]);
 
   const onToggleEnabled = (isMoving: boolean, isRecording: boolean) => {
@@ -450,16 +453,16 @@ export default function StopActivity(props: Props) {
               <Switch
                 style={{paddingTop: 20}}
                 onValueChange={(text) => {
-                  setAcceptChallengeNameUtilisateur(text);
+                  setAcceptChallengeNameUtilisateur((value) => !value);
                 }}
                 value={acceptChallengeNameUtilisateur}
               />
 
               <TouchableOpacity
                 onPress={() => {
-                  setAcceptChallengeNameUtilisateur(
-                    !acceptChallengeNameUtilisateur,
-                  );
+                  setAcceptChallengeNameUtilisateur((value) => {
+                    return !value;
+                  });
                 }}>
                 <Text style={{marginLeft: 10}}>
                   J'accepte que mon nom apparaisse dans les résultats

@@ -127,6 +127,7 @@ export default function Introduction() {
               challenge.positionsTrace = positionArray;
 
               finalChallenge = {
+                isActive : true,
                 positionsTrace: positionArray,
                 idChallenge: finalChallenge.idChallenge,
                 libelleChallenge: finalChallenge.libelleChallenge,
