@@ -692,8 +692,8 @@ class CreateAccount extends ValidationComponent {
                       value={this.state.acceptChallengeTelUtilisateur == 1}
                     />
                     <Text style={{marginLeft: 10}}>
-                      J’accepte l’utilisation de mon numéro de téléphone pour le
-                      tirage au sort des lots
+                      J’accepte l’utilisation de mon numéro à des fins
+                      commerciales.
                     </Text>
                   </View>
                 ) : null}
