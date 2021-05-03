@@ -110,7 +110,7 @@ export default function MapContainer() {
         console.log(error.code, error.message);
       },
       {
-        enableHighAccuracy: true,
+        enableHighAccuracy: true, distanceFilter : 0, interval : 100
       },
     );
   };
