@@ -580,14 +580,15 @@ export default function MapButtons(props: Props) {
             onPress={() => onCreateLive()}
             style={{
               alignSelf: 'center',
-              backgroundColor: isGpsNotOk ? '#B9B9B9' : '#44E660',
+              backgroundColor:'#44E660',
               width: 80,
               height: 80,
               borderRadius: 300,
               justifyContent: 'center',
               elevation: 20,
             }}
-            disabled={isGpsNotOk}>
+            // disabled={isGpsNotOk}
+            >
             {spinner ? (
               <Spinner color="white" style={{alignSelf: 'center'}} />
             ) : (

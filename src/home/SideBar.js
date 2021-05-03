@@ -348,7 +348,7 @@ export default class Sidebar extends Component {
             </View>
           </TouchableHighlight>
         ) : null}
-        {TemplateHasAppDonation ? (
+        {/* {TemplateHasAppDonation ? (
           <TouchableOpacity
             onPress={() => this.onStartDonate()}
             style={{width: '100%'}}>
@@ -369,7 +369,7 @@ export default class Sidebar extends Component {
               </Text>
             </View>
           </TouchableOpacity>
-        ) : null}
+        ) : null} */}
         <TouchableHighlight
           underlayColor="rgba(255,255,255,1,0.6)"
           onPress={() => this.onClickNavigate('Help')}
