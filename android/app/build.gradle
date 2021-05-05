@@ -134,8 +134,8 @@ android {
             applicationId "com.dag.pmrsixfours.app"
             minSdkVersion rootProject.ext.minSdkVersion
             targetSdkVersion rootProject.ext.targetSdkVersion
-            versionCode 548
-            versionName "1.0.40"
+            versionCode 552
+            versionName "1.0.44"
     }
     splits {
         abi {

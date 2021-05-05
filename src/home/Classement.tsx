@@ -128,7 +128,7 @@ class Classement extends Component<Props, State> {
                 style={{
                   fontWeight: 'bold',
                   textAlign: 'center',
-                  color: ApiUtils.getBackgroundColor(),
+                  color: 'black',
                   fontSize: 20,
                   marginBottom: 10,
                   textTransform: 'uppercase',
@@ -142,7 +142,7 @@ class Classement extends Component<Props, State> {
                   <Text
                     style={{
                       textAlign: 'center',
-                      color: ApiUtils.getBackgroundColor(),
+                      color: 'black',
                     }}>
                     Retrouvez tous les résultats sur notre site internet : A
                     RENTRER

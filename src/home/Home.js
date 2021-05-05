@@ -655,7 +655,7 @@ class Home extends Component {
                     ]}>
                     Version V {VersionCheck.getCurrentVersion()}
                   </Text>
-                  <Text
+                  {/* <Text
                     style={[
                       {
                         color: textAutoBackgroundColor,
@@ -668,7 +668,7 @@ class Home extends Component {
                     {moment(TemplateExpirationDate.toISOString()).format(
                       'DD/MM/YYYY',
                     )}
-                  </Text>
+                  </Text> */}
                 </ImageBackground>
               </View>
             </KeyboardAvoidingView>

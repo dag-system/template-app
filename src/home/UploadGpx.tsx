@@ -356,9 +356,9 @@ class UploadGpx extends Component<Props, State> {
                     paddingHorizontal: 50,
                     elevation: 0,
                     alignSelf: 'center',
-                    borderColor: ApiUtils.getColor(),
+                    borderColor: 'black',
                     borderWidth: 1,
-                    backgroundColor: ApiUtils.getColor(),
+                    backgroundColor: 'black',
                   }}
                   onPress={() => this.onOpenGpx()}>
                   {this.state.file == null ? (
@@ -401,20 +401,20 @@ class UploadGpx extends Component<Props, State> {
                     onValueChange={this.onValueSportChange.bind(this)}
                     placeholder={'Choisissez votre sport'}
                     placeholderStyle={{
-                      color: ApiUtils.getColor(),
+                      color: 'black',
                     }}
-                    placeholderIconColor={ApiUtils.getColor()}
-                    textStyle={{color: ApiUtils.getColor()}}
+                    placeholderIconColor={'black'}
+                    textStyle={{color:'black'}}
                     itemStyle={{
-                      color: ApiUtils.getColor(),
+                      color: 'black',
                       marginLeft: 0,
                       paddingLeft: 10,
-                      borderBottomColor: ApiUtils.getColor(),
+                      borderBottomColor: 'black',
                       borderBottomWidth: 1,
                     }}
                     itemTextStyle={{
-                      color: ApiUtils.getColor(),
-                      borderBottomColor: ApiUtils.getColor(),
+                      color: 'black',
+                      borderBottomColor: 'black',
                       borderBottomWidth: 1,
                     }}>
                     <Picker.Item label="Choisissez votre sport" value="-1" />

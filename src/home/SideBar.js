@@ -8,6 +8,7 @@ import {
   TouchableOpacity,
   TouchableHighlight,
   ScrollView,
+  Platform,
 } from 'react-native';
 import {
   Container,
@@ -258,7 +259,7 @@ export default class Sidebar extends Component {
             </Text>
           </View>
         </TouchableHighlight>
-        <TouchableHighlight
+        {/* <TouchableHighlight
           underlayColor="rgba(255,255,255,1,0.6)"
           onPress={() => this.onClickNavigate('Replay')}
           style={{
@@ -300,7 +301,9 @@ export default class Sidebar extends Component {
               Comparateur
             </Text>
           </View>
-        </TouchableHighlight>
+        </TouchableHighlight> */}
+       
+       
         {TemplateArrayImagesPartenairesPath.length > 0 ? (
           <TouchableHighlight
             underlayColor="rgba(255,255,255,1,0.6)"
@@ -348,7 +351,7 @@ export default class Sidebar extends Component {
             </View>
           </TouchableHighlight>
         ) : null}
-        {/* {TemplateHasAppDonation ? (
+        {TemplateHasAppDonation  && Platform.OS !='ios' ? (
           <TouchableOpacity
             onPress={() => this.onStartDonate()}
             style={{width: '100%'}}>
@@ -369,7 +372,7 @@ export default class Sidebar extends Component {
               </Text>
             </View>
           </TouchableOpacity>
-        ) : null} */}
+        ) : null}
         <TouchableHighlight
           underlayColor="rgba(255,255,255,1,0.6)"
           onPress={() => this.onClickNavigate('Help')}

@@ -1,6 +1,6 @@
 export const TemplateDisplayName = 'PMR Six-Fours';
 export const IsDemo = false;
-export const TemplateExpirationDate = new Date('2021-05-10T22:00:00.000Z');
+export const TemplateExpirationDate = new Date('2031-05-10T22:00:00.000Z');
 export const TemplateAppName = purgeString(
   romanizeString(TemplateDisplayName.toLowerCase()),
 );

@@ -18,7 +18,10 @@ import {useDispatch, useSelector} from 'react-redux';
 import BackgroundGeolocation from 'react-native-background-geolocation';
 import ErrorMessage from '../home/ErrorMessage';
 import {ScrollView, TextInput} from 'react-native-gesture-handler';
-import {TemplateSportLive} from '../globalsModifs';
+import {
+  TemplateSportLive,
+  textAutoBackgroundColor,
+} from '../globalsModifs';
 import AppState from '../models/AppState';
 import {useNavigation} from '@react-navigation/core';
 
@@ -360,55 +363,59 @@ export default function StopActivity(props: Props) {
           />
 
           <View style={styles.picker}>
-            <Picker
-              mode="dropdown"
-              accessibilityLabel={'Choisissez votre sport'}
-              iosHeader={'Choisissez votre sport'}
-              iosIcon={<Icon name="chevron-down" type="FontAwesome5" />}
-              style={{marginTop: 0}}
-              selectedValue={selectedSport.toString()}
-              onValueChange={(value) => onValueSportChange(value)}
-              placeholder={'Choisissez votre sport'}
-              placeholderStyle={{
-                color: ApiUtils.getColor(),
-              }}
-              placeholderIconColor={ApiUtils.getColor()}
-              textStyle={{color: ApiUtils.getColor()}}
-              itemStyle={{
-                color: ApiUtils.getColor(),
-                marginLeft: 0,
-                paddingLeft: 10,
-                borderBottomColor: ApiUtils.getColor(),
-                borderBottomWidth: 1,
-              }}
-              itemTextStyle={{
-                color: ApiUtils.getColor(),
-                borderBottomColor: ApiUtils.getColor(),
-                borderBottomWidth: 1,
-              }}>
-              <Picker.Item label="Choisissez votre sport" value="-1" />
-              {TemplateSportLive.map((sport, index) => {
-                return (
-                  <Picker.Item
-                    label={sport.sportName}
-                    value={sport.idSport.toString()}
-                    key={index}
-                  />
-                );
-              })}
-            </Picker>
+            {TemplateSportLive.length > 1 ? (
+              <View>
+                <Picker
+                  mode="dropdown"
+                  accessibilityLabel={'Choisissez votre sport'}
+                  iosHeader={'Choisissez votre sport'}
+                  iosIcon={<Icon name="chevron-down" type="FontAwesome5" />}
+                  style={{marginTop: 0}}
+                  selectedValue={selectedSport.toString()}
+                  onValueChange={(value) => onValueSportChange(value)}
+                  placeholder={'Choisissez votre sport'}
+                  placeholderStyle={{
+                    color: 'black',
+                  }}
+                  placeholderIconColor={'black'}
+                  textStyle={{color: 'black'}}
+                  itemStyle={{
+                    color: 'black',
+                    marginLeft: 0,
+                    paddingLeft: 10,
+                    borderBottomColor: 'black',
+                    borderBottomWidth: 1,
+                  }}
+                  itemTextStyle={{
+                    color: 'black',
+                    borderBottomColor: 'black',
+                    borderBottomWidth: 1,
+                  }}>
+                  <Picker.Item label="Choisissez votre sport" value="-1" />
+                  {TemplateSportLive.map((sport, index) => {
+                    return (
+                      <Picker.Item
+                        label={sport.sportName}
+                        value={sport.idSport.toString()}
+                        key={index}
+                      />
+                    );
+                  })}
+                </Picker>
 
-            {selectedSport == -1 ? (
-              <Text
-                style={{
-                  marginTop: 10,
-                  color: 'red',
-                  fontSize: 14,
-                  paddingLeft: 5,
-                  fontStyle: 'italic',
-                }}>
-                Le type de sport doit être renseigné
-              </Text>
+                {selectedSport == -1 ? (
+                  <Text
+                    style={{
+                      marginTop: 10,
+                      color: 'red',
+                      fontSize: 14,
+                      paddingLeft: 5,
+                      fontStyle: 'italic',
+                    }}>
+                    Le type de sport doit être renseigné
+                  </Text>
+                ) : null}
+              </View>
             ) : null}
 
             <View
@@ -486,11 +493,13 @@ export default function StopActivity(props: Props) {
                 paddingHorizontal: 50,
                 elevation: 0,
                 alignSelf: 'center',
-                borderColor: isErrorFormStop() ? 'black' : ApiUtils.getColor(),
+                borderColor: isErrorFormStop()
+                  ? 'black'
+                  : textAutoBackgroundColor,
                 borderWidth: 1,
                 backgroundColor: isErrorFormStop()
                   ? 'transparent'
-                  : ApiUtils.getColor(),
+                  : textAutoBackgroundColor,
               }}
               onPress={() => onClickValidateStop()}
               disabled={isErrorFormStop()}>

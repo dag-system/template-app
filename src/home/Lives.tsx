@@ -329,7 +329,6 @@ class Lives extends Component<Props, State> {
   }
 
   async getLives(idUtilisateur) {
-    console.log('la');
     this.setState({isLoading: true});
     let formData = new FormData();
     formData.append('method', 'getLives');
@@ -934,7 +933,7 @@ class Lives extends Component<Props, State> {
                                   <Text
                                     style={{
                                       fontWeight: 'bold',
-                                      color: ApiUtils.getColor(),
+                                      color: TemplateBackgroundColor == '#ffffff' ? 'black' : TemplateBackgroundColor,
                                     }}>
                                     {this.getSport(item.idSport)}
                                   </Text>
@@ -1007,7 +1006,7 @@ class Lives extends Component<Props, State> {
                                             fontSize: 12,
                                             marginLeft: 10,
                                             alignSelf: 'center',
-                                            color: ApiUtils.getColor(),
+                                            color: TemplateBackgroundColor == '#ffffff' ? 'black' : TemplateBackgroundColor,
                                           }}
                                         />
                                       </View>
@@ -1069,7 +1068,7 @@ class Lives extends Component<Props, State> {
                                       <Text style={{width: 200}}>
                                         <Text
                                           style={{
-                                            color: ApiUtils.getColor(),
+                                            color: TemplateBackgroundColor == '#ffffff' ? 'black' : TemplateBackgroundColor,
                                             fontWeight: 'bold',
                                           }}>
                                           {this.getSport(item.idSport)}
@@ -1131,6 +1130,7 @@ class Lives extends Component<Props, State> {
                   zIndex: 12,
                   left: 10,
                   justifyContent: 'center',
+                  elevation : 20
                 },
               ]}
               onPress={() => this.openGpxModal()}>
@@ -1202,20 +1202,20 @@ class Lives extends Component<Props, State> {
                           onValueChange={this.onValueSportChange.bind(this)}
                           placeholder={'Choisissez votre sport'}
                           placeholderStyle={{
-                            color: ApiUtils.getColor(),
+                            color: 'black',
                           }}
-                          placeholderIconColor={ApiUtils.getColor()}
-                          textStyle={{color: ApiUtils.getColor()}}
+                          placeholderIconColor={ 'black'}
+                          textStyle={{color:  'black'}}
                           itemStyle={{
-                            color: ApiUtils.getColor(),
+                            color:  'black',
                             marginLeft: 0,
                             paddingLeft: 10,
-                            borderBottomColor: ApiUtils.getColor(),
+                            borderBottomColor:  'black',
                             borderBottomWidth: 1,
                           }}
                           itemTextStyle={{
-                            color: ApiUtils.getColor(),
-                            borderBottomColor: ApiUtils.getColor(),
+                            color:  'black',
+                            borderBottomColor:  'black',
                             borderBottomWidth: 1,
                           }}>
                           <Picker.Item
@@ -1409,6 +1409,14 @@ const styles = StyleSheet.create({
     right: 20,
     bottom: 90,
     justifyContent: 'center',
+    elevation : 20,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 5,
+    },
+    shadowOpacity: 0.34,
+    shadowRadius: 6.27,
   },
   plusButtonLogo: {
     height: 30,
@@ -1421,6 +1429,7 @@ const styles = StyleSheet.create({
     // marginLeft: -3,
     alignSelf: 'center',
     zIndex: 10,
+  
   },
   footer: {
     backgroundColor: 'transparent',

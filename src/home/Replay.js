@@ -429,7 +429,7 @@ class Replay extends Component {
             t.forEach((tr) => {
               var finalTrace = {
                 // positionsTrace: positionArray,
-                couleurTrace: ApiUtils.getColor(),
+                couleurTrace: 'black',
                 nomTrace: tr.getName(),
                 isActive: true,
                 sportTrace: 'inconnu',
@@ -858,20 +858,20 @@ class Replay extends Component {
                     onValueChange={this.onChangeChallenge.bind(this)}
                     placeholder={'Choisissez une épreuve'}
                     placeholderStyle={{
-                      color: ApiUtils.getColor(),
+                      color: 'black',
                     }}
-                    placeholderIconColor={ApiUtils.getColor()}
-                    textStyle={{color: ApiUtils.getColor()}}
+                    placeholderIconColor={'black'}
+                    textStyle={{color: 'black'}}
                     itemStyle={{
-                      color: ApiUtils.getColor(),
+                      color: 'black',
                       marginLeft: 0,
                       paddingLeft: 10,
-                      borderBottomColor: ApiUtils.getColor(),
+                      borderBottomColor: 'black',
                       borderBottomWidth: 1,
                     }}
                     itemTextStyle={{
-                      color: ApiUtils.getColor(),
-                      borderBottomColor: ApiUtils.getColor(),
+                      color: 'black',
+                      borderBottomColor: 'black',
                       borderBottomWidth: 1,
                     }}>
                     <Picker.Item label="Choisissez une épreuve" value="-1" />
@@ -931,20 +931,20 @@ class Replay extends Component {
                             onValueChange={this.onChangeTrace1.bind(this)}
                             placeholder={'Choisir'}
                             placeholderStyle={{
-                              color: ApiUtils.getColor(),
+                              color: 'black',
                             }}
-                            placeholderIconColor={ApiUtils.getColor()}
-                            textStyle={{color: ApiUtils.getColor()}}
+                            placeholderIconColor={'black'}
+                            textStyle={{color: 'black'}}
                             itemStyle={{
-                              color: ApiUtils.getColor(),
+                              color: 'black',
                               marginLeft: 0,
                               paddingLeft: 10,
-                              borderBottomColor: ApiUtils.getColor(),
+                              borderBottomColor: 'black',
                               borderBottomWidth: 1,
                             }}
                             itemTextStyle={{
-                              color: ApiUtils.getColor(),
-                              borderBottomColor: ApiUtils.getColor(),
+                              color: 'black',
+                              borderBottomColor: 'black',
                               borderBottomWidth: 1,
                             }}>
                             <Picker.Item label="Choisir" value="-1" />
@@ -1003,20 +1003,20 @@ class Replay extends Component {
                             onValueChange={this.onChangeTrace2.bind(this)}
                             placeholder={'Choisir'}
                             placeholderStyle={{
-                              color: ApiUtils.getColor(),
+                              color: 'black',
                             }}
-                            placeholderIconColor={ApiUtils.getColor()}
-                            textStyle={{color: ApiUtils.getColor()}}
+                            placeholderIconColor={'black'}
+                            textStyle={{color: 'black'}}
                             itemStyle={{
-                              color: ApiUtils.getColor(),
+                              color: 'black',
                               marginLeft: 0,
                               paddingLeft: 10,
-                              borderBottomColor: ApiUtils.getColor(),
+                              borderBottomColor: 'black',
                               borderBottomWidth: 1,
                             }}
                             itemTextStyle={{
-                              color: ApiUtils.getColor(),
-                              borderBottomColor: ApiUtils.getColor(),
+                              color: 'black',
+                              borderBottomColor: 'black',
                               borderBottomWidth: 1,
                             }}>
                             <Picker.Item label="Choisir" value="-1" />
@@ -1047,10 +1047,10 @@ class Replay extends Component {
                           paddingHorizontal: 50,
                           elevation: 0,
                           alignSelf: 'center',
-                          borderColor: ApiUtils.getColor(),
+                          borderColor: 'black',
                           borderWidth: 1,
                           backgroundColor: this.isUserSelected()
-                            ? ApiUtils.getColor()
+                            ? 'black'
                             : 'white',
                         }}
                         onPress={() => this.validateRunners()}>
@@ -1058,7 +1058,7 @@ class Replay extends Component {
                           style={{
                             color: this.isUserSelected()
                               ? 'white'
-                              : ApiUtils.getColor(),
+                              : 'black',
                           }}>
                           Comparer
                         </Text>
@@ -1271,7 +1271,7 @@ class Replay extends Component {
                         style={{
                           width: 25,
                           height: 25,
-                          backgroundColor: ApiUtils.getColor(),
+                          backgroundColor: 'black',
                           borderRadius: 100,
                           borderColor: 'white',
                           borderWidth: 1,
