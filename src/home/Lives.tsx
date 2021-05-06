@@ -33,7 +33,6 @@ import Sidebar from './SideBar';
 import {connect} from 'react-redux';
 import GlobalStyles from '../styles';
 import {Modal} from 'react-native';
-import BatteryModal from './BatteryModal';
 import {Sponsors} from './Sponsors';
 import UploadGpx from './UploadGpx';
 import {Platform} from 'react-native';
@@ -42,7 +41,6 @@ import DefaultProps from '../models/DefaultProps';
 import VersionCheck from 'react-native-version-check';
 import RNPusherPushNotifications from 'react-native-pusher-push-notifications';
 import NotificationModal from './NotificationModal';
-import Help from './Help';
 
 import {
   TemplateBackgroundColor,
@@ -348,6 +346,7 @@ class Lives extends Component<Props, State> {
       .then(ApiUtils.checkStatus)
       .then((response) => response.json())
       .then((responseJson) => {
+        console.log(responseJson);
         var action = {type: 'GET_LIVES', data: responseJson};
         this.props.dispatch(action);
 
@@ -811,7 +810,7 @@ class Lives extends Component<Props, State> {
                               <Text
                                 style={{
                                   marginBottom: 5,
-                                  color: ApiUtils.getColor(),
+                                  color: 'black',
                                 }}>
                                 {notification.nomSegment}
                               </Text>
@@ -863,11 +862,11 @@ class Lives extends Component<Props, State> {
                                 <Text
                                   style={{
                                     padding: 5,
-                                    borderColor: ApiUtils.getColor(),
+                                    borderColor: 'black',
                                     borderWidth: 2,
                                     // marginTop: -8,
                                     fontWeight: 'bold',
-                                    color: ApiUtils.getColor(),
+                                    color: 'black',
                                   }}>
                                   Voir
                                 </Text>
@@ -934,7 +933,7 @@ class Lives extends Component<Props, State> {
                                   <Text
                                     style={{
                                       fontWeight: 'bold',
-                                      color: ApiUtils.getColor(),
+                                      color: 'black',
                                     }}>
                                     {this.getSport(item.idSport)}
                                   </Text>
@@ -1001,13 +1000,13 @@ class Lives extends Component<Props, State> {
                                         <Icon
                                           name="trophy"
                                           type="FontAwesome5"
-                                          color={ApiUtils.getColor()}
+                                          color={'black'}
                                           fontSize={13}
                                           style={{
                                             fontSize: 12,
                                             marginLeft: 10,
                                             alignSelf: 'center',
-                                            color: ApiUtils.getColor(),
+                                            color: 'black',
                                           }}
                                         />
                                       </View>
@@ -1069,7 +1068,7 @@ class Lives extends Component<Props, State> {
                                       <Text style={{width: 200}}>
                                         <Text
                                           style={{
-                                            color: ApiUtils.getColor(),
+                                            color: 'black',
                                             fontWeight: 'bold',
                                           }}>
                                           {this.getSport(item.idSport)}
@@ -1202,20 +1201,20 @@ class Lives extends Component<Props, State> {
                           onValueChange={this.onValueSportChange.bind(this)}
                           placeholder={'Choisissez votre sport'}
                           placeholderStyle={{
-                            color: ApiUtils.getColor(),
+                            color: 'black',
                           }}
-                          placeholderIconColor={ApiUtils.getColor()}
-                          textStyle={{color: ApiUtils.getColor()}}
+                          placeholderIconColor={'black'}
+                          textStyle={{color: 'black'}}
                           itemStyle={{
-                            color: ApiUtils.getColor(),
+                            color: 'black',
                             marginLeft: 0,
                             paddingLeft: 10,
-                            borderBottomColor: ApiUtils.getColor(),
+                            borderBottomColor: 'black',
                             borderBottomWidth: 1,
                           }}
                           itemTextStyle={{
-                            color: ApiUtils.getColor(),
-                            borderBottomColor: ApiUtils.getColor(),
+                            color: 'black',
+                            borderBottomColor: 'black',
                             borderBottomWidth: 1,
                           }}>
                           <Picker.Item
@@ -1409,6 +1408,14 @@ const styles = StyleSheet.create({
     right: 20,
     bottom: 90,
     justifyContent: 'center',
+    elevation: 20,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 5,
+    },
+    shadowOpacity: 0.34,
+    shadowRadius: 6.27,
   },
   plusButtonLogo: {
     height: 30,

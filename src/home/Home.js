@@ -47,6 +47,7 @@ import {
   TemplateIdOrganisation,
   TemplateIsPaying,
   textAutoBackgroundColor,
+  textAutoSecondColor,
 } from '../globalsModifs';
 
 const mapStateToProps = (state) => {
@@ -801,7 +802,7 @@ class Home extends Component {
                       this.state.followCode == '' &&
                       this.state.selectedFolocode == -1
                         ? {backgroundColor: 'transparent'}
-                        : {backgroundColor: ApiUtils.getColor()},
+                        : {backgroundColor: textAutoBackgroundColor},
                     ]}
                     onPress={() => this.onClickSendFollowCode()}
                     disabled={
@@ -816,7 +817,7 @@ class Home extends Component {
                           this.state.followCode == '' &&
                           this.state.selectedFolocode == -1
                             ? 'black'
-                            : 'white',
+                            : textAutoSecondColor == '#000000' ? 'white' : textAutoSecondColor,
                       }}>
                       CONNEXION
                     </Text>

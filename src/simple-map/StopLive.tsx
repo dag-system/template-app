@@ -373,20 +373,20 @@ export default function StopActivity(props: Props) {
               onValueChange={(value) => onValueSportChange(value)}
               placeholder={'Choisissez votre sport'}
               placeholderStyle={{
-                color: ApiUtils.getColor(),
+                color: 'black',
               }}
-              placeholderIconColor={ApiUtils.getColor()}
-              textStyle={{color: ApiUtils.getColor()}}
+              placeholderIconColor={'black'}
+              textStyle={{color: 'black'}}
               itemStyle={{
-                color: ApiUtils.getColor(),
+                color: 'black',
                 marginLeft: 0,
                 paddingLeft: 10,
-                borderBottomColor: ApiUtils.getColor(),
+                borderBottomColor: 'black',
                 borderBottomWidth: 1,
               }}
               itemTextStyle={{
-                color: ApiUtils.getColor(),
-                borderBottomColor: ApiUtils.getColor(),
+                color: 'black',
+                borderBottomColor: 'black',
                 borderBottomWidth: 1,
               }}>
               <Picker.Item label="Choisissez votre sport" value="-1" />
@@ -489,11 +489,11 @@ export default function StopActivity(props: Props) {
                 paddingHorizontal: 50,
                 elevation: 0,
                 alignSelf: 'center',
-                borderColor: isErrorFormStop() ? 'black' : ApiUtils.getColor(),
+                borderColor: isErrorFormStop() ? 'black' : 'black',
                 borderWidth: 1,
                 backgroundColor: isErrorFormStop()
                   ? 'transparent'
-                  : ApiUtils.getColor(),
+                  : 'black',
               }}
               onPress={() => onClickValidateStop()}
               disabled={isErrorFormStop()}>

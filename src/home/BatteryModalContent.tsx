@@ -175,7 +175,7 @@ class BatteryModalContent extends Component {
           style={{
             textAlign: 'center',
             fontWeight: 'bold',
-            color: ApiUtils.getColor(),
+            color: textAutoSecondColor,
             textDecorationLine: 'underline',
             marginTop: 30,
           }}>

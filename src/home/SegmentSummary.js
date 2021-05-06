@@ -471,11 +471,11 @@ class SegmentSummary extends Component {
                     height: 45,
                     marginTop: 15,
                     backgroundColor:
-                      ApiUtils.getBackgroundColor() === '#FFFFFF'
+                      ApiUtils.getBackgroundColor().toUpperCase() === '#FFFFFF'
                         ? 'black'
                         : ApiUtils.getBackgroundColor(),
                     color:
-                      ApiUtils.getBackgroundColor() === '#FFFFFF'
+                    ApiUtils.getBackgroundColor().toUpperCase() === '#FFFFFF'
                         ? 'white'
                         : textAutoBackgroundColor,
                     borderWidth: 1,

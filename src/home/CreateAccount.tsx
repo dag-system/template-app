@@ -566,20 +566,20 @@ class CreateAccount extends ValidationComponent {
                         onValueChange={(value) => this.onValueDayddn(value)}
                         placeholder={'Jour'}
                         placeholderStyle={{
-                          color: ApiUtils.getBackgroundColor(),
+                          color: 'black',
                         }}
-                        placeholderIconColor={ApiUtils.getBackgroundColor()}
-                        textStyle={{color: ApiUtils.getBackgroundColor()}}
+                        placeholderIconColor={'black'}
+                        textStyle={{color: 'black'}}
                         itemStyle={{
-                          color: ApiUtils.getBackgroundColor(),
+                          color: 'black',
                           marginLeft: 0,
                           paddingLeft: 10,
-                          borderBottomColor: ApiUtils.getBackgroundColor(),
+                          borderBottomColor: 'black',
                           borderBottomWidth: 1,
                         }}
                         itemTextStyle={{
-                          color: ApiUtils.getBackgroundColor(),
-                          borderBottomColor: ApiUtils.getBackgroundColor(),
+                          color: 'black',
+                          borderBottomColor: 'black',
                           borderBottomWidth: 1,
                         }}>
                         {this.state.days.map((d) => {
@@ -598,20 +598,20 @@ class CreateAccount extends ValidationComponent {
                         onValueChange={(value) => this.onValueMonthddn(value)}
                         placeholder={'Mois'}
                         placeholderStyle={{
-                          color: ApiUtils.getBackgroundColor(),
+                          color: 'black',
                         }}
-                        placeholderIconColor={ApiUtils.getBackgroundColor()}
-                        textStyle={{color: ApiUtils.getBackgroundColor()}}
+                        placeholderIconColor={'black'}
+                        textStyle={{color: 'black'}}
                         itemStyle={{
-                          color: ApiUtils.getBackgroundColor(),
+                          color: 'black',
                           marginLeft: 0,
                           paddingLeft: 10,
-                          borderBottomColor: ApiUtils.getBackgroundColor(),
+                          borderBottomColor: 'black',
                           borderBottomWidth: 1,
                         }}
                         itemTextStyle={{
-                          color: ApiUtils.getBackgroundColor(),
-                          borderBottomColor: ApiUtils.getBackgroundColor(),
+                          color: 'black',
+                          borderBottomColor: 'black',
                           borderBottomWidth: 1,
                         }}>
                         {this.state.monthsString.map((month) => {
@@ -631,20 +631,20 @@ class CreateAccount extends ValidationComponent {
                         onValueChange={(value) => this.onValueYearddn(value)}
                         placeholder={'Année'}
                         placeholderStyle={{
-                          color: ApiUtils.getBackgroundColor(),
+                          color: 'black',
                         }}
-                        placeholderIconColor={ApiUtils.getBackgroundColor()}
-                        textStyle={{color: ApiUtils.getBackgroundColor()}}
+                        placeholderIconColor={'black'}
+                        textStyle={{color: 'black'}}
                         itemStyle={{
-                          color: ApiUtils.getBackgroundColor(),
+                          color: 'black',
                           marginLeft: 0,
                           paddingLeft: 10,
-                          borderBottomColor: ApiUtils.getBackgroundColor(),
+                          borderBottomColor: 'black',
                           borderBottomWidth: 1,
                         }}
                         itemTextStyle={{
-                          color: ApiUtils.getBackgroundColor(),
-                          borderBottomColor: ApiUtils.getBackgroundColor(),
+                          color: 'black',
+                          borderBottomColor: 'black',
                           borderBottomWidth: 1,
                         }}>
                         {this.state.years.map((year) => {

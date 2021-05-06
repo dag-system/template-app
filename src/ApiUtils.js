@@ -71,11 +71,10 @@ var ApiUtils = {
   getColor() {
     let color = this.getBackgroundColor();
 
-    if (this.getBackgroundColor() == '#FFFFFF') {
+    if (this.getBackgroundColor() == '#FFFFFF'  || this.getBackgroundColor() == '#ffffff') {
       color = this.getSecondColor();
     }
-
-    if (color == '#FFFFFF') {
+    if (color == '#FFFFFF' || color == '#ffffff') {
       return '#000000';
     }
 
