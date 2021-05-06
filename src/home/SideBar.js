@@ -69,7 +69,8 @@ export default class Sidebar extends Component {
   }
 
   onStartDonate = () => {
-    this.setState({isVisibleDonateModal: true});
+    // this.setState({isVisibleDonateModal: true});
+    this.openLink("https://www.attrap-reves.org/");
   };
 
   onCloseDonate = () => {
@@ -351,7 +352,7 @@ export default class Sidebar extends Component {
             </View>
           </TouchableHighlight>
         ) : null}
-        {TemplateHasAppDonation  && Platform.OS !='ios' ? (
+        {TemplateHasAppDonation ? (
           <TouchableOpacity
             onPress={() => this.onStartDonate()}
             style={{width: '100%'}}>
@@ -368,7 +369,7 @@ export default class Sidebar extends Component {
                 style={[styles.icon, {color: textAutoBackgroundColor}]}
               />
               <Text style={[styles.menuText, {color: textAutoBackgroundColor}]}>
-                Faire un don
+                Soutenez l'association Attrap'rêves
               </Text>
             </View>
           </TouchableOpacity>
