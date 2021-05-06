@@ -31,7 +31,7 @@ import md5 from 'md5';
 import BackgroundGeolocation from 'react-native-background-geolocation';
 import {connect} from 'react-redux';
 import DeviceInfo from 'react-native-device-info';
-
+import Logobg from '../assets/logobg.png';
 import ApiUtils from '../ApiUtils';
 import Logo from '../assets/logo.png';
 import Loading from './Loading';
@@ -43,6 +43,7 @@ import VersionCheck from 'react-native-version-check';
 import moment from 'moment';
 
 import {
+  TemplateBackgroundColor,
   TemplateExpirationDate,
   TemplateIdOrganisation,
   TemplateIsPaying,
@@ -532,7 +533,7 @@ class Home extends Component {
                   alignItems: 'center',
                   backgroundColor: ApiUtils.getBackgroundColor(),
                 }}>
-                <ImageBackground style={{width: '100%', minHeight: 10}}>
+                <ImageBackground style={{width: '100%', minHeight: 10}}    source={Logobg}>
                   <TouchableHighlight
                     underlayColor="transparent"
                     onPress={() => this.pressLogo()}
@@ -657,7 +658,7 @@ class Home extends Component {
                     ]}>
                     Version V {VersionCheck.getCurrentVersion()}
                   </Text>
-                  <Text
+                  {/* <Text
                     style={[
                       {
                         color: textAutoBackgroundColor,
@@ -670,7 +671,8 @@ class Home extends Component {
                     {moment(TemplateExpirationDate.toISOString()).format(
                       'DD/MM/YYYY',
                     )}
-                  </Text>
+                  </Text> */}
+                  <View style={{paddingBottom : 100}}></View>
                 </ImageBackground>
               </View>
             </KeyboardAvoidingView>
@@ -802,7 +804,7 @@ class Home extends Component {
                       this.state.followCode == '' &&
                       this.state.selectedFolocode == -1
                         ? {backgroundColor: 'transparent'}
-                        : {backgroundColor: textAutoBackgroundColor},
+                        : {backgroundColor: TemplateBackgroundColor},
                     ]}
                     onPress={() => this.onClickSendFollowCode()}
                     disabled={

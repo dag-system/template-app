@@ -40,9 +40,9 @@ export default function MapCarousel() {
     let totalTime = 0;
     let totalDplus = 0;
 
-    challenges?.forEach((c) => {
-      loadSegment(c.idChallenge);
-    });
+    // challenges?.forEach((c) => {
+    //   loadSegment(c.idChallenge);
+    // });
     lives.forEach((live) => {
       let infos = getLiveStatsInfo(live.statsLive);
       if (infos != null) {

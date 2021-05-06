@@ -280,10 +280,10 @@ class BatteryModalContent extends Component {
                 <Text> 1. Aller dans "Réglages"</Text>
                 <Text> 2. Cliquer sur "Batterie"</Text>
                 <Text> 3. Cliquer sur "Lancement d'application"</Text>
-                <Text>4. Rechercher et désactiver l’appli « My Cross »</Text>
+                <Text>4. Rechercher et désactiver l’appli </Text>
                 <Text>5. Cliquer sur OK en vérifiant que tout soit activé</Text>
                 <Text>
-                  6. Retourner dans les reglages batterie et désactiver
+                  6. Retourner dans les réglages batterie et désactiver
                   l'économiseur de batterie
                 </Text>
 
@@ -296,7 +296,7 @@ class BatteryModalContent extends Component {
                 <Text> 2. Cliquer sur "Maintenance de l'appareil"</Text>
                 <Text> 3. Cliquer sur "Batterie"</Text>
                 <Text> 5. Cliquer sur "Ajouter des applications"</Text>
-                <Text>6.Sélectionner l’appli « My Cross »</Text>
+                <Text>6.Sélectionner l’appli </Text>
                 <Text>Cliquer sur "Terminé"</Text>
 
                 <Text style={{fontWeight: 'bold', marginTop: 10}}>
@@ -313,8 +313,8 @@ class BatteryModalContent extends Component {
                 <Text>7. Désactiver "Désactiver auto. applis inutilis." </Text>
                 <Text>8. Cliquer sur "Applications en veille" </Text>
                 <Text>
-                  9. Vérifier que l'application l’appli « My Cross » ne soit pas
-                  dans la liste, sinon supprimer-là à l'aide de la corbeille en
+                  9. Vérifier que l'application l’appli  ne soit pas
+                  dans la liste, si non supprimer-là à l'aide de la corbeille en
                   haut à droite
                 </Text>
 
@@ -324,13 +324,13 @@ class BatteryModalContent extends Component {
                 </Text>
                 <Text>
                   Par défaut, sur ce modèle, l’économiseur de batterie est
-                  désactivé. Sinon, voici la procédure !
+                  désactivé. Si non, voici la procédure !
                 </Text>
                 <Text>1. Aller dans “Paramètres”</Text>
                 <Text>2. Cliquer sur “Batterie”</Text>
                 <Text>3. Cliquer sur “Détails”</Text>
-                <Text>4. Cliquer sur l’appli « My Cross »</Text>
-                <Text>5. Désactivé l’appli « My Cross »</Text>
+                <Text>4. Cliquer sur l’appli </Text>
+                <Text>5. Désactivé l’appli </Text>
 
                 <Text style={{fontWeight: 'bold', marginTop: 10}}>
                   HONOR (8, 9, 10, …)
@@ -355,7 +355,7 @@ class BatteryModalContent extends Component {
                 </Text>
                 <Text>1. Aller dans "Paramètres"</Text>
                 <Text>2. Cliquer sur "Gérer les applications"</Text>
-                <Text>3. Rechercher et cliquer sur l’appli « My Cross »</Text>
+                <Text>3. Rechercher et cliquer sur l’appli </Text>
                 <Text>4. Activer "Démarrage automatique"</Text>
                 <Text>5. Une fenêtre s'ouvre, cliquer sur "OK"</Text>
                 <Text>6. Cliquer ensuite sur "Économiseur de batterie"</Text>
@@ -375,7 +375,7 @@ class BatteryModalContent extends Component {
                 <Text>6. Désactiver "Nettoyage suspendu"</Text>
                 <Text>7. Retourner sur la page précédente (Réglages)</Text>
                 <Text>8. Cliquer sur "Gestionnaire de démarrage"</Text>
-                <Text>9. Activer l’appli « My Cross »</Text>
+                <Text>9. Activer l’appli </Text>
                 <Text>10. Cliquer sur "Autoriser"</Text>
 
                 <Text style={{fontWeight: 'bold', marginTop: 10}}>
@@ -391,7 +391,7 @@ class BatteryModalContent extends Component {
                 <Text>
                   8. Cliquer sur "White-list des apps en arrière-plan"
                 </Text>
-                <Text>9. Activer l’appli « My Cross » </Text>
+                <Text>9. Activer l’appli  </Text>
 
                 <Text style={{fontWeight: 'bold', marginTop: 10}}>
                   ONEPLUS (6 et plus...)
@@ -399,7 +399,7 @@ class BatteryModalContent extends Component {
                 <Text>1. Aller dans "Paramètres"</Text>
                 <Text>2. Cliquer sur "Batterie"</Text>
                 <Text>3. Cliquer sur "Optimisation de la batterie"</Text>
-                <Text>4. Sélectionner l’appli « My Cross »</Text>
+                <Text>4. Sélectionner l’appli </Text>
                 <Text>5. Sélectionner "Ne pas optimiser"</Text>
               </View>
             ) : null}
@@ -477,7 +477,7 @@ class BatteryModalContent extends Component {
               Voici la procédure pour modifier les paramètres de localisation :
             </Text>
             <Text>1. Ouvrez les paramètres de votre téléphone</Text>
-            <Text>2. Accédez à "My Cross {'>'} Position"</Text>
+            <Text>2. Accédez à l'appli {'>'} Position"</Text>
             <Text>
               3. Sélectionnez “Lorsque l’app est active” et réglez “Position
               exacte” sur ON (voir capture d'écran ci-dessous)
@@ -503,7 +503,7 @@ class BatteryModalContent extends Component {
               Voici la procédure pour modifier les paramètres de localisation :
             </Text>
             <Text>1. Ouvrez les paramètres de votre téléphone</Text>
-            <Text>2. Accédez à "My Cross {'>'} Position"</Text>
+            <Text>2. Accédez à {'>'} Position"</Text>
             <Text>
               3. Sélectionnez “Lorsque l’app est active” (voir capture d'écran
               ci-dessous)

@@ -25,7 +25,7 @@ import Sidebar from './SideBar';
 import Logo from '../assets/logo.png';
 import Rotate from '../assets/rotate.png';
 import AutoHeightWebView from 'react-native-autoheight-webview';
-
+import Logovdm from '../assets/sponsor_logo4.png';
 import {TemplateSiteLink, textAutoBackgroundColor} from './../globalsModifs';
 
 const mapStateToProps = () => {
@@ -114,10 +114,18 @@ class Classement extends Component<Props, State> {
                 </Left>
                 <Body style={{flex: 0}} />
                 <Right style={{flex: 1}}>
+                <Text style={{color: textAutoBackgroundColor}}>
+                    Course des Jeux du val de marne
+                  </Text>
                   <Image
                     resizeMode="contain"
-                    source={Logo}
-                    style={styles.logo}
+                    source={Logovdm}
+                    style={{
+                      width: '50%',
+                      height: 50,
+                      marginRight: '10%',
+                      marginLeft: 15,
+                    }}
                   />
                 </Right>
               </Header>

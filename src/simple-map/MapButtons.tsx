@@ -635,24 +635,25 @@ export default function MapButtons(props: Props) {
             )}
           </TouchableOpacity>
         ) : (
-          <TouchableOpacity
-            onPress={() => onOpenTraceModal(true)}
-            style={{
-              alignSelf: 'center',
-              backgroundColor: 'white',
-              paddingVertical: 5,
-              paddingHorizontal: 10,
-              borderRadius: 300,
-              justifyContent: 'center',
-              display: 'flex',
-              flexDirection: 'row',
-              marginLeft: 20,
-              elevation: 20,
-            }}>
-            <Icon name="eye" style={[{fontSize: 22}]} type="FontAwesome5" />
-            <Text style={{marginLeft: 10}}>Démo</Text>
-            {/* </View> */}
-          </TouchableOpacity>
+          null
+          // <TouchableOpacity
+          //   onPress={() => onOpenTraceModal(true)}
+          //   style={{
+          //     alignSelf: 'center',
+          //     backgroundColor: 'white',
+          //     paddingVertical: 5,
+          //     paddingHorizontal: 10,
+          //     borderRadius: 300,
+          //     justifyContent: 'center',
+          //     display: 'flex',
+          //     flexDirection: 'row',
+          //     marginLeft: 20,
+          //     elevation: 20,
+          //   }}>
+          //   <Icon name="eye" style={[{fontSize: 22}]} type="FontAwesome5" />
+          //   <Text style={{marginLeft: 10}}>Démo</Text>
+          //   {/* </View> */}
+          // </TouchableOpacity>
         )}
       </View>
       {/******** modal3 : finish LIVE *****************/}

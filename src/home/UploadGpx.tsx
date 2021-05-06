@@ -32,6 +32,7 @@ import ErrorMessage from './ErrorMessage';
 import {TextInput} from 'react-native-gesture-handler';
 import DocumentPicker from 'react-native-document-picker';
 import DefaultProps from '../models/DefaultProps';
+import Logovdm from '../assets/sponsor_logo4.png';
 
 import {TemplateSportLive, textAutoBackgroundColor} from '../globalsModifs';
 
@@ -335,7 +336,19 @@ class UploadGpx extends Component<Props, State> {
             </Left>
             <Body style={{flex: 0}} />
             <Right style={{flex: 1}}>
-              <Image resizeMode="contain" source={Logo} style={styles.logo} />
+              <Text style={{color: textAutoBackgroundColor}}>
+                Course des Jeux du val de marne
+              </Text>
+              <Image
+                resizeMode="contain"
+                source={Logovdm}
+                style={{
+                  width: '50%',
+                  height: 50,
+                  marginRight: '10%',
+                  marginLeft: 15,
+                }}
+              />
             </Right>
           </Header>
           <Content style={styles.body} scrollEnabled={true}>

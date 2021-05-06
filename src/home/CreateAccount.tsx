@@ -6,6 +6,7 @@ import {
   Image,
   Switch,
   ActivityIndicator,
+  ImageBackground,
 } from 'react-native';
 import {
   Container,
@@ -34,6 +35,8 @@ import {connect} from 'react-redux';
 import {KeyboardAvoidingView, Dimensions} from 'react-native';
 import VersionCheck from 'react-native-version-check';
 import GlobalStyles from '../styles';
+import Logovdm from '../assets/sponsor_logo4.png';
+import Logobg from '../assets/logobg.png';
 
 import {
   TemplateNameAsk,
@@ -54,6 +57,7 @@ import {
   TemplateChallengeAutreName,
   TemplateIsPaying,
   IsDemo,
+  textAutoBackgroundColor,
 } from './../globalsModifs';
 
 const mapStateToProps = (state) => {
@@ -403,12 +407,28 @@ class CreateAccount extends ValidationComponent {
                 />
               </Button>
             </Left>
-            <Body>
-              <Image resizeMode="contain" source={Logo} style={styles.logo} />
-            </Body>
-            <Right></Right>
+            {/* <Body></Body> */}
+            <Right style={{flex: 1}}>
+              <Text style={{color: textAutoBackgroundColor, width: '67%'}}>
+                Course des Jeux du val de marne
+              </Text>
+              <Image
+                resizeMode="contain"
+                source={Logovdm}
+                style={{
+                  width: '40%',
+                  height: 50,
+                  marginRight: '10%',
+                  marginLeft: 15,
+                }}
+              />
+            </Right>
           </Header>
           <Content>
+          <ImageBackground
+              source={Logobg}
+              style={{width: '100%', minHeight: 10}}
+              resizeMode="cover">
             <KeyboardAvoidingView>
               <Form>
                 {this.state.isNameAsk ? (
@@ -692,8 +712,8 @@ class CreateAccount extends ValidationComponent {
                       value={this.state.acceptChallengeTelUtilisateur == 1}
                     />
                     <Text style={{marginLeft: 10}}>
-                      J’accepte l’utilisation de mon numéro de téléphone pour le
-                      tirage au sort des lots
+                    J’accepte que mon numéro de téléphone soit utilisé a des
+                        fins commerciales.
                     </Text>
                   </View>
                 ) : null}
@@ -875,8 +895,9 @@ class CreateAccount extends ValidationComponent {
                       })
                     }>
                     <Text style={{marginLeft: 10}}>
-                      J'accepte que mes données personnelles soient utilisées à
-                      des fins d'informations
+                    J’accepte que le Département m’envoie des informations
+                        et le cas échéant, me contacte pour toute action ou
+                        manifestation départementale.
                     </Text>
                   </TouchableOpacity>
                 </View>
@@ -889,8 +910,9 @@ class CreateAccount extends ValidationComponent {
                       fontSize: 18,
                       color: 'red',
                     }}>
-                    Vous devez acceptez que vos données soient utilisées à des
-                    fins d'informations
+                    Vous devez acceptez que le Département m’envoie des informations
+                        et le cas échéant, me contacte pour toute action ou
+                        manifestation départementale.
                   </Text>
                 ) : null}
               </Form>
@@ -951,6 +973,7 @@ class CreateAccount extends ValidationComponent {
                 </Text>
               )}
             </KeyboardAvoidingView>
+            </ImageBackground>
           </Content>
         </Container>
       </Root>
@@ -960,7 +983,7 @@ class CreateAccount extends ValidationComponent {
 
 const styles = StyleSheet.create({
   header: {
-    backgroundColor: 'white',
+    backgroundColor: ApiUtils.getBackgroundColor(),
     // backgroundColor: ApiUtils.getColor(),
     width: '100%',
   },

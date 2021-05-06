@@ -30,8 +30,8 @@ import ApiUtils from '../ApiUtils';
 import defaultMessages from './defaultMessages';
 import GlobalStyles from '../styles';
 import ValidationComponent from 'react-native-form-validator';
-
-import {TemplateIsPaying} from './../globalsModifs';
+import Logovdm from '../assets/sponsor_logo4.png';
+import {TemplateIsPaying, textAutoBackgroundColor} from './../globalsModifs';
 import {Sponsors} from './Sponsors';
 
 const mapStateToProps = (state) => {
@@ -219,10 +219,23 @@ class ForgotPassword extends ValidationComponent {
                 />
               </Button>
             </Left>
-            <Body>
-              <Image resizeMode="contain" source={Logo} style={styles.logo} />
-            </Body>
-            <Right></Right>
+            <Body />
+            <Right style={{flex: 1}}>
+              <Text style={{color: textAutoBackgroundColor}}>
+                Course des Jeux du val de marne
+              </Text>
+              <Image
+                resizeMode="contain"
+                source={Logovdm}
+                style={{
+                  width: '50%',
+                  height: 50,
+                  marginRight: '80%',
+                  marginLeft: 15,
+                }}
+              />
+            </Right>
+
           </Header>
 
           <View style={styles.loginButtonSection}>
@@ -405,8 +418,8 @@ class ForgotPassword extends ValidationComponent {
 
 const styles = StyleSheet.create({
   header: {
-    backgroundColor: 'white',
-    // backgroundColor: ApiUtils.getBackgroundColor(),
+    // backgroundColor: 'white',
+    backgroundColor: ApiUtils.getBackgroundColor(),
     width: '100%',
   },
   title: {
