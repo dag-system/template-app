@@ -212,7 +212,7 @@ export default class Sidebar extends Component {
                       : textAutoBackgroundColor,
                 },
               ]}>
-              Classement
+              Liste des participants
             </Text>
           </View>
         </TouchableHighlight>
@@ -261,53 +261,51 @@ export default class Sidebar extends Component {
           </View>
         </TouchableHighlight> */}
 
-        {TemplateArrayImagesPartenairesPath.length > 0 ? (
-          <TouchableHighlight
-            underlayColor="rgba(255,255,255,1,0.6)"
-            onPress={() => this.onClickNavigate('Partenaires')}
+        <TouchableHighlight
+          underlayColor="rgba(255,255,255,1,0.6)"
+          onPress={() => this.onClickNavigate('Partenaires')}
+          style={{
+            width: '100%',
+            backgroundColor:
+              this.props.selected == 'Partenaires' ? '#E9E9E9' : 'transparent',
+          }}>
+          <View
             style={{
-              width: '100%',
-              backgroundColor:
-                this.props.selected == 'Partenaires'
-                  ? '#E9E9E9'
-                  : 'transparent',
+              display: 'flex',
+              flexDirection: 'row',
+              justifyContent: 'flex-start',
+              alignItems: 'center',
+              flexWrap: 'wrap',
+              padding: 10,
             }}>
-            <View
-              style={{
-                display: 'flex',
-                flexDirection: 'row',
-                justifyContent: 'flex-start',
-                flexWrap: 'wrap',
-                padding: 10,
-              }}>
-              <Icon
-                name="handshake"
-                type="FontAwesome5"
-                style={[
-                  styles.icon,
-                  {
-                    color:
-                      this.props.selected == 'Partenaires'
-                        ? textAutoSecondColor
-                        : textAutoBackgroundColor,
-                  },
-                ]}
-              />
-              <Text
-                style={[
-                  styles.menuText,
-                  {
-                    color:
-                      this.props.selected == 'Partenaires'
-                        ? textAutoSecondColor
-                        : textAutoBackgroundColor,
-                  },
-                ]}>
-                Partenaires
-              </Text>
-            </View>
-          </TouchableHighlight>
-        ) : null}
+            <Icon
+              name="handshake"
+              type="FontAwesome5"
+              style={[
+                styles.icon,
+                {
+                  color:
+                    this.props.selected == 'Partenaires'
+                      ? textAutoSecondColor
+                      : textAutoBackgroundColor,
+                },
+              ]}
+            />
+            <Text
+              style={[
+                styles.menuText,
+                {
+                  color:
+                    this.props.selected == 'Partenaires'
+                      ? textAutoSecondColor
+                      : textAutoBackgroundColor,
+                  width: '75%',
+                },
+              ]}>
+              Les Jeux du Val-De-Marne, c'est quoi ?
+            </Text>
+          </View>
+        </TouchableHighlight>
 
         {TemplateHasAppDonation ? (
           <TouchableOpacity

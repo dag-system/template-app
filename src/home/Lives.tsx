@@ -966,7 +966,7 @@ class Lives extends Component<Props, State> {
                   alignItems: 'center',
                 }}>
                 <Text style={{color: textAutoBackgroundColor}}>
-                  Course des jeux du val de marne
+                  Course des jeux du Val-de-Marne
                 </Text>
                 <Image
                   resizeMode="contain"

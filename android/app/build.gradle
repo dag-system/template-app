@@ -131,11 +131,11 @@ android {
     }
 
     defaultConfig {
-            applicationId "com.dag.templateappname.app"
+            applicationId "com.dag.jeuxduvaldemarne.app"
             minSdkVersion rootProject.ext.minSdkVersion
             targetSdkVersion rootProject.ext.targetSdkVersion
-            versionCode 547
-            versionName "1.0.36"
+            versionCode 548
+            versionName "1.0.37"
     }
     splits {
         abi {

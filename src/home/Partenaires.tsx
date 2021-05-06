@@ -103,7 +103,27 @@ class Partenaires extends Component<Props, State> {
             )}
 
             <Content style={{padding: 10, paddingTop: 20}} scrollEnabled={true}>
-              <Text style={{fontWeight: 'bold'}}>Nos partenaires</Text>
+              <Text style={{fontWeight: 'bold', marginBottom: 15}}>
+                Les Jeux du Val-de-Marne, c'est quoi ?
+              </Text>
+              <Text style={{textAlign: 'justify', marginBottom: 10}}>
+                100 000 participants chaque année, les Jeux du Val-de-Marne sont
+                organisés par le Conseil départemental du Val-de-Marne en
+                partenariat avec le CDOS du Val-de-Marne, les commités sportifs
+                départementaux, les associations sportives locals, les communes
+                du Val-de-Marne, l'inspection académique (UNSS - USEP - le
+                Service départemental à la Jeunesse, à l'engagement et aux
+                sports).
+              </Text>
+              <Text style={{textAlign: 'justify', marginBottom: 10}}>
+                Les Jeux permettent l'expression et la promotion de toutes les
+                disciplines tout en réaffirmant les valeurs et l'éthique
+                sportive. Ils offrent à tous les Val-de-Marnais, la possibilité
+                de pratiquer gratuitement du sport.
+              </Text>
+              <Text style={{textAlign: 'justify', marginBottom: 100}}>
+                Pourquoi pas vous ?
+              </Text>
 
               {TemplateArrayImagesPartenairesPath.map((image) => {
                 return (

@@ -823,8 +823,9 @@ class Home extends Component {
 
                 <View style={{marginBottom: 0}} />
               </View>
-
-              <Sponsors />
+              <View style={{position: 'absolute', bottom: 0}}>
+                <Sponsors />
+              </View>
             </Modal>
 
             <Modal

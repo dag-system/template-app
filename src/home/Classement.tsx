@@ -117,7 +117,7 @@ class Classement extends Component<Props, State> {
                 <Body style={{flex: 0}} />
                 <Right style={{flex: 1}}>
                   <Text style={{color: textAutoBackgroundColor}}>
-                    Course des jeux du val de marne
+                    Course des jeux du Val-de-Marne
                   </Text>
                   <Image
                     resizeMode="contain"
@@ -143,7 +143,7 @@ class Classement extends Component<Props, State> {
                   marginBottom: 10,
                   textTransform: 'uppercase',
                 }}>
-                Classement du challenge de votre application
+                Liste des participants de votre application
               </Text>
 
               {TemplateSiteLink !== 'www.dag-system.com' ? (
@@ -154,8 +154,8 @@ class Classement extends Component<Props, State> {
                       textAlign: 'center',
                       color: ApiUtils.getBackgroundColor(),
                     }}>
-                    Retrouvez tous les classements sur notre site internet : A
-                    RENTRER
+                    Retrouvez tous les participants sur notre site internet :{' '}
+                    {TemplateSiteLink}
                   </Text>
                 </TouchableOpacity>
               ) : null}
@@ -176,7 +176,7 @@ class Classement extends Component<Props, State> {
               <AutoHeightWebView
                 source={{
                   uri:
-                    'https://www.folomi.fr/classement/classementTemplate.html?organisation=' +
+                    'https://folomi.fr/classement/inscriptionTemplate.html?organisation=' +
                     ApiUtils.getOrganisation() +
                     '&color=' +
                     ApiUtils.getBackgroundColor().split('#')[1],

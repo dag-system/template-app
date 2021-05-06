@@ -407,7 +407,7 @@ class CreateAccount extends ValidationComponent {
             <Body style={{flex: 0}} />
             <Right style={{flex: 1}}>
               <Text style={{color: textAutoBackgroundColor, width: '67%'}}>
-                Course des jeux du val de marne
+                Course des jeux du Val-de-Marne
               </Text>
               <Image
                 resizeMode="contain"

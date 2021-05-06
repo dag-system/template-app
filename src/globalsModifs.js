@@ -43,11 +43,13 @@ export const TemplateIsPaying = false;
 export const TemplateChallengeAutreName = 'Template Test Autre';
 
 export const TemplateSportLive = [
-  {idSport: 13, sportName: 'MARCHE'},
-  {idSport: 24, sportName: 'Course à pied'},
-  {idSport: 27, sportName: 'Course à pied'},
+  {idSport: 36, sportName: 'Marche 2km'},
+  {idSport: 37, sportName: 'Marche 5km'},
+  {idSport: 38, sportName: 'Marche 9.4km'},
+  {idSport: 39, sportName: 'Course à pied 2km'},
+  {idSport: 40, sportName: 'Course à pied 5km'},
+  {idSport: 41, sportName: 'Course à pied 9.4km'},
 ];
-export const TemplateTrace = [{label: 'Ne pas afficher ', id: '616'}];
 
 export const TemplateArrayImagesSponsorPath = [
   require('./assets/sponsor_logo1.png'),

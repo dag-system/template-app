@@ -168,7 +168,7 @@ class Help extends Component {
                 <Body style={{flex: 0}} />
                 <Right style={{flex: 1}}>
                   <Text style={{color: textAutoBackgroundColor}}>
-                    Course des jeux du val de marne
+                    Course des jeux du Val-de-Marne
                   </Text>
                   <Image
                     resizeMode="contain"
@@ -198,7 +198,7 @@ class Help extends Component {
                 Bienvenue sur l’application officielle de la Course des Jeux du
                 Val-de-Marne
               </Text>
-              <Text style={{marginTop: 10}}>
+              <Text style={{marginTop: 10, textAlign: 'justify'}}>
                 Félicitations !!! Tu vas pouvoir participer à une course
                 organisée dans le cadre des 55ès Jeux du Val-de-Marne, proposée
                 par le Département du Val-de-Marne. Tu contribueras activement
@@ -206,7 +206,7 @@ class Help extends Component {
                 kilomètres en courant ou en marchant afin de relier
                 virtuellement le Val-de-Marne à Tokyo
               </Text>
-              <Text style={{marginTop: 10}}>
+              <Text style={{marginTop: 10, textAlign: 'justify'}}>
                 Plusieurs distances te sont proposées : 2 , 5 ou 9.4 km mais
                 réalise ce dont tu te sens capable sans contrainte de temps. Tu
                 pourras courir pendant toute la quinzaine des Jeux du
