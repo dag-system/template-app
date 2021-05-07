@@ -793,7 +793,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 5D9F6EC227A0926ABB7AB96F /* Pods-Folomi.debug.xcconfig */;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIconInsa;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = "Folomi/My Cross.entitlements";
 				CODE_SIGN_IDENTITY = "Apple Development";
@@ -826,7 +826,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 3172BF9AA1F12AE3D568A64A /* Pods-Folomi.release.xcconfig */;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIconInsa;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = "Folomi/My Cross.entitlements";
 				CODE_SIGN_IDENTITY = "Apple Development";
