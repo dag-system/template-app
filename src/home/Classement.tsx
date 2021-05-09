@@ -94,6 +94,7 @@ class Classement extends Component<Props, State> {
           <Sidebar
             navigation={this.props.navigation}
             drawer={this.drawer}
+            closeDrawer={this.closeDrawer}
             selected="Classement"
           />
         }>

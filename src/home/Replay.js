@@ -209,6 +209,7 @@ class Replay extends Component {
       .then(ApiUtils.checkStatus)
       .then((response) => response.json())
       .then((responseJson) => {
+      
         let data = Object.values(responseJson);
 
         this.setState({isloading: false, canStart: true});
@@ -226,11 +227,24 @@ class Replay extends Component {
             data,
             10,
           );
+
+          if(this.state.effort1.startPointIndex !=null)
+          {
+            startPoint1 = data[this.state.effort1.startPointIndex];
+          
+          }
           this.setState({
             startPoint1: startPoint1,
             isDownloaded1: true,
             canStart: true,
           });
+
+          if(this.state.effort1.endPointIndex !=null)
+          {
+            let endPoint1 = data[this.state.effort1.endPointIndex];
+            this.setState(endPoint1);
+          }
+
           this.centerMapOnTrace(dataMap);
         } else {
           let dataTime = this.getCoordinates(data);
@@ -244,11 +258,28 @@ class Replay extends Component {
             data,
             10,
           );
+
+          if(this.state.effort2.startPointIndex !=null)
+          {
+            console.log("new Startpoint 2")
+            startPoint2 = data[this.state.effort2.startPointIndex];
+          }
+
           this.setState({
             startPoint2: startPoint2,
             isDownloaded2: true,
             canStart: true,
           });
+
+          if(this.state.effort2.endPointIndex !=null)
+          {
+            let endPoint2 = data[this.state.effort2.endPointIndex];
+            this.setState(endPoint2);
+          }
+
+
+      
+
         }
       })
 
@@ -630,7 +661,6 @@ class Replay extends Component {
   }
 
   stop() {
-    console.log(this.interval);
     clearInterval(this.interval);
     this.setState({
       startTimeSeconds: 0,
@@ -649,10 +679,11 @@ class Replay extends Component {
     let markers2 = this.state.coordinatesTime2;
 
     let startPoint1 = this.state.startPoint1;
+
     if (this.state.startPoint1 == null) {
       startPoint1 = markers1[0];
     }
-    let marker1 = this.getMarker(markers1, startTimeSeconds, startPoint1);
+    let marker1 = this.getMarker(this.state.effort1.startPointIndex , this.state.effort1.endPointIndex ,markers1, startTimeSeconds, startPoint1);
 
     if (marker1 != null) {
       // console.log(marker1);
@@ -673,7 +704,7 @@ class Replay extends Component {
       startPoint2 = markers2[0];
     }
 
-    let marker2 = this.getMarker(markers2, startTimeSeconds, markers2[0]);
+    let marker2 = this.getMarker(this.state.effort2.startPointIndex , this.state.effort2.endPointIndex, markers2, startTimeSeconds,startPoint2);
     if (marker2 != null) {
       this.setState({currentMarker2: marker2});
     }
@@ -690,13 +721,12 @@ class Replay extends Component {
     let endTime = new Date().getTime();
 
     let timeDifference = endTime - startTime;
-    console.log(timeDifference);
   };
 
-  getMarker(markers, time, startPoint) {
-    let startDate = moment(startPoint.time);
+  getMarker(startIndex, endIndex,markers, time, startPoint) {
+    let startDate = moment(markers[startIndex].time);
     let marker = null;
-    for (let i = 0; i < markers.length; i++) {
+    for (let i = startIndex; i < endIndex; i++) {
       let m = markers[i];
       let currentTime = moment(m.time);
 
@@ -722,12 +752,14 @@ class Replay extends Component {
   }
 
   onChangeTrace1(value) {
-    this.setState({gpx1Name: value});
+    this.setState({effort1: value});
+    this.setState({gpx1Name: value.gpxLive});
     this.setState({canStart: false});
   }
 
   onChangeTrace2(value) {
-    this.setState({gpx2Name: value});
+    this.setState({effort2: value});
+    this.setState({gpx2Name: value.gpxLive});
     this.setState({canStart: false});
   }
 
@@ -808,6 +840,7 @@ class Replay extends Component {
           <Sidebar
             navigation={this.props.navigation}
             drawer={this.drawer}
+            closeDrawer={this.closeDrawer}
             selected="Replay"
           />
         }>
@@ -927,7 +960,7 @@ class Replay extends Component {
                               <Icon name="chevron-down" type="FontAwesome5" />
                             }
                             style={{marginTop: 0, width: '80%'}}
-                            selectedValue={this.state.gpx1Name}
+                            selectedValue={this.state.effort1}
                             onValueChange={this.onChangeTrace1.bind(this)}
                             placeholder={'Choisir'}
                             placeholderStyle={{
@@ -953,7 +986,7 @@ class Replay extends Component {
                               return (
                                 <Picker.Item
                                   label={c.nomUtilisateur + ' ' + c.tempsEffort}
-                                  value={c.gpxLive}
+                                  value={c}
                                 />
                               );
                             })}
@@ -999,7 +1032,7 @@ class Replay extends Component {
                               <Icon name="chevron-down" type="FontAwesome5" />
                             }
                             style={{marginTop: 0, width: '80%'}}
-                            selectedValue={this.state.gpx2Name}
+                            selectedValue={this.state.effort2}
                             onValueChange={this.onChangeTrace2.bind(this)}
                             placeholder={'Choisir'}
                             placeholderStyle={{
@@ -1025,7 +1058,7 @@ class Replay extends Component {
                               return (
                                 <Picker.Item
                                   label={c.nomUtilisateur + ' ' + c.tempsEffort}
-                                  value={c.gpxLive}
+                                  value={c}
                                 />
                               );
                             })}
@@ -1236,11 +1269,12 @@ class Replay extends Component {
                     longitudeDelta: LONGITUDE_DELTA,
                   }}
                   onLayout={() => this.centerMap()}>
+
                   {this.state.coordinates != null &&
                   this.state.coordinates.length > 0 ? (
                     <MapView.Polyline
                       key="polyline1"
-                      coordinates={this.state.coordinates}
+                      coordinates={this.state.coordinates.filter((v,i) => i >= this.state.startPoint1 && i <=  this.state.endPoint1)}
                       geodesic={true}
                       strokeColor="orange"
                       strokeWidth={3}
@@ -1252,7 +1286,7 @@ class Replay extends Component {
                   this.state.coordinates2.length > 0 ? (
                     <MapView.Polyline
                       key="polyline2"
-                      coordinates={this.state.coordinates2}
+                      coordinates={this.state.coordinates2.filter((v,i) => i >= this.state.startPoint2 && i <=  this.state.endPoint2)}
                       geodesic={true}
                       strokeColor="yellow"
                       strokeWidth={3}
@@ -1317,7 +1351,7 @@ class Replay extends Component {
                       </View>
                     </Marker>
                   ) : null}
-                  {/* 
+                  
                   {this.props.polylines != null
                     ? this.props.polylines
                         .filter(pol => pol.isActive == true)
@@ -1334,7 +1368,7 @@ class Replay extends Component {
                             strokeWidth={5}
                           />
                         ))
-                    : null} */}
+                    : null}
                 </MapView>
                 {/* )} */}
 

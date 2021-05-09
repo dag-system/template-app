@@ -152,6 +152,7 @@ class Help extends Component {
           <Sidebar
             navigation={this.props.navigation}
             drawer={this.drawer}
+            closeDrawer={this.closeDrawer}
             selected="Help"
           />
         }>

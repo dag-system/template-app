@@ -14,6 +14,7 @@ export default class AppState {
   currentMapStyle: MapTypes;
   demoTrace: Polyline;
   currentLive: Live;
+  currentLiveSummary : Live;
   isMoving: boolean;
   isRecording: boolean;
   odometer: any;

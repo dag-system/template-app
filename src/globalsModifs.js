@@ -1,18 +1,18 @@
-export const TemplateDisplayName = 'Template Test';
-export const IsDemo = true;
-export const TemplateExpirationDate = new Date(); // Fait
+export const TemplateDisplayName = 'tetedor';
+export const IsDemo = false;
+export const TemplateExpirationDate = new Date('2031-05-10T22:00:00.000Z');
 export const TemplateAppName = purgeString(
   romanizeString(TemplateDisplayName.toLowerCase()),
 );
 export const TemplateOrganisation = purgeString(
   romanizeString(TemplateDisplayName.toUpperCase()),
 );
-export const TemplateIdOrganisation = '57';
-export const TemplateBackgroundColor = '#FFFFFF'; //Fait
+export const TemplateIdOrganisation = '369';
+export const TemplateBackgroundColor = '#ffffff';
 export const TemplateSecondColor = '#FFFFFF';
 export const textAutoBackgroundColor = autoColor(TemplateBackgroundColor);
 export const textAutoSecondColor = autoColor(TemplateSecondColor);
-export const TemplateSiteLink = 'www.dag-system.com'; // A faite
+export const TemplateSiteLink = 'www.dag-system.com';
 export const TemplateNameAsk = true;
 export const TemplateFirstNameAsk = true;
 export const TemplateSexeAsk = true;
@@ -22,18 +22,36 @@ export const TemplateTelAsk = true;
 export const TemplateAdressAsk = true;
 export const TemplatePostalAsk = true;
 export const TemplateCityAsk = true;
-export const TemplateCountryAsk = true;
-export const TemplateTelVerifAsk = true;
-export const TemplateChallengeClub = true;
-export const TemplateChallengeFamille = true;
-export const TemplateChallengeAutre = true;
-export const TemplateChallengeEntreprise = true;
-export const TemplateHasAppDonation = false;
+export const TemplateCountryAsk = false;
+export const TemplateTelVerifAsk = false;
+export const TemplateChallengeClub = false;
+export const TemplateChallengeFamille = false;
+export const TemplateChallengeAutre = false;
+export const TemplateChallengeEntreprise = false;
+export const TemplateHasAppDonation = true;
 export const TemplateIsPaying = false;
 export const TemplateChallengeAutreName = 'Template Test Autre';
-export const TemplateSportLive = [];
-export const TemplateArrayImagesSponsorPath = [];
-export const TemplateArrayImagesPartenairesPath = [];
+export const TemplateSportLive = [{idSport: 24, sportName: 'Course à pied'}];
+export const TemplateTrace = [
+  {label: '5 km PMR Six-Fours', id: '676'},
+  {label: '10 km PMR Six-Fours', id: '677'},
+];
+export const TemplateArrayImagesSponsorPath = [
+  // require('./assets/sponsor_logo1.png'),
+  // require('./assets/sponsor_logo2.png'),
+  // require('./assets/sponsor_logo3.png'),
+  // require('./assets/sponsor_logo4.png'),
+];
+export const TemplateArrayImagesPartenairesPath = [
+  // require('./assets/partner_logo5.png'),
+  // require('./assets/partner_logo6.png'),
+  // require('./assets/partner_logo7.png'),
+  // require('./assets/partner_logo8.png'),
+  // require('./assets/partner_logo9.png'),
+  // require('./assets/partner_logo10.png'),
+  // require('./assets/partner_logo11.png'),
+  // require('./assets/partner_logo12.png'),
+];
 function purgeString(str) {
   const accents =
     'ÀÁÂÃÄÅàáâãäåÒÓÔÕÕÖØòóôõöøÈÉÊËèéêëðÇçÐÌÍÎÏìíîïÙÚÛÜùúûüÑñŠšŸÿýŽž\' ,*-_#|/="~';

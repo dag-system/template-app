@@ -76,6 +76,7 @@ interface State {
 }
 
 const Map = forwardRef((props, ref) => {
+  
   const [currentInteret, setCurrentInteret] = useState<Interest>();
   const [currentPolyline, setCurrentPolyline] = useState<PolylineModel>();
   const [isModalInterestVisible, setIsModalInterestVisible] = useState(false);

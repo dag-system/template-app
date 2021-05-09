@@ -26,7 +26,6 @@ import {
   Picker,
   H3,
 } from 'native-base';
-import Swipeout from 'react-native-swipeout';
 import ApiUtils from '../ApiUtils';
 import Logo from '../assets/logo.png';
 import Sidebar from './SideBar';
@@ -390,13 +389,13 @@ class Lives extends Component<Props, State> {
   };
 
   onClickCreateLive() {
-    if (this.props.lives.filter((l) => l.etatLive == 0).length > 0) {
-      let currentLive = this.props.lives.filter((l) => l.etatLive == 0)[0];
-      this.viewLive(currentLive);
-    } else {
+    // if (this.props.lives.filter((l) => l.etatLive == 0).length > 0) {
+    //   let currentLive = this.props.lives.filter((l) => l.etatLive == 0)[0];
+    //   this.viewLive(currentLive);
+    // } else {
       this.onClickCreateLiveOk();
       // this.setState({modalChooseSportVisible: true});
-    }
+    // }
   }
 
   onClickCreateLiveOk() {
@@ -523,6 +522,7 @@ class Lives extends Component<Props, State> {
     if (deletingIds.filter((d) => d == idLive).length == 0) {
       deletingIds.push(idLive);
     }
+    console.log("idlive to delete" + idLive)
     this.setState(
       {isLoading: true, isLoadingDeleting: true, deletingIds: deletingIds},
       () => this.deleteLiveOk(this.state.rowID),
@@ -739,6 +739,7 @@ class Lives extends Component<Props, State> {
             <Sidebar
               navigation={this.props.navigation}
               drawer={this.drawer}
+              closeDrawer={this.closeDrawer}
               selected="Lives"
             />
           }>
@@ -950,16 +951,6 @@ class Lives extends Component<Props, State> {
                           </View>
                         </TouchableOpacity>
                       ) : (
-                        <Swipeout
-                          right={this.swipeoutBtns}
-                          autoClose={true}
-                          backgroundColor="transparent"
-                          onOpen={(sectionID, rowID) => {
-                            this.setState({
-                              sectionID,
-                              rowID,
-                            });
-                          }}>
                           <TouchableOpacity
                             delayLongPress={500}
                             onLongPress={this.onPressDeleteLive.bind(
@@ -1089,7 +1080,6 @@ class Lives extends Component<Props, State> {
                               </View>
                             </View>
                           </TouchableOpacity>
-                        </Swipeout>
                       )
                     }
                     keyExtractor={(item, index) => index.toString()}
@@ -1097,6 +1087,29 @@ class Lives extends Component<Props, State> {
                 )}
               </View>
             </Content>
+             <TouchableHighlight
+              underlayColor="rgba(255,255,255,1,0.6)"
+              disabled={this.state.spinner}
+              style={[styles.buttonok, {zIndex: 12}]}
+              onPress={() => this.onClickCreateLive()}>
+              {this.state.spinner ? (
+                <ActivityIndicator
+                  color={'white'}
+                  style={{
+                    alignSelf: 'center',
+                    height: 20,
+                    width: 20,
+                  }}
+                />
+              ) : (
+                <Icon
+                  active
+                  name="plus"
+                  type="AntDesign"
+                  style={styles.plusButtonLogo}
+                />
+              )}
+            </TouchableHighlight>
             {/* <TouchableHighlight
               underlayColor="rgba(255,255,255,1,0.6)"
               disabled={this.state.spinner}
