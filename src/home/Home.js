@@ -43,6 +43,7 @@ import VersionCheck from 'react-native-version-check';
 import moment from 'moment';
 
 import {
+  TemplateBackgroundColor,
   TemplateExpirationDate,
   TemplateIdOrganisation,
   TemplateIsPaying,
@@ -802,7 +803,7 @@ class Home extends Component {
                       this.state.followCode == '' &&
                       this.state.selectedFolocode == -1
                         ? {backgroundColor: 'transparent'}
-                        : {backgroundColor: textAutoBackgroundColor},
+                        : {backgroundColor: TemplateBackgroundColor},
                     ]}
                     onPress={() => this.onClickSendFollowCode()}
                     disabled={
