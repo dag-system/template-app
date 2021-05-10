@@ -131,11 +131,11 @@ android {
     }
 
     defaultConfig {
-            applicationId "com.dag.templateappname.app"
+            applicationId "com.dag.activtoibysfgt.app"
             minSdkVersion rootProject.ext.minSdkVersion
             targetSdkVersion rootProject.ext.targetSdkVersion
-            versionCode 547
-            versionName "1.1.39"
+            versionCode 552
+            versionName "1.1.41"
     }
     splits {
         abi {

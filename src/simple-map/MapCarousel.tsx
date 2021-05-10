@@ -274,5 +274,6 @@ const styles = StyleSheet.create({
   },
   title: {
     color: '#000',
+    fontSize :12
   },
 });
