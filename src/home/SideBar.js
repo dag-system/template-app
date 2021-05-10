@@ -568,6 +568,7 @@ const styles = StyleSheet.create({
   },
   menuText: {
     marginLeft: 30,
+    fontSize: 14,
     maxWidth: '100%',
   },
   versionInfo: {

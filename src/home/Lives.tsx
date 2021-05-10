@@ -41,6 +41,7 @@ import DefaultProps from '../models/DefaultProps';
 import VersionCheck from 'react-native-version-check';
 import RNPusherPushNotifications from 'react-native-pusher-push-notifications';
 import NotificationModal from './NotificationModal';
+import Logovdm from '../assets/sponsor_logo4.png';
 
 import {
   TemplateBackgroundColor,
@@ -755,9 +756,22 @@ class Lives extends Component<Props, State> {
                   />
                 </TouchableOpacity>
               </Left>
-              <Right style={{flex: 1, width: '100%'}}>
-                <Image resizeMode="contain" source={Logo} style={styles.logo} />
-              </Right>
+              {/* <Body></Body> */}
+           <Right style={{flex: 1}}>
+              <Text style={{color: textAutoBackgroundColor, width: '67%'}}>
+                Course des Jeux du val de marne
+              </Text>
+              <Image
+                resizeMode="contain"
+                source={Logovdm}
+                style={{
+                  width: '40%',
+                  height: 50,
+                  marginRight: '10%',
+                  marginLeft: 15,
+                }}
+              />
+            </Right>
             </Header>
 
             <Content

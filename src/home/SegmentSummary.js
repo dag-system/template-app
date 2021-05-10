@@ -25,6 +25,7 @@ import ApiUtils from '../ApiUtils';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {connect} from 'react-redux';
 import Logo from '../assets/logo.png';
+import Logovdm from '../assets/sponsor_logo4.png';
 import {textAutoBackgroundColor} from './../globalsModifs';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 const mapStateToProps = (state) => {
@@ -298,7 +299,19 @@ class SegmentSummary extends Component {
           </Left>
           <Body style={{flex: 0}} />
           <Right style={{flex: 1}}>
-            <Image resizeMode="contain" source={Logo} style={styles.logo} />
+            <Text style={{color: textAutoBackgroundColor}}>
+              Course des Jeux du val de marne
+            </Text>
+            <Image
+              resizeMode="contain"
+              source={Logovdm}
+              style={{
+                width: '50%',
+                height: 50,
+                marginRight: '10%',
+                marginLeft: 15,
+              }}
+            />
           </Right>
         </Header>
         <View style={styles.loginButtonSection}>
@@ -475,7 +488,7 @@ class SegmentSummary extends Component {
                         ? 'black'
                         : ApiUtils.getBackgroundColor(),
                     color:
-                    ApiUtils.getBackgroundColor().toUpperCase() === '#FFFFFF'
+                      ApiUtils.getBackgroundColor().toUpperCase() === '#FFFFFF'
                         ? 'white'
                         : textAutoBackgroundColor,
                     borderWidth: 1,

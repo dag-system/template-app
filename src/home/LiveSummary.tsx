@@ -47,6 +47,7 @@ import {Icon as IconElement} from 'react-native-elements';
 import {FlatList} from 'react-native';
 import {check, request, PERMISSIONS, RESULTS} from 'react-native-permissions';
 import DefaultProps from '../models/DefaultProps';
+import Logovdm from '../assets/sponsor_logo4.png';
 import {
   VictoryArea,
   VictoryAxis,
@@ -745,9 +746,21 @@ class LiveSummary extends Component<Props, State> {
                 </Button>
               </View>
             </Left>
-            <Body style={{flex: 0}} />
-            <Right style={{flex: 1}}>
-              <Image resizeMode="contain" source={Logo} style={styles.logo} />
+          {/* <Body></Body> */}
+          <Right style={{flex: 1}}>
+              <Text style={{color: textAutoBackgroundColor, width: '67%'}}>
+                Course des Jeux du val de marne
+              </Text>
+              <Image
+                resizeMode="contain"
+                source={Logovdm}
+                style={{
+                  width: '40%',
+                  height: 50,
+                  marginRight: '10%',
+                  marginLeft: 15,
+                }}
+              />
             </Right>
           </Header>
           <Content style={styles.body} scrollEnabled={true}>

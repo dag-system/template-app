@@ -1,12 +1,13 @@
 import React, {Component} from 'react';
 import {StyleSheet, View, Share, Image} from 'react-native';
-import {Header, Body, Icon, Left, Right, Button} from 'native-base';
+import {Header, Body, Icon, Left, Right, Button, Text} from 'native-base';
 import ApiUtils from '../ApiUtils';
 import {connect} from 'react-redux';
 import DefaultProps from '../models/DefaultProps';
 import Logo from '../assets/logo.png';
 import {formattedTime} from '../services/HoursService';
 import AppState from '../models/AppState';
+import Logovdm from '../assets/sponsor_logo4.png';
 import {textAutoBackgroundColor} from '../globalsModifs';
 const mapStateToProps = (state: AppState) => {
   return {
@@ -178,14 +179,22 @@ class MapHeader extends Component<Props, State> {
               <Icon style={styles.saveText} name="bars" type="FontAwesome5" />
             </Button>
           </Left>
-          <Body>
-            <Image
-              resizeMode="contain"
-              source={Logo}
-              style={styles.logoHeader}
-            />
-          </Body>
-          <Right></Right>
+           {/* <Body></Body> */}
+           <Right style={{flex: 1}}>
+              <Text style={{color: textAutoBackgroundColor, width: '67%'}}>
+                Course des Jeux du val de marne
+              </Text>
+              <Image
+                resizeMode="contain"
+                source={Logovdm}
+                style={{
+                  width: '40%',
+                  height: 50,
+                  marginRight: '10%',
+                  marginLeft: 15,
+                }}
+              />
+            </Right>
         </Header>
       </View>
     );

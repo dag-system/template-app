@@ -209,9 +209,11 @@ class ForgotPassword extends ValidationComponent {
     return (
       <Root>
         <Container>
-          <Header style={styles.header}>
+        <Header style={styles.header}>
             <Left>
-              <Button style={styles.drawerButton} onPress={() => this.goBack()}>
+              <Button
+                style={styles.drawerButton}
+                onPress={() => this.goBack()}>
                 <Icon
                   style={styles.saveText}
                   name="chevron-left"
@@ -219,25 +221,23 @@ class ForgotPassword extends ValidationComponent {
                 />
               </Button>
             </Left>
-            <Body />
+            {/* <Body></Body> */}
             <Right style={{flex: 1}}>
-              <Text style={{color: textAutoBackgroundColor}}>
+              <Text style={{color: textAutoBackgroundColor, width: '67%'}}>
                 Course des Jeux du val de marne
               </Text>
               <Image
                 resizeMode="contain"
                 source={Logovdm}
                 style={{
-                  width: '50%',
+                  width: '40%',
                   height: 50,
-                  marginRight: '80%',
+                  marginRight: '10%',
                   marginLeft: 15,
                 }}
               />
             </Right>
-
           </Header>
-
           <View style={styles.loginButtonSection}>
             <Text style={{textAlign: 'justify'}}>
               Entrez votre email ci-dessous pour récuperer votre code

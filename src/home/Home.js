@@ -41,6 +41,7 @@ import GlobalStyles from '../styles';
 import {Sponsors} from './Sponsors';
 import VersionCheck from 'react-native-version-check';
 import moment from 'moment';
+import Logovdm from '../assets/sponsor_logo4.png';
 
 import {
   TemplateBackgroundColor,
@@ -680,7 +681,7 @@ class Home extends Component {
             <Modal
               visible={this.state.isVisibleModalLogin}
               onRequestClose={() => this.oncloseModalLogin()}>
-              <Header style={styles.header}>
+              <Header style={[styles.header,{backgroundColor : TemplateBackgroundColor}]}>
                 <Left>
                   <Button
                     style={styles.drawerButton}
@@ -692,14 +693,22 @@ class Home extends Component {
                     />
                   </Button>
                 </Left>
-                <Body>
-                  <Image
-                    resizeMode="contain"
-                    source={Logo}
-                    style={styles.logoHeader}
-                  />
-                </Body>
-                <Right></Right>
+               {/* <Body></Body> */}
+            <Right style={{flex: 1}}>
+              <Text style={{color: textAutoBackgroundColor, width: '67%'}}>
+                Course des Jeux du val de marne
+              </Text>
+              <Image
+                resizeMode="contain"
+                source={Logovdm}
+                style={{
+                  width: '40%',
+                  height: 50,
+                  marginRight: '10%',
+                  marginLeft: 15,
+                }}
+              />
+            </Right>
               </Header>
 
               <KeyboardAvoidingView style={styles.followCodeLoginSection}>
