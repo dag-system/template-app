@@ -97,7 +97,7 @@ class Partenaires extends Component<Props, State> {
                  <Body style={{flex: 0}} />
                  <Right style={{flex: 1}}>
                    <Text style={{color: textAutoBackgroundColor}}>
-                     Course des jeux du Val-de-Marne
+                     Course des Jeux du Val-de-Marne
                    </Text>
                    <Image
                      resizeMode="contain"
@@ -122,7 +122,7 @@ class Partenaires extends Component<Props, State> {
                 100 000 participants chaque année, les Jeux du Val-de-Marne sont
                 organisés par le Conseil départemental du Val-de-Marne en
                 partenariat avec le CDOS du Val-de-Marne, les comités sportifs
-                départementaux, les associations sportives locals, les communes
+                départementaux, les associations sportives locales, les communes
                 du Val-de-Marne, l'inspection académique (UNSS - USEP - le
                 Service départemental à la Jeunesse, à l'engagement et aux
                 sports).

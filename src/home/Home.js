@@ -504,6 +504,13 @@ class Home extends Component {
             polylines: finalTraceArray,
             pointsInterets: finalinterestArray,
             challenges: finalChallengesArray,
+            statistics: {
+              nbKmTotal: result.nbKmTotal,
+              nbActivites: result.nbActivites,
+              nbUtilisateurs: result.nbUtilisateurs,
+              nbClasses: result.nbClasses,
+              nbKmEfforts: result.nbKmEfforts,
+            },
           };
 
           var action = {type: 'UPDATE_STATION_DATA', data: station};
@@ -696,7 +703,7 @@ class Home extends Component {
                {/* <Body></Body> */}
             <Right style={{flex: 1}}>
               <Text style={{color: textAutoBackgroundColor, width: '67%'}}>
-                Course des Jeux du val de marne
+                Course des Jeux du Val-de-Marne
               </Text>
               <Image
                 resizeMode="contain"

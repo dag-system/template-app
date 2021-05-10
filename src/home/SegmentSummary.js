@@ -300,7 +300,7 @@ class SegmentSummary extends Component {
           <Body style={{flex: 0}} />
           <Right style={{flex: 1}}>
             <Text style={{color: textAutoBackgroundColor}}>
-              Course des Jeux du val de marne
+              Course des Jeux du Val-de-Marne
             </Text>
             <Image
               resizeMode="contain"

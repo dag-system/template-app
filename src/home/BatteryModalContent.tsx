@@ -339,7 +339,7 @@ class BatteryModalContent extends Component {
                 <Text>1. Aller dans “Réglages”</Text>
                 <Text>2. Cliquer sur “Batterie”</Text>
                 <Text>3. Cliquer sur “Lancement d'application”</Text>
-                <Text>4. Chercher "My Cross"</Text>
+                <Text>4. Chercher "Jeux du Val-de-Marne"</Text>
                 <Text>5. Désélectionner la checkbox</Text>
                 <Text>
                   5. Sélectionner les 3 champs qui vont s'afficher en popup

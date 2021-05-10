@@ -745,7 +745,7 @@ class Lives extends Component<Props, State> {
           }>
           <Container>
             <Header style={styles.header}>
-              <Left style={{flex: 1, width: '30%'}}>
+              <Left style={styles.goBackButton}>
                 <TouchableOpacity
                   style={styles.drawerButton}
                   onPress={() => this.onDrawer()}>
@@ -759,7 +759,7 @@ class Lives extends Component<Props, State> {
               {/* <Body></Body> */}
            <Right style={{flex: 1}}>
               <Text style={{color: textAutoBackgroundColor, width: '67%'}}>
-                Course des Jeux du val de marne
+                Course des Jeux du Val-de-Marne
               </Text>
               <Image
                 resizeMode="contain"
@@ -1331,6 +1331,17 @@ const styles = StyleSheet.create({
   title: {
     width: '25%',
   },
+  goBackButton: {
+    backgroundColor: 'transparent',
+    width: 30,
+    marginTop: 0,
+    paddingTop: 10,
+    shadowOffset: {height: 0, width: 0},
+    shadowOpacity: 0,
+    elevation: 0,
+    marginLeft: 0,
+    paddingLeft: 0,
+  }, 
   saveButton: {
     backgroundColor: 'transparent',
     width: '38%',

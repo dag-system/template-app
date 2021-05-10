@@ -52,6 +52,7 @@ export default function MapCarousel() {
       }
     });
 
+    console.log(statistics)
     let currentCarouselItems: CarouselItem[] = [];
 
     //1 - nombre activites

@@ -182,7 +182,7 @@ class MapHeader extends Component<Props, State> {
            {/* <Body></Body> */}
            <Right style={{flex: 1}}>
               <Text style={{color: textAutoBackgroundColor, width: '67%'}}>
-                Course des Jeux du val de marne
+                Course des Jeux du Val-de-Marne
               </Text>
               <Image
                 resizeMode="contain"

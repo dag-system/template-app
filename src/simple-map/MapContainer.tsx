@@ -36,6 +36,7 @@ export default function MapContainer() {
   const {isRecording, userData} = useSelector((state: AppState) => state);
 
   useEffect(() => {
+    downloadData();
     const unsubscribe = navigation.addListener('focus', () => {
       // do somethin
       watchPosition();
@@ -110,7 +111,9 @@ export default function MapContainer() {
         console.log(error.code, error.message);
       },
       {
-        enableHighAccuracy: true,interval : 100, distanceFilter : 0
+        enableHighAccuracy: true,
+        interval: 100,
+        distanceFilter: 0,
       },
     );
   };
@@ -201,13 +204,15 @@ export default function MapContainer() {
       .then((responseJson) => {
         //save values in cache
 
+  
         var result = responseJson;
-
+        var finalTraceArray: any[] = [];
+        var finalChallengesArray: any[] = [];
+        var finalinterestArray: any = [];
         if (result.traces != null && result.traces.length != 0) {
           var tracesArray = Object.values(result.traces);
 
-          var finalTraceArray: any[] = [];
-          var finalinterestArray: any = [];
+         
           if (tracesArray != null && tracesArray.length != 0) {
             tracesArray.forEach((trace: any) => {
               var finalTrace = trace;
@@ -232,7 +237,7 @@ export default function MapContainer() {
 
           var challengesArray = Object.values(result.challenges);
 
-          var finalChallengesArray: any[] = [];
+      
 
           if (challengesArray != null && challengesArray.length != 0) {
             challengesArray.forEach((challenge: any) => {
@@ -242,7 +247,7 @@ export default function MapContainer() {
               challenge.positionsTrace = positionArray;
 
               finalChallenge = {
-                isActive : true,
+                isActive: true,
                 positionsTrace: positionArray,
                 idChallenge: finalChallenge.idChallenge,
                 libelleChallenge: finalChallenge.libelleChallenge,
@@ -255,78 +260,81 @@ export default function MapContainer() {
               finalChallengesArray.push(finalChallenge);
             });
           }
+        }
 
-          if (result.interets != null && result.interets.length != 0) {
-            var interestArray = Object.values(result.interets);
-            var count = 0;
-            interestArray.forEach((interest: any) => {
-              var coordinate = {
-                latitude: parseFloat(interest.latitudeInteret),
-                longitude: parseFloat(interest.longitudeInteret),
-              };
+        if (result.interets != null && result.interets.length != 0) {
+    
+          console.log(result.interests);
+          var interestArray = Object.values(result.interets);
+          var count = 0;
+          interestArray.forEach((interest: any) => {
+            var coordinate = {
+              latitude: parseFloat(interest.latitudeInteret),
+              longitude: parseFloat(interest.longitudeInteret),
+            };
 
-              var finalInterest = {
-                id: 'interest' + count,
-                idInteret: interest.idInteret,
-                idStation: interest.idStation,
-                coordinates: coordinate,
-                libelleInteret: interest.libelleInteret,
-                couleurTrace: interest.couleurTrace,
-                descriptionInteret: interest.descriptionInteret,
-                telephoneInteret: interest.telephoneInteret,
-                lienInteret: interest.lienInteret,
-                photoInteret: interest.photoInteret,
-                description: '',
-              };
+            var finalInterest = {
+              id: 'interest' + count,
+              idInteret: interest.idInteret,
+              idStation: interest.idStation,
+              coordinates: coordinate,
+              libelleInteret: interest.libelleInteret,
+              couleurTrace: interest.couleurTrace,
+              descriptionInteret: interest.descriptionInteret,
+              telephoneInteret: interest.telephoneInteret,
+              lienInteret: interest.lienInteret,
+              photoInteret: interest.photoInteret,
+              description: '',
+            };
 
+            if (
+              finalInterest.descriptionInteret == null &&
+              interest.externalData != null
+            ) {
+              var extraData = JSON.parse(interest.externalData);
               if (
-                finalInterest.descriptionInteret == null &&
-                interest.externalData != null
+                extraData.hasDescription.length > 0 &&
+                extraData.hasDescription[0] != null
               ) {
-                var extraData = JSON.parse(interest.externalData);
                 if (
-                  extraData.hasDescription.length > 0 &&
-                  extraData.hasDescription[0] != null
+                  extraData.hasDescription[0].shortDescription != null &&
+                  extraData.hasDescription[0].shortDescription.length > 1
                 ) {
-                  if (
-                    extraData.hasDescription[0].shortDescription != null &&
-                    extraData.hasDescription[0].shortDescription.length > 1
-                  ) {
-                    finalInterest.description =
-                      extraData.hasDescription[0].shortDescription[1];
-                  } else {
-                    finalInterest.description =
-                      extraData.hasDescription[0].shortDescription[0];
-                  }
+                  finalInterest.description =
+                    extraData.hasDescription[0].shortDescription[1];
+                } else {
+                  finalInterest.description =
+                    extraData.hasDescription[0].shortDescription[0];
                 }
               }
-              if (interest.actifInteret == '1') {
-                finalinterestArray.push(finalInterest);
-                count++;
-              }
-            });
-          }
+            }
 
-          var station = {
-            nomStation: result.nomStation,
-            descriptionStation: result.descriptionStation,
-            polylines: finalTraceArray,
-            pointsInterets: finalinterestArray,
-            challenges: finalChallengesArray,
-            statistics: {
-              nbKmTotal: result.nbKmTotal,
-              nbActivites: result.nbActivites,
-              nbUtilisateurs: result.nbUtilisateurs,
-              nbClasses: result.nbClasses,
-              nbKmEfforts: result.nbKmEfforts,
-            },
-          };
-
-          var action = {type: 'UPDATE_STATION_DATA', data: station};
-          dispatch(action);
+            if (interest.actifInteret == '1') {
+              finalinterestArray.push(finalInterest);
+              count++;
+            }
+          });
         }
+
+        var station = {
+          nomStation: result.nomStation,
+          descriptionStation: result.descriptionStation,
+          polylines: finalTraceArray,
+          pointsInterets: finalinterestArray,
+          challenges: finalChallengesArray,
+          statistics: {
+            nbKmTotal: result.nbKmTotal,
+            nbActivites: result.nbActivites,
+            nbUtilisateurs: result.nbUtilisateurs,
+            nbClasses: result.nbClasses,
+            nbKmEfforts: result.nbKmEfforts,
+          },
+        };
+
+        var action = {type: 'UPDATE_STATION_DATA', data: station};
+        dispatch(action);
       })
-      // .catch(e => alert('test', JSON.stringify(e)))
+      .catch((e) => console.log(e))
       .then();
   };
 

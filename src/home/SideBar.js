@@ -318,7 +318,7 @@ export default class Sidebar extends Component {
                 flexDirection: 'row',
                 justifyContent: 'flex-start',
                 flexWrap: 'wrap',
-                padding: 10,
+                padding: 7,
               }}>
               <Icon
                 name="handshake"

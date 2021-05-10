@@ -197,6 +197,13 @@ export default function Introduction() {
             polylines: finalTraceArray,
             pointsInterets: finalinterestArray,
             challenges: finalChallengesArray,
+            statistics: {
+              nbKmTotal: result.nbKmTotal,
+              nbActivites: result.nbActivites,
+              nbUtilisateurs: result.nbUtilisateurs,
+              nbClasses: result.nbClasses,
+              nbKmEfforts: result.nbKmEfforts,
+            },
           };
 
           var action = {type: 'UPDATE_STATION_DATA', data: station};

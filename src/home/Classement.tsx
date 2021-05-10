@@ -115,7 +115,7 @@ class Classement extends Component<Props, State> {
                 <Body style={{flex: 0}} />
                 <Right style={{flex: 1}}>
                 <Text style={{color: textAutoBackgroundColor}}>
-                    Course des Jeux du val de marne
+                    Course des Jeux du Val-de-Marne
                   </Text>
                   <Image
                     resizeMode="contain"
@@ -158,7 +158,7 @@ class Classement extends Component<Props, State> {
                 </TouchableOpacity>
               ) : null}
 
-              {/* {this.state.isPortrait ? (
+              {this.state.isPortrait ? (
                 <View>
                   <Image
                     source={Rotate}
@@ -169,12 +169,12 @@ class Classement extends Component<Props, State> {
                     Tourner votre écran pour voir plus d'infos
                   </Text>
                 </View>
-              ) : null} */}
+              ) : null}
 
               <AutoHeightWebView
                 source={{
                   uri:
-                    'https://www.folomi.fr/classement/classementTemplate.html?organisation=' +
+                    'https://www.folomi.fr/classement/inscriptionTemplate.html?organisation=' +
                     ApiUtils.getOrganisation() +
                     '&color=' +
                     ApiUtils.getBackgroundColor().split('#')[1],

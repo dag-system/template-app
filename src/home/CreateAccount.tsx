@@ -195,6 +195,9 @@ class CreateAccount extends ValidationComponent {
     var isValid = this.validate({
       nomUtilisateur: {required: true},
       prenomUtilisateur: {required: true},
+      adresseUtilisateur: {required: true},
+      cpUtilisateur: {required: true},
+      villeUtilisateur: {required: true},
       //telUtilisateur: {required: true},
       // newPassword: {required: true},
       // newPasswordConfirmation: {required: true},
@@ -410,7 +413,7 @@ class CreateAccount extends ValidationComponent {
             {/* <Body></Body> */}
             <Right style={{flex: 1}}>
               <Text style={{color: textAutoBackgroundColor, width: '67%'}}>
-                Course des Jeux du val de marne
+                Course des Jeux du Val-de-Marne
               </Text>
               <Image
                 resizeMode="contain"
@@ -425,276 +428,462 @@ class CreateAccount extends ValidationComponent {
             </Right>
           </Header>
           <Content>
-          <ImageBackground
+            <ImageBackground
               source={Logobg}
               style={{width: '100%', minHeight: 10}}
               resizeMode="cover">
-            <KeyboardAvoidingView>
-              <Form>
-                {this.state.isNameAsk ? (
-                  <Item stackedLabel style={{marginBottom: 5}}>
-                    <Label>Nom *</Label>
-                    <Input
-                      //  autoCapitalize="characters"
-                      ref="nomUtilisateur"
-                      returnKeyType="next"
-                      textContentType="familyName"
-                      clearButtonMode="always"
-                      value={this.state.nomUtilisateur}
-                      onChangeText={(value) =>
-                        this.setState({nomUtilisateur: value})
-                      }
-                    />
-                  </Item>
-                ) : null}
+              <KeyboardAvoidingView>
+                <Form>
+                  {this.state.isNameAsk ? (
+                    <Item stackedLabel style={{marginBottom: 5}}>
+                      <Label>Nom *</Label>
+                      <Input
+                        //  autoCapitalize="characters"
+                        ref="nomUtilisateur"
+                        returnKeyType="next"
+                        textContentType="familyName"
+                        clearButtonMode="always"
+                        value={this.state.nomUtilisateur}
+                        onChangeText={(value) =>
+                          this.setState({nomUtilisateur: value})
+                        }
+                      />
+                    </Item>
+                  ) : null}
 
-                {this.isFieldInError('nomUtilisateur') &&
-                  this.state.isNameAsk &&
-                  this.getErrorsInField(
-                    'nomUtilisateur',
-                  ).map((errorMessage) => (
-                    <Text style={styles.error}>{errorMessage}</Text>
-                  ))}
+                  {this.isFieldInError('nomUtilisateur') &&
+                    this.state.isNameAsk &&
+                    this.getErrorsInField(
+                      'nomUtilisateur',
+                    ).map((errorMessage) => (
+                      <Text style={styles.error}>{errorMessage}</Text>
+                    ))}
 
-                {this.state.isFirstNameAsk ? (
-                  <Item stackedLabel style={{marginBottom: 5}}>
-                    <Label>Prénom *</Label>
-                    <Input
-                      //  autoCapitalize="characters"
-                      ref="prenomUtilisateur"
-                      returnKeyType="next"
-                      textContentType="name"
-                      clearButtonMode="always"
-                      value={this.state.prenomUtilisateur}
-                      onChangeText={(value) =>
-                        this.setState({prenomUtilisateur: value})
-                      }
-                    />
-                  </Item>
-                ) : null}
-                {this.isFieldInError('prenomUtilisateur') &&
-                  this.state.isFirstNameAsk &&
-                  this.getErrorsInField(
-                    'prenomUtilisateur',
-                  ).map((errorMessage) => (
-                    <Text style={styles.error}>{errorMessage}</Text>
-                  ))}
+                  {this.state.isFirstNameAsk ? (
+                    <Item stackedLabel style={{marginBottom: 5}}>
+                      <Label>Prénom *</Label>
+                      <Input
+                        //  autoCapitalize="characters"
+                        ref="prenomUtilisateur"
+                        returnKeyType="next"
+                        textContentType="name"
+                        clearButtonMode="always"
+                        value={this.state.prenomUtilisateur}
+                        onChangeText={(value) =>
+                          this.setState({prenomUtilisateur: value})
+                        }
+                      />
+                    </Item>
+                  ) : null}
+                  {this.isFieldInError('prenomUtilisateur') &&
+                    this.state.isFirstNameAsk &&
+                    this.getErrorsInField(
+                      'prenomUtilisateur',
+                    ).map((errorMessage) => (
+                      <Text style={styles.error}>{errorMessage}</Text>
+                    ))}
 
-                {this.state.isMailAsk ? (
-                  <Item stackedLabel style={{marginBottom: 5}}>
-                    <Label>Email *</Label>
-                    <Input
-                      ref="emailUtilisateur"
-                      autoCompleteType="email"
-                      returnKeyType="next"
-                      textContentType="emailAddress"
-                      keyboardType="email-address"
-                      clearButtonMode="always"
-                      value={this.state.emailUtilisateur}
-                      onChangeText={(value) =>
-                        this.setState({
-                          emailUtilisateur: value.replace(/\s+/g, ''),
-                        })
-                      }
-                    />
-                  </Item>
-                ) : null}
+                  {this.state.isMailAsk ? (
+                    <Item stackedLabel style={{marginBottom: 5}}>
+                      <Label>Email *</Label>
+                      <Input
+                        ref="emailUtilisateur"
+                        autoCompleteType="email"
+                        returnKeyType="next"
+                        textContentType="emailAddress"
+                        keyboardType="email-address"
+                        clearButtonMode="always"
+                        value={this.state.emailUtilisateur}
+                        onChangeText={(value) =>
+                          this.setState({
+                            emailUtilisateur: value.replace(/\s+/g, ''),
+                          })
+                        }
+                      />
+                    </Item>
+                  ) : null}
 
-                {this.isFieldInError('emailUtilisateur') &&
-                  this.state.isMailAsk &&
-                  this.getErrorsInField(
-                    'emailUtilisateur',
-                  ).map((errorMessage) => (
-                    <Text style={styles.error}>{errorMessage}</Text>
-                  ))}
+                  {this.isFieldInError('emailUtilisateur') &&
+                    this.state.isMailAsk &&
+                    this.getErrorsInField(
+                      'emailUtilisateur',
+                    ).map((errorMessage) => (
+                      <Text style={styles.error}>{errorMessage}</Text>
+                    ))}
 
-                {this.state.isSexeAsk ? (
-                  <View>
-                    <Text style={styles.label}>Sexe</Text>
+                  {this.state.isSexeAsk ? (
+                    <View>
+                      <Text style={styles.label}>Sexe</Text>
 
+                      <View
+                        style={{
+                          display: 'flex',
+                          flexDirection: 'row',
+                          width: '80%',
+                          justifyContent: 'space-between',
+                          alignSelf: 'center',
+                        }}>
+                        <TouchableOpacity
+                          style={{
+                            display: 'flex',
+                            flexDirection: 'row',
+                            width: '30%',
+                            justifyContent: 'space-around',
+                          }}
+                          onPress={() => this.setState({sexeUtilisateur: 'F'})}>
+                          <Text>Femme</Text>
+                          <Radio
+                            selected={this.state.sexeUtilisateur == 'F'}
+                            onPress={() =>
+                              this.setState({sexeUtilisateur: 'F'})
+                            }
+                          />
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                          style={{
+                            display: 'flex',
+                            flexDirection: 'row',
+                            width: '30%',
+                            justifyContent: 'space-around',
+                          }}
+                          onPress={() => this.setState({sexeUtilisateur: 'H'})}>
+                          <Text>Homme</Text>
+                          <Radio
+                            selected={this.state.sexeUtilisateur == 'H'}
+                            onPress={() =>
+                              this.setState({sexeUtilisateur: 'H'})
+                            }
+                          />
+                        </TouchableOpacity>
+
+                        <TouchableOpacity
+                          style={{
+                            display: 'flex',
+                            flexDirection: 'row',
+                            width: '30%',
+                            justifyContent: 'space-around',
+                          }}
+                          onPress={() => this.setState({sexeUtilisateur: 'A'})}>
+                          <Text>Autre</Text>
+                          <Radio
+                            selected={this.state.sexeUtilisateur == 'A'}
+                            onPress={() =>
+                              this.setState({sexeUtilisateur: 'A'})
+                            }
+                          />
+                        </TouchableOpacity>
+                      </View>
+                    </View>
+                  ) : null}
+
+                  {this.state.isDdnAsk ? (
+                    <Item stackedLabel style={{marginBottom: 5}}>
+                      <Label>Date de naissance</Label>
+                      <Label style={{fontSize: 12}}>
+                        Important pour les résultats par catégorie
+                      </Label>
+                      <View style={[GlobalStyles.row]}>
+                        <Picker
+                          style={{
+                            width: Dimensions.get('screen').width / 3 - 10,
+                          }}
+                          mode="dropdown"
+                          accessibilityLabel={'Jour'}
+                          iosHeader={'Jour'}
+                          iosIcon={
+                            <Icon name="chevron-down" type="FontAwesome5" />
+                          }
+                          selectedValue={this.state.dayDdn}
+                          onValueChange={(value) => this.onValueDayddn(value)}
+                          placeholder={'Jour'}
+                          placeholderStyle={{
+                            color: 'black',
+                          }}
+                          placeholderIconColor={'black'}
+                          textStyle={{color: 'black'}}
+                          itemStyle={{
+                            color: 'black',
+                            marginLeft: 0,
+                            paddingLeft: 10,
+                            borderBottomColor: 'black',
+                            borderBottomWidth: 1,
+                          }}
+                          itemTextStyle={{
+                            color: 'black',
+                            borderBottomColor: 'black',
+                            borderBottomWidth: 1,
+                          }}>
+                          {this.state.days.map((d) => {
+                            return <Picker.Item label={d} value={d} />;
+                          })}
+                        </Picker>
+                        <Picker
+                          style={{
+                            width: Dimensions.get('screen').width / 3 - 10,
+                          }}
+                          mode="dropdown"
+                          accessibilityLabel={'Mois'}
+                          iosHeader={'Mois'}
+                          iosIcon={
+                            <Icon name="chevron-down" type="FontAwesome5" />
+                          }
+                          selectedValue={this.state.monthDdn}
+                          onValueChange={(value) => this.onValueMonthddn(value)}
+                          placeholder={'Mois'}
+                          placeholderStyle={{
+                            color: 'black',
+                          }}
+                          placeholderIconColor={'black'}
+                          textStyle={{color: 'black'}}
+                          itemStyle={{
+                            color: 'black',
+                            marginLeft: 0,
+                            paddingLeft: 10,
+                            borderBottomColor: 'black',
+                            borderBottomWidth: 1,
+                          }}
+                          itemTextStyle={{
+                            color: 'black',
+                            borderBottomColor: 'black',
+                            borderBottomWidth: 1,
+                          }}>
+                          {this.state.monthsString.map((month) => {
+                            return <Picker.Item label={month} value={month} />;
+                          })}
+                        </Picker>
+
+                        <Picker
+                          style={{
+                            width: Dimensions.get('screen').width / 3 - 10,
+                          }}
+                          mode="dropdown"
+                          accessibilityLabel={''}
+                          iosHeader={'Année'}
+                          iosIcon={
+                            <Icon name="chevron-down" type="FontAwesome5" />
+                          }
+                          selectedValue={this.state.yearDdn}
+                          onValueChange={(value) => this.onValueYearddn(value)}
+                          placeholder={'Année'}
+                          placeholderStyle={{
+                            color: 'black',
+                          }}
+                          placeholderIconColor={'black'}
+                          textStyle={{color: 'black'}}
+                          itemStyle={{
+                            color: 'black',
+                            marginLeft: 0,
+                            paddingLeft: 10,
+                            borderBottomColor: 'black',
+                            borderBottomWidth: 1,
+                          }}
+                          itemTextStyle={{
+                            color: 'black',
+                            borderBottomColor: 'black',
+                            borderBottomWidth: 1,
+                          }}>
+                          {this.state.years.map((year) => {
+                            return <Picker.Item label={year} value={year} />;
+                          })}
+                        </Picker>
+                      </View>
+                    </Item>
+                  ) : null}
+
+                  {this.state.isTelAsk ? (
+                    <Item stackedLabel style={{marginBottom: 5}}>
+                      <Label>Numéro de télephone * </Label>
+                      <Input
+                        returnKeyType="next"
+                        ref="telUtilisateur"
+                        keyboardType="phone-pad"
+                        autoCompleteType="tel"
+                        clearButtonMode="always"
+                        value={this.state.telUtilisateur}
+                        onChangeText={(phoneNumber) =>
+                          this.setState({
+                            telUtilisateur: phoneNumber,
+                          })
+                        }
+                      />
+                    </Item>
+                  ) : null}
+
+                  {this.state.isTelVerifAsked && this.state.isTelAsk ? (
                     <View
                       style={{
+                        marginTop: 20,
+                        paddingLeft: 10,
+                        width: '80%',
                         display: 'flex',
                         flexDirection: 'row',
-                        width: '80%',
                         justifyContent: 'space-between',
-                        alignSelf: 'center',
                       }}>
-                      <TouchableOpacity
-                        style={{
-                          display: 'flex',
-                          flexDirection: 'row',
-                          width: '30%',
-                          justifyContent: 'space-around',
-                        }}
-                        onPress={() => this.setState({sexeUtilisateur: 'F'})}>
-                        <Text>Femme</Text>
-                        <Radio
-                          selected={this.state.sexeUtilisateur == 'F'}
-                          onPress={() => this.setState({sexeUtilisateur: 'F'})}
-                        />
-                      </TouchableOpacity>
-                      <TouchableOpacity
-                        style={{
-                          display: 'flex',
-                          flexDirection: 'row',
-                          width: '30%',
-                          justifyContent: 'space-around',
-                        }}
-                        onPress={() => this.setState({sexeUtilisateur: 'H'})}>
-                        <Text>Homme</Text>
-                        <Radio
-                          selected={this.state.sexeUtilisateur == 'H'}
-                          onPress={() => this.setState({sexeUtilisateur: 'H'})}
-                        />
-                      </TouchableOpacity>
-
-                      <TouchableOpacity
-                        style={{
-                          display: 'flex',
-                          flexDirection: 'row',
-                          width: '30%',
-                          justifyContent: 'space-around',
-                        }}
-                        onPress={() => this.setState({sexeUtilisateur: 'A'})}>
-                        <Text>Autre</Text>
-                        <Radio
-                          selected={this.state.sexeUtilisateur == 'A'}
-                          onPress={() => this.setState({sexeUtilisateur: 'A'})}
-                        />
-                      </TouchableOpacity>
+                      <Switch
+                        style={{paddingTop: 20}}
+                        onValueChange={(text) =>
+                          this.setState({acceptChallengeTelUtilisateur: text})
+                        }
+                        value={this.state.acceptChallengeTelUtilisateur == 1}
+                      />
+                      <Text style={{marginLeft: 10}}>
+                        J’accepte que mon numéro de téléphone soit utilisé a des
+                        fins commerciales.
+                      </Text>
                     </View>
-                  </View>
-                ) : null}
+                  ) : null}
 
-                {this.state.isDdnAsk ? (
-                  <Item stackedLabel style={{marginBottom: 5}}>
-                    <Label>Date de naissance</Label>
-                    <Label style={{fontSize: 12}}>
-                      Important pour les résultats par catégorie
-                    </Label>
-                    <View style={[GlobalStyles.row]}>
-                      <Picker
-                        style={{width: Dimensions.get('screen').width / 3 - 10}}
-                        mode="dropdown"
-                        accessibilityLabel={'Jour'}
-                        iosHeader={'Jour'}
-                        iosIcon={
-                          <Icon name="chevron-down" type="FontAwesome5" />
+                  {this.state.isAdressAsk ? (
+                    <Item stackedLabel style={{marginBottom: 5}}>
+                      <Label>Adresse</Label>
+                      <Input
+                        returnKeyType="next"
+                        clearButtonMode="always"
+                        ref="adresseUtilisateur"
+                        textContentType="fullStreetAddress"
+                        value={this.state.adresseUtilisateur}
+                        onChangeText={(value) =>
+                          this.setState({adresseUtilisateur: value})
                         }
-                        selectedValue={this.state.dayDdn}
-                        onValueChange={(value) => this.onValueDayddn(value)}
-                        placeholder={'Jour'}
-                        placeholderStyle={{
-                          color: 'black',
-                        }}
-                        placeholderIconColor={'black'}
-                        textStyle={{color: 'black'}}
-                        itemStyle={{
-                          color: 'black',
-                          marginLeft: 0,
-                          paddingLeft: 10,
-                          borderBottomColor: 'black',
-                          borderBottomWidth: 1,
-                        }}
-                        itemTextStyle={{
-                          color: 'black',
-                          borderBottomColor: 'black',
-                          borderBottomWidth: 1,
-                        }}>
-                        {this.state.days.map((d) => {
-                          return <Picker.Item label={d} value={d} />;
-                        })}
-                      </Picker>
-                      <Picker
-                        style={{width: Dimensions.get('screen').width / 3 - 10}}
-                        mode="dropdown"
-                        accessibilityLabel={'Mois'}
-                        iosHeader={'Mois'}
-                        iosIcon={
-                          <Icon name="chevron-down" type="FontAwesome5" />
+                      />
+                    </Item>
+                  ) : null}
+
+                  {this.isFieldInError('adresseUtilisateur') &&
+                    this.state.isFirstNameAsk &&
+                    this.getErrorsInField(
+                      'adresseUtilisateur',
+                    ).map((errorMessage) => (
+                      <Text style={styles.error}>{errorMessage}</Text>
+                    ))}
+
+                  {this.state.isPostalAsk ? (
+                    <Item stackedLabel style={{marginBottom: 5}}>
+                      <Label>Code Postal</Label>
+                      <Input
+                        returnKeyType="next"
+                        clearButtonMode="always"
+                        ref="cpUtilisateur"
+                        textContentType="postalCode"
+                        value={this.state.cpUtilisateur}
+                        onChangeText={(value) =>
+                          this.setState({cpUtilisateur: value})
                         }
-                        selectedValue={this.state.monthDdn}
-                        onValueChange={(value) => this.onValueMonthddn(value)}
-                        placeholder={'Mois'}
-                        placeholderStyle={{
-                          color: 'black',
-                        }}
-                        placeholderIconColor={'black'}
-                        textStyle={{color: 'black'}}
-                        itemStyle={{
-                          color: 'black',
-                          marginLeft: 0,
-                          paddingLeft: 10,
-                          borderBottomColor: 'black',
-                          borderBottomWidth: 1,
-                        }}
-                        itemTextStyle={{
-                          color: 'black',
-                          borderBottomColor: 'black',
-                          borderBottomWidth: 1,
-                        }}>
-                        {this.state.monthsString.map((month) => {
-                          return <Picker.Item label={month} value={month} />;
-                        })}
-                      </Picker>
+                      />
+                    </Item>
+                  ) : null}
 
-                      <Picker
-                        style={{width: Dimensions.get('screen').width / 3 - 10}}
-                        mode="dropdown"
-                        accessibilityLabel={''}
-                        iosHeader={'Année'}
-                        iosIcon={
-                          <Icon name="chevron-down" type="FontAwesome5" />
+                  {this.isFieldInError('cpUtilisateur') &&
+                    this.state.isFirstNameAsk &&
+                    this.getErrorsInField(
+                      'cpUtilisateur',
+                    ).map((errorMessage) => (
+                      <Text style={styles.error}>{errorMessage}</Text>
+                    ))}
+
+                  {this.state.isCityAsk ? (
+                    <Item stackedLabel style={{marginBottom: 5}}>
+                      <Label>Ville</Label>
+                      <Input
+                        autoCapitalize="characters"
+                        returnKeyType="next"
+                        textContentType="addressCity"
+                        clearButtonMode="always"
+                        ref="villeUtilisateur"
+                        value={this.state.villeUtilisateur}
+                        onChangeText={(value) =>
+                          this.setState({villeUtilisateur: value})
                         }
-                        selectedValue={this.state.yearDdn}
-                        onValueChange={(value) => this.onValueYearddn(value)}
-                        placeholder={'Année'}
-                        placeholderStyle={{
-                          color: 'black',
-                        }}
-                        placeholderIconColor={'black'}
-                        textStyle={{color: 'black'}}
-                        itemStyle={{
-                          color: 'black',
-                          marginLeft: 0,
-                          paddingLeft: 10,
-                          borderBottomColor: 'black',
-                          borderBottomWidth: 1,
-                        }}
-                        itemTextStyle={{
-                          color: 'black',
-                          borderBottomColor: 'black',
-                          borderBottomWidth: 1,
-                        }}>
-                        {this.state.years.map((year) => {
-                          return <Picker.Item label={year} value={year} />;
-                        })}
-                      </Picker>
-                    </View>
-                  </Item>
-                ) : null}
+                      />
+                    </Item>
+                  ) : null}
 
-                {this.state.isTelAsk ? (
-                  <Item stackedLabel style={{marginBottom: 5}}>
-                    <Label>Numéro de télephone * </Label>
-                    <Input
-                      returnKeyType="next"
-                      ref="telUtilisateur"
-                      keyboardType="phone-pad"
-                      autoCompleteType="tel"
-                      clearButtonMode="always"
-                      value={this.state.telUtilisateur}
-                      onChangeText={(phoneNumber) =>
-                        this.setState({
-                          telUtilisateur: phoneNumber,
-                        })
-                      }
-                    />
-                  </Item>
-                ) : null}
+                  {this.isFieldInError('villeUtilisateur') &&
+                    this.state.isFirstNameAsk &&
+                    this.getErrorsInField('villeUtilisateur').map((errorMessage) => (
+                      <Text style={styles.error}>{errorMessage}</Text>
+                    ))}
 
-                {this.state.isTelVerifAsked && this.state.isTelAsk ? (
+                  {this.state.isCountyAsk ? (
+                    <Item stackedLabel style={{marginBottom: 5}}>
+                      <Label>Ville</Label>
+                      <Input
+                        autoCapitalize="characters"
+                        returnKeyType="next"
+                        textContentType="countryName"
+                        clearButtonMode="always"
+                        value={this.state.paysUtilisateur}
+                        onChangeText={(value) =>
+                          this.setState({paysUtilisateur: value})
+                        }
+                      />
+                    </Item>
+                  ) : null}
+
+                  {this.state.isChallengeEntrepriseAsk ? (
+                    <Item stackedLabel style={{marginBottom: 5}}>
+                      <Label>Challenge Entreprise</Label>
+                      <Input
+                        autoCapitalize="characters"
+                        returnKeyType="next"
+                        textContentType="none"
+                        clearButtonMode="always"
+                        value={this.state.clubEntreprise}
+                        onChangeText={(value) =>
+                          this.setState({clubEntreprise: value})
+                        }
+                      />
+                    </Item>
+                  ) : null}
+
+                  {this.state.isChallengeClubAsk ? (
+                    <Item stackedLabel style={{marginBottom: 5}}>
+                      <Label>Challenge Club</Label>
+                      <Input
+                        autoCapitalize="characters"
+                        returnKeyType="next"
+                        textContentType="none"
+                        clearButtonMode="always"
+                        value={this.state.clubClub}
+                        onChangeText={(value) =>
+                          this.setState({clubClub: value})
+                        }
+                      />
+                    </Item>
+                  ) : null}
+
+                  {this.state.isChallengeFamilleAsk ? (
+                    <Item stackedLabel style={{marginBottom: 5}}>
+                      <Label>Challenge Famille</Label>
+                      <Input
+                        autoCapitalize="characters"
+                        returnKeyType="next"
+                        textContentType="none"
+                        clearButtonMode="always"
+                        value={this.state.clubFamille}
+                        onChangeText={(value) =>
+                          this.setState({clubFamille: value})
+                        }
+                      />
+                    </Item>
+                  ) : null}
+
+                  {this.state.isChallengeAutreAsk ? (
+                    <Item stackedLabel style={{marginBottom: 5}}>
+                      <Label>{TemplateChallengeAutreName}</Label>
+                      <Input
+                        autoCapitalize="characters"
+                        returnKeyType="next"
+                        textContentType="none"
+                        clearButtonMode="always"
+                        value={this.state.clubAutre}
+                        onChangeText={(value) =>
+                          this.setState({clubAutre: value})
+                        }
+                      />
+                    </Item>
+                  ) : null}
+
                   <View
                     style={{
                       marginTop: 20,
@@ -707,272 +896,128 @@ class CreateAccount extends ValidationComponent {
                     <Switch
                       style={{paddingTop: 20}}
                       onValueChange={(text) =>
-                        this.setState({acceptChallengeTelUtilisateur: text})
+                        this.setState({acceptChallengeNameUtilisateur: text})
                       }
-                      value={this.state.acceptChallengeTelUtilisateur == 1}
+                      value={this.state.acceptChallengeNameUtilisateur}
                     />
-                    <Text style={{marginLeft: 10}}>
-                    J’accepte que mon numéro de téléphone soit utilisé a des
-                        fins commerciales.
-                    </Text>
+                    <TouchableOpacity
+                      onPress={() =>
+                        this.setState({
+                          acceptChallengeNameUtilisateur: !this.state
+                            .acceptChallengeNameUtilisateur,
+                        })
+                      }>
+                      <Text style={{marginLeft: 10}}>
+                        Je souhaite voir mon nom apparaître dans les résultats
+                      </Text>
+                    </TouchableOpacity>
                   </View>
-                ) : null}
 
-                {this.state.isAdressAsk ? (
-                  <Item stackedLabel style={{marginBottom: 5}}>
-                    <Label>Adresse</Label>
-                    <Input
-                      returnKeyType="next"
-                      clearButtonMode="always"
-                      textContentType="fullStreetAddress"
-                      value={this.state.adresseUtilisateur}
-                      onChangeText={(value) =>
-                        this.setState({adresseUtilisateur: value})
+                  <View
+                    style={{
+                      marginTop: 20,
+                      paddingLeft: 10,
+                      width: '80%',
+                      display: 'flex',
+                      flexDirection: 'row',
+                      justifyContent: 'space-between',
+                    }}>
+                    <Switch
+                      style={{paddingTop: 20}}
+                      onValueChange={(text) =>
+                        this.setState({acceptChallengeUtilisateur: text})
                       }
+                      value={this.state.acceptChallengeUtilisateur}
                     />
-                  </Item>
-                ) : null}
-
-                {this.state.isPostalAsk ? (
-                  <Item stackedLabel style={{marginBottom: 5}}>
-                    <Label>Code Postal</Label>
-                    <Input
-                      returnKeyType="next"
-                      clearButtonMode="always"
-                      textContentType="postalCode"
-                      value={this.state.cpUtilisateur}
-                      onChangeText={(value) =>
-                        this.setState({cpUtilisateur: value})
-                      }
-                    />
-                  </Item>
-                ) : null}
-
-                {this.state.isCityAsk ? (
-                  <Item stackedLabel style={{marginBottom: 5}}>
-                    <Label>Ville</Label>
-                    <Input
-                      autoCapitalize="characters"
-                      returnKeyType="next"
-                      textContentType="addressCity"
-                      clearButtonMode="always"
-                      value={this.state.villeUtilisateur}
-                      onChangeText={(value) =>
-                        this.setState({villeUtilisateur: value})
-                      }
-                    />
-                  </Item>
-                ) : null}
-
-                {this.state.isCountyAsk ? (
-                  <Item stackedLabel style={{marginBottom: 5}}>
-                    <Label>Ville</Label>
-                    <Input
-                      autoCapitalize="characters"
-                      returnKeyType="next"
-                      textContentType="countryName"
-                      clearButtonMode="always"
-                      value={this.state.paysUtilisateur}
-                      onChangeText={(value) =>
-                        this.setState({paysUtilisateur: value})
-                      }
-                    />
-                  </Item>
-                ) : null}
-
-                {this.state.isChallengeEntrepriseAsk ? (
-                  <Item stackedLabel style={{marginBottom: 5}}>
-                    <Label>Challenge Entreprise</Label>
-                    <Input
-                      autoCapitalize="characters"
-                      returnKeyType="next"
-                      textContentType="none"
-                      clearButtonMode="always"
-                      value={this.state.clubEntreprise}
-                      onChangeText={(value) =>
-                        this.setState({clubEntreprise: value})
-                      }
-                    />
-                  </Item>
-                ) : null}
-
-                {this.state.isChallengeClubAsk ? (
-                  <Item stackedLabel style={{marginBottom: 5}}>
-                    <Label>Challenge Club</Label>
-                    <Input
-                      autoCapitalize="characters"
-                      returnKeyType="next"
-                      textContentType="none"
-                      clearButtonMode="always"
-                      value={this.state.clubClub}
-                      onChangeText={(value) => this.setState({clubClub: value})}
-                    />
-                  </Item>
-                ) : null}
-
-                {this.state.isChallengeFamilleAsk ? (
-                  <Item stackedLabel style={{marginBottom: 5}}>
-                    <Label>Challenge Famille</Label>
-                    <Input
-                      autoCapitalize="characters"
-                      returnKeyType="next"
-                      textContentType="none"
-                      clearButtonMode="always"
-                      value={this.state.clubFamille}
-                      onChangeText={(value) =>
-                        this.setState({clubFamille: value})
-                      }
-                    />
-                  </Item>
-                ) : null}
-
-                {this.state.isChallengeAutreAsk ? (
-                  <Item stackedLabel style={{marginBottom: 5}}>
-                    <Label>{TemplateChallengeAutreName}</Label>
-                    <Input
-                      autoCapitalize="characters"
-                      returnKeyType="next"
-                      textContentType="none"
-                      clearButtonMode="always"
-                      value={this.state.clubAutre}
-                      onChangeText={(value) =>
-                        this.setState({clubAutre: value})
-                      }
-                    />
-                  </Item>
-                ) : null}
-
-                <View
-                  style={{
-                    marginTop: 20,
-                    paddingLeft: 10,
-                    width: '80%',
-                    display: 'flex',
-                    flexDirection: 'row',
-                    justifyContent: 'space-between',
-                  }}>
-                  <Switch
-                    style={{paddingTop: 20}}
-                    onValueChange={(text) =>
-                      this.setState({acceptChallengeNameUtilisateur: text})
-                    }
-                    value={this.state.acceptChallengeNameUtilisateur}
-                  />
-                  <TouchableOpacity
-                    onPress={() =>
-                      this.setState({
-                        acceptChallengeNameUtilisateur: !this.state
-                          .acceptChallengeNameUtilisateur,
-                      })
-                    }>
-                    <Text style={{marginLeft: 10}}>
-                      Je souhaite voir mon nom apparaître dans les résultats
-                    </Text>
-                  </TouchableOpacity>
-                </View>
-
-                <View
-                  style={{
-                    marginTop: 20,
-                    paddingLeft: 10,
-                    width: '80%',
-                    display: 'flex',
-                    flexDirection: 'row',
-                    justifyContent: 'space-between',
-                  }}>
-                  <Switch
-                    style={{paddingTop: 20}}
-                    onValueChange={(text) =>
-                      this.setState({acceptChallengeUtilisateur: text})
-                    }
-                    value={this.state.acceptChallengeUtilisateur}
-                  />
-                  <TouchableOpacity
-                    onPress={() =>
-                      this.setState({
-                        acceptChallengeUtilisateur: !this.state
-                          .acceptChallengeUtilisateur,
-                      })
-                    }>
-                    <Text style={{marginLeft: 10}}>
-                    J’accepte que le Département m’envoie des informations
+                    <TouchableOpacity
+                      onPress={() =>
+                        this.setState({
+                          acceptChallengeUtilisateur: !this.state
+                            .acceptChallengeUtilisateur,
+                        })
+                      }>
+                      <Text style={{marginLeft: 10}}>
+                        J’accepte que le Département m’envoie des informations
                         et le cas échéant, me contacte pour toute action ou
                         manifestation départementale.
+                      </Text>
+                    </TouchableOpacity>
+                  </View>
+
+                  {this.state.errorCNIL ? (
+                    <Text
+                      style={{
+                        width: '100%',
+                        textAlign: 'center',
+                        fontSize: 18,
+                        color: 'red',
+                      }}>
+                      Vous devez acceptez que le Département m’envoie des
+                      informations et le cas échéant, me contacte pour toute
+                      action ou manifestation départementale.
+                    </Text>
+                  ) : null}
+                </Form>
+
+                {this.state.isLoading ? (
+                  <View
+                    style={{
+                      marginTop: 20,
+                      marginBottom: 20,
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      flexDirection: 'row',
+                      display: 'flex',
+                    }}>
+                    <ActivityIndicator color="black" />
+                    <Text style={{marginLeft: 5}}>Enregistrement en cours</Text>
+                  </View>
+                ) : (
+                  <TouchableOpacity
+                    style={[
+                      GlobalStyles.button,
+                      {
+                        width: '80%',
+                        alignSelf: 'center',
+                        justifyContent: 'center',
+                        marginTop: 20,
+                      },
+                    ]}
+                    onPress={() => this.onClickValidate()}>
+                    <Text
+                      style={[
+                        {
+                          textAlign: 'center',
+                          color: 1 == 1 ? 'black' : 'black',
+                        },
+                      ]}>
+                      ENREGISTRER
                     </Text>
                   </TouchableOpacity>
-                </View>
+                )}
 
-                {this.state.errorCNIL ? (
+                {ApiUtils.ISDEBUG() ? (
+                  <Text
+                    style={{textAlign: 'center', fontSize: 12, marginTop: 30}}>
+                    Debug version {VersionCheck.getCurrentVersion()}
+                  </Text>
+                ) : IsDemo ? (
+                  <Text
+                    style={{textAlign: 'center', fontSize: 12, marginTop: 30}}>
+                    Demo version {VersionCheck.getCurrentVersion()}
+                  </Text>
+                ) : (
                   <Text
                     style={{
-                      width: '100%',
                       textAlign: 'center',
-                      fontSize: 18,
-                      color: 'red',
+                      fontSize: 12,
+                      marginTop: 30,
+                      marginBottom: 100,
                     }}>
-                    Vous devez acceptez que le Département m’envoie des informations
-                        et le cas échéant, me contacte pour toute action ou
-                        manifestation départementale.
+                    Version V {VersionCheck.getCurrentVersion()}
                   </Text>
-                ) : null}
-              </Form>
-
-              {this.state.isLoading ? (
-                <View
-                  style={{
-                    marginTop: 20,
-                    marginBottom: 20,
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    flexDirection: 'row',
-                    display: 'flex',
-                  }}>
-                  <ActivityIndicator color="black" />
-                  <Text style={{marginLeft: 5}}>Enregistrement en cours</Text>
-                </View>
-              ) : (
-                <TouchableOpacity
-                  style={[
-                    GlobalStyles.button,
-                    {
-                      width: '80%',
-                      alignSelf: 'center',
-                      justifyContent: 'center',
-                      marginTop: 20,
-                    },
-                  ]}
-                  onPress={() => this.onClickValidate()}>
-                  <Text
-                    style={[
-                      {textAlign: 'center', color: 1 == 1 ? 'black' : 'black'},
-                    ]}>
-                    ENREGISTRER
-                  </Text>
-                </TouchableOpacity>
-              )}
-
-              {ApiUtils.ISDEBUG() ? (
-                <Text
-                  style={{textAlign: 'center', fontSize: 12, marginTop: 30}}>
-                  Debug version {VersionCheck.getCurrentVersion()}
-                </Text>
-              ) : IsDemo ? (
-                <Text
-                  style={{textAlign: 'center', fontSize: 12, marginTop: 30}}>
-                  Demo version {VersionCheck.getCurrentVersion()}
-                </Text>
-              ) : (
-                <Text
-                  style={{
-                    textAlign: 'center',
-                    fontSize: 12,
-                    marginTop: 30,
-                    marginBottom: 100,
-                  }}>
-                  Version V {VersionCheck.getCurrentVersion()}
-                </Text>
-              )}
-            </KeyboardAvoidingView>
+                )}
+              </KeyboardAvoidingView>
             </ImageBackground>
           </Content>
         </Container>

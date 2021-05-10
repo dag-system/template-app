@@ -28,7 +28,7 @@ interface Props {
 }
 
 export default function TraceModal(props: Props) {
-  const [tabVisible, setTabVisible] = useState('traces');
+  const [tabVisible, setTabVisible] = useState('interests');
   const {polylines, pointsInterets} = useSelector((state: AppState) => state);
   const dispatch = useDispatch();
 
