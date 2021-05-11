@@ -188,8 +188,8 @@ export default function MapCarousel() {
           shadowRadius: 6.27,
         }}>
         <View style={styles.itemPart}>
-          <Text style={styles.title}>{item.title1}</Text>
-          <Text style={styles.title}>{item.subTitle1}</Text>
+          <Text style={[styles.title, {width : '70%'}]} lineBreakMode="tail" numberOfLines={2}>{item.title1}</Text>
+          <Text style={[styles.title, {width : '30%'}]}>{item.subTitle1}</Text>
         </View>
         <View
           style={{
@@ -206,8 +206,8 @@ export default function MapCarousel() {
             }}></View>
         </View>
         <View style={styles.itemPart}>
-          <Text style={styles.title}>{item.title2}</Text>
-          <Text style={styles.title}>{item.subTitle2}</Text>
+          <Text  style={[styles.title, {width : '70%'}]}>{item.title2}</Text>
+          <Text  style={[styles.title, {width : '30%'}]}>{item.subTitle2}</Text>
         </View>
       </View>
     );
@@ -215,10 +215,13 @@ export default function MapCarousel() {
 
   function pagination() {
     return (
+      <View style={{width : '80%'}}>
+
+
       <Pagination
         dotsLength={carouselItems.length}
         activeDotIndex={activeSlide}
-        // containerStyle={{  height : 10, width :'100%', justifyContent :"center" }}
+        // containerStyle={{ width :'50%', justifyContent :"center" }}
         dotStyle={{
           width: 7,
           height: 7,
@@ -236,6 +239,7 @@ export default function MapCarousel() {
         inactiveDotOpacity={1}
         inactiveDotScale={0.9}
       />
+            </View>
     );
   }
 

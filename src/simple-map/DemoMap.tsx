@@ -40,6 +40,7 @@ export default function DemoMap() {
   );
 
   useEffect(() => {
+
     let currentInterval = setInterval(() => {
       updateDemo(speedDemo);
     }, 1000);
@@ -195,8 +196,8 @@ export default function DemoMap() {
           showsScale={false}
           showsTraffic={false}
           initialRegion={{
-            latitude: 45.76512485710589,
-            longitude: 4.8696115893891765,
+            latitude: 48.792001,
+            longitude: 2.39851            ,
             latitudeDelta: LATITUDE_DELTA_CLOSE,
             longitudeDelta: LONGITUDE_DELTA_CLOSE,
           }}

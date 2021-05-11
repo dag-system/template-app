@@ -134,8 +134,8 @@ android {
             applicationId "com.dag.activtoibysfgt.app"
             minSdkVersion rootProject.ext.minSdkVersion
             targetSdkVersion rootProject.ext.targetSdkVersion
-            versionCode 552
-            versionName "1.1.41"
+            versionCode 555
+            versionName "1.1.44"
     }
     splits {
         abi {
