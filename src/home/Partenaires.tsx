@@ -211,7 +211,7 @@ const styles = StyleSheet.create({
     elevation: 0,
   },
   saveText: {
-    color: 'black',
+    color: 'white',
   },
   body: {
     width: '100%',

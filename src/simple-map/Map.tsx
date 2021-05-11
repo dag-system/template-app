@@ -363,8 +363,8 @@ const Map = forwardRef((props, ref) => {
         showsScale={false}
         showsTraffic={false}
         initialRegion={{
-          latitude: 45.76512485710589, // 44.843884,
-          longitude: 4.8696115893891765,
+          latitude: 48.7833, // 44.843884,
+          longitude: 2.4667,
           latitudeDelta: LATITUDE_DELTA_CLOSE,
           longitudeDelta: LONGITUDE_DELTA_CLOSE,
         }}

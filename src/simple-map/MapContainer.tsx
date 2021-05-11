@@ -203,7 +203,6 @@ export default function MapContainer() {
       .then((response) => response.json())
       .then((responseJson) => {
         //save values in cache
-
   
         var result = responseJson;
         var finalTraceArray: any[] = [];
@@ -264,7 +263,7 @@ export default function MapContainer() {
 
         if (result.interets != null && result.interets.length != 0) {
     
-          console.log(result.interests);
+      
           var interestArray = Object.values(result.interets);
           var count = 0;
           interestArray.forEach((interest: any) => {

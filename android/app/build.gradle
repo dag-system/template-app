@@ -134,8 +134,8 @@ android {
             applicationId "com.dag.jeuxduvaldemarne.app"
             minSdkVersion rootProject.ext.minSdkVersion
             targetSdkVersion rootProject.ext.targetSdkVersion
-            versionCode 554
-            versionName "1.1.43"
+            versionCode 555
+            versionName "1.1.44"
     }
     splits {
         abi {
