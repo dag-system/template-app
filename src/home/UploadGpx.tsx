@@ -33,7 +33,11 @@ import {TextInput} from 'react-native-gesture-handler';
 import DocumentPicker from 'react-native-document-picker';
 import DefaultProps from '../models/DefaultProps';
 
-import {TemplateSportLive, textAutoBackgroundColor} from '../globalsModifs';
+import {
+  TemplateSportLive,
+  TemplateBackgroundColor,
+  textAutoBackgroundColor,
+} from '../globalsModifs';
 
 const mapStateToProps = (state) => {
   return {
@@ -401,20 +405,20 @@ class UploadGpx extends Component<Props, State> {
                     onValueChange={this.onValueSportChange.bind(this)}
                     placeholder={'Choisissez votre sport'}
                     placeholderStyle={{
-                      color:'black',
+                      color: 'black',
                     }}
                     placeholderIconColor={'black'}
-                    textStyle={{color:'black'}}
+                    textStyle={{color: 'black'}}
                     itemStyle={{
-                      color:'black',
+                      color: 'black',
                       marginLeft: 0,
                       paddingLeft: 10,
-                      borderBottomColor:'black',
+                      borderBottomColor: 'black',
                       borderBottomWidth: 1,
                     }}
                     itemTextStyle={{
-                      color:'black',
-                      borderBottomColor:'black',
+                      color: 'black',
+                      borderBottomColor: 'black',
                       borderBottomWidth: 1,
                     }}>
                     <Picker.Item label="Choisissez votre sport" value="-1" />
@@ -487,8 +491,8 @@ class UploadGpx extends Component<Props, State> {
                     <TouchableOpacity
                       onPress={() => {
                         this.setState({
-                          acceptChallengeNameUtilisateur: !this.state
-                            .acceptChallengeNameUtilisateur,
+                          acceptChallengeNameUtilisateur:
+                            !this.state.acceptChallengeNameUtilisateur,
                         });
                       }}>
                       <Text style={{marginLeft: 10}}>
@@ -515,19 +519,15 @@ class UploadGpx extends Component<Props, State> {
                       paddingHorizontal: 50,
                       elevation: 0,
                       alignSelf: 'center',
-                      borderColor: this.isErrorFormStop()
-                        ? 'black'
-                        : 'black',
+                      borderColor: textAutoBackgroundColor,
                       borderWidth: 1,
-                      backgroundColor: this.isErrorFormStop()
-                        ? 'transparent'
-                        : 'black',
+                      backgroundColor: TemplateBackgroundColor,
                     }}
                     onPress={() => this.sendFile()}
                     disabled={this.isErrorFormStop()}>
                     <Text
                       style={{
-                        color: this.isErrorFormStop() ? 'black' : 'white',
+                        color: textAutoBackgroundColor,
                       }}>
                       ENREGISTRER
                     </Text>
