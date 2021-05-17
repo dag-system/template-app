@@ -33,7 +33,13 @@ import {TextInput} from 'react-native-gesture-handler';
 import DocumentPicker from 'react-native-document-picker';
 import DefaultProps from '../models/DefaultProps';
 
-import {TemplateSportLive, textAutoBackgroundColor} from '../globalsModifs';
+import {
+  TemplateSportLive,
+  TemplateBackgroundColor,
+  textAutoBackgroundColor,
+  TemplateSecondColor,
+  textAutoSecondColor,
+} from '../globalsModifs';
 
 const mapStateToProps = (state) => {
   return {
@@ -404,7 +410,7 @@ class UploadGpx extends Component<Props, State> {
                       color: 'black',
                     }}
                     placeholderIconColor={'black'}
-                    textStyle={{color:'black'}}
+                    textStyle={{color: 'black'}}
                     itemStyle={{
                       color: 'black',
                       marginLeft: 0,
@@ -487,8 +493,8 @@ class UploadGpx extends Component<Props, State> {
                     <TouchableOpacity
                       onPress={() => {
                         this.setState({
-                          acceptChallengeNameUtilisateur: !this.state
-                            .acceptChallengeNameUtilisateur,
+                          acceptChallengeNameUtilisateur:
+                            !this.state.acceptChallengeNameUtilisateur,
                         });
                       }}>
                       <Text style={{marginLeft: 10}}>
@@ -515,13 +521,9 @@ class UploadGpx extends Component<Props, State> {
                       paddingHorizontal: 50,
                       elevation: 0,
                       alignSelf: 'center',
-                      borderColor: this.isErrorFormStop()
-                        ? 'black'
-                        : ApiUtils.getColor(),
+                      borderColor: textAutoSecondColor,
                       borderWidth: 1,
-                      backgroundColor: this.isErrorFormStop()
-                        ? 'transparent'
-                        : ApiUtils.getColor(),
+                      backgroundColor: TemplateBackgroundColor,
                     }}
                     onPress={() => this.sendFile()}
                     disabled={this.isErrorFormStop()}>
