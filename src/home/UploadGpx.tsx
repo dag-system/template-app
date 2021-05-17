@@ -521,7 +521,7 @@ class UploadGpx extends Component<Props, State> {
                       paddingHorizontal: 50,
                       elevation: 0,
                       alignSelf: 'center',
-                      borderColor: textAutoSecondColor,
+                      borderColor: textAutoBackgroundColor,
                       borderWidth: 1,
                       backgroundColor: TemplateBackgroundColor,
                     }}
@@ -529,7 +529,7 @@ class UploadGpx extends Component<Props, State> {
                     disabled={this.isErrorFormStop()}>
                     <Text
                       style={{
-                        color: this.isErrorFormStop() ? 'black' : 'white',
+                        color: textAutoBackgroundColor,
                       }}>
                       ENREGISTRER
                     </Text>
