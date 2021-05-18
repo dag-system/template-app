@@ -83,6 +83,14 @@ export default function MapCarousel() {
 
     currentCarouselItems.push({
       id: 'nbKm',
+      title2: 'Km déjà parcourus',
+      subTitle2: statistics?.nbKmTotal != null ? statistics?.nbKmTotal + ' km' : "- km",
+      title1: 'Distance pour Tokyo ',
+      subTitle1: "9 710 km",
+    });
+
+    currentCarouselItems.push({
+      id: 'nbKm',
       title1: 'Nb km parcourus',
       subTitle1: totalKm.toFixed(1) + ' km',
       title2: 'Nb km parcourus total ',
