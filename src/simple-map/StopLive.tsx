@@ -55,7 +55,7 @@ export default function StopActivity(props: Props) {
       userData.acceptChallengeNameUtilisateur == 1 ||
         userData.acceptChallengeNameUtilisateur == true,
     );
-  }, [currentLive]);
+  }, [currentLive?.idLive]);
 
   const onToggleEnabled = (isMoving: boolean, isRecording: boolean) => {
     if (isMoving) {

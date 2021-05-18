@@ -133,6 +133,7 @@ export default function MapButtons(props: Props) {
       idSport = TemplateSportLive[0].idSport;
       formData.append('idSport', TemplateSportLive[0].idSport.toString());
     } else {
+      idSport =selectedSport;
       formData.append('idSport', selectedSport.toString());
     }
 

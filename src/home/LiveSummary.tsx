@@ -238,7 +238,8 @@ class LiveSummary extends Component<Props, State> {
         this.setState({coordinates: dataMap}, () =>
           this.centerMapOnGpx(dataMap),
         );
-
+        // this.calculateTimeForEachKm(dataMap);
+        // this.calculateStatsForGpx(dataMap);
         this.centerMapOnGpx(dataMap);
       })
 
@@ -259,14 +260,21 @@ class LiveSummary extends Component<Props, State> {
       });
   }
 
-  getCoordinatesForMap(positions) {
-    var coordinates = [];
-    positions.forEach((element) => {
-      element = Object.values(element);
+  // calculateStatsForGpx = (positions) =>
+  // {
+  //   // statsLive
+  // } 
 
+  getCoordinatesForMap(positions) {
+    var coordinates : any[]= [];
+    positions.forEach((element : any) => {
+      element = Object.values(element);
+      let time = element[2];
+      time = Object.values(time);
       var coordinate = {
         latitude: parseFloat(element[0]),
         longitude: parseFloat(element[1]),
+        dateGps: time[0],
       };
       coordinates.push(coordinate);
     });
@@ -323,10 +331,11 @@ class LiveSummary extends Component<Props, State> {
     var action = {type: 'SAVE_CURRENT_LIVE', data: live};
     this.props.dispatch(action);
 
-    //this.calculateTimeForEachKm(positions);
+    // this.calculateTimeForEachKm(positions);
   }
 
   async calculateTimeForEachKm(coordinates) {
+
     let dist = 0;
     let splits = [];
     let startPoint = coordinates[0];
@@ -383,7 +392,7 @@ class LiveSummary extends Component<Props, State> {
         startPoint = coordinates[i];
       }
     }
-    // console.log(splits);
+     console.log(splits);
     this.setState({splits: splits, speedData: speedData});
   }
 
