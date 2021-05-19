@@ -43,6 +43,7 @@ import VersionCheck from 'react-native-version-check';
 import moment from 'moment';
 
 import {
+  TemplateAppName,
   TemplateExpirationDate,
   TemplateIdOrganisation,
   TemplateIsPaying,
@@ -165,6 +166,8 @@ class Home extends Component {
       }
     });
   }
+
+
 
   onLogin() {
     this.setState({isLoading: true});
@@ -910,6 +913,7 @@ const styles = StyleSheet.create({
     padding: 0,
     marginBottom: 20,
     marginTop: 20,
+    color : 'black'
   },
   p: {
     fontSize: 12,
