@@ -11,6 +11,7 @@ import ApiUtils from '../ApiUtils';
 interface State {}
 
 interface CarouselItem {
+  order : number,
   id: string;
   title1: string;
   subTitle1: string;
@@ -56,6 +57,7 @@ export default function MapCarousel() {
 
     //1 - nombre activites
     currentCarouselItems.push({
+      order : 0,
       id: 'nbActivites',
       title1: "Nombre d'activités",
       subTitle1: lives.length.toString(),
@@ -81,6 +83,7 @@ export default function MapCarousel() {
     // Nombre de classés (tous parcours confondus - les miens – ceux de tous les utilisateurs)
 
     currentCarouselItems.push({
+      order : 1,
       id: 'nbKm',
       title1: 'Nb km parcourus',
       subTitle1: totalKm.toFixed(1) + ' km',
@@ -130,6 +133,7 @@ export default function MapCarousel() {
       .then((responseJson) => {
 
         let newCarouselItem: CarouselItem = {
+          order : idSegment,
           id: idSegment.toString(),
           title1: responseJson.nomSegment + ' : ',
           subTitle1: responseJson.efforts.bestEffort !=null ? responseJson.efforts.bestEffort.tempsEffort : "Pas de temps",
@@ -252,7 +256,9 @@ export default function MapCarousel() {
       <View style={{marginTop: -10, marginBottom: -10}}>{pagination()}</View>
 
       <Carousel
-        data={carouselItems}
+        data={carouselItems.sort(function (a, b) {
+          return a.order - b.order;
+        })}
         renderItem={_renderItem}
         sliderWidth={400}
         style={{marginTop: -200, paddingTop: 0}}

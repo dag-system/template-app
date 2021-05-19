@@ -51,6 +51,14 @@ export default function TraceModal(props: Props) {
     props.showDemoTrace(trace);
   };
 
+  const getDistanceTrace = (distance : number) =>{
+    if(distance > 1000)
+    {
+      return (distance/1000).toFixed(1);
+    }else{
+      return distance;
+    }
+  }
   // render() {
   return (
     /******** modal5 : Traces list  *****************/
@@ -178,7 +186,7 @@ export default function TraceModal(props: Props) {
                           style={{fontSize: 14}}
                           numberOfLines={1}
                           ellipsizeMode="tail">
-                          {item.sportTrace} - {item.distanceTrace}km -
+                          {getDistanceTrace(item.distanceTrace)}km -
                           {item.dplusTrace}D+
                         </Text>
                       </View>
