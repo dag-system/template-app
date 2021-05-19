@@ -22,6 +22,7 @@ import {
   Right,
   Picker,
   Footer,
+  Content,
 } from 'native-base';
 import Logo from '../assets/logo.png';
 import {Button as ButtonElement} from 'react-native-elements';
@@ -224,7 +225,7 @@ class ForgotPassword extends ValidationComponent {
             </Body>
             <Right></Right>
           </Header>
-
+<Content>
           <View style={styles.loginButtonSection}>
             <Text style={{textAlign: 'justify'}}>
               Entrez votre email ci-dessous pour récuperer votre code
@@ -394,10 +395,11 @@ class ForgotPassword extends ValidationComponent {
               </View>
             ) : null}
           </View>
-        </Container>
-        <Footer style={{backgroundColor: 'white', paddingBottom: 64}}>
+          </Content>
+        {/* <Footer style={{backgroundColor: 'white', paddingBottom: 64}}> */}
           <Sponsors />
-        </Footer>
+        {/* </Footer> */}
+        </Container>
       </Root>
     );
   }

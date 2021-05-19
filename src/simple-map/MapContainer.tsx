@@ -383,9 +383,9 @@ export default function MapContainer() {
         <Map ref={mapRef} />
 
         {TemplateArrayImagesSponsorPath.length > 0 ? (
-          <Footer style={{backgroundColor: 'white', paddingBottom: 64}}>
+          // <Footer style={{backgroundColor: 'white', paddingBottom: 64}}>
             <Sponsors />
-          </Footer>
+          // </Footer>
         ) : null}
 
         <TraceModal

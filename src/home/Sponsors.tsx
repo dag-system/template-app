@@ -9,7 +9,7 @@ export class Sponsors extends Component {
   componentDidMount() {}
   render() {
     return (
-      <View>
+      <View style={{backgroundColor : 'white'}}>
         {TemplateArrayImagesSponsorPath.length > 0 ? (
           <>
             <View

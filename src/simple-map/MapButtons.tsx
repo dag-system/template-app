@@ -694,7 +694,7 @@ export default function MapButtons(props: Props) {
                   onPress={() => {
                     toggleModalChooseSport();
                   }}>
-                  <Icon name="chevron-left" type="FontAwesome5" />
+                  <Icon name="chevron-left" type="FontAwesome5"  style={{ color : 'black'}}/>
                 </Button>
               </Left>
               <Body style={{justifyContent: 'center', flex: 1}}>

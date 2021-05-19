@@ -292,8 +292,7 @@ class Home extends Component {
             this.setState({noConnection: true});
 
             Toast.show({
-              text:
-                "Vous n'avez pas de connection internet, merci de réessayer",
+              text: "Vous n'avez pas de connection internet, merci de réessayer",
               buttonText: 'Ok',
               type: 'danger',
               position: 'bottom',
@@ -350,7 +349,8 @@ class Home extends Component {
   }
 
   validateEmail(email) {
-    var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    var re =
+      /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     return re.test(email);
   }
 
@@ -427,7 +427,7 @@ class Home extends Component {
               challenge.positionsTrace = positionArray;
 
               finalChallenge = {
-                isActive : true,
+                isActive: true,
                 positionsTrace: positionArray,
                 idChallenge: finalChallenge.idChallenge,
                 libelleChallenge: finalChallenge.libelleChallenge,
@@ -678,158 +678,163 @@ class Home extends Component {
             <Modal
               visible={this.state.isVisibleModalLogin}
               onRequestClose={() => this.oncloseModalLogin()}>
-              <Header style={styles.header}>
-                <Left>
-                  <Button
-                    style={styles.drawerButton}
-                    onPress={() => this.oncloseModalLogin()}>
-                    <Icon
-                      style={styles.saveText}
-                      name="chevron-left"
-                      type="FontAwesome5"
+              <Container>
+                <Header style={styles.header}>
+                  <Left>
+                    <Button
+                      style={styles.drawerButton}
+                      onPress={() => this.oncloseModalLogin()}>
+                      <Icon
+                        style={styles.saveText}
+                        name="chevron-left"
+                        type="FontAwesome5"
+                      />
+                    </Button>
+                  </Left>
+                  <Body>
+                    <Image
+                      resizeMode="contain"
+                      source={Logo}
+                      style={styles.logoHeader}
                     />
-                  </Button>
-                </Left>
-                <Body>
-                  <Image
-                    resizeMode="contain"
-                    source={Logo}
-                    style={styles.logoHeader}
-                  />
-                </Body>
-                <Right></Right>
-              </Header>
-
-              <KeyboardAvoidingView style={styles.followCodeLoginSection}>
-                <Text
-                  style={{
-                    fontWeight: 'bold',
-                    textTransform: 'uppercase',
-                    textAlign: 'center',
-                    marginTop: 30,
-                    color: 'black',
-                  }}>
-                  Vous avez déjà un compte ?
-                </Text>
-
-                {this.props.folocodes?.length > 0 ? (
-                  <View>
-                    <Picker
-                      style={{width: 300, height: 100}}
-                      mode="dropdown"
-                      accessibilityLabel={'Choisir le Code'}
-                      iosHeader={'Choisir le Code'}
-                      iosIcon={<Icon name="chevron-down" type="FontAwesome5" />}
-                      selectedValue={this.state.selectedFolocode}
-                      onValueChange={this.onValueFolocodeChange.bind(this)}
-                      placeholder={'Choisissez le Code'}
-                      placeholderStyle={{
-                        color: 'black'
-                      }}
-                      placeholderIconColor={'black'}
-                      textStyle={{color: 'black'}}
-                      itemStyle={{
-                        color: 'black',
-                        marginLeft: 0,
-                        paddingLeft: 10,
-                        borderBottomColor: 'black',
-                        borderBottomWidth: 1,
-                      }}
-                      itemTextStyle={{
-                        color:'black',
-                        borderBottomColor: 'black',
-                        borderBottomWidth: 1,
-                      }}>
-                      <Picker.Item label="Choisissez le Code" value={-1} />
-                      {this.props.folocodes.map((folocode) => {
-                        return (
-                          <Picker.Item
-                            label={
-                              folocode.folocode +
-                              ' ' +
-                              folocode.prenom +
-                              ' ' +
-                              folocode.nom
-                            }
-                            value={folocode.folocode}
-                          />
-                        );
-                      })}
-                    </Picker>
-                  </View>
-                ) : null}
-
-                {this.props.folocodes?.length > 0 ? (
-                  <Text style={{textAlign: 'center'}}>ou </Text>
-                ) : null}
-
-                <View
-                  style={{
-                    display: 'flex',
-                    flexDirection: 'row',
-                    justifyContent: 'center',
-                  }}>
-                  <TextInput
-                    style={styles.inputCode}
-                    placeholder="Entrez votre code"
-                    placeholderTextColor="black"
-                    value={this.state.followCode}
-                    onChangeText={(followCode) =>
-                      this.setState({followCode: followCode})
-                    }
-                    clearButtonMode="always"
-                  />
-                </View>
-
-                <View
-                  style={{
-                    flexDirection: 'row',
-                    justifyContent: 'center',
-                    alignSelf: 'center',
-                  }}>
-                  <TouchableOpacity
-                    full
-                    style={[
-                      GlobalStyles.button,
-                      {
-                        width: '80%',
-                        elevation: 0,
-                        borderColor: 'black',
-                        borderWidth: 1,
-                        padding: 10,
-                      },
-
-                      this.state.followCode == '' &&
-                      this.state.selectedFolocode == -1
-                        ? {backgroundColor: 'transparent'}
-                        : {backgroundColor: textAutoBackgroundColor},
-                    ]}
-                    onPress={() => this.onClickSendFollowCode()}
-                    disabled={
-                      this.state.followCode == '' &&
-                      this.state.selectedFolocode == -1
-                    }>
+                  </Body>
+                  <Right></Right>
+                </Header>
+                <Content>
+                  <KeyboardAvoidingView style={styles.followCodeLoginSection}>
                     <Text
                       style={{
                         fontWeight: 'bold',
+                        textTransform: 'uppercase',
                         textAlign: 'center',
-                        color:
+                        marginTop: 30,
+                        color: 'black',
+                      }}>
+                      Vous avez déjà un compte ?
+                    </Text>
+
+                    {this.props.folocodes?.length > 0 ? (
+                      <View>
+                        <Picker
+                          style={{width: 300, height: 100}}
+                          mode="dropdown"
+                          accessibilityLabel={'Choisir le Code'}
+                          iosHeader={'Choisir le Code'}
+                          iosIcon={
+                            <Icon name="chevron-down" type="FontAwesome5" />
+                          }
+                          selectedValue={this.state.selectedFolocode}
+                          onValueChange={this.onValueFolocodeChange.bind(this)}
+                          placeholder={'Choisissez le Code'}
+                          placeholderStyle={{
+                            color: 'black',
+                          }}
+                          placeholderIconColor={'black'}
+                          textStyle={{color: 'black'}}
+                          itemStyle={{
+                            color: 'black',
+                            marginLeft: 0,
+                            paddingLeft: 10,
+                            borderBottomColor: 'black',
+                            borderBottomWidth: 1,
+                          }}
+                          itemTextStyle={{
+                            color: 'black',
+                            borderBottomColor: 'black',
+                            borderBottomWidth: 1,
+                          }}>
+                          <Picker.Item label="Choisissez le Code" value={-1} />
+                          {this.props.folocodes.map((folocode) => {
+                            return (
+                              <Picker.Item
+                                label={
+                                  folocode.folocode +
+                                  ' ' +
+                                  folocode.prenom +
+                                  ' ' +
+                                  folocode.nom
+                                }
+                                value={folocode.folocode}
+                              />
+                            );
+                          })}
+                        </Picker>
+                      </View>
+                    ) : null}
+
+                    {this.props.folocodes?.length > 0 ? (
+                      <Text style={{textAlign: 'center'}}>ou </Text>
+                    ) : null}
+
+                    <View
+                      style={{
+                        display: 'flex',
+                        flexDirection: 'row',
+                        justifyContent: 'center',
+                      }}>
+                      <TextInput
+                        style={styles.inputCode}
+                        placeholder="Entrez votre code"
+                        placeholderTextColor="black"
+                        value={this.state.followCode}
+                        onChangeText={(followCode) =>
+                          this.setState({followCode: followCode})
+                        }
+                        clearButtonMode="always"
+                      />
+                    </View>
+
+                    <View
+                      style={{
+                        flexDirection: 'row',
+                        justifyContent: 'center',
+                        alignSelf: 'center',
+                      }}>
+                      <TouchableOpacity
+                        full
+                        style={[
+                          GlobalStyles.button,
+                          {
+                            width: '80%',
+                            elevation: 0,
+                            borderColor: 'black',
+                            borderWidth: 1,
+                            padding: 10,
+                          },
+
                           this.state.followCode == '' &&
                           this.state.selectedFolocode == -1
-                            ? 'black'
-                            : textAutoSecondColor == '#000000' ? 'white' : textAutoSecondColor,
-                      }}>
-                      CONNEXION
-                    </Text>
-                  </TouchableOpacity>
-                </View>
+                            ? {backgroundColor: 'transparent'}
+                            : {backgroundColor: 'black'},
+                        ]}
+                        onPress={() => this.onClickSendFollowCode()}
+                        disabled={
+                          this.state.followCode == '' &&
+                          this.state.selectedFolocode == -1
+                        }>
+                        <Text
+                          style={{
+                            fontWeight: 'bold',
+                            textAlign: 'center',
+                            color:
+                              this.state.followCode == '' &&
+                              this.state.selectedFolocode == -1
+                                ? 'black'
+                                : 'white'
+                          }}>
+                          CONNEXION
+                        </Text>
+                      </TouchableOpacity>
+                    </View>
 
-                <View style={{marginBottom: 0}} />
-              </KeyboardAvoidingView>
+                    {/* <View style={{marginBottom: 0}} /> */}
+                  </KeyboardAvoidingView>
 
-              <View style={{position: 'absolute', bottom: 0}}>
+                  {/* <View style={{position: 'absolute', bottom: 0, left : 0}}> */}
+                </Content>
                 <Sponsors />
-              </View>
+              </Container>
+              {/* </View> */}
             </Modal>
 
             <Modal
