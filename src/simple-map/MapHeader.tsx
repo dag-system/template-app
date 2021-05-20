@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {StyleSheet, View, Share, Image} from 'react-native';
+import {StyleSheet, View, Share, Image, TouchableOpacity} from 'react-native';
 import {Header, Body, Icon, Left, Right, Button, Text} from 'native-base';
 import ApiUtils from '../ApiUtils';
 import {connect} from 'react-redux';
@@ -171,31 +171,35 @@ class MapHeader extends Component<Props, State> {
   render() {
     return (
       <View>
-        <Header style={styles.header}>
-          <Left>
-            <Button
-              style={styles.goBackButton}
-              onPress={() => this.openDrawer()}>
-              <Icon style={styles.saveText} name="bars" type="FontAwesome5" />
-            </Button>
-          </Left>
-           {/* <Body></Body> */}
-           <Right style={{flex: 1}}>
-              <Text style={{color: textAutoBackgroundColor, width: '67%'}}>
-                Course des Jeux du Val-de-Marne
-              </Text>
-              <Image
-                resizeMode="contain"
-                source={Logovdm}
-                style={{
-                  width: '40%',
-                  height: 50,
-                  marginRight: '10%',
-                  marginLeft: 15,
-                }}
-              />
-            </Right>
-        </Header>
+          <Header style={styles.header}>
+                <Left style={{flex: 1}}>
+                  <TouchableOpacity
+                    style={styles.drawerButton}
+                    onPress={() => this.openDrawer()}>
+                    <Icon
+                      style={styles.saveText}
+                      name="bars"
+                      type="FontAwesome5"
+                    />
+                  </TouchableOpacity>
+                </Left>
+                <Body style={{flex: 0}} />
+                <Right style={{flex: 1}}>
+                <Text style={{color: textAutoBackgroundColor, marginTop : -10}}>
+                    Course des Jeux du Val-de-Marne
+                  </Text>
+                  <Image
+                    resizeMode="contain"
+                    source={Logovdm}
+                    style={{
+                      width: '50%',
+                      height: 50,
+                      marginRight: '10%',
+                      marginLeft: 15,
+                    }}
+                  />
+                </Right>
+              </Header>
       </View>
     );
   }
@@ -228,6 +232,16 @@ const styles = StyleSheet.create({
     paddingTop: 10,
     paddingBottom: 10,
     // height: 80
+  },
+
+  drawerButton: {
+    backgroundColor: 'transparent',
+    width: '100%',
+    marginTop: 15,
+    paddingTop: 0,
+    shadowOffset: {height: 0, width: 0},
+    shadowOpacity: 0,
+    elevation: 0,
   },
 
   liveNameBanner: {

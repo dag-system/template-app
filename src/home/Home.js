@@ -688,35 +688,36 @@ class Home extends Component {
             <Modal
               visible={this.state.isVisibleModalLogin}
               onRequestClose={() => this.oncloseModalLogin()}>
-              <Header style={[styles.header,{backgroundColor : TemplateBackgroundColor}]}>
-                <Left>
-                  <Button
-                    style={styles.drawerButton}
-                    onPress={() => this.oncloseModalLogin()}>
-                    <Icon
-                      style={styles.saveText}
-                      name="chevron-left"
-                      type="FontAwesome5"
-                    />
-                  </Button>
-                </Left>
-               {/* <Body></Body> */}
+              <Header style={styles.header}>
+            <Left style={{flex: 1}}>
+              <TouchableOpacity
+                style={styles.drawerButton}
+                onPress={() => this.oncloseModalLogin()}>
+                <Icon
+                  style={styles.saveText}
+                  name="chevron-left"
+                  type="FontAwesome5"
+                />
+                {/* <Text style={styles.saveText}>Précedent</Text> */}
+              </TouchableOpacity>
+            </Left>
+            <Body style={{flex: 0}} />
             <Right style={{flex: 1}}>
-              <Text style={{color: textAutoBackgroundColor, width: '67%'}}>
+              <Text style={{color: textAutoBackgroundColor}}>
                 Course des Jeux du Val-de-Marne
               </Text>
               <Image
                 resizeMode="contain"
                 source={Logovdm}
                 style={{
-                  width: '40%',
+                  width: '50%',
                   height: 50,
                   marginRight: '10%',
                   marginLeft: 15,
                 }}
               />
             </Right>
-              </Header>
+          </Header>
 
               <KeyboardAvoidingView style={styles.followCodeLoginSection}>
                 <Text
@@ -883,8 +884,8 @@ class Home extends Component {
 
 const styles = StyleSheet.create({
   header: {
-    backgroundColor: 'white',
-    //backgroundColor: ApiUtils.getBackgroundColor(),
+    //backgroundColor: 'white',
+    backgroundColor: ApiUtils.getBackgroundColor(),
     width: '100%',
   },
   title: {
@@ -958,7 +959,7 @@ const styles = StyleSheet.create({
   },
 
   saveText: {
-    color: 'black',
+    color: 'white',
     paddingLeft: 0,
     marginLeft: 5,
     marginRight: -5,

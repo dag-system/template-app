@@ -45,3 +45,10 @@ curl -H "Content-Type: application/json" \
 }
      
      }'
+
+
+
+curl -H "Content-Type: application/json" \
+     -H "Authorization: Bearer 4F40ED54FBED882612B6256911F0FDAF06FBEC6F4DCB82A91AB69C50D7691FD5" \
+     -X POST "https://ee65d394-91cd-457e-b830-ffa1f4468545.pushnotifications.pusher.com/publish_api/v1/instances/ee65d394-91cd-457e-b830-ffa1f4468545/publishes" \
+     -d '{"interests":["debug-jeuxduvaldemarne"],"fcm":{"notification":{"title":"Hello", "body":"Hello, world!"}}}'

@@ -28,7 +28,6 @@ import {
   Picker,
 } from 'native-base';
 import ApiUtils from '../ApiUtils';
-import Logo from '../assets/logo.png';
 import ValidationComponent from 'react-native-form-validator';
 import defaultMessages from './defaultMessages';
 import {connect} from 'react-redux';
@@ -398,28 +397,28 @@ class CreateAccount extends ValidationComponent {
     return (
       <Root>
         <Container>
-          <Header style={styles.header}>
-            <Left>
-              <Button
+        <Header style={styles.header}>
+            <Left style={{flex: 1}}>
+              <TouchableOpacity
                 style={styles.drawerButton}
-                onPress={() => this.ongoHome()}>
+                onPress={() => this.goBack()}>
                 <Icon
                   style={styles.saveText}
                   name="chevron-left"
                   type="FontAwesome5"
                 />
-              </Button>
+              </TouchableOpacity>
             </Left>
-            {/* <Body></Body> */}
+            <Body style={{flex: 0}} />
             <Right style={{flex: 1}}>
-              <Text style={{color: textAutoBackgroundColor, width: '67%'}}>
+              <Text style={{color: textAutoBackgroundColor}}>
                 Course des Jeux du Val-de-Marne
               </Text>
               <Image
                 resizeMode="contain"
                 source={Logovdm}
                 style={{
-                  width: '40%',
+                  width: '50%',
                   height: 50,
                   marginRight: '10%',
                   marginLeft: 15,
@@ -1060,7 +1059,7 @@ const styles = StyleSheet.create({
     paddingLeft: 0,
   },
   saveText: {
-    color: 'black',
+    color: 'white',
     paddingLeft: 0,
     marginLeft: 5,
     marginRight: -5,

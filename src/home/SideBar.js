@@ -333,17 +333,20 @@ export default class Sidebar extends Component {
                   },
                 ]}
               />
-              <Text
+            
+              <Text numberOfLines={2} lineBreakMode={'clip'}
                 style={[
                   styles.menuText,
                   {
+                    width : 200,
                     color:
                       this.props.selected == 'Partenaires'
                         ? textAutoSecondColor
                         : textAutoBackgroundColor,
                   },
                 ]}>
-           Les Jeux du Val-de-Marne, c'est quoi ?
+           Les Jeux du Val-de-Marne,
+            c'est quoi ?
               </Text>
             </View>
           </TouchableHighlight>

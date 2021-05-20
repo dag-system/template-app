@@ -95,8 +95,6 @@ export default function MapContainer() {
   const watchPosition = () => {
     Geolocation.watchPosition(
       (location) => {
-        console.log('position');
-        console.log(location);
         let isGpsNotOk = location.coords.speed == -1;
         let data = {
           location: location,

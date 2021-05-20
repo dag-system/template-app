@@ -724,38 +724,27 @@ class LiveSummary extends Component<Props, State> {
         <Container>
           <Header style={styles.header}>
             <Left style={{flex: 1}}>
-              <View
-                style={{
-                  flexDirection: 'row',
-                  justifyContent: 'flex-start',
-                  width: '100%',
-                  paddingRight: 0,
-                  paddingLeft: 0,
-                  marginTop: 20,
-                  marginBottom: 20,
-                }}>
-                <Button
-                  style={styles.drawerButton}
-                  onPress={() => this.onGoBack()}>
-                  <Icon
-                    style={styles.saveText}
-                    name="chevron-left"
-                    type="FontAwesome5"
-                  />
-                  {/* <Text style={styles.saveText}>Précedent</Text> */}
-                </Button>
-              </View>
+              <TouchableOpacity
+                style={styles.drawerButton}
+                onPress={() => this.onGoBack()}>
+                <Icon
+                  style={styles.saveText}
+                  name="chevron-left"
+                  type="FontAwesome5"
+                />
+                {/* <Text style={styles.saveText}>Précedent</Text> */}
+              </TouchableOpacity>
             </Left>
-          {/* <Body></Body> */}
-          <Right style={{flex: 1}}>
-              <Text style={{color: textAutoBackgroundColor, width: '67%'}}>
+            <Body style={{flex: 0}} />
+            <Right style={{flex: 1}}>
+              <Text style={{color: textAutoBackgroundColor}}>
                 Course des Jeux du Val-de-Marne
               </Text>
               <Image
                 resizeMode="contain"
                 source={Logovdm}
                 style={{
-                  width: '40%',
+                  width: '50%',
                   height: 50,
                   marginRight: '10%',
                   marginLeft: 15,

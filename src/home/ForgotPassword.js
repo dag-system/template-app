@@ -210,8 +210,8 @@ class ForgotPassword extends ValidationComponent {
       <Root>
         <Container>
         <Header style={styles.header}>
-            <Left>
-              <Button
+            <Left style={{flex: 1}}>
+              <TouchableOpacity
                 style={styles.drawerButton}
                 onPress={() => this.goBack()}>
                 <Icon
@@ -219,18 +219,19 @@ class ForgotPassword extends ValidationComponent {
                   name="chevron-left"
                   type="FontAwesome5"
                 />
-              </Button>
+                {/* <Text style={styles.saveText}>Précedent</Text> */}
+              </TouchableOpacity>
             </Left>
-            {/* <Body></Body> */}
+            <Body style={{flex: 0}} />
             <Right style={{flex: 1}}>
-              <Text style={{color: textAutoBackgroundColor, width: '67%'}}>
+              <Text style={{color: textAutoBackgroundColor}}>
                 Course des Jeux du Val-de-Marne
               </Text>
               <Image
                 resizeMode="contain"
                 source={Logovdm}
                 style={{
-                  width: '40%',
+                  width: '50%',
                   height: 50,
                   marginRight: '10%',
                   marginLeft: 15,
@@ -437,7 +438,7 @@ const styles = StyleSheet.create({
     paddingLeft: 0,
   },
   saveText: {
-    color: 'black',
+    color: 'white',
     paddingLeft: 0,
     marginLeft: 5,
     marginRight: -5,

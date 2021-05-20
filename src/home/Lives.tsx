@@ -744,35 +744,35 @@ class Lives extends Component<Props, State> {
             />
           }>
           <Container>
-            <Header style={styles.header}>
-              <Left style={styles.goBackButton}>
-                <TouchableOpacity
-                  style={styles.drawerButton}
-                  onPress={() => this.onDrawer()}>
-                  <Icon
-                    style={styles.saveText}
-                    name="bars"
-                    type="FontAwesome5"
+          <Header style={styles.header}>
+                <Left style={{flex: 1}}>
+                  <TouchableOpacity
+                    style={styles.drawerButton}
+                    onPress={() => this.onDrawer()}>
+                    <Icon
+                      style={styles.saveText}
+                      name="bars"
+                      type="FontAwesome5"
+                    />
+                  </TouchableOpacity>
+                </Left>
+                <Body style={{flex: 0}} />
+                <Right style={{flex: 1}}>
+                <Text style={{color: textAutoBackgroundColor}}>
+                    Course des Jeux du Val-de-Marne
+                  </Text>
+                  <Image
+                    resizeMode="contain"
+                    source={Logovdm}
+                    style={{
+                      width: '50%',
+                      height: 50,
+                      marginRight: '10%',
+                      marginLeft: 15,
+                    }}
                   />
-                </TouchableOpacity>
-              </Left>
-              {/* <Body></Body> */}
-           <Right style={{flex: 1}}>
-              <Text style={{color: textAutoBackgroundColor, width: '67%'}}>
-                Course des Jeux du Val-de-Marne
-              </Text>
-              <Image
-                resizeMode="contain"
-                source={Logovdm}
-                style={{
-                  width: '40%',
-                  height: 50,
-                  marginRight: '10%',
-                  marginLeft: 15,
-                }}
-              />
-            </Right>
-            </Header>
+                </Right>
+              </Header>
 
             <Content
               style={styles.body}
@@ -1331,17 +1331,6 @@ const styles = StyleSheet.create({
   title: {
     width: '25%',
   },
-  goBackButton: {
-    backgroundColor: 'transparent',
-    width: 30,
-    marginTop: 0,
-    paddingTop: 10,
-    shadowOffset: {height: 0, width: 0},
-    shadowOpacity: 0,
-    elevation: 0,
-    marginLeft: 0,
-    paddingLeft: 0,
-  }, 
   saveButton: {
     backgroundColor: 'transparent',
     width: '38%',
@@ -1351,9 +1340,8 @@ const styles = StyleSheet.create({
   drawerButton: {
     backgroundColor: 'transparent',
     width: '100%',
-    // width: '10%',
-    // marginTop: 0,
-    // paddingTop: 0,
+    marginTop: 0,
+    paddingTop: 0,
     shadowOffset: {height: 0, width: 0},
     shadowOpacity: 0,
     elevation: 0,
@@ -1361,6 +1349,7 @@ const styles = StyleSheet.create({
   saveText: {
     color: textAutoBackgroundColor,
   },
+
   container: {
     flex: 1,
     justifyContent: 'center',
