@@ -13,9 +13,7 @@ import {connect} from 'react-redux';
 
 import {
   TemplateBackgroundColor,
-  TemplateSecondColor,
   textAutoBackgroundColor,
-  textAutoSecondColor,
 } from '../globalsModifs';
 
 const mapStateToProps = (state) => {
@@ -61,7 +59,8 @@ class BatteryModalContent extends Component {
 
   async openBatteryOptimisation() {
     // Is Android device ignoring battery optimizations?
-    let isIgnoring = await BackgroundGeolocation.deviceSettings.isIgnoringBatteryOptimizations();
+    let isIgnoring =
+      await BackgroundGeolocation.deviceSettings.isIgnoringBatteryOptimizations();
     this.setState({isStep2Validated: isIgnoring});
     if (!isIgnoring) {
       BackgroundGeolocation.deviceSettings
@@ -90,7 +89,8 @@ class BatteryModalContent extends Component {
 
   async checkBatteryOptimisation() {
     // Is Android device ignoring battery optimizations?
-    let isIgnoring = await BackgroundGeolocation.deviceSettings.isIgnoringBatteryOptimizations();
+    let isIgnoring =
+      await BackgroundGeolocation.deviceSettings.isIgnoringBatteryOptimizations();
     this.setState({isStep2Validated: isIgnoring});
   }
   checkPowerManager() {
@@ -175,7 +175,7 @@ class BatteryModalContent extends Component {
           style={{
             textAlign: 'center',
             fontWeight: 'bold',
-            color: textAutoSecondColor,
+            color: textAutoBackgroundColor,
             textDecorationLine: 'underline',
             marginTop: 30,
           }}>
@@ -256,17 +256,17 @@ class BatteryModalContent extends Component {
                         // paddingBottom: 200,
                         marginTop: 10,
                         justifyContent: 'center',
-                        borderColor: textAutoSecondColor,
-                        backgroundColor: TemplateSecondColor,
-                        padding: 10,
+                        backgroundColor: TemplateBackgroundColor,
                         borderWidth: 1,
+                        borderColor: textAutoBackgroundColor,
+                        padding: 10,
                       }}
                       onPress={() => this.openPowerManager()}>
                       <Text
                         style={{
                           textAlign: 'center',
                           textTransform: 'uppercase',
-                          color: textAutoSecondColor,
+                          color: textAutoBackgroundColor,
                         }}>
                         Ouvrir les paramètres
                       </Text>
@@ -437,16 +437,16 @@ class BatteryModalContent extends Component {
                       // paddingBottom: 200,
                       marginTop: 10,
                       justifyContent: 'center',
-                      borderColor: textAutoSecondColor,
-                      backgroundColor: TemplateSecondColor,
                       padding: 10,
                       borderWidth: 1,
+                      borderColor: textAutoBackgroundColor,
+                      backgroundColor: TemplateBackgroundColor,
                     }}>
                     <Text
                       style={{
                         textAlign: 'center',
                         textTransform: 'uppercase',
-                        color: textAutoSecondColor,
+                        color: textAutoBackgroundColor,
                       }}>
                       Désactiver l'optimisation de la batterie
                     </Text>

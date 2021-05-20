@@ -6,7 +6,10 @@ import RNPusherPushNotifications from 'react-native-pusher-push-notifications';
 import Logo from '../assets/logo.png';
 import BackgroundGeolocation from 'react-native-background-geolocation';
 
-import {textAutoBackgroundColor, textAutoSecondColor} from './../globalsModifs';
+import {
+  textAutoBackgroundColor,
+  TemplateBackgroundColor,
+} from './../globalsModifs';
 
 const mapStateToProps = (state) => {
   return {
@@ -95,19 +98,19 @@ class Logout extends Component {
           style={{
             width: '80%',
             height: 45,
-            backgroundColor: ApiUtils.getSecondColor(),
             display: 'flex',
             justifyContent: 'center',
             alignItems: 'center',
             marginTop: 50,
             marginBottom: 20,
-            borderColor: textAutoSecondColor,
             borderWidth: 1,
+            borderColor: textAutoBackgroundColor,
+            backgroundColor: TemplateBackgroundColor,
           }}>
           <Text
             style={{
               fontSize: 17,
-              color: textAutoSecondColor,
+              color: textAutoBackgroundColor,
             }}>
             Retourner à mes activités
           </Text>
@@ -117,10 +120,12 @@ class Logout extends Component {
           style={{
             width: '80%',
             height: 35,
-            backgroundColor: ApiUtils.getSecondColor(),
             display: 'flex',
             justifyContent: 'center',
             alignItems: 'center',
+            borderWidth: 1,
+            borderColor: 'red',
+            backgroundColor: TemplateBackgroundColor,
           }}>
           <Text
             style={{

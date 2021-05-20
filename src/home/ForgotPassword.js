@@ -129,8 +129,7 @@ class ForgotPassword extends ValidationComponent {
             this.setState({noConnection: true});
 
             Toast.show({
-              text:
-                "Vous n'avez pas de connection internet, merci de réessayer",
+              text: "Vous n'avez pas de connection internet, merci de réessayer",
               buttonText: 'Ok',
               type: 'danger',
               position: 'bottom',
@@ -225,180 +224,174 @@ class ForgotPassword extends ValidationComponent {
             </Body>
             <Right></Right>
           </Header>
-<Content>
-          <View style={styles.loginButtonSection}>
-            <Text style={{textAlign: 'justify'}}>
-              Entrez votre email ci-dessous pour récuperer votre code
-            </Text>
+          <Content>
+            <View style={styles.loginButtonSection}>
+              <Text style={{textAlign: 'justify'}}>
+                Entrez votre email ci-dessous pour récuperer votre code
+              </Text>
 
-            <Item stackedLabel style={{marginBottom: 5, marginTop: 20}}>
-              <Label>Email *</Label>
-              <Input
-                ref={(c) => (this.input = c)}
-                //  ref={this.input}
-                // ref={(c) => {
-                //   this.emailInput = c;
-                // }}
+              <Item stackedLabel style={{marginBottom: 5, marginTop: 20}}>
+                <Label>Email *</Label>
+                <Input
+                  ref={(c) => (this.input = c)}
+                  //  ref={this.input}
+                  // ref={(c) => {
+                  //   this.emailInput = c;
+                  // }}
 
-                returnKeyType="next"
-                clearButtonMode="always"
-                value={this.state.emailUtilisateur}
-                onChangeText={(value) =>
-                  this.setState({emailUtilisateur: value.trim()})
-                }
-              />
-            </Item>
-            {this.isFieldInError('emailUtilisateur') &&
-              this.getErrorsInField('emailUtilisateur').map((errorMessage) => (
-                <Text style={styles.error}>{errorMessage}</Text>
-              ))}
+                  returnKeyType="next"
+                  clearButtonMode="always"
+                  value={this.state.emailUtilisateur}
+                  onChangeText={(value) =>
+                    this.setState({emailUtilisateur: value.trim()})
+                  }
+                />
+              </Item>
+              {this.isFieldInError('emailUtilisateur') &&
+                this.getErrorsInField('emailUtilisateur').map(
+                  (errorMessage) => (
+                    <Text style={styles.error}>{errorMessage}</Text>
+                  ),
+                )}
 
-            <View style={{marginTop: 40}}>
-              <TouchableOpacity
-                style={[
-                  GlobalStyles.button,
-                  {
-                    width: '100%',
-                    elevation: 0,
-                    borderColor:
-                      this.isFieldInError('emailUtilisateur') ||
-                      this.state.emailUtilisateur == ''
-                        ? 'black'
-                        : 'black',
-                    borderWidth: 1,
-                    padding: 10,
-                  },
+              <View style={{marginTop: 40}}>
+                <TouchableOpacity
+                  style={[
+                    GlobalStyles.button,
+                    {
+                      width: '100%',
+                      elevation: 0,
+                      borderColor:
+                        this.isFieldInError('emailUtilisateur') ||
+                        this.state.emailUtilisateur == ''
+                          ? 'black'
+                          : 'black',
+                      borderWidth: 1,
+                      padding: 10,
+                    },
 
-                  this.isFieldInError('emailUtilisateur') ||
-                  this.state.emailUtilisateur == ''
-                    ? {backgroundColor: 'transparent'}
-                    : {backgroundColor: 'black'},
-                ]}
-                onPress={() => this.onClickSendFollowCode()}
-                onPress={() => this.onClickValidate()}>
-                <Text
-                  style={{
-                    fontWeight: 'bold',
-                    textAlign: 'center',
-                    color:
-                      this.isFieldInError('emailUtilisateur') ||
-                      this.state.emailUtilisateur == ''
-                        ? 'black'
-                        : 'white',
-                  }}>
-                  Envoyer
-                </Text>
-              </TouchableOpacity>
-            </View>
-
-            {this.state.folocodes.length > 0 ? (
-              <View>
-                <Text style={{textAlign: 'center', marginTop: 10}}>
-                  Vos codes
-                </Text>
-
-                {/* {this.state.folocodes.map()} */}
-
-                <Picker
-                  style={{width: 300}}
-                  mode="dropdown"
-                  accessibilityLabel={'Choisir le Code'}
-                  iosHeader={'Choisir le Code'}
-                  iosIcon={<Icon name="chevron-down" type="FontAwesome5" />}
-                  selectedValue={this.state.selectedFolocode}
-                  onValueChange={this.onValueFolocodeChange.bind(this)}
-                  placeholder={'Choisissez le Code'}
-                  placeholderStyle={{
-                    color: 'black',
-                  }}
-                  placeholderIconColor={'black'}
-                  textStyle={{color: 'black'}}
-                  itemStyle={{
-                    color: 'black',
-                    marginLeft: 0,
-                    paddingLeft: 10,
-                    borderBottomColor: 'black',
-                    borderBottomWidth: 1,
-                  }}
-                  itemTextStyle={{
-                    color: 'black',
-                    borderBottomColor: 'black',
-                    borderBottomWidth: 1,
-                  }}>
-                  <Picker.Item label="Choisissez le Code" value={-1} />
-                  {this.state.folocodes
-                    .filter((f) => f.folocodeUtilisateur != undefined)
-                    .map((folocode) => {
-                      return (
-                        <Picker.Item
-                          label={
-                            folocode.folocodeUtilisateur +
-                            ' ' +
-                            folocode.prenomUtilisateur +
-                            ' ' +
-                            folocode.nomUtilisateur
-                          }
-                          value={folocode.folocodeUtilisateur}
-                        />
-                      );
-                    })}
-                </Picker>
-
-                {this.state.selectedFolocode != -1 ? (
-                  <View
+                    this.isFieldInError('emailUtilisateur') ||
+                    this.state.emailUtilisateur == ''
+                      ? {backgroundColor: 'transparent'}
+                      : {backgroundColor: 'black'},
+                  ]}
+                  onPress={() => this.onClickSendFollowCode()}
+                  onPress={() => this.onClickValidate()}>
+                  <Text
                     style={{
-                      flexDirection: 'row',
-                      justifyContent: 'center',
-                      alignSelf: 'center',
+                      fontWeight: 'bold',
+                      textAlign: 'center',
+                      color:
+                        this.isFieldInError('emailUtilisateur') ||
+                        this.state.emailUtilisateur == ''
+                          ? 'black'
+                          : 'white',
                     }}>
-                    <TouchableOpacity
-                      full
-                      style={[
-                        GlobalStyles.button,
-                        {
-                          width: '80%',
-                          elevation: 0,
-                          borderColor:
-                            this.state.followCode == '' &&
-                            this.state.selectedFolocode == -1
-                              ? 'black'
-                              : 'black',
-                          borderWidth: 1,
-                          padding: 10,
-                        },
-
-                        this.state.followCode == '' &&
-                        this.state.selectedFolocode == -1
-                          ? {backgroundColor: 'transparent'}
-                          : {backgroundColor: 'black'},
-                      ]}
-                      onPress={() => this.onClickSendFollowCode()}
-                      disabled={
-                        this.state.followCode == '' &&
-                        this.state.selectedFolocode == -1
-                      }>
-                      <Text
-                        style={{
-                          fontWeight: 'bold',
-                          textAlign: 'center',
-                          color:
-                            this.state.followCode == '' &&
-                            this.state.selectedFolocode == -1
-                              ? 'black'
-                              : 'white',
-                        }}>
-                        CONNEXION
-                      </Text>
-                    </TouchableOpacity>
-                  </View>
-                ) : null}
+                    Envoyer
+                  </Text>
+                </TouchableOpacity>
               </View>
-            ) : null}
-          </View>
+
+              {this.state.folocodes.length > 0 ? (
+                <View>
+                  <Text style={{textAlign: 'center', marginTop: 10}}>
+                    Vos codes
+                  </Text>
+
+                  {/* {this.state.folocodes.map()} */}
+
+                  <Picker
+                    style={{width: 300}}
+                    mode="dropdown"
+                    accessibilityLabel={'Choisir le Code'}
+                    iosHeader={'Choisir le Code'}
+                    iosIcon={<Icon name="chevron-down" type="FontAwesome5" />}
+                    selectedValue={this.state.selectedFolocode}
+                    onValueChange={this.onValueFolocodeChange.bind(this)}
+                    placeholder={'Choisissez le Code'}
+                    placeholderStyle={{
+                      color: 'black',
+                    }}
+                    placeholderIconColor={'black'}
+                    textStyle={{color: 'black'}}
+                    itemStyle={{
+                      color: 'black',
+                      marginLeft: 0,
+                      paddingLeft: 10,
+                      borderBottomColor: 'black',
+                      borderBottomWidth: 1,
+                    }}
+                    itemTextStyle={{
+                      color: 'black',
+                      borderBottomColor: 'black',
+                      borderBottomWidth: 1,
+                    }}>
+                    <Picker.Item label="Choisissez le Code" value={-1} />
+                    {this.state.folocodes
+                      .filter((f) => f.folocodeUtilisateur != undefined)
+                      .map((folocode) => {
+                        return (
+                          <Picker.Item
+                            label={
+                              folocode.folocodeUtilisateur +
+                              ' ' +
+                              folocode.prenomUtilisateur +
+                              ' ' +
+                              folocode.nomUtilisateur
+                            }
+                            value={folocode.folocodeUtilisateur}
+                          />
+                        );
+                      })}
+                  </Picker>
+
+                  {this.state.selectedFolocode != -1 ? (
+                    <View
+                      style={{
+                        flexDirection: 'row',
+                        justifyContent: 'center',
+                        alignSelf: 'center',
+                      }}>
+                      <TouchableOpacity
+                        full
+                        style={[
+                          GlobalStyles.button,
+                          {
+                            width: '80%',
+                            elevation: 0,
+                            borderColor: 'black',
+                            borderWidth: 1,
+                            padding: 10,
+                          },
+
+                          this.state.followCode == '' &&
+                          this.state.selectedFolocode == -1
+                            ? {backgroundColor: 'transparent'}
+                            : {backgroundColor: 'black'},
+                        ]}
+                        onPress={() => this.onClickSendFollowCode()}
+                        disabled={
+                          this.state.followCode == '' &&
+                          this.state.selectedFolocode == -1
+                        }>
+                        <Text
+                          style={{
+                            fontWeight: 'bold',
+                            textAlign: 'center',
+                            color: 'black',
+                          }}>
+                          CONNEXION
+                        </Text>
+                      </TouchableOpacity>
+                    </View>
+                  ) : null}
+                </View>
+              ) : null}
+            </View>
           </Content>
-        {/* <Footer style={{backgroundColor: 'white', paddingBottom: 64}}> */}
+          {/* <Footer style={{backgroundColor: 'white', paddingBottom: 64}}> */}
           <Sponsors />
-        {/* </Footer> */}
+          {/* </Footer> */}
         </Container>
       </Root>
     );

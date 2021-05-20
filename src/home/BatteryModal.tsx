@@ -19,10 +19,8 @@ import ApiUtils from '../ApiUtils';
 
 import {
   textAutoBackgroundColor,
-  textAutoSecondColor,
-  TemplateSecondColor,
+  TemplateBackgroundColor,
 } from '../globalsModifs';
-
 
 const mapStateToProps = (state) => {
   return {
@@ -62,7 +60,6 @@ class BatteryModal extends Component {
   };
 
   onValidate = () => {
-
     this.props.onValidate && this.props.onValidate();
   };
 
@@ -151,8 +148,10 @@ const styles = StyleSheet.create({
     elevation: 0,
   },
   drawerButton: {
-    backgroundColor: TemplateSecondColor,
-    color: textAutoSecondColor,
+    backgroundColor: TemplateBackgroundColor,
+    color: textAutoBackgroundColor,
+    borderWidth: 1,
+    borderColor: textAutoBackgroundColor,
     width: '100%',
     marginTop: 0,
     paddingTop: 0,

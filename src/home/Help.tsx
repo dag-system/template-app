@@ -34,7 +34,6 @@ import VideoPrez from '../assets/tuto.mp4';
 import {
   TemplateBackgroundColor,
   textAutoBackgroundColor,
-  textAutoSecondColor,
 } from '../globalsModifs';
 const mapStateToProps = (state) => {
   return {
@@ -231,7 +230,7 @@ class Help extends Component {
                     flexDirection: 'row',
                   }}>
                   <Icon
-                    style={{marginTop: -5, color: textAutoSecondColor}}
+                    style={{marginTop: -5, color: 'black'}}
                     name="expand-alt"
                     type="FontAwesome5"
                   />

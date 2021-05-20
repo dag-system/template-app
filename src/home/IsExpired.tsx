@@ -4,6 +4,10 @@ import ApiUtils from '../ApiUtils';
 import {connect} from 'react-redux';
 import Logo from '../assets/logo.png';
 import RNExitApp from 'react-native-exit-app';
+import {
+  TemplateBackgroundColor,
+  textAutoBackgroundColor,
+} from '../globalsModifs';
 
 const mapStateToProps = (state) => {
   return {
@@ -72,19 +76,19 @@ class IsExpired extends Component {
           style={{
             width: '80%',
             height: 45,
-            backgroundColor: ApiUtils.getColor(),
             display: 'flex',
             justifyContent: 'center',
             alignItems: 'center',
             marginTop: 50,
             marginBottom: 150,
-            borderColor: 'black',
             borderWidth: 1,
+            borderColor: textAutoBackgroundColor,
+            backgroundColor: TemplateBackgroundColor,
           }}>
           <Text
             style={{
               fontSize: 17,
-              color: ApiUtils.getSecondColor(),
+              color: textAutoBackgroundColor,
             }}>
             Quitter
           </Text>

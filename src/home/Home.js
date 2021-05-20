@@ -48,7 +48,6 @@ import {
   TemplateIdOrganisation,
   TemplateIsPaying,
   textAutoBackgroundColor,
-  textAutoSecondColor,
 } from '../globalsModifs';
 
 const mapStateToProps = (state) => {
@@ -166,8 +165,6 @@ class Home extends Component {
       }
     });
   }
-
-
 
   onLogin() {
     this.setState({isLoading: true});
@@ -823,7 +820,7 @@ class Home extends Component {
                               this.state.followCode == '' &&
                               this.state.selectedFolocode == -1
                                 ? 'black'
-                                : 'white'
+                                : 'white',
                           }}>
                           CONNEXION
                         </Text>
@@ -913,7 +910,7 @@ const styles = StyleSheet.create({
     padding: 0,
     marginBottom: 20,
     marginTop: 20,
-    color : 'black'
+    color: 'black',
   },
   p: {
     fontSize: 12,
