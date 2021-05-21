@@ -48,17 +48,23 @@ export default function NotificationManager() {
 
   useEffect(() => {
     init();
-  }, [userData]);
+  }, [userData?.idUtilisateur]);
 
   const init = () => {
+    console.log('init');
     RNPusherPushNotifications.setInstanceId(
       'ee65d394-91cd-457e-b830-ffa1f4468545',
     );
 
+    subscribe('debug-' + TemplateAppName);
+    subscribe('debug-' + TemplateAppName+"-"+Platform.OS);
     RNPusherPushNotifications.on('notification', handleNotification);
     RNPusherPushNotifications.on('registered', () => {
       subscribe('debug-' + TemplateAppName);
+      subscribe('debug-' + TemplateAppName+"-"+Platform.OS);
       if (userData != null) {
+        console.log("subscribe");
+        console.log(userData);
         subscribe('debug-' + userData.idUtilisateur);
       }
       // this.subscribe('debug-' + this.props.userData.idUtilisateur);

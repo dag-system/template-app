@@ -25,7 +25,7 @@ class Logout extends Component {
   }
 
   unSubscribe = (interest) => {
-    console.log(`Subscribing to "${interest}"`);
+    console.log(`unsubscribing to "${interest}"`);
     RNPusherPushNotifications.unsubscribe(
       interest,
       (statusCode, response) => {
@@ -43,11 +43,12 @@ class Logout extends Component {
 
   disconnect = () => {
     BackgroundGeolocation.stop();
-    // this.unSubscribe('debug-' + this.props.userData.idUtilisateur);
+
     var action = {type: 'LOGOUT', data: null};
     this.props.dispatch(action);
 
     this.onClickNavigate('Home');
+    this.unSubscribe('debug-' + this.props.userData.idUtilisateur);
   };
 
   render() {
