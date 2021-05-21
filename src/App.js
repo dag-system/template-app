@@ -10,6 +10,7 @@ import {Provider} from 'react-redux';
 import {persistor, store} from './store/configStore';
 import Loading from './home/Loading';
 import BackgroundGeolocation from 'react-native-background-geolocation';
+import NotificationManager from './home/NotificationManager';
 
 export default class App extends Component {
   componentDidMount() {
@@ -61,6 +62,7 @@ export default class App extends Component {
           <PersistGate
             loading={<Loading />}
             persistor={persistor}></PersistGate>
+            <NotificationManager />
           <Navigator />
         </Provider>
       </Root>

@@ -46,7 +46,7 @@ class Logout extends Component {
 
   disconnect = () => {
     BackgroundGeolocation.stop();
-    // this.unSubscribe('debug-' + this.props.userData.idUtilisateur);
+    this.unSubscribe('debug-' + this.props.userData.idUtilisateur);
     var action = {type: 'LOGOUT', data: null};
     this.props.dispatch(action);
 
