@@ -66,6 +66,7 @@ const mapStateToProps = (state) => {
     currentMapStyle: state.currentMapStyle,
     polylines: state.polylines,
     sports: state.sports,
+    lives: state.lives,
   };
 };
 
@@ -298,6 +299,16 @@ class LiveSummary extends Component<Props, State> {
   onClickDownloadGpx(url, name) {
     this.downloadFile(url, name);
   }
+
+  isFirstLive = () => {
+    let minId = this.props.currentLiveSummary.idLive;
+    for (let i = 0; i < this.props.lives.length; i++) {
+      if (this.props.lives[i].idLive < minId) {
+        return false;
+      }
+    }
+    return true;
+  };
 
   saveCoordinates(positions) {
     var coordinates = [];
@@ -754,11 +765,26 @@ class LiveSummary extends Component<Props, State> {
           </Header>
           <Content style={styles.body} scrollEnabled={true}>
             <ScrollView contentContainerStyle={styles.loginButtonSection}>
+              <View style={{padding: 10}}>
+                <Text style={{textAlign: 'center'}}>
+                  Félicitations tu as participé au défi virtuel pour relier le
+                  Val-de-Marne à Tokyo.
+                </Text>
+                {this.isFirstLive() ? (
+                  <Text style={{textAlign: 'center'}}>
+                    Tu vas prochainement recevoir un cadeau pour ta
+                    participation.
+                  </Text>
+                ) : null}
+                <Text style={{textAlign: 'center'}}>
+                  Chaque pas compte, tu as jusqu’au 6 juin 2021 pour continuer à
+                  contribuer à cet objectif (9 710 km).
+                </Text>
+              </View>
               {this.state.statsLive == null &&
               this.state.live.IsImportedFromGpx == 0 &&
               !this.state.isloading ? (
                 <View>
-                  <Text style={{textAlign: 'center'}} />
                   <TouchableOpacity
                     onPress={() =>
                       this.loadLive(this.props.currentLiveSummary.idLive)
