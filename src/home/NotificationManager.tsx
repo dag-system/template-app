@@ -4,7 +4,8 @@ import {
   Platform,
   Alert,
   Text,
-  Modal,Image,
+  Modal,
+  Image,
   TouchableOpacity,
 } from 'react-native';
 import {
@@ -22,13 +23,17 @@ import {
 import GlobalStyles from '../styles';
 import {useDispatch, useSelector} from 'react-redux';
 import AppState from '../models/AppState';
-import {ReactNativeModal as ModalSmall} from 'react-native-modal';
 import RNPusherPushNotifications from 'react-native-pusher-push-notifications';
-import {TemplateAppName, TemplateBackgroundColor, TemplateSecondColor, textAutoBackgroundColor, textAutoSecondColor} from '../globalsModifs';
-import Logovdm from '../assets/sponsor_logo4.png';
+import {
+  TemplateAppName,
+  TemplateBackgroundColor,
+  TemplateDisplayName,
+  textAutoBackgroundColor,
+} from '../globalsModifs';
+// import Logovdm from '../assets/sponsor_logo4.png';
 import Logo from '../assets/logo.png';
 import ApiUtils from '../ApiUtils';
-import { Sponsors } from './Sponsors';
+import {Sponsors} from './Sponsors';
 
 export default function NotificationManager() {
   const dispatch = useDispatch();
@@ -39,39 +44,37 @@ export default function NotificationManager() {
   const [notificationText, setNotificationText] = useState('');
   const [notificationTitle, setNotificationTitle] = useState('');
   const [buttonTitle, setButtonTitle] = useState('');
-  
+
   const {userData} = useSelector((state: AppState) => state);
 
   useEffect(() => {
     init();
-    console.log('init 1');
   }, []);
 
   useEffect(() => {
     init();
-    console.log('init 2');
-  }, [userData?.idUtilisateur]);
+  }, [userData]);
 
   const init = () => {
-    console.log('init')
+    console.log('init');
     RNPusherPushNotifications.setInstanceId(
       'ee65d394-91cd-457e-b830-ffa1f4468545',
-    )
-    subscribe('debug-' + TemplateAppName);
-    if (userData != null) {
-      console.log("userdata not null")
-      subscribe('debug-' + userData.idUtilisateur);
-    }
-    RNPusherPushNotifications.on('notification', handleNotification);
-    // RNPusherPushNotifications.on('registered', () => {
-    //   subscribe('debug-' + TemplateAppName);
-    //   if (userData != null) {
-    //     console.log("userdata not null")
-    //     subscribe('debug-' + userData.idUtilisateur);
-    //   }
-    //   // this.subscribe('debug-' + this.props.userData.idUtilisateur);
-    //   RNPusherPushNotifications.on('notification', handleNotification);
-    // });
+    );
+
+    // subscribe('debug-' + TemplateAppName);
+    // subscribe('debug-' + TemplateAppName+"-"+Platform.OS);
+    // RNPusherPushNotifications.on('notification', handleNotification);
+    RNPusherPushNotifications.on('registered', () => {
+      subscribe('debug-' + TemplateAppName);
+      subscribe('debug-' + TemplateAppName + '-' + Platform.OS);
+      if (userData != null) {
+        console.log('subscribe');
+        console.log(userData);
+        subscribe('debug-' + userData.idUtilisateur);
+      }
+      // this.subscribe('debug-' + this.props.userData.idUtilisateur);
+      RNPusherPushNotifications.on('notification', handleNotification);
+    });
   };
 
   const subscribe = (interest) => {
@@ -95,13 +98,12 @@ export default function NotificationManager() {
     console.log('LALA');
     console.log(notification);
 
-    setIsModalNotificationVisible(true);
-
     if (notification.data != null) {
       if (notification.data.TSLocationManager == 'true') {
         return;
       }
     }
+    setIsModalNotificationVisible(true);
     if (Platform.OS == 'ios') {
       let actionData = notification.userInfo.data.notification;
 
@@ -128,10 +130,14 @@ export default function NotificationManager() {
       console.log(notification.data);
       if (notification.data != '') {
         // let datastring = notification.data.notification;
-        let actionData = JSON.parse(notification.data.notification);
-        setNotificationText(actionData.text);
-        setNotificationTitle(actionData.title);
-        setButtonTitle(actionData.buttonText);
+        if (notification.data.notification != null) {
+          console.log('start parse notification');
+          let actionData = JSON.parse(notification.data.notification);
+          setNotificationText(actionData.text);
+          setNotificationTitle(actionData.title);
+          setButtonTitle(actionData.buttonText);
+        }
+
         // Alert.alert(actionData.text);
         // if (notification.data.collapse_key != null) {
 
@@ -143,33 +149,37 @@ export default function NotificationManager() {
 
   return (
     <View>
-      <Modal visible={isModalNotificationVisible} style={{backgroundColor: 'white'}}>
-      <Header style={styles.header}>
-                <Left style={{flex: 1}}>
-                  <Text></Text>
-                </Left>
-                <Body style={{flex: 0}} />
-                <Right style={{flex: 1}}>
-                  {/* <Text style={{color: textAutoBackgroundColor}}>
-                    Course des Jeux du Val-de-Marne
-                  </Text> */}
-                  <Image
-                    resizeMode="contain"
-                    source={Logo}
-                    style={{
-                      width: '50%',
-                      height: 50,
-                      marginRight: '10%',
-                      marginLeft: 15,
-                    }}
-                  />
-                </Right>
-              </Header>
+      <Modal
+        visible={isModalNotificationVisible}
+        style={{backgroundColor: 'white'}}>
+        <Header style={styles.header}>
+          <Left style={{flex: 1}}>
+            <Text></Text>
+          </Left>
+          <Body style={{flex: 0}} />
+          <Right style={{flex: 1}}>
+            <Text style={{color: textAutoBackgroundColor}}>
+              {TemplateDisplayName}
+            </Text>
+            <Image
+              resizeMode="contain"
+              source={Logo}
+              style={{
+                width: '50%',
+                height: 50,
+                marginRight: '10%',
+                marginLeft: 15,
+              }}
+            />
+          </Right>
+        </Header>
         <Container>
           <Content style={{padding: 20}}>
-            <H2 style={{textAlign: 'center', marginBottom : 20}}>{notificationTitle}</H2>
+            <H2 style={{textAlign: 'center', marginBottom: 20}}>
+              {notificationTitle}
+            </H2>
 
-            <Text style={{textAlign:'center'}}>{notificationText}</Text>
+            <Text style={{textAlign: 'center'}}>{notificationText}</Text>
 
             <View
               style={{
@@ -177,7 +187,7 @@ export default function NotificationManager() {
                 alignContent: 'center',
                 display: 'flex',
                 flexDirection: 'row',
-                marginTop : 30
+                marginTop: 30,
               }}>
               <TouchableOpacity
                 style={[
@@ -192,7 +202,7 @@ export default function NotificationManager() {
                   },
                 ]}
                 onPress={() => closeModal()}>
-                <Text style={{color: textAutoSecondColor, textAlign: 'center'}}>
+                <Text style={{color: 'white', textAlign: 'center'}}>
                   {buttonTitle}
                 </Text>
               </TouchableOpacity>

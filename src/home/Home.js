@@ -465,6 +465,7 @@ class Home extends Component {
                 telephoneInteret: interest.telephoneInteret,
                 lienInteret: interest.lienInteret,
                 photoInteret: interest.photoInteret,
+                idTypeInteret : interest.idTypeInteret,
               };
 
               if (

@@ -36,6 +36,7 @@ import MapStatBanner from './MapStatBanner';
 import Interest from '../models/Interest';
 import AppState from '../models/AppState';
 import PolylineModel from '../models/Polyline';
+import InterestCarousel from './InterestCarousel';
 
 const LATITUDE_DELTA_CLOSE = 0.02922;
 const LONGITUDE_DELTA_CLOSE = 0.02421;
@@ -455,6 +456,7 @@ const Map = forwardRef((props, ref) => {
             onclose={() => this.closeModalBattery()}
           />
         </Modal> */}
+      {/* <InterestCarousel /> */}
     </View>
   );
 });

@@ -153,6 +153,7 @@ export default function Introduction() {
               var finalInterest = {
                 id: 'interest' + count,
                 idInteret: interest.idInteret,
+                idTypeInteret : interest.idTypeInteret,
                 idStation: interest.idStation,
                 coordinates: coordinate,
                 libelleInteret: interest.libelleInteret,

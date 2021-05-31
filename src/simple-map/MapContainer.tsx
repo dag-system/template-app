@@ -108,7 +108,9 @@ export default function MapContainer() {
         console.log(error.code, error.message);
       },
       {
-        enableHighAccuracy: true,interval : 100, distanceFilter : 0
+        enableHighAccuracy: true,
+        interval: 100,
+        distanceFilter: 0,
       },
     );
   };
@@ -240,7 +242,7 @@ export default function MapContainer() {
               challenge.positionsTrace = positionArray;
 
               finalChallenge = {
-                isActive : true,
+                isActive: true,
                 positionsTrace: positionArray,
                 idChallenge: finalChallenge.idChallenge,
                 libelleChallenge: finalChallenge.libelleChallenge,
@@ -273,6 +275,7 @@ export default function MapContainer() {
                 descriptionInteret: interest.descriptionInteret,
                 telephoneInteret: interest.telephoneInteret,
                 lienInteret: interest.lienInteret,
+                idTypeInteret : interest.idTypeInteret,
                 photoInteret: interest.photoInteret,
                 description: '',
               };
@@ -380,11 +383,12 @@ export default function MapContainer() {
         />
         <Map ref={mapRef} />
 
+
         {TemplateArrayImagesSponsorPath.length > 0 ? (
           // <Footer style={{backgroundColor: 'white', paddingBottom: 64}}>
-            <Sponsors />
-          // </Footer>
-        ) : null}
+          <Sponsors />
+        ) : // </Footer>
+        null}
 
         <TraceModal
           isVisible={isModalTraceVisible}
