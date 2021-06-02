@@ -812,7 +812,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.dag.templateappname.app;
+				PRODUCT_BUNDLE_IDENTIFIER = com.fouleeblanche.app;
 				PRODUCT_NAME = "My Cross";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -840,7 +840,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.dag.templateappname.app;
+				PRODUCT_BUNDLE_IDENTIFIER = com.fouleeblanche.app;
 				PRODUCT_NAME = "My Cross";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 5.0;

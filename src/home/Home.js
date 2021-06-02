@@ -11,6 +11,7 @@ import {
   KeyboardAvoidingView,
   Image,
   ImageBackground,
+  Dimensions,
 } from 'react-native';
 import {
   Container,
@@ -34,6 +35,7 @@ import DeviceInfo from 'react-native-device-info';
 
 import ApiUtils from '../ApiUtils';
 import Logo from '../assets/logo.png';
+import Fond from '../assets/fond.jpg';
 import Loading from './Loading';
 import {Modal} from 'react-native';
 import WebviewJetCode from './WebviewJetCode';
@@ -49,6 +51,7 @@ import {
   TemplateIsPaying,
   textAutoBackgroundColor,
 } from '../globalsModifs';
+import { ScrollView } from 'react-native-gesture-handler';
 
 const mapStateToProps = (state) => {
   return {
@@ -521,20 +524,21 @@ class Home extends Component {
     return (
       <Root>
         <Container style={{backgroundColor: ApiUtils.getBackgroundColor()}}>
-          <SafeAreaView
+          {/* <SafeAreaView
             style={{backgroundColor: ApiUtils.getBackgroundColor()}}
-          />
+          /> */}
 
-          <Content style={[styles.body]} scrollEnabled={true}>
+          {/* <Content style={[styles.body]} scrollEnabled={true}> */}
+   
             <KeyboardAvoidingView style={styles.loginButtonSection}>
-              <View
+              {/* <View
                 style={{
                   zIndex: 10,
                   alignItems: 'center',
                   backgroundColor: ApiUtils.getBackgroundColor(),
-                }}>
-                <ImageBackground style={{width: '100%', minHeight: 10}}>
-                  <TouchableHighlight
+                }}> */}
+                <ImageBackground style={{width: '100%', minHeight: 10, height : Dimensions.get("screen").height}} source={Fond}>
+                  {/* <TouchableHighlight
                     underlayColor="transparent"
                     onPress={() => this.pressLogo()}
                     style={styles.logo}>
@@ -554,7 +558,12 @@ class Home extends Component {
                         }}
                       />
                     </Animated.View>
-                  </TouchableHighlight>
+                  </TouchableHighlight> */}
+                  <View    style={{
+                          height: 400,
+                          width: 200,
+                        }}></View>
+                        <ScrollView>
                   <View
                     style={{
                       flexDirection: 'row',
@@ -567,10 +576,11 @@ class Home extends Component {
                         GlobalStyles.button,
                         {
                           marginTop: 0,
-                          borderColor: textAutoBackgroundColor,
+                          borderColor: 'white',
                           opacity: 1,
                           width: '80%',
                           padding: 10,
+                          backgroundColor : 'white'
                         },
                       ]}
                       onPress={() => this.createAccountOld()}>
@@ -672,10 +682,10 @@ class Home extends Component {
                       'DD/MM/YYYY',
                     )}
                   </Text>
+                  </ScrollView>
                 </ImageBackground>
-              </View>
+              {/* </View> */}
             </KeyboardAvoidingView>
-
             <Modal
               visible={this.state.isVisibleModalLogin}
               onRequestClose={() => this.oncloseModalLogin()}>
@@ -857,7 +867,7 @@ class Home extends Component {
               </Header>
               <WebviewJetCode uri={'https://google.com'} />
             </Modal>
-          </Content>
+          {/* </Content> */}
           <View style={{backgroundColor: 'white'}}>
             <Animated.View animation="bounceInUp" delay={200}>
               <Sponsors />

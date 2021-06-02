@@ -1,4 +1,4 @@
-export const TemplateDisplayName = 'Template Test';
+export const TemplateDisplayName = 'Foulée blanche';
 export const IsDemo = true;
 export const TemplateExpirationDate = new Date(); // Fait
 export const TemplateAppName = purgeString(
@@ -7,7 +7,7 @@ export const TemplateAppName = purgeString(
 export const TemplateOrganisation = purgeString(
   romanizeString(TemplateDisplayName.toUpperCase()),
 );
-export const TemplateIdOrganisation = '57';
+export const TemplateIdOrganisation = '36';
 export const TemplateBackgroundColor = '#FFFFFF'; //Fait
 export const TemplateSecondColor = '#FFFFFF';
 export const textAutoBackgroundColor = autoColor(TemplateBackgroundColor);
