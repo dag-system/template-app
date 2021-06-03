@@ -1,5 +1,7 @@
 import moment from 'moment';
 import haversine from 'haversine-distance';
+import {buildGPX, GarminBuilder} from 'gpx-builder';
+import {Point} from 'gpx-builder/dist/builder/BaseBuilder/models';
 
 export default class GpxService {
   static calculateTimeBetweenTwoPoints(
@@ -90,4 +92,25 @@ export default class GpxService {
       return 0;
     }
   }
+
+  static createGpx = (data: any[]) => {
+    try {
+      const gpxData = new GarminBuilder();
+      let points: Point[] = [];
+
+      data.forEach((c) => {
+        var point = new Point(c.latitude, c.longitude, {
+          time: new Date(c.timestamp),
+        });
+        points.push(point);
+      });
+
+      gpxData.setSegmentPoints(points);
+      var gpxString = buildGPX(gpxData.toObject());
+      return gpxString;
+      //await this.sendGeneratedGPX(gpxString);
+    } catch (e) {
+      console.log(e);
+    }
+  };
 }

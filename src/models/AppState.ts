@@ -27,4 +27,11 @@ export default class AppState {
   isOkPopupBAttery: boolean;
   isOkPopupBAttery2: boolean;
   isOkPopupGps: boolean;
+  stravaData : StravaData;
+}
+
+interface StravaData{
+  accessToken : string;
+  refreshToken : string;
+  accessTokenExpirationDate : Date;
 }

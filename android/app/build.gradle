@@ -136,6 +136,9 @@ android {
             targetSdkVersion rootProject.ext.targetSdkVersion
             versionCode 547
             versionName "1.1.39"
+                   manifestPlaceholders = [
+      appAuthRedirectScheme: 'com.dag.templateappname.app'
+    ]
     }
     splits {
         abi {

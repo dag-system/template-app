@@ -30,40 +30,9 @@ const initialState = {
   isGpsNotOk: true,
   phoneData: null,
   notifications: [],
+  stravaData: null
 };
 
-const initialMockState = {
-  userData: {
-    idUtilisateur: 7000,
-  },
-  sports: [],
-  lives: [{idLive: 1, libelleLive: 'test'}],
-  clubs: [],
-  isRecording: false,
-  currentLive: {
-    idLive: 3,
-  },
-  dates: [],
-  markers: [],
-  coordinates: [],
-  coordinatesString: '[]',
-  showsUserLocation: false,
-  isMoving: false,
-  isStarted: false,
-  odometer: 0,
-  pointsInterets: [],
-  polylines: [],
-  nomStation: null,
-  descriptionStation: null,
-  currentPosition: null,
-  currentLiveFromSegment: null,
-  currentLiveFromSegmentId: null,
-  currentMapStyle: Platform.OS == 'android' ? 'terrain' : 'hybrid',
-  folocodes: [],
-  isOkPopupGps: false,
-  isOkPopupBAttery: false,
-  notifications: [{type: 'newEffort', idLive: 12}],
-};
 
 const reducer = (state = initialState, action) => {
   switch (action.type) {
@@ -116,6 +85,14 @@ const reducer = (state = initialState, action) => {
       let nextState = {
         ...state,
         folocodes: [...state.folocodes, action.data],
+      };
+      return nextState || state;
+    }
+
+    case 'SAVE_STRAVA_TOKEN' :{
+      let nextState = {
+        ...state,
+        stravaData: action.data,
       };
       return nextState || state;
     }
