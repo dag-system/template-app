@@ -17,6 +17,7 @@ import AppState from '../models/AppState';
 import {useNavigation} from '@react-navigation/core';
 import {CommonActions} from '@react-navigation/native';
 import BackgroundGeolocation, { Config } from 'react-native-background-geolocation';
+import moment from 'moment';
 
 export default function Introduction() {
   const navigation = useNavigation();
@@ -137,7 +138,12 @@ export default function Introduction() {
                 dateFinChallenge: finalChallenge.dateFinChallenge,
               };
 
-              finalChallengesArray.push(finalChallenge);
+              if (
+                finalChallenge.dateFinChallenge == null ||
+                moment(finalChallenge.dateFinChallenge) > moment()
+              ) {
+                finalChallengesArray.push(finalChallenge);
+              }
             });
           }
 

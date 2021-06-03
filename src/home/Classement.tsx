@@ -119,6 +119,16 @@ class Classement extends Component<Props, State> {
                     source={Logo}
                     style={styles.logo}
                   />
+                  <Autrans
+                    width={'40%'}
+                    height={50}
+                    style={{
+                      alignSelf: 'center',
+                      opacity: 1,
+                      marginLeft: 10,
+                      marginBottom: 5,
+                    }}
+                  />
                 </Right>
               </Header>
             )}
@@ -128,7 +138,7 @@ class Classement extends Component<Props, State> {
                 style={{
                   fontWeight: 'bold',
                   textAlign: 'center',
-                  color: ApiUtils.getColor() ,
+                  color: ApiUtils.getColor(),
                   fontSize: 20,
                   marginBottom: 10,
                   textTransform: 'uppercase',

@@ -406,7 +406,16 @@ class CreateAccount extends ValidationComponent {
             <Body>
               <Image resizeMode="contain" source={Logo} style={styles.logo} />
             </Body>
-            <Right></Right>
+            <Right>  <Autrans
+                    width={'40%'}
+                    height={50}
+                    style={{
+                      alignSelf: 'center',
+                      opacity: 1,
+                      marginLeft: 10,
+                      marginBottom: 5,
+                    }}
+                  /></Right>
           </Header>
           <Content>
             <KeyboardAvoidingView>

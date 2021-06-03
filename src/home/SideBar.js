@@ -301,7 +301,7 @@ export default class Sidebar extends Component {
             </Text>
           </View>
         </TouchableHighlight>
-        {TemplateArrayImagesPartenairesPath.length > 0 ? (
+        {/* {TemplateArrayImagesPartenairesPath.length > 0 ? ( */}
           <TouchableHighlight
             underlayColor="rgba(255,255,255,1,0.6)"
             onPress={() => this.onClickNavigate('Partenaires')}
@@ -347,7 +347,7 @@ export default class Sidebar extends Component {
               </Text>
             </View>
           </TouchableHighlight>
-        ) : null}
+        {/* ) : null} */}
         {TemplateHasAppDonation ? (
           <TouchableOpacity
             onPress={() => this.onStartDonate()}

@@ -32,6 +32,7 @@ import md5 from 'md5';
 import BackgroundGeolocation from 'react-native-background-geolocation';
 import {connect} from 'react-redux';
 import DeviceInfo from 'react-native-device-info';
+import Autrans from '../assets/autrans.svg';
 
 import ApiUtils from '../ApiUtils';
 import Logo from '../assets/logo.png';
@@ -51,7 +52,7 @@ import {
   TemplateIsPaying,
   textAutoBackgroundColor,
 } from '../globalsModifs';
-import { ScrollView } from 'react-native-gesture-handler';
+import {ScrollView} from 'react-native-gesture-handler';
 
 const mapStateToProps = (state) => {
   return {
@@ -440,7 +441,12 @@ class Home extends Component {
                 dateFinChallenge: finalChallenge.dateFinChallenge,
               };
 
-              finalChallengesArray.push(finalChallenge);
+              if (
+                finalChallenge.dateFinChallenge == null ||
+                moment(finalChallenge.dateFinChallenge) > moment()
+              ) {
+                finalChallengesArray.push(finalChallenge);
+              }
             });
           }
 
@@ -468,7 +474,7 @@ class Home extends Component {
                 telephoneInteret: interest.telephoneInteret,
                 lienInteret: interest.lienInteret,
                 photoInteret: interest.photoInteret,
-                idTypeInteret : interest.idTypeInteret,
+                idTypeInteret: interest.idTypeInteret,
               };
 
               if (
@@ -528,8 +534,7 @@ class Home extends Component {
             style={{backgroundColor: ApiUtils.getBackgroundColor()}}
           /> */}
 
-          {/* <Content style={[styles.body]} scrollEnabled={true}> */}
-   
+          <Content style={[styles.body]} scrollEnabled={true}>
             <KeyboardAvoidingView style={styles.loginButtonSection}>
               {/* <View
                 style={{
@@ -537,39 +542,42 @@ class Home extends Component {
                   alignItems: 'center',
                   backgroundColor: ApiUtils.getBackgroundColor(),
                 }}> */}
-                <ImageBackground style={{width: '100%', minHeight: 10, height : Dimensions.get("screen").height}} source={Fond}>
-                  {/* <TouchableHighlight
-                    underlayColor="transparent"
-                    onPress={() => this.pressLogo()}
-                    style={styles.logo}>
-                    <Animated.View
-                      ref={(ref) => {
-                        this.logo = ref;
+              <ImageBackground
+                style={{
+                  width: '100%',
+                  minHeight: 10,
+                  height: Dimensions.get('screen').height,
+                }}
+                source={Fond}>
+                <TouchableHighlight
+                  underlayColor="transparent"
+                  onPress={() => this.pressLogo()}
+                  style={styles.logo}>
+                  <Animated.View
+                    ref={(ref) => {
+                      this.logo = ref;
+                    }}
+                    style={[GlobalStyles.row, {justifyContent: 'center'}]}
+                    animation="bounceInDown"
+                    delay={300}>
+                    <Image
+                      resizeMode="contain"
+                      source={Logo}
+                      style={{
+                        height: 200,
+                        width: 200,
                       }}
-                      style={[GlobalStyles.row, {justifyContent: 'center'}]}
-                      animation="bounceInDown"
-                      delay={300}>
-                      <Image
-                        resizeMode="contain"
-                        source={Logo}
-                        style={{
-                          height: 200,
-                          width: 200,
-                        }}
-                      />
-                    </Animated.View>
-                  </TouchableHighlight> */}
-                  <View    style={{
-                          height: 400,
-                          width: 200,
-                        }}></View>
-                        <ScrollView>
+                    />
+                  </Animated.View>
+                </TouchableHighlight>
+
+                <ScrollView>
                   <View
                     style={{
                       flexDirection: 'row',
                       justifyContent: 'space-evenly',
                       width: '100%',
-                      marginTop: 20,
+                      marginTop: 50,
                     }}>
                     <TouchableOpacity
                       style={[
@@ -580,7 +588,7 @@ class Home extends Component {
                           opacity: 1,
                           width: '80%',
                           padding: 10,
-                          backgroundColor : 'white'
+                          backgroundColor: 'white',
                         },
                       ]}
                       onPress={() => this.createAccountOld()}>
@@ -668,7 +676,7 @@ class Home extends Component {
                     ]}>
                     Version V {VersionCheck.getCurrentVersion()}
                   </Text>
-                  <Text
+                  {/* <Text
                     style={[
                       {
                         color: textAutoBackgroundColor,
@@ -681,9 +689,9 @@ class Home extends Component {
                     {moment(TemplateExpirationDate.toISOString()).format(
                       'DD/MM/YYYY',
                     )}
-                  </Text>
-                  </ScrollView>
-                </ImageBackground>
+                  </Text> */}
+                </ScrollView>
+              </ImageBackground>
               {/* </View> */}
             </KeyboardAvoidingView>
             <Modal
@@ -709,7 +717,18 @@ class Home extends Component {
                       style={styles.logoHeader}
                     />
                   </Body>
-                  <Right></Right>
+                  <Right>
+                    <Autrans
+                      width={'40%'}
+                      height={50}
+                      style={{
+                        alignSelf: 'center',
+                        opacity: 1,
+                        marginLeft: 10,
+                        marginBottom: 5,
+                      }}
+                    />
+                  </Right>
                 </Header>
                 <Content>
                   <KeyboardAvoidingView style={styles.followCodeLoginSection}>
@@ -867,7 +886,7 @@ class Home extends Component {
               </Header>
               <WebviewJetCode uri={'https://google.com'} />
             </Modal>
-          {/* </Content> */}
+          </Content>
           <View style={{backgroundColor: 'white'}}>
             <Animated.View animation="bounceInUp" delay={200}>
               <Sponsors />
@@ -902,7 +921,7 @@ const styles = StyleSheet.create({
   loginButtonSection: {
     width: '100%',
 
-    paddingBottom: 30,
+    paddingBottom: 0,
     borderBottomLeftRadius: 100,
   },
   followCodeLoginSection: {

@@ -222,7 +222,18 @@ class ForgotPassword extends ValidationComponent {
             <Body>
               <Image resizeMode="contain" source={Logo} style={styles.logo} />
             </Body>
-            <Right></Right>
+            <Right>
+              <Autrans
+                width={'40%'}
+                height={50}
+                style={{
+                  alignSelf: 'center',
+                  opacity: 1,
+                  marginLeft: 10,
+                  marginBottom: 5,
+                }}
+              />
+            </Right>
           </Header>
           <Content>
             <View style={styles.loginButtonSection}>
@@ -378,7 +389,10 @@ class ForgotPassword extends ValidationComponent {
                           style={{
                             fontWeight: 'bold',
                             textAlign: 'center',
-                            color: 'black',
+                            color:
+                              this.state.selectedFolocode == -1
+                                ? 'black'
+                                : 'white',
                           }}>
                           CONNEXION
                         </Text>

@@ -21,6 +21,7 @@ import Interest from '../models/Interest';
 import AppState from '../models/AppState';
 import PhoneData from '../models/PhoneData';
 import Geolocation from 'react-native-geolocation-service';
+import moment from 'moment';
 
 export default function MapContainer() {
   const dispatch = useDispatch();
@@ -252,7 +253,13 @@ export default function MapContainer() {
                 dateFinChallenge: finalChallenge.dateFinChallenge,
               };
 
-              finalChallengesArray.push(finalChallenge);
+              if (
+                finalChallenge.dateFinChallenge == null ||
+                moment(finalChallenge.dateFinChallenge) > moment()
+              ) {
+                finalChallengesArray.push(finalChallenge);
+              }
+
             });
           }
 
@@ -275,7 +282,7 @@ export default function MapContainer() {
                 descriptionInteret: interest.descriptionInteret,
                 telephoneInteret: interest.telephoneInteret,
                 lienInteret: interest.lienInteret,
-                idTypeInteret : interest.idTypeInteret,
+                idTypeInteret: interest.idTypeInteret,
                 photoInteret: interest.photoInteret,
                 description: '',
               };
@@ -383,13 +390,7 @@ export default function MapContainer() {
         />
         <Map ref={mapRef} />
 
-
-        {TemplateArrayImagesSponsorPath.length > 0 ? (
-          // <Footer style={{backgroundColor: 'white', paddingBottom: 64}}>
-          <Sponsors />
-        ) : // </Footer>
-        null}
-
+        <Sponsors />
         <TraceModal
           isVisible={isModalTraceVisible}
           onClose={() => closeTraceModal()}

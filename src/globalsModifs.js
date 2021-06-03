@@ -31,9 +31,11 @@ export const TemplateChallengeEntreprise = true;
 export const TemplateHasAppDonation = false;
 export const TemplateIsPaying = false;
 export const TemplateChallengeAutreName = 'Template Test Autre';
-export const TemplateSportLive = [];
-export const TemplateArrayImagesSponsorPath = [];
-export const TemplateArrayImagesPartenairesPath = [];
+export const TemplateSportLive = [{sportName : "Course à pied", idSport : 25}];
+export const TemplateArrayImagesSponsorPath = [
+];
+export const TemplateArrayImagesPartenairesPath = [
+];
 function purgeString(str) {
   const accents =
     'ÀÁÂÃÄÅàáâãäåÒÓÔÕÕÖØòóôõöøÈÉÊËèéêëðÇçÐÌÍÎÏìíîïÙÚÛÜùúûüÑñŠšŸÿýŽž\' ,*-_#|/="~';

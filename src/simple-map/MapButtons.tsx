@@ -349,7 +349,7 @@ export default function MapButtons(props: Props) {
         position: 'absolute',
         left: 0,
         right: 0,
-        bottom: Platform.OS == 'ios' ? 110 : 70,
+        bottom: Platform.OS == 'ios' ? 110 : 100,
         paddingTop: isOpenExtraButtons ? 100 : 0,
         zIndex: 1000,
         justifyContent: 'center',
