@@ -16,6 +16,7 @@ import AppState from '../models/AppState';
 import {useNavigation} from '@react-navigation/core';
 import GpxService from '../services/GpxServices';
 import Logo from '../assets/logo.png';
+import HeaderComponent from '../home/HeaderComponent';
 
 const LATITUDE_DELTA_CLOSE = 0.016022;
 const LONGITUDE_DELTA_CLOSE = 0.001221;
@@ -170,17 +171,7 @@ export default function DemoMap() {
 
   return (
     <View style={styles.map}>
-      <Header style={{backgroundColor: 'white'}}>
-        <Left>
-          <TouchableOpacity onPress={() => goBack()}>
-            <Icon name="chevron-left" type="FontAwesome5" />
-          </TouchableOpacity>
-        </Left>
-        <Body>
-          <Image resizeMode="contain" source={Logo} style={styles.logoHeader} />
-        </Body>
-        <Right></Right>
-      </Header>
+      <HeaderComponent onPressBack={() => goBack()} mode="back" />
 
       <View style={{flex: 1}}>
         <MapView

@@ -5,6 +5,7 @@ import MapView from 'react-native-maps';
 import {connect} from 'react-redux';
 import ApiUtils from '../ApiUtils';
 import Logo from '../assets/logo.png';
+import HeaderComponent from './HeaderComponent';
 const mapStateToProps = (state) => {
   return {
     userData: state.userData,
@@ -91,31 +92,10 @@ class LiveSummaryMap extends Component {
   render() {
     return (
       <Container>
-        <Header style={styles.header}>
-          <Body>
-            <View
-              style={{
-                flexDirection: 'row',
-                justifyContent: 'flex-start',
-                width: '100%',
-                paddingRight: 0,
-                paddingLeft: 0,
-                marginTop: 20,
-                marginBottom: 20,
-              }}>
-              <Button
-                style={styles.drawerButton}
-                onPress={() => this.onGoBack()}>
-                <Icon
-                  style={styles.saveText}
-                  name="chevron-left"
-                  type="FontAwesome5"
-                />
-                <Text style={styles.saveText}>Précedent</Text>
-              </Button>
-            </View>
-          </Body>
-        </Header>
+         <HeaderComponent
+              onPressBack={() => this.onGoBack()}
+              mode="back"
+            />
         <Body style={styles.body}>
           <View style={styles.loginButtonSection}>
             <Button

@@ -24,6 +24,7 @@ var ApiUtils = {
     return pushNotificationInstance;
   },
   isExpired() {
+    return false;
     let currentDate = new Date();
 
     if (IsDemo && !__DEV__) {

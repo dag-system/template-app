@@ -29,6 +29,7 @@ import WebviewJetCode from './WebviewJetCode';
 
 import {TemplateAppName} from './../globalsModifs';
 import {Dispatch} from 'redux';
+import HeaderComponent from './HeaderComponent';
 
 const mapStateToProps = (state) => {
   return {
@@ -85,20 +86,12 @@ class Partenaires extends Component<Props, State> {
         style={{
           height: '100%',
         }}>
-        <Header style={styles.header}>
-          <Left>
-            <Button
-              style={styles.drawerButton}
-              onPress={() => this.onClickReturn()}>
-              <Icon
-                style={styles.saveText}
-                name="chevron-left"
-                type="FontAwesome5"
-              />
-            </Button>
-          </Left>
-          <Right />
-        </Header>
+        <HeaderComponent
+          onPressBack={() => {
+            this.onClickReturn();
+          }}
+          mode="back"
+        />
         <WebviewJetCode
           navigation={this.props.navigation}
           uri={

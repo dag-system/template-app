@@ -33,7 +33,7 @@ import BackgroundGeolocation from 'react-native-background-geolocation';
 import {connect} from 'react-redux';
 import DeviceInfo from 'react-native-device-info';
 import Autrans from '../assets/autrans.svg';
-
+import HeaderComponent from './HeaderComponent';
 import ApiUtils from '../ApiUtils';
 import Logo from '../assets/logo.png';
 import Fond from '../assets/fond.jpg';
@@ -698,38 +698,11 @@ class Home extends Component {
               visible={this.state.isVisibleModalLogin}
               onRequestClose={() => this.oncloseModalLogin()}>
               <Container>
-                <Header style={styles.header}>
-                  <Left>
-                    <Button
-                      style={styles.drawerButton}
-                      onPress={() => this.oncloseModalLogin()}>
-                      <Icon
-                        style={styles.saveText}
-                        name="chevron-left"
-                        type="FontAwesome5"
-                      />
-                    </Button>
-                  </Left>
-                  <Body>
-                    <Image
-                      resizeMode="contain"
-                      source={Logo}
-                      style={styles.logoHeader}
-                    />
-                  </Body>
-                  <Right>
-                    <Autrans
-                      width={'40%'}
-                      height={50}
-                      style={{
-                        alignSelf: 'center',
-                        opacity: 1,
-                        marginLeft: 10,
-                        marginBottom: 5,
-                      }}
-                    />
-                  </Right>
-                </Header>
+                <HeaderComponent
+                  onPressBack={() => this.oncloseModalLogin()}
+                  mode="back"
+                />
+
                 <Content>
                   <KeyboardAvoidingView style={styles.followCodeLoginSection}>
                     <Text
@@ -870,20 +843,11 @@ class Home extends Component {
             <Modal
               visible={this.state.isModalJetcodeVisible}
               onRequestClose={() => this.oncloseModal()}>
-              <Header style={styles.header}>
-                <Left>
-                  <Button
-                    style={styles.drawerButton}
-                    onPress={() => this.oncloseModal()}>
-                    <Icon
-                      style={styles.saveText}
-                      name="chevron-left"
-                      type="FontAwesome5"
-                    />
-                  </Button>
-                </Left>
-                <Right />
-              </Header>
+              <HeaderComponent
+                onPressBack={() => this.oncloseModal()}
+                mode="back"
+              />
+
               <WebviewJetCode uri={'https://google.com'} />
             </Modal>
           </Content>
@@ -914,9 +878,9 @@ const styles = StyleSheet.create({
     width: '70%',
     height: 100,
     alignSelf: 'center',
-    marginTop: Platform.OS == 'ios' ? 20 : 25,
-    marginTop: 75,
-    marginBottom: 100,
+    // marginTop: Platform.OS == 'ios' ? 20 : 25,
+    marginTop: 20,
+    marginBottom: 230,
   },
   loginButtonSection: {
     width: '100%',

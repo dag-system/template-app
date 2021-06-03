@@ -43,6 +43,7 @@ import {isPointInPolygon} from 'geolib';
 
 import haversine from 'haversine-distance';
 import {textAutoBackgroundColor} from '../globalsModifs';
+import HeaderComponent from './HeaderComponent';
 const mapStateToProps = (state) => {
   return {
     userData: state.userData,
@@ -813,23 +814,10 @@ class Replay extends Component {
         }>
         <Root>
           <Container>
-            <Header style={styles.header}>
-              <Left style={{flex: 1}}>
-                <TouchableOpacity
-                  style={styles.drawerButton}
-                  onPress={() => this.onDrawer()}>
-                  <Icon
-                    style={styles.saveText}
-                    name="bars"
-                    type="FontAwesome5"
-                  />
-                </TouchableOpacity>
-              </Left>
-              <Body style={{flex: 0}} />
-              <Right style={{flex: 1}}>
-                <Image resizeMode="contain" source={Logo} style={styles.logo} />
-              </Right>
-            </Header>
+            <HeaderComponent
+              onPressBack={() => this.onDrawer()}
+              mode="drawer"
+            />
             <Content style={styles.body} scrollEnabled={true}>
               {this.state.isMapFullSize ? null : (
                 <View>
@@ -875,14 +863,16 @@ class Replay extends Component {
                       borderBottomWidth: 1,
                     }}>
                     <Picker.Item label="Choisissez une épreuve" value="-1" />
-                    {this.props.challenges.map((challenge) => {
-                      return (
-                        <Picker.Item
-                          label={challenge.libelleChallenge}
-                          value={challenge.idChallenge}
-                        />
-                      );
-                    })}
+                    {this.props.challenges != null
+                      ? this.props.challenges.map((challenge) => {
+                          return (
+                            <Picker.Item
+                              label={challenge.libelleChallenge}
+                              value={challenge.idChallenge}
+                            />
+                          );
+                        })
+                      : null}
                     {/* <Picker.Item label="My Cross" value={58} /> */}
                   </Picker>
 
@@ -1056,9 +1046,7 @@ class Replay extends Component {
                         onPress={() => this.validateRunners()}>
                         <Text
                           style={{
-                            color: this.isUserSelected()
-                              ? 'white'
-                              : 'black',
+                            color: this.isUserSelected() ? 'white' : 'black',
                           }}>
                           Comparer
                         </Text>

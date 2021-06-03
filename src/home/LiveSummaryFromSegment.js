@@ -12,6 +12,7 @@ import MapView from 'react-native-maps';
 import ApiUtils from '../ApiUtils';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {connect} from 'react-redux';
+import HeaderComponent from './HeaderComponent';
 const mapStateToProps = (state) => {
   return {
     currentLive: state.currentLive,
@@ -229,31 +230,10 @@ class LiveSummaryFromSegment extends Component {
       <Container>
         {/* <Body style={styles.body}> */}
 
-        <Header style={styles.header}>
-          <Body>
-            <View
-              style={{
-                flexDirection: 'row',
-                justifyContent: 'flex-start',
-                width: '100%',
-                paddingRight: 0,
-                paddingLeft: 0,
-                marginTop: 20,
-                marginBottom: 20,
-              }}>
-              <Button
-                style={styles.drawerButton}
-                onPress={() => this.onGoBack()}>
-                <Icon
-                  style={styles.saveText}
-                  name="chevron-left"
-                  type="FontAwesome5"
-                />
-                <Text style={styles.saveText}>Précedent</Text>
-              </Button>
-            </View>
-          </Body>
-        </Header>
+        <HeaderComponent
+              onPressBack={() => this.onGoBack()}
+              mode="back"
+            />
         <View style={styles.loginButtonSection}>
           <ScrollView contentContainerStyle={styles.loginButtonSection}>
             {this.props.currentLive.statsLive != null ? (

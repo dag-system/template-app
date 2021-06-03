@@ -47,6 +47,7 @@ import {
   TemplateSportLive,
   textAutoBackgroundColor,
 } from '../globalsModifs';
+import HeaderComponent from './HeaderComponent';
 
 const mapStateToProps = (state) => {
   return {
@@ -743,22 +744,10 @@ class Lives extends Component<Props, State> {
             />
           }>
           <Container>
-            <Header style={styles.header}>
-              <Left style={{flex: 1, width: '30%'}}>
-                <TouchableOpacity
-                  style={styles.drawerButton}
-                  onPress={() => this.onDrawer()}>
-                  <Icon
-                    style={styles.saveText}
-                    name="bars"
-                    type="FontAwesome5"
-                  />
-                </TouchableOpacity>
-              </Left>
-              <Right style={{flex: 1, width: '100%'}}>
-                <Image resizeMode="contain" source={Logo} style={styles.logo} />
-              </Right>
-            </Header>
+            <HeaderComponent
+              onPressBack={() => this.onDrawer()}
+              mode="drawer"
+            />
 
             <Content
               style={styles.body}
@@ -1164,27 +1153,10 @@ class Lives extends Component<Props, State> {
               {/* {this.state.modal3Visible ? ( */}
               <Root>
                 <View>
-                  <Header style={styles.headerModal}>
-                    <Left>
-                      <Button
-                        style={styles.drawerButton}
-                        onPress={() => {
-                          this.toggleModalChooseSport();
-                        }}>
-                        <Icon
-                          style={styles.saveText}
-                          name="chevron-left"
-                          type="FontAwesome5"
-                        />
-                      </Button>
-                    </Left>
-                    <Body style={{justifyContent: 'center', flex: 1}}>
-                      <Text style={{fontWeight: 'bold'}}>
-                        Démarrer une activité
-                      </Text>
-                    </Body>
-                    <Right style={{flex: 1}} />
-                  </Header>
+                  <HeaderComponent
+                    onPressBack={() => this.toggleModalChooseSport()}
+                    mode="back"
+                  />
 
                   <ScrollView scrollEnabled={true}>
                     <View>

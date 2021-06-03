@@ -57,6 +57,7 @@ import {
 
 import {TemplateSportLive, textAutoBackgroundColor} from '../globalsModifs';
 import GpxService from '../services/GpxServices';
+import HeaderComponent from './HeaderComponent';
 
 const mapStateToProps = (state) => {
   return {
@@ -721,35 +722,7 @@ class LiveSummary extends Component<Props, State> {
     return (
       <Root>
         <Container>
-          <Header style={styles.header}>
-            <Left style={{flex: 1}}>
-              <View
-                style={{
-                  flexDirection: 'row',
-                  justifyContent: 'flex-start',
-                  width: '100%',
-                  paddingRight: 0,
-                  paddingLeft: 0,
-                  marginTop: 20,
-                  marginBottom: 20,
-                }}>
-                <Button
-                  style={styles.drawerButton}
-                  onPress={() => this.onGoBack()}>
-                  <Icon
-                    style={styles.saveText}
-                    name="chevron-left"
-                    type="FontAwesome5"
-                  />
-                  {/* <Text style={styles.saveText}>Précedent</Text> */}
-                </Button>
-              </View>
-            </Left>
-            <Body style={{flex: 0}} />
-            <Right style={{flex: 1}}>
-              <Image resizeMode="contain" source={Logo} style={styles.logo} />
-            </Right>
-          </Header>
+          <HeaderComponent onPressBack={() => this.onGoBack()} mode="back" />
           <Content style={styles.body} scrollEnabled={true}>
             <ScrollView contentContainerStyle={styles.loginButtonSection}>
               {this.state.statsLive == null &&
@@ -1479,35 +1452,10 @@ class LiveSummary extends Component<Props, State> {
           <Modal
             visible={this.state.isOpenReplayModal}
             onRequestClose={() => this.closeReplayModal()}>
-            <Header style={styles.header}>
-              <Left style={{flex: 1}}>
-                <View
-                  style={{
-                    flexDirection: 'row',
-                    justifyContent: 'flex-start',
-                    width: '100%',
-                    paddingRight: 0,
-                    paddingLeft: 0,
-                    marginTop: 20,
-                    marginBottom: 20,
-                  }}>
-                  <Button
-                    style={styles.drawerButton}
-                    onPress={() => this.closeReplayModal()}>
-                    <Icon
-                      style={styles.saveText}
-                      name="chevron-left"
-                      type="FontAwesome5"
-                    />
-                    {/* <Text style={styles.saveText}>Précedent</Text> */}
-                  </Button>
-                </View>
-              </Left>
-              <Body style={{flex: 0}} />
-              <Right style={{flex: 1}}>
-                <Image resizeMode="contain" source={Logo} style={styles.logo} />
-              </Right>
-            </Header>
+            <HeaderComponent
+              onPressBack={() => this.closeReplayModal()}
+              mode="back"
+            />
 
             <Content
               style={{paddingHorizontal: 0, paddingTop: 0}}

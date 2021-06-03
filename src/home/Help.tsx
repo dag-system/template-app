@@ -35,6 +35,7 @@ import {
   TemplateBackgroundColor,
   textAutoBackgroundColor,
 } from '../globalsModifs';
+import HeaderComponent from './HeaderComponent';
 const mapStateToProps = (state) => {
   return {
     userData: state.userData,
@@ -157,21 +158,8 @@ class Help extends Component {
         <Container>
           <Root>
             {this.props.noHeader ? null : (
-              <Header style={styles.header}>
-                <Left style={{flex: 1}}>
-                  <TouchableOpacity
-                    style={styles.drawerButton}
-                    onPress={() => this.onDrawer()}>
-                    <Icon
-                      style={styles.saveText}
-                      name="bars"
-                      type="FontAwesome5"
-                    />
-                  </TouchableOpacity>
-                </Left>
-                <Body style={{flex: 0}} />
-                <Right style={{flex: 1}} />
-              </Header>
+                 <HeaderComponent onPressBack={() => this.onDrawer()} mode="drawer" />
+      
             )}
 
             <Content style={{padding: 5, paddingTop: 20}} scrollEnabled={true}>

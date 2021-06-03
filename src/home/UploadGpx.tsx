@@ -38,6 +38,7 @@ import {
   TemplateBackgroundColor,
   textAutoBackgroundColor,
 } from '../globalsModifs';
+import HeaderComponent from './HeaderComponent';
 
 const mapStateToProps = (state) => {
   return {
@@ -313,35 +314,8 @@ class UploadGpx extends Component<Props, State> {
     return (
       <Root>
         <Container>
-          <Header style={styles.header}>
-            <Left style={{flex: 1}}>
-              <View
-                style={{
-                  flexDirection: 'row',
-                  justifyContent: 'flex-start',
-                  width: '100%',
-                  paddingRight: 0,
-                  paddingLeft: 0,
-                  marginTop: 20,
-                  marginBottom: 20,
-                }}>
-                <Button
-                  style={styles.drawerButton}
-                  onPress={() => this.onGoBack()}>
-                  <Icon
-                    style={styles.saveText}
-                    name="chevron-left"
-                    type="FontAwesome5"
-                  />
-                  {/* <Text style={styles.saveText}>Précedent</Text> */}
-                </Button>
-              </View>
-            </Left>
-            <Body style={{flex: 0}} />
-            <Right style={{flex: 1}}>
-              <Image resizeMode="contain" source={Logo} style={styles.logo} />
-            </Right>
-          </Header>
+          <HeaderComponent onPressBack={() => this.onGoBack()} mode="back" />
+
           <Content style={styles.body} scrollEnabled={true}>
             <ScrollView scrollEnabled={true}>
               <Text

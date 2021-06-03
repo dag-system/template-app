@@ -34,6 +34,7 @@ import ValidationComponent from 'react-native-form-validator';
 
 import {TemplateIsPaying} from './../globalsModifs';
 import {Sponsors} from './Sponsors';
+import HeaderComponent from './HeaderComponent';
 
 const mapStateToProps = (state) => {
   return {
@@ -209,32 +210,7 @@ class ForgotPassword extends ValidationComponent {
     return (
       <Root>
         <Container>
-          <Header style={styles.header}>
-            <Left>
-              <Button style={styles.drawerButton} onPress={() => this.goBack()}>
-                <Icon
-                  style={styles.saveText}
-                  name="chevron-left"
-                  type="FontAwesome5"
-                />
-              </Button>
-            </Left>
-            <Body>
-              <Image resizeMode="contain" source={Logo} style={styles.logo} />
-            </Body>
-            <Right>
-              <Autrans
-                width={'40%'}
-                height={50}
-                style={{
-                  alignSelf: 'center',
-                  opacity: 1,
-                  marginLeft: 10,
-                  marginBottom: 5,
-                }}
-              />
-            </Right>
-          </Header>
+          <HeaderComponent onPressBack={() => this.goBack()} mode="back" />
           <Content>
             <View style={styles.loginButtonSection}>
               <Text style={{textAlign: 'justify'}}>

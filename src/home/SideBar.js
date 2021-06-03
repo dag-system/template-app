@@ -32,6 +32,7 @@ import {
   textAutoSecondColor,
   TemplateArrayImagesPartenairesPath,
 } from './../globalsModifs';
+import HeaderComponent from './HeaderComponent';
 
 export default class Sidebar extends Component {
   constructor(props) {
@@ -302,51 +303,49 @@ export default class Sidebar extends Component {
           </View>
         </TouchableHighlight>
         {/* {TemplateArrayImagesPartenairesPath.length > 0 ? ( */}
-          <TouchableHighlight
-            underlayColor="rgba(255,255,255,1,0.6)"
-            onPress={() => this.onClickNavigate('Partenaires')}
+        <TouchableHighlight
+          underlayColor="rgba(255,255,255,1,0.6)"
+          onPress={() => this.onClickNavigate('Partenaires')}
+          style={{
+            width: '100%',
+            backgroundColor:
+              this.props.selected == 'Partenaires' ? '#E9E9E9' : 'transparent',
+          }}>
+          <View
             style={{
-              width: '100%',
-              backgroundColor:
-                this.props.selected == 'Partenaires'
-                  ? '#E9E9E9'
-                  : 'transparent',
+              display: 'flex',
+              flexDirection: 'row',
+              justifyContent: 'flex-start',
+              flexWrap: 'wrap',
+              padding: 10,
             }}>
-            <View
-              style={{
-                display: 'flex',
-                flexDirection: 'row',
-                justifyContent: 'flex-start',
-                flexWrap: 'wrap',
-                padding: 10,
-              }}>
-              <Icon
-                name="handshake"
-                type="FontAwesome5"
-                style={[
-                  styles.icon,
-                  {
-                    color:
-                      this.props.selected == 'Partenaires'
-                        ? textAutoSecondColor
-                        : textAutoBackgroundColor,
-                  },
-                ]}
-              />
-              <Text
-                style={[
-                  styles.menuText,
-                  {
-                    color:
-                      this.props.selected == 'Partenaires'
-                        ? textAutoSecondColor
-                        : textAutoBackgroundColor,
-                  },
-                ]}>
-                Partenaires
-              </Text>
-            </View>
-          </TouchableHighlight>
+            <Icon
+              name="handshake"
+              type="FontAwesome5"
+              style={[
+                styles.icon,
+                {
+                  color:
+                    this.props.selected == 'Partenaires'
+                      ? textAutoSecondColor
+                      : textAutoBackgroundColor,
+                },
+              ]}
+            />
+            <Text
+              style={[
+                styles.menuText,
+                {
+                  color:
+                    this.props.selected == 'Partenaires'
+                      ? textAutoSecondColor
+                      : textAutoBackgroundColor,
+                },
+              ]}>
+              Partenaires
+            </Text>
+          </View>
+        </TouchableHighlight>
         {/* ) : null} */}
         {TemplateHasAppDonation ? (
           <TouchableOpacity
@@ -517,27 +516,11 @@ export default class Sidebar extends Component {
         <Modal
           visible={this.state.isVisibleDonateModal}
           onRequestClose={() => this.onCloseDonate()}>
-          <Header style={styles.header}>
-            <Left>
-              <Button
-                style={styles.drawerButton}
-                onPress={() => this.onCloseDonate()}>
-                <Icon
-                  style={styles.saveText}
-                  name="chevron-left"
-                  type="FontAwesome5"
-                />
-              </Button>
-            </Left>
-            <Body style={{flex: 0}} />
-            <Right style={{flex: 1}}>
-              <Image
-                resizeMode="contain"
-                source={Logo}
-                style={styles.logoHeader}
-              />
-            </Right>
-          </Header>
+          <HeaderComponent
+            onPressBack={() => this.onCloseDonate()}
+            mode="back"
+          />
+
           <WebviewJetCode
             uri={
               'http://dag-system.com/externalcontent/' +

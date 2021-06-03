@@ -41,8 +41,9 @@ import SkiChrono from '../assets/skichrono.jpg';
 import Rossignol from '../assets/rossignol.jpg';
 import Deva from '../assets/deva.png';
 import Dag from '../assets/dag.png';
+import HeaderComponent from './HeaderComponent';
 
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
   return {
     userData: state.userData,
   };
@@ -69,9 +70,8 @@ class Partenaires extends Component {
     };
   }
 
-  componentDidMount()
-  {
-    this.setState({newPassword : true})
+  componentDidMount() {
+    this.setState({newPassword: true});
   }
 
   closeDrawer = () => {
@@ -88,7 +88,7 @@ class Partenaires extends Component {
   render() {
     return (
       <Drawer
-        ref={ref => {
+        ref={(ref) => {
           this.drawer = ref;
         }}
         content={
@@ -101,21 +101,12 @@ class Partenaires extends Component {
         <Container>
           <Root>
             {this.props.noHeader ? null : (
-              <Header style={styles.header}>
-                <Left style={{flex: 1}}>
-                  <TouchableOpacity
-                    style={styles.drawerButton}
-                    onPress={() => this.onDrawer()}>
-                    <Icon
-                      style={styles.saveText}
-                      name="bars"
-                      type="FontAwesome5"
-                    />
-                  </TouchableOpacity>
-                </Left>
-                <Body style={{flex: 0}} />
-                <Right style={{flex: 1}} />
-              </Header>
+              <HeaderComponent
+                onPressBack={() => {
+                  this.onDrawer();
+                }}
+                mode="drawer"
+              />
             )}
 
             <Content style={{padding: 10, paddingTop: 20}} scrollEnabled={true}>
@@ -127,15 +118,18 @@ class Partenaires extends Component {
                   flex: 1,
                   marginTop: 40,
                   marginBottom: 40,
-                  justifyContent : 'center',
-              
+                  justifyContent: 'center',
                 }}>
                 <Image
                   source={Region}
                   resizeMethod="resize"
                   resizeMode="contain"
-       
-                  style={{height: '100%', width: '80%', alignSelf : 'center',           marginHorizontal : 'auto'}}
+                  style={{
+                    height: '100%',
+                    width: '80%',
+                    alignSelf: 'center',
+                    marginHorizontal: 'auto',
+                  }}
                 />
               </View>
               <View
@@ -147,9 +141,6 @@ class Partenaires extends Component {
                 }}>
                 <Text />
               </View>
-
-
-
 
               <View
                 style={{
@@ -236,7 +227,6 @@ class Partenaires extends Component {
                 <Text />
               </View>
 
-
               <View
                 style={{
                   width: '100%',
@@ -254,7 +244,6 @@ class Partenaires extends Component {
                 />
               </View>
 
-
               <View
                 style={{
                   borderBottomWidth: 1,
@@ -264,7 +253,6 @@ class Partenaires extends Component {
                 }}>
                 <Text />
               </View>
-
 
               <View
                 style={{
@@ -287,7 +275,6 @@ class Partenaires extends Component {
                 <Text />
               </View>
 
-
               <View
                 style={{
                   width: '100%',
@@ -296,11 +283,17 @@ class Partenaires extends Component {
                   marginTop: 40,
                   marginBottom: 40,
                 }}>
-                  <Image source={Dauphine} 
-                       resizeMethod="resize"
-                       resizeMode="contain"
-            
-                       style={{height: '100%', width: '80%', alignSelf : 'center',           marginHorizontal : 'auto'}} />
+                <Image
+                  source={Dauphine}
+                  resizeMethod="resize"
+                  resizeMode="contain"
+                  style={{
+                    height: '100%',
+                    width: '80%',
+                    alignSelf: 'center',
+                    marginHorizontal: 'auto',
+                  }}
+                />
                 {/* <Dauphine height={'70%'} style={{marginTop: 10}} /> */}
               </View>
 
@@ -313,7 +306,6 @@ class Partenaires extends Component {
                 }}>
                 <Text />
               </View>
-
 
               <View
                 style={{
@@ -323,11 +315,17 @@ class Partenaires extends Component {
                   marginTop: 40,
                   marginBottom: 40,
                 }}>
-                  <Image source={SkiChrono} 
-                       resizeMethod="resize"
-                       resizeMode="contain"
-            
-                       style={{height: '100%', width: '80%', alignSelf : 'center',           marginHorizontal : 'auto'}} />
+                <Image
+                  source={SkiChrono}
+                  resizeMethod="resize"
+                  resizeMode="contain"
+                  style={{
+                    height: '100%',
+                    width: '80%',
+                    alignSelf: 'center',
+                    marginHorizontal: 'auto',
+                  }}
+                />
                 {/* <Dauphine height={'70%'} style={{marginTop: 10}} /> */}
               </View>
 
@@ -341,7 +339,6 @@ class Partenaires extends Component {
                 <Text />
               </View>
 
-
               <View
                 style={{
                   width: '100%',
@@ -350,37 +347,17 @@ class Partenaires extends Component {
                   marginTop: 40,
                   marginBottom: 40,
                 }}>
-                  <Image source={Rossignol} 
-                       resizeMethod="resize"
-                       resizeMode="contain"
-            
-                       style={{height: '100%', width: '80%', alignSelf : 'center',           marginHorizontal : 'auto'}} />
-              </View>
-
-              <View
-                style={{
-                  borderBottomWidth: 1,
-                  borderBottomColor: '#DDDDDD',
-                  width: Dimensions.get('screen').width,
-                  marginTop: 0,
-                }}>
-                <Text />
-              </View>
-
-
-              <View
-                style={{
-                  width: '100%',
-                  height: 100,
-                  flex: 1,
-                  marginTop: 40,
-                  marginBottom: 40,
-                }}>
-                  <Image source={Deva} 
-                       resizeMethod="resize"
-                       resizeMode="contain"
-            
-                       style={{height: '100%', width: '30%', alignSelf : 'center',           marginHorizontal : 'auto'}} />
+                <Image
+                  source={Rossignol}
+                  resizeMethod="resize"
+                  resizeMode="contain"
+                  style={{
+                    height: '100%',
+                    width: '80%',
+                    alignSelf: 'center',
+                    marginHorizontal: 'auto',
+                  }}
+                />
               </View>
 
               <View
@@ -401,13 +378,50 @@ class Partenaires extends Component {
                   marginTop: 40,
                   marginBottom: 40,
                 }}>
-                  <Image source={Dag} 
-                       resizeMethod="resize"
-                       resizeMode="contain"
-            
-                       style={{height: '100%', width: '30%', alignSelf : 'center',           marginHorizontal : 'auto'}} />
+                <Image
+                  source={Deva}
+                  resizeMethod="resize"
+                  resizeMode="contain"
+                  style={{
+                    height: '100%',
+                    width: '30%',
+                    alignSelf: 'center',
+                    marginHorizontal: 'auto',
+                  }}
+                />
               </View>
-              
+
+              <View
+                style={{
+                  borderBottomWidth: 1,
+                  borderBottomColor: '#DDDDDD',
+                  width: Dimensions.get('screen').width,
+                  marginTop: 0,
+                }}>
+                <Text />
+              </View>
+
+              <View
+                style={{
+                  width: '100%',
+                  height: 100,
+                  flex: 1,
+                  marginTop: 40,
+                  marginBottom: 40,
+                }}>
+                <Image
+                  source={Dag}
+                  resizeMethod="resize"
+                  resizeMode="contain"
+                  style={{
+                    height: '100%',
+                    width: '30%',
+                    alignSelf: 'center',
+                    marginHorizontal: 'auto',
+                  }}
+                />
+              </View>
+
               <View style={{marginBottom: 100}} />
             </Content>
           </Root>

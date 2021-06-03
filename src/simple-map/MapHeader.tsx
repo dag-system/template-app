@@ -8,6 +8,7 @@ import Logo from '../assets/logo.png';
 import {formattedTime} from '../services/HoursService';
 import AppState from '../models/AppState';
 import {textAutoBackgroundColor} from '../globalsModifs';
+import HeaderComponent from '../home/HeaderComponent';
 const mapStateToProps = (state: AppState) => {
   return {
     isRecording: state.isRecording,
@@ -170,23 +171,8 @@ class MapHeader extends Component<Props, State> {
   render() {
     return (
       <View>
-        <Header style={styles.header}>
-          <Left>
-            <Button
-              style={styles.goBackButton}
-              onPress={() => this.openDrawer()}>
-              <Icon style={styles.saveText} name="bars" type="FontAwesome5" />
-            </Button>
-          </Left>
-          <Body>
-            <Image
-              resizeMode="contain"
-              source={Logo}
-              style={styles.logoHeader}
-            />
-          </Body>
-          <Right></Right>
-        </Header>
+          <HeaderComponent onPressBack={()=> this.openDrawer()} mode="drawer" ></HeaderComponent>
+
       </View>
     );
   }

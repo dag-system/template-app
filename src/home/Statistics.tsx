@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, {useEffect} from 'react';
 import {StyleSheet, View, Image} from 'react-native';
 import {useSelector} from 'react-redux';
 import {useDispatch} from 'react-redux';
@@ -18,6 +18,7 @@ import AppState from '../models/AppState';
 import {useNavigation} from '@react-navigation/core';
 import Sidebar from './SideBar';
 import ApiUtils from '../ApiUtils';
+import HeaderComponent from './HeaderComponent';
 
 export default function Statistics() {
   const {lives} = useSelector((state: AppState) => state);
@@ -39,7 +40,6 @@ export default function Statistics() {
       ref={(ref) => {
         drawer = ref;
       }}
-      
       content={
         <Sidebar
           navigation={navigation}
@@ -49,17 +49,7 @@ export default function Statistics() {
         />
       }>
       <Container>
-        <Header style={styles.header}>
-          <Left>
-            <Button style={styles.drawerButton} onPress={() => onDrawer()}>
-              <Icon style={styles.saveText} name="bars" type="FontAwesome5" />
-            </Button>
-          </Left>
-          <Body>
-          <Image resizeMode="contain" source={Logo} style={styles.logo} />
-          </Body>
-          <Right></Right>
-        </Header>
+        <HeaderComponent onPressBack={() => onDrawer()} mode="drawer" />
         <Content>
           <View>
             {/* <Text>statistics</Text>
@@ -86,12 +76,12 @@ const styles = StyleSheet.create({
     shadowOpacity: 0,
     elevation: 0,
   },
-  saveText:{
-    color : 'black'
+  saveText: {
+    color: 'black',
   },
   drawerButton: {
     backgroundColor: 'transparent',
-    color : 'black',
+    color: 'black',
     width: '100%',
     marginTop: 0,
     paddingTop: 0,

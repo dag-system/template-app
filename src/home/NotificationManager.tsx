@@ -34,6 +34,7 @@ import {
 import Logo from '../assets/logo.png';
 import ApiUtils from '../ApiUtils';
 import {Sponsors} from './Sponsors';
+import HeaderComponent from './HeaderComponent';
 
 export default function NotificationManager() {
   const dispatch = useDispatch();
@@ -152,27 +153,13 @@ export default function NotificationManager() {
       <Modal
         visible={isModalNotificationVisible}
         style={{backgroundColor: 'white'}}>
-        <Header style={styles.header}>
-          <Left style={{flex: 1}}>
-            <Text></Text>
-          </Left>
-          <Body style={{flex: 0}} />
-          <Right style={{flex: 1}}>
-            <Text style={{color: textAutoBackgroundColor}}>
-              {TemplateDisplayName}
-            </Text>
-            <Image
-              resizeMode="contain"
-              source={Logo}
-              style={{
-                width: '50%',
-                height: 50,
-                marginRight: '10%',
-                marginLeft: 15,
-              }}
-            />
-          </Right>
-        </Header>
+        <HeaderComponent
+          onPressBack={() => {
+            closeModal()
+          }}
+          mode="back"
+        />
+
         <Container>
           <Content style={{padding: 20}}>
             <H2 style={{textAlign: 'center', marginBottom: 20}}>

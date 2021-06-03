@@ -27,6 +27,7 @@ import Rotate from '../assets/rotate.png';
 import AutoHeightWebView from 'react-native-autoheight-webview';
 
 import {TemplateSiteLink, textAutoBackgroundColor} from './../globalsModifs';
+import HeaderComponent from './HeaderComponent';
 
 const mapStateToProps = () => {
   return {};
@@ -100,37 +101,8 @@ class Classement extends Component<Props, State> {
         <Container>
           <Root>
             {this.props.noHeader ? null : (
-              <Header style={styles.header}>
-                <Left style={{flex: 1}}>
-                  <TouchableOpacity
-                    style={styles.drawerButton}
-                    onPress={() => this.onDrawer()}>
-                    <Icon
-                      style={styles.saveText}
-                      name="bars"
-                      type="FontAwesome5"
-                    />
-                  </TouchableOpacity>
-                </Left>
-                <Body style={{flex: 0}} />
-                <Right style={{flex: 1}}>
-                  <Image
-                    resizeMode="contain"
-                    source={Logo}
-                    style={styles.logo}
-                  />
-                  <Autrans
-                    width={'40%'}
-                    height={50}
-                    style={{
-                      alignSelf: 'center',
-                      opacity: 1,
-                      marginLeft: 10,
-                      marginBottom: 5,
-                    }}
-                  />
-                </Right>
-              </Header>
+              <HeaderComponent onPressBack={()=> this.onDrawer()} mode="drawer" ></HeaderComponent>
+       
             )}
 
             <Content style={{padding: 10, paddingTop: 20}} scrollEnabled={true}>
