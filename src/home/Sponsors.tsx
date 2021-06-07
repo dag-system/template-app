@@ -31,7 +31,7 @@ export class Sponsors extends Component {
 
   render() {
     return (
-      <View>
+      <View style={{   backgroundColor :'transparent'}}>
         <View
           style={{
             borderBottomWidth: 1,
@@ -45,40 +45,11 @@ export class Sponsors extends Component {
           style={{
             display: 'flex',
             flexDirection: 'row',
-            // justifyContent: 'flex-start',
             marginTop: 10,
             width: '100%',
             paddingHorizontal: 10,
             marginBottom: 20,
           }}>
-          {/* <View style={{width: '34%', height: 50}}>
-            <Image
-              source={Region}
-              resizeMethod="resize"
-              resizeMode="contain"
-              style={{height: '100%', width: '100%'}}
-            />
-          </View>
-
-          <View style={{width: '30%', height: 50}}>
-            <Isere height={'80%'} style={{marginTop: 5}} />
-          </View>
-
-          <View
-            style={{
-              width: '10%',
-              height: 50,
-              flex: 1,
-              justifyContent: 'center',
-              paddingLeft: 0,
-            }}>
-            <Image
-              source={Ccmv}
-              resizeMethod="resize"
-              resizeMode="contain"
-              style={{height: '70%', width: '100%'}}
-            />
-          </View> */}
 
           <View style={{width: '30%', height: 50}}>
             <Autrans

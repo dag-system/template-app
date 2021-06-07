@@ -529,154 +529,154 @@ class Home extends Component {
 
     return (
       <Root>
-        <Container style={{backgroundColor: ApiUtils.getBackgroundColor()}}>
-          {/* <SafeAreaView
+        {/* <Container style={{backgroundColor: ApiUtils.getBackgroundColor()}}> */}
+        {/* <SafeAreaView
             style={{backgroundColor: ApiUtils.getBackgroundColor()}}
           /> */}
 
-          <Content style={[styles.body]} scrollEnabled={true}>
-            <KeyboardAvoidingView style={styles.loginButtonSection}>
-              {/* <View
+        <View style={[styles.body]} scrollEnabled={false}>
+          <KeyboardAvoidingView style={styles.loginButtonSection}>
+            {/* <View
                 style={{
                   zIndex: 10,
                   alignItems: 'center',
                   backgroundColor: ApiUtils.getBackgroundColor(),
                 }}> */}
-              <ImageBackground
-                style={{
-                  width: '100%',
-                  minHeight: 10,
-                  height: Dimensions.get('screen').height,
-                }}
-                source={Fond}>
-                <TouchableHighlight
-                  underlayColor="transparent"
-                  onPress={() => this.pressLogo()}
-                  style={styles.logo}>
-                  <Animated.View
-                    ref={(ref) => {
-                      this.logo = ref;
+            <ImageBackground
+              style={{
+                width: '100%',
+                minHeight: 10,
+                height: Dimensions.get('screen').height,
+              }}
+              source={Fond}>
+              <TouchableHighlight
+                underlayColor="transparent"
+                onPress={() => this.pressLogo()}
+                style={styles.logo}>
+                <Animated.View
+                  ref={(ref) => {
+                    this.logo = ref;
+                  }}
+                  style={[GlobalStyles.row, {justifyContent: 'center'}]}
+                  animation="bounceInDown"
+                  delay={300}>
+                  <Image
+                    resizeMode="contain"
+                    source={Logo}
+                    style={{
+                      height: 200,
+                      width: 200,
                     }}
-                    style={[GlobalStyles.row, {justifyContent: 'center'}]}
-                    animation="bounceInDown"
-                    delay={300}>
-                    <Image
-                      resizeMode="contain"
-                      source={Logo}
+                  />
+                </Animated.View>
+              </TouchableHighlight>
+
+              <ScrollView>
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    justifyContent: 'space-evenly',
+                    width: '100%',
+                    marginTop: 50,
+                  }}>
+                  <TouchableOpacity
+                    style={[
+                      GlobalStyles.button,
+                      {
+                        marginTop: 0,
+                        borderColor: 'white',
+                        opacity: 1,
+                        width: '80%',
+                        padding: 10,
+                        backgroundColor: 'white',
+                      },
+                    ]}
+                    onPress={() => this.createAccountOld()}>
+                    <Text
                       style={{
-                        height: 200,
-                        width: 200,
-                      }}
-                    />
-                  </Animated.View>
-                </TouchableHighlight>
-
-                <ScrollView>
-                  <View
-                    style={{
-                      flexDirection: 'row',
-                      justifyContent: 'space-evenly',
-                      width: '100%',
-                      marginTop: 50,
-                    }}>
-                    <TouchableOpacity
-                      style={[
-                        GlobalStyles.button,
-                        {
-                          marginTop: 0,
-                          borderColor: 'white',
-                          opacity: 1,
-                          width: '80%',
-                          padding: 10,
-                          backgroundColor: 'white',
-                        },
-                      ]}
-                      onPress={() => this.createAccountOld()}>
-                      <Text
-                        style={{
-                          textAlign: 'center',
-                          fontWeight: 'bold',
-                          color: textAutoBackgroundColor,
-                          textTransform: 'uppercase',
-                        }}>
-                        Créer un compte
-                      </Text>
-                    </TouchableOpacity>
-                  </View>
-                  <View
-                    style={{
-                      flexDirection: 'row',
-                      justifyContent: 'space-evenly',
-                      width: '100%',
-                      marginTop: 20,
-                    }}>
-                    <TouchableOpacity
-                      style={[
-                        GlobalStyles.button,
-                        {
-                          marginTop: 10,
-                          borderColor: textAutoBackgroundColor,
-                          opacity: 1,
-                          width: '80%',
-                          padding: 10,
-                          backgroundColor: textAutoBackgroundColor,
-                        },
-                      ]}
-                      onPress={() => this.openModalLogin()}>
-                      <Text
-                        style={{
-                          textAlign: 'center',
-                          fontWeight: 'bold',
-                          color: ApiUtils.getBackgroundColor(),
-                          textTransform: 'uppercase',
-                        }}>
-                        Je me connecte
-                      </Text>
-                    </TouchableOpacity>
-                  </View>
-                  <View
-                    style={{
-                      flexDirection: 'row',
-                      justifyContent: 'space-evenly',
-                      width: '100%',
-                      marginTop: 2,
-                    }}>
-                    <TouchableOpacity
-                      style={[
-                        {
-                          marginTop: 10,
-                          borderColor: textAutoBackgroundColor,
-                          opacity: 1,
-                          width: '80%',
-                          borderColor: textAutoBackgroundColor,
-                          padding: 2,
-                        },
-                      ]}
-                      onPress={() => this.forgotPassword()}>
-                      <Text
-                        style={{
-                          textAlign: 'center',
-                          textDecorationLine: 'underline',
-                          color: textAutoBackgroundColor,
-                          textTransform: 'uppercase',
-                        }}>
-                        J'ai oublié mon code ?
-                      </Text>
-                    </TouchableOpacity>
-                  </View>
-
-                  <Text
+                        textAlign: 'center',
+                        fontWeight: 'bold',
+                        color: textAutoBackgroundColor,
+                        textTransform: 'uppercase',
+                      }}>
+                      Créer un compte
+                    </Text>
+                  </TouchableOpacity>
+                </View>
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    justifyContent: 'space-evenly',
+                    width: '100%',
+                    marginTop: 20,
+                  }}>
+                  <TouchableOpacity
+                    style={[
+                      GlobalStyles.button,
+                      {
+                        marginTop: 10,
+                        borderColor: textAutoBackgroundColor,
+                        opacity: 1,
+                        width: '80%',
+                        padding: 10,
+                        backgroundColor: textAutoBackgroundColor,
+                      },
+                    ]}
+                    onPress={() => this.openModalLogin()}>
+                    <Text
+                      style={{
+                        textAlign: 'center',
+                        fontWeight: 'bold',
+                        color: ApiUtils.getBackgroundColor(),
+                        textTransform: 'uppercase',
+                      }}>
+                      Je me connecte
+                    </Text>
+                  </TouchableOpacity>
+                </View>
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    justifyContent: 'space-evenly',
+                    width: '100%',
+                    marginTop: 2,
+                  }}>
+                  <TouchableOpacity
                     style={[
                       {
-                        color: textAutoBackgroundColor,
-                        textAlign: 'center',
-                        fontSize: 13,
-                        marginTop: 30,
+                        marginTop: 10,
+                        borderColor: textAutoBackgroundColor,
+                        opacity: 1,
+                        width: '80%',
+                        borderColor: textAutoBackgroundColor,
+                        padding: 2,
                       },
-                    ]}>
-                    Version V {VersionCheck.getCurrentVersion()}
-                  </Text>
-                  {/* <Text
+                    ]}
+                    onPress={() => this.forgotPassword()}>
+                    <Text
+                      style={{
+                        textAlign: 'center',
+                        textDecorationLine: 'underline',
+                        color: textAutoBackgroundColor,
+                        textTransform: 'uppercase',
+                      }}>
+                      J'ai oublié mon code ?
+                    </Text>
+                  </TouchableOpacity>
+                </View>
+
+                <Text
+                  style={[
+                    {
+                      color: textAutoBackgroundColor,
+                      textAlign: 'center',
+                      fontSize: 13,
+                      marginTop: 30,
+                    },
+                  ]}>
+                  Version V {VersionCheck.getCurrentVersion()}
+                </Text>
+                {/* <Text
                     style={[
                       {
                         color: textAutoBackgroundColor,
@@ -690,173 +690,216 @@ class Home extends Component {
                       'DD/MM/YYYY',
                     )}
                   </Text> */}
-                </ScrollView>
-              </ImageBackground>
-              {/* </View> */}
-            </KeyboardAvoidingView>
-            <Modal
-              visible={this.state.isVisibleModalLogin}
-              onRequestClose={() => this.oncloseModalLogin()}>
-              <Container>
-                <HeaderComponent
-                  onPressBack={() => this.oncloseModalLogin()}
-                  mode="back"
-                />
-
-                <Content>
-                  <KeyboardAvoidingView style={styles.followCodeLoginSection}>
-                    <Text
-                      style={{
-                        fontWeight: 'bold',
-                        textTransform: 'uppercase',
-                        textAlign: 'center',
-                        marginTop: 30,
-                        color: 'black',
-                      }}>
-                      Vous avez déjà un compte ?
-                    </Text>
-
-                    {this.props.folocodes?.length > 0 ? (
-                      <View>
-                        <Picker
-                          style={{width: 300, height: 100}}
-                          mode="dropdown"
-                          accessibilityLabel={'Choisir le Code'}
-                          iosHeader={'Choisir le Code'}
-                          iosIcon={
-                            <Icon name="chevron-down" type="FontAwesome5" />
-                          }
-                          selectedValue={this.state.selectedFolocode}
-                          onValueChange={this.onValueFolocodeChange.bind(this)}
-                          placeholder={'Choisissez le Code'}
-                          placeholderStyle={{
-                            color: 'black',
-                          }}
-                          placeholderIconColor={'black'}
-                          textStyle={{color: 'black'}}
-                          itemStyle={{
-                            color: 'black',
-                            marginLeft: 0,
-                            paddingLeft: 10,
-                            borderBottomColor: 'black',
-                            borderBottomWidth: 1,
-                          }}
-                          itemTextStyle={{
-                            color: 'black',
-                            borderBottomColor: 'black',
-                            borderBottomWidth: 1,
-                          }}>
-                          <Picker.Item label="Choisissez le Code" value={-1} />
-                          {this.props.folocodes.map((folocode) => {
-                            return (
-                              <Picker.Item
-                                label={
-                                  folocode.folocode +
-                                  ' ' +
-                                  folocode.prenom +
-                                  ' ' +
-                                  folocode.nom
-                                }
-                                value={folocode.folocode}
-                              />
-                            );
-                          })}
-                        </Picker>
-                      </View>
-                    ) : null}
-
-                    {this.props.folocodes?.length > 0 ? (
-                      <Text style={{textAlign: 'center'}}>ou </Text>
-                    ) : null}
-
-                    <View
-                      style={{
-                        display: 'flex',
-                        flexDirection: 'row',
-                        justifyContent: 'center',
-                      }}>
-                      <TextInput
-                        style={styles.inputCode}
-                        placeholder="Entrez votre code"
-                        placeholderTextColor="black"
-                        value={this.state.followCode}
-                        onChangeText={(followCode) =>
-                          this.setState({followCode: followCode})
-                        }
-                        clearButtonMode="always"
-                      />
-                    </View>
-
-                    <View
-                      style={{
-                        flexDirection: 'row',
-                        justifyContent: 'center',
-                        alignSelf: 'center',
-                      }}>
-                      <TouchableOpacity
-                        full
-                        style={[
-                          GlobalStyles.button,
-                          {
-                            width: '80%',
-                            elevation: 0,
-                            borderColor: 'black',
-                            borderWidth: 1,
-                            padding: 10,
-                          },
-
-                          this.state.followCode == '' &&
-                          this.state.selectedFolocode == -1
-                            ? {backgroundColor: 'transparent'}
-                            : {backgroundColor: 'black'},
-                        ]}
-                        onPress={() => this.onClickSendFollowCode()}
-                        disabled={
-                          this.state.followCode == '' &&
-                          this.state.selectedFolocode == -1
-                        }>
-                        <Text
-                          style={{
-                            fontWeight: 'bold',
-                            textAlign: 'center',
-                            color:
-                              this.state.followCode == '' &&
-                              this.state.selectedFolocode == -1
-                                ? 'black'
-                                : 'white',
-                          }}>
-                          CONNEXION
-                        </Text>
-                      </TouchableOpacity>
-                    </View>
-
-                    {/* <View style={{marginBottom: 0}} /> */}
-                  </KeyboardAvoidingView>
-
-                  {/* <View style={{position: 'absolute', bottom: 0, left : 0}}> */}
-                </Content>
-                <Sponsors />
-              </Container>
-              {/* </View> */}
-            </Modal>
-
-            <Modal
-              visible={this.state.isModalJetcodeVisible}
-              onRequestClose={() => this.oncloseModal()}>
+              </ScrollView>
+            </ImageBackground>
+            {/* </View> */}
+          </KeyboardAvoidingView>
+          <Modal
+            visible={this.state.isVisibleModalLogin}
+            onRequestClose={() => this.oncloseModalLogin()}>
+            <Container>
               <HeaderComponent
-                onPressBack={() => this.oncloseModal()}
+                onPressBack={() => this.oncloseModalLogin()}
                 mode="back"
               />
 
-              <WebviewJetCode uri={'https://google.com'} />
-            </Modal>
-          </Content>
-          <View style={{backgroundColor: 'white'}}>
-            <Animated.View animation="bounceInUp" delay={200}>
+              <Content>
+                <KeyboardAvoidingView style={styles.followCodeLoginSection}>
+                  <Text
+                    style={{
+                      fontWeight: 'bold',
+                      textTransform: 'uppercase',
+                      textAlign: 'center',
+                      marginTop: 30,
+                      color: 'black',
+                    }}>
+                    Vous avez déjà un compte ?
+                  </Text>
+
+                  {this.props.folocodes?.length > 0 ? (
+                    <View>
+                      <Picker
+                        style={{width: 300, height: 100}}
+                        mode="dropdown"
+                        accessibilityLabel={'Choisir le Code'}
+                        iosHeader={'Choisir le Code'}
+                        iosIcon={
+                          <Icon name="chevron-down" type="FontAwesome5" />
+                        }
+                        selectedValue={this.state.selectedFolocode}
+                        onValueChange={this.onValueFolocodeChange.bind(this)}
+                        placeholder={'Choisissez le Code'}
+                        placeholderStyle={{
+                          color: 'black',
+                        }}
+                        placeholderIconColor={'black'}
+                        textStyle={{color: 'black'}}
+                        itemStyle={{
+                          color: 'black',
+                          marginLeft: 0,
+                          paddingLeft: 10,
+                          borderBottomColor: 'black',
+                          borderBottomWidth: 1,
+                        }}
+                        itemTextStyle={{
+                          color: 'black',
+                          borderBottomColor: 'black',
+                          borderBottomWidth: 1,
+                        }}>
+                        <Picker.Item label="Choisissez le Code" value={-1} />
+                        {this.props.folocodes.map((folocode) => {
+                          return (
+                            <Picker.Item
+                              label={
+                                folocode.folocode +
+                                ' ' +
+                                folocode.prenom +
+                                ' ' +
+                                folocode.nom
+                              }
+                              value={folocode.folocode}
+                            />
+                          );
+                        })}
+                      </Picker>
+                    </View>
+                  ) : null}
+
+                  {this.props.folocodes?.length > 0 ? (
+                    <Text style={{textAlign: 'center'}}>ou </Text>
+                  ) : null}
+
+                  <View
+                    style={{
+                      display: 'flex',
+                      flexDirection: 'row',
+                      justifyContent: 'center',
+                    }}>
+                    <TextInput
+                      style={styles.inputCode}
+                      placeholder="Entrez votre code"
+                      placeholderTextColor="black"
+                      value={this.state.followCode}
+                      onChangeText={(followCode) =>
+                        this.setState({followCode: followCode})
+                      }
+                      clearButtonMode="always"
+                    />
+                  </View>
+
+                  <View
+                    style={{
+                      flexDirection: 'row',
+                      justifyContent: 'center',
+                      alignSelf: 'center',
+                    }}>
+                    <TouchableOpacity
+                      full
+                      style={[
+                        GlobalStyles.button,
+                        {
+                          width: '80%',
+                          elevation: 0,
+                          borderColor: 'black',
+                          borderWidth: 1,
+                          padding: 10,
+                        },
+
+                        this.state.followCode == '' &&
+                        this.state.selectedFolocode == -1
+                          ? {backgroundColor: 'transparent'}
+                          : {backgroundColor: 'black'},
+                      ]}
+                      onPress={() => this.onClickSendFollowCode()}
+                      disabled={
+                        this.state.followCode == '' &&
+                        this.state.selectedFolocode == -1
+                      }>
+                      <Text
+                        style={{
+                          fontWeight: 'bold',
+                          textAlign: 'center',
+                          color:
+                            this.state.followCode == '' &&
+                            this.state.selectedFolocode == -1
+                              ? 'black'
+                              : 'white',
+                        }}>
+                        CONNEXION
+                      </Text>
+                    </TouchableOpacity>
+                  </View>
+
+                  {/* <View style={{marginBottom: 0}} /> */}
+                </KeyboardAvoidingView>
+
+                {/* <View style={{position: 'absolute', bottom: 0, left : 0}}> */}
+              </Content>
               <Sponsors />
-            </Animated.View>
+            </Container>
+            {/* </View> */}
+          </Modal>
+
+          <Modal
+            visible={this.state.isModalJetcodeVisible}
+            onRequestClose={() => this.oncloseModal()}>
+            <HeaderComponent
+              onPressBack={() => this.oncloseModal()}
+              mode="back"
+            />
+
+            <WebviewJetCode uri={'https://google.com'} />
+          </Modal>
+        </View>
+
+        <View style={{backgroundColor: 'transparent'}}>
+          <View
+            style={{
+              backgroundColor: 'white',
+              width: '100%',
+              opacity: 0.4,
+              height: Dimensions.get('screen').height > 700 ? 100 : 70,
+              position: 'absolute',
+              // marginBottom: 20,
+              bottom: Platform.OS == 'ios' ? 0 : 50,
+            }}>
+            <Text> </Text>
           </View>
-        </Container>
+          <Animated.View animation="bounceInUp" delay={200}>
+            {/* <Sponsors /> */}
+            <View
+              style={{
+                display: 'flex',
+                flexDirection: 'row',
+                marginTop: 10,
+                width: '100%',
+                paddingHorizontal: 10,
+                position: 'absolute',
+                // marginBottom: 20,
+                bottom:
+                  Platform.OS == 'ios'
+                    ? Dimensions.get('screen').height > 700
+                      ? 30
+                      : 15
+                    : 90,
+                backgroundColor: 'transparent',
+              }}>
+              <View style={{width: '30%', height: 50}}>
+                <Autrans
+                  width={'80%'}
+                  height={50}
+                  style={{
+                    alignSelf: 'center',
+                    opacity: 1,
+                    marginLeft: 10,
+                    // marginBottom: 5,
+                  }}
+                />
+              </View>
+            </View>
+          </Animated.View>
+        </View>
+        {/* </Container> */}
       </Root>
     );
   }
@@ -878,9 +921,9 @@ const styles = StyleSheet.create({
     width: '70%',
     height: 100,
     alignSelf: 'center',
-    // marginTop: Platform.OS == 'ios' ? 20 : 25,
-    marginTop: 20,
-    marginBottom: 230,
+    marginTop:
+      Platform.OS == 'ios' && Dimensions.get('screen').height > 700 ? 40 : 0,
+    marginBottom: Dimensions.get('screen').height > 700 ? 200 : 100,
   },
   loginButtonSection: {
     width: '100%',

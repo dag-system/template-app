@@ -5,6 +5,7 @@
 	};
 	objectVersion = 46;
 	objects = {
+
 /* Begin PBXBuildFile section */
 		00E356F31AD99517003FC87E /* FolomiTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* FolomiTests.m */; };
 		13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.m */; };
@@ -344,7 +345,7 @@
 						TestTargetID = 13B07F861A680F5B00A75B9A;
 					};
 					13B07F861A680F5B00A75B9A = {
-						DevelopmentTeam = U22Y8S3CHH;
+						DevelopmentTeam = YJSVWVX3PY;
 						LastSwiftMigration = 1120;
 						ProvisioningStyle = Automatic;
 					};
@@ -797,8 +798,8 @@
 				CODE_SIGN_ENTITLEMENTS = "Folomi/My Cross.entitlements";
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = U22Y8S3CHH;
+				CURRENT_PROJECT_VERSION = 7;
+				DEVELOPMENT_TEAM = YJSVWVX3PY;
 				ENABLE_BITCODE = NO;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"$(inherited)",
@@ -806,7 +807,7 @@
 				);
 				INFOPLIST_FILE = Folomi/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				MARKETING_VERSION = 1.4;
+				MARKETING_VERSION = 1.15;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -830,11 +831,11 @@
 				CODE_SIGN_ENTITLEMENTS = "Folomi/My Cross.entitlements";
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = U22Y8S3CHH;
+				CURRENT_PROJECT_VERSION = 7;
+				DEVELOPMENT_TEAM = YJSVWVX3PY;
 				INFOPLIST_FILE = Folomi/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				MARKETING_VERSION = 1.4;
+				MARKETING_VERSION = 1.15;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",

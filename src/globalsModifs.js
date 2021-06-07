@@ -26,11 +26,11 @@ export const TemplateCountryAsk = true;
 export const TemplateTelVerifAsk = true;
 export const TemplateChallengeClub = true;
 export const TemplateChallengeFamille = true;
-export const TemplateChallengeAutre = true;
+export const TemplateChallengeAutre = false;
 export const TemplateChallengeEntreprise = true;
 export const TemplateHasAppDonation = false;
 export const TemplateIsPaying = false;
-export const TemplateChallengeAutreName = 'Template Test Autre';
+export const TemplateChallengeAutreName = null;
 export const TemplateSportLive = [{sportName : "Course à pied", idSport : 25}];
 export const TemplateArrayImagesSponsorPath = [
 ];
