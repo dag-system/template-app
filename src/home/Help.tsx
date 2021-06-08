@@ -158,14 +158,17 @@ class Help extends Component {
         <Container>
           <Root>
             {this.props.noHeader ? null : (
-                 <HeaderComponent onPressBack={() => this.onDrawer()} mode="drawer" />
-      
+              <HeaderComponent
+                onPressBack={() => this.onDrawer()}
+                mode="drawer"
+              />
             )}
 
             <Content style={{padding: 5, paddingTop: 20}} scrollEnabled={true}>
+            {!this.props.noHeader ? null : (
               <View style={[GlobalStyles.row, {justifyContent: 'center'}]}>
                 <Image resizeMode="contain" source={Logo} style={styles.logo} />
-              </View>
+              </View> )}
               <Text
                 style={{
                   textAlign: 'center',
@@ -175,13 +178,23 @@ class Help extends Component {
                 }}>
                 Bienvenue sur votre application sportive !
               </Text>
-
-              <Text style={{marginTop: 10}}>
-                Entrainez-vous et affrontez vos amis et collègues en toute
-                sécurité, et sans jamais vous croiser !
+              <Text style={{marginTop: 10, textAlign : 'center', color :'#3266aa'}}>
+                Cet été à la Foulée on troque les skis contre les baskets...
+                Entrainez-vous et venez tenter la grande première du « défi
+                estival de la Foulée Blanche » !
+              </Text>
+              <Text style={{marginTop: 10 , textAlign : 'center', color :'#3266aa'}}>
+                Comme cet hiver, c'est quand vous le voulez, autant de fois que
+                vous en avez envie, c’est ENCORE gratuit et illimité ! Et il y
+                en aura pour tous les niveaux : de 6 à 29 km{' '}
+              </Text>
+              <Text style={{marginTop: 10, textAlign : 'center', color :'#3266aa'}}>
+                Une seule obligation : on oublie le stress et on vient juste
+                pour se faire plaisir. Et à chacun de mettre le curseur du défi
+                où il le souhaite !
               </Text>
 
-              <Text style={{marginTop: 10}}>
+              <Text style={{marginTop: 10, textAlign : 'center', color :'#3266aa'}}>
                 Découvrez le fonctionnement de l'application dans la vidéo
                 ci-dessous :
               </Text>

@@ -852,53 +852,42 @@ class Home extends Component {
           </Modal>
         </View>
 
-        <View style={{backgroundColor: 'transparent'}}>
+        {/* <View style={{backgroundColor: 'transparent'}}> */}
           <View
             style={{
               backgroundColor: 'white',
               width: '100%',
               opacity: 0.4,
-              height: Dimensions.get('screen').height > 700 ? 100 : 70,
+              height: 80,
               position: 'absolute',
               // marginBottom: 20,
-              bottom: Platform.OS == 'ios' ? 0 : 50,
+              bottom: Platform.OS == 'ios' ? 0 : 0,
             }}>
-            <Text> </Text>
           </View>
-          <Animated.View animation="bounceInUp" delay={200}>
-            {/* <Sponsors /> */}
-            <View
-              style={{
+          <Animated.View animation="bounceInUp" delay={200}  style={{
                 display: 'flex',
                 flexDirection: 'row',
-                marginTop: 10,
+                marginTop: 0,
                 width: '100%',
                 paddingHorizontal: 10,
                 position: 'absolute',
-                // marginBottom: 20,
-                bottom:
-                  Platform.OS == 'ios'
-                    ? Dimensions.get('screen').height > 700
-                      ? 30
-                      : 15
-                    : 90,
+                bottom: 0,
                 backgroundColor: 'transparent',
               }}>
-              <View style={{width: '30%', height: 50}}>
+              {/* <View style={{width: '30%', height: 50}}> */}
                 <Autrans
-                  width={'80%'}
+                  width={100}
                   height={50}
                   style={{
                     alignSelf: 'center',
                     opacity: 1,
                     marginLeft: 10,
-                    // marginBottom: 5,
+                    marginBottom : 20
                   }}
                 />
-              </View>
-            </View>
+              {/* </View> */}
           </Animated.View>
-        </View>
+        {/* </View> */}
         {/* </Container> */}
       </Root>
     );

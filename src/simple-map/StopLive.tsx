@@ -34,10 +34,8 @@ export default function StopActivity(props: Props) {
   const [selectedSport, setSelectedSport] = useState(-1);
   const [comments, setComments] = useState('');
   const [spinner, setSpinner] = useState(false);
-  const [
-    acceptChallengeNameUtilisateur,
-    setAcceptChallengeNameUtilisateur,
-  ] = useState(false);
+  const [acceptChallengeNameUtilisateur, setAcceptChallengeNameUtilisateur] =
+    useState(false);
 
   const dispatch = useDispatch();
   const navigation = useNavigation();
@@ -349,13 +347,26 @@ export default function StopActivity(props: Props) {
 
       <ScrollView scrollEnabled={true}>
         <View>
-          <TextInput
-            style={[styles.inputCode, {fontWeight: 'bold'}]}
-            clearButtonMode="always"
-            placeholder="Titre"
-            value={libelleLive}
-            onChangeText={(value) => onChangeLiveName(value)}
-          />
+          <View style={{display: 'flex', flexDirection: 'row'}}>
+            <Icon
+              type="FontAwesome5"
+              name="pen"
+              style={{
+                width: 15,
+                height: 20,
+                fontSize: 15,
+                marginTop: 22,
+                marginLeft: 12,
+              }}
+            />
+            <TextInput
+              style={[styles.inputCode, {fontWeight: 'bold', width: '80%'}]}
+              clearButtonMode="always"
+              placeholder="Titre"
+              value={libelleLive}
+              onChangeText={(value) => onChangeLiveName(value)}
+            />
+          </View>
 
           <ErrorMessage
             value={libelleLive}
@@ -363,43 +374,45 @@ export default function StopActivity(props: Props) {
           />
 
           <View style={styles.picker}>
-            <Picker
-              mode="dropdown"
-              accessibilityLabel={'Choisissez votre sport'}
-              iosHeader={'Choisissez votre sport'}
-              iosIcon={<Icon name="chevron-down" type="FontAwesome5" />}
-              style={{marginTop: 0}}
-              selectedValue={selectedSport.toString()}
-              onValueChange={(value) => onValueSportChange(value)}
-              placeholder={'Choisissez votre sport'}
-              placeholderStyle={{
-                color: 'black',
-              }}
-              placeholderIconColor={'black'}
-              textStyle={{color: 'black'}}
-              itemStyle={{
-                color: 'black',
-                marginLeft: 0,
-                paddingLeft: 10,
-                borderBottomColor: 'black',
-                borderBottomWidth: 1,
-              }}
-              itemTextStyle={{
-                color: 'black',
-                borderBottomColor: 'black',
-                borderBottomWidth: 1,
-              }}>
-              <Picker.Item label="Choisissez votre sport" value="-1" />
-              {TemplateSportLive.map((sport, index) => {
-                return (
-                  <Picker.Item
-                    label={sport.sportName}
-                    value={sport.idSport.toString()}
-                    key={index}
-                  />
-                );
-              })}
-            </Picker>
+            {TemplateSportLive.length == 1 && selectedSport != -1 ? null : (
+              <Picker
+                mode="dropdown"
+                accessibilityLabel={'Choisissez votre sport'}
+                iosHeader={'Choisissez votre sport'}
+                iosIcon={<Icon name="chevron-down" type="FontAwesome5" />}
+                style={{marginTop: 0}}
+                selectedValue={selectedSport.toString()}
+                onValueChange={(value) => onValueSportChange(value)}
+                placeholder={'Choisissez votre sport'}
+                placeholderStyle={{
+                  color: 'black',
+                }}
+                placeholderIconColor={'black'}
+                textStyle={{color: 'black'}}
+                itemStyle={{
+                  color: 'black',
+                  marginLeft: 0,
+                  paddingLeft: 10,
+                  borderBottomColor: 'black',
+                  borderBottomWidth: 1,
+                }}
+                itemTextStyle={{
+                  color: 'black',
+                  borderBottomColor: 'black',
+                  borderBottomWidth: 1,
+                }}>
+                <Picker.Item label="Choisissez votre sport" value="-1" />
+                {TemplateSportLive.map((sport, index) => {
+                  return (
+                    <Picker.Item
+                      label={sport.sportName}
+                      value={sport.idSport.toString()}
+                      key={index}
+                    />
+                  );
+                })}
+              </Picker>
+            )}
 
             {selectedSport == -1 ? (
               <Text
@@ -491,9 +504,7 @@ export default function StopActivity(props: Props) {
                 alignSelf: 'center',
                 borderColor: isErrorFormStop() ? 'black' : 'black',
                 borderWidth: 1,
-                backgroundColor: isErrorFormStop()
-                  ? 'transparent'
-                  : 'black',
+                backgroundColor: isErrorFormStop() ? 'transparent' : 'black',
               }}
               onPress={() => onClickValidateStop()}
               disabled={isErrorFormStop()}>

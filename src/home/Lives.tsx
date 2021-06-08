@@ -137,6 +137,11 @@ class Lives extends Component<Props, State> {
   }
 
   async componentDidMountOk() {
+    if(TemplateSportLive.length == 1)
+    {
+      console.log('did mount')
+      this.setState({selectedSport : TemplateSportLive[0].idSport})
+    }
     this.getLives(this.props.userData.idUtilisateur);
     // if (this.props.isRecording) {
     //   this.goToMap();

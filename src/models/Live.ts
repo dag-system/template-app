@@ -4,4 +4,5 @@ export default class Live {
   idSport!: number;
   libelleLive!: string;
   codeLive: string |undefined;
+  coordinates?  :any[];
 }

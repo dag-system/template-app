@@ -58,6 +58,7 @@ import {
 import {TemplateSportLive, textAutoBackgroundColor} from '../globalsModifs';
 import GpxService from '../services/GpxServices';
 import HeaderComponent from './HeaderComponent';
+import ShareComponent from './ShareComponent';
 
 const mapStateToProps = (state) => {
   return {
@@ -106,6 +107,7 @@ interface State {
   isOpenReplayModal: boolean;
   splits: any[];
   speedData: any[];
+  isOpenShareModal: boolean;
 }
 
 class LiveSummary extends Component<Props, State> {
@@ -138,6 +140,7 @@ class LiveSummary extends Component<Props, State> {
       isModalTraceVisible: false,
       isOpenReplayModal: false,
       speedData: [],
+      isOpenShareModal: false,
     };
   }
 
@@ -464,7 +467,8 @@ class LiveSummary extends Component<Props, State> {
 
   onClickShare() {
     //this.shareImage();
-    this.shareOldStyle();
+    // this.shareOldStyle();
+    this.openShareModal();
   }
 
   shareOldStyle() {
@@ -655,6 +659,12 @@ class LiveSummary extends Component<Props, State> {
       edgePadding: {top: 10, right: 10, bottom: 10, left: 10},
       animated: true,
     });
+
+    var live = this.props.currentLiveSummary;
+    live.coordinates = positions;
+
+    var action = {type: 'SAVE_CURRENT_LIVE', data: live};
+    this.props.dispatch(action);
   }
 
   saveCurrentMapStyle(style) {
@@ -685,6 +695,14 @@ class LiveSummary extends Component<Props, State> {
   closeTraceModal() {
     this.setState({isModalTraceVisible: false});
   }
+
+  closeShareModal = () => {
+    this.setState({isOpenShareModal: false});
+  };
+
+  openShareModal = () => {
+    this.setState({isOpenShareModal: true});
+  };
 
   static navigationOptions = {
     drawerLabel: () => null,
@@ -1359,6 +1377,29 @@ class LiveSummary extends Component<Props, State> {
                     </View>
                   ) : null}
 
+                  {/* {this.state.statsLive?.lienPartage != null ? ( */}
+                  <TouchableOpacity
+                    style={[
+                      GlobalStyles.button,
+                      {
+                        width: '80%',
+                        alignSelf: 'center',
+                        marginTop: 30,
+                        paddingVertical: 12,
+                      },
+                    ]}
+                    onPress={() => this.onClickShare()}
+                    disabled={this.state.followCode == ''}>
+                    <Text
+                      style={{
+                        textAlign: 'center',
+                        textTransform: 'uppercase',
+                        fontWeight: 'bold',
+                      }}>
+                      PARTAGER SUR VOS Réseaux
+                    </Text>
+                  </TouchableOpacity>
+
                   {this.state.statsLive?.lienReplay != null &&
                   this.state.live.IsImportedFromGpx != 1 ? (
                     <TouchableOpacity
@@ -1367,7 +1408,7 @@ class LiveSummary extends Component<Props, State> {
                         {
                           width: '80%',
                           alignSelf: 'center',
-                          marginTop: 30,
+                          marginTop: 13,
                           paddingVertical: 12,
                         },
                       ]}
@@ -1382,31 +1423,6 @@ class LiveSummary extends Component<Props, State> {
                           fontWeight: 'bold',
                         }}>
                         Revoir votre parcours
-                      </Text>
-                    </TouchableOpacity>
-                  ) : (
-                    <View />
-                  )}
-                  {this.state.statsLive?.lienPartage != null ? (
-                    <TouchableOpacity
-                      style={[
-                        GlobalStyles.button,
-                        {
-                          width: '80%',
-                          alignSelf: 'center',
-                          marginTop: 13,
-                          paddingVertical: 12,
-                        },
-                      ]}
-                      onPress={() => this.onClickShare()}
-                      disabled={this.state.followCode == ''}>
-                      <Text
-                        style={{
-                          textAlign: 'center',
-                          textTransform: 'uppercase',
-                          fontWeight: 'bold',
-                        }}>
-                        PARTAGER
                       </Text>
                     </TouchableOpacity>
                   ) : (
@@ -1473,6 +1489,17 @@ class LiveSummary extends Component<Props, State> {
                     (Platform.OS === 'ios' ? 64 : 56),
                 }}></WebView>
             </Content>
+          </Modal>
+
+          <Modal
+            visible={this.state.isOpenShareModal}
+            onRequestClose={() => this.closeShareModal()}>
+            <HeaderComponent
+              onPressBack={() => this.closeShareModal()}
+              mode="back"
+            />
+
+            <ShareComponent onClose={() => this.closeShareModal()} />
           </Modal>
 
           {/******** modal5 : Traces list  *****************/}

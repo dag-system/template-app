@@ -95,6 +95,12 @@ class UploadGpx extends Component<Props, State> {
       acceptChallengeUtilisateur:
         this.props.userData.acceptChallengeUtilisateur == 1,
     });
+
+    if(TemplateSportLive.length == 1)
+    {
+      console.log('did mount')
+      this.setState({selectedSport : TemplateSportLive[0].idSport})
+    }
   }
 
   onGoBack() {
