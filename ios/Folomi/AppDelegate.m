@@ -3,7 +3,7 @@
 #import <React/RCTBridge.h>
 #import <React/RCTBundleURLProvider.h>
 #import <React/RCTRootView.h>
-
+#import <React/RCTLinkingManager.h>
 // Add this at the top of AppDelegate.m
    #import <RNPusherPushNotifications.h>
 /*#if DEBUG && TARGET_OS_SIMULATOR
@@ -66,6 +66,13 @@ static void InitializeFlipper(UIApplication *application) {
 
 -(void)application:(UIApplication *)application didFailToRegisterForRemoteNotificationsWithError:(NSError *)error {
   NSLog(@"Remote notification support is unavailable due to error: %@", error.localizedDescription);
+}
+
+- (BOOL)application:(UIApplication *)app openURL:(NSURL *)url options:(NSDictionary<NSString *, id> *) options {
+if ([self.authorizationFlowManagerDelegate resumeExternalUserAgentFlowWithURL:url]) {
+  return YES;
+}
+return [RCTLinkingManager application:app openURL:url options:options];
 }
 
 

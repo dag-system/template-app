@@ -136,6 +136,9 @@ android {
             targetSdkVersion rootProject.ext.targetSdkVersion
             versionCode 550
             versionName "1.1.42"
+            manifestPlaceholders = [
+                        appAuthRedirectScheme: 'com.fouleeblanche.app'
+            ]
     }
     splits {
         abi {

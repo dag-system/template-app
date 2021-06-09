@@ -7,6 +7,7 @@ import {
   Image,
   ScrollView,
   TouchableOpacity,
+  Modal,
 } from 'react-native';
 import {
   Container,
@@ -32,6 +33,7 @@ import ErrorMessage from './ErrorMessage';
 import {TextInput} from 'react-native-gesture-handler';
 import DocumentPicker from 'react-native-document-picker';
 import DefaultProps from '../models/DefaultProps';
+import ConnectStrava from './ConnectStava';
 
 import {
   TemplateSportLive,
@@ -69,6 +71,9 @@ interface State {
   }[];
   acceptChallengeNameUtilisateur: boolean;
   acceptChallengeUtilisateur: boolean;
+  isOpenStravaModal: boolean;
+  stravaData: string | null;
+  mode: 'file' | 'strava';
 }
 
 class UploadGpx extends Component<Props, State> {
@@ -83,6 +88,9 @@ class UploadGpx extends Component<Props, State> {
       listSport: TemplateSportLive,
       acceptChallengeNameUtilisateur: false,
       acceptChallengeUtilisateur: false,
+      isOpenStravaModal: false,
+      stravaData: null,
+      mode: 'file',
     };
   }
 
@@ -155,7 +163,7 @@ class UploadGpx extends Component<Props, State> {
     if (this.state.selectedSport == -1) {
       isError = true;
     }
-    if (this.state.file == null) {
+    if (this.state.file == null && this.state.stravaData == null) {
       isError = true;
     }
 
@@ -228,7 +236,14 @@ class UploadGpx extends Component<Props, State> {
 
     let formData = new FormData();
     // body.append('file', file)
-    formData.append('file_attachment', this.state.file);
+
+    if (this.state.mode == 'strava') {
+      formData.append('gpxData', this.state.stravaData);
+    } else {
+      formData.append('file_attachment', this.state.file);
+    }
+
+
 
     formData.append('method', 'createLive');
     formData.append('auth', ApiUtils.getAPIAuth());
@@ -317,6 +332,19 @@ class UploadGpx extends Component<Props, State> {
     }
   }
 
+  openStravaModal = () => {
+    this.setState({isOpenStravaModal: true});
+  };
+
+  closeStravaModal = () => {
+    this.setState({isOpenStravaModal: false});
+  };
+
+  onSelectStravaTraceOk = (data: string) => {
+    this.setState({stravaData: data, mode: 'strava'});
+    this.closeStravaModal();
+  };
+
   render() {
     return (
       <Root>
@@ -362,6 +390,46 @@ class UploadGpx extends Component<Props, State> {
                     </Text>
                   )}
                 </Button>
+
+                <Text style={{textAlign: 'center'}}>ou</Text>
+                <Button
+                  style={{
+                    marginTop: 10,
+                    paddingHorizontal: 50,
+                    elevation: 0,
+                    alignSelf: 'center',
+                    borderColor: '#FC6100',
+                    borderWidth: 1,
+                    backgroundColor: '#FC6100',
+                  }}
+                  onPress={() => this.openStravaModal()}>
+                  {this.state.stravaData == null ? (
+                    <Text
+                      style={{
+                        color: 'white',
+                      }}>
+                      Ajouter un fichier depuis Strava
+                    </Text>
+                  ) : (
+                    <Text
+                      style={{
+                        color: 'white',
+                      }}>
+                      Chosir une autre trace
+                    </Text>
+                  )}
+                </Button>
+
+                {this.state.isOpenStravaModal ? (
+                  <Modal
+                    visible={this.state.isOpenStravaModal}
+                    onRequestClose={() => this.closeStravaModal()}>
+                    <ConnectStrava
+                      onSelect={(data) => this.onSelectStravaTraceOk(data)}
+                      onCancel={() => this.setState({isOpenStravaModal: false})}
+                    />
+                  </Modal>
+                ) : null}
 
                 <TextInput
                   style={[styles.inputCode, {fontWeight: 'bold'}]}

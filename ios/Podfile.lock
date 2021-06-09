@@ -1,4 +1,9 @@
 PODS:
+  - AppAuth (1.4.0):
+    - AppAuth/Core (= 1.4.0)
+    - AppAuth/ExternalUserAgent (= 1.4.0)
+  - AppAuth/Core (1.4.0)
+  - AppAuth/ExternalUserAgent (1.4.0)
   - boost-for-react-native (1.63.0)
   - CocoaAsyncSocket (7.6.5)
   - CocoaLibEvent (1.0.0)
@@ -241,6 +246,9 @@ PODS:
     - React-cxxreact (= 0.62.2)
     - React-jsi (= 0.62.2)
   - React-jsinspector (0.62.2)
+  - react-native-app-auth (6.3.0):
+    - AppAuth (= 1.4.0)
+    - React-Core
   - react-native-document-picker (5.0.3):
     - React-Core
   - react-native-geolocation (2.0.2):
@@ -417,6 +425,7 @@ DEPENDENCIES:
   - React-jsi (from `../node_modules/react-native/ReactCommon/jsi`)
   - React-jsiexecutor (from `../node_modules/react-native/ReactCommon/jsiexecutor`)
   - React-jsinspector (from `../node_modules/react-native/ReactCommon/jsinspector`)
+  - react-native-app-auth (from `../node_modules/react-native-app-auth`)
   - react-native-document-picker (from `../node_modules/react-native-document-picker`)
   - "react-native-geolocation (from `../node_modules/@react-native-community/geolocation`)"
   - react-native-geolocation-service (from `../node_modules/react-native-geolocation-service`)
@@ -461,6 +470,7 @@ DEPENDENCIES:
 
 SPEC REPOS:
   trunk:
+    - AppAuth
     - boost-for-react-native
     - CocoaAsyncSocket
     - CocoaLibEvent
@@ -511,6 +521,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/jsiexecutor"
   React-jsinspector:
     :path: "../node_modules/react-native/ReactCommon/jsinspector"
+  react-native-app-auth:
+    :path: "../node_modules/react-native-app-auth"
   react-native-document-picker:
     :path: "../node_modules/react-native-document-picker"
   react-native-geolocation:
@@ -593,6 +605,7 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/yoga"
 
 SPEC CHECKSUMS:
+  AppAuth: 31bcec809a638d7bd2f86ea8a52bd45f6e81e7c7
   boost-for-react-native: 39c7adb57c4e60d6c5479dd8623128eb5b3f0f2c
   CocoaAsyncSocket: 065fd1e645c7abab64f7a6a2007a48038fdc6a99
   CocoaLibEvent: 2fab71b8bd46dd33ddb959f7928ec5909f838e3f
@@ -622,6 +635,7 @@ SPEC CHECKSUMS:
   React-jsi: b6dc94a6a12ff98e8877287a0b7620d365201161
   React-jsiexecutor: 1540d1c01bb493ae3124ed83351b1b6a155db7da
   React-jsinspector: 512e560d0e985d0e8c479a54a4e5c147a9c83493
+  react-native-app-auth: 5dcd3175e7be01e17805da30400c92fc4f7ed011
   react-native-document-picker: 2e6ecd112c48215e36431734d902f35201ffab0a
   react-native-geolocation: c956aeb136625c23e0dce0467664af2c437888c9
   react-native-geolocation-service: 4030de78cdeb93ebef1fdc1971668bea6c0bc59b

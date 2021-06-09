@@ -30,6 +30,7 @@ const initialState = {
   isGpsNotOk: true,
   phoneData: null,
   notifications: [],
+  stravaData: null,
 };
 
 const initialMockState = {
@@ -108,6 +109,14 @@ const reducer = (state = initialState, action) => {
       let nextState = {
         ...state,
         clubs: action.data,
+      };
+      return nextState || state;
+    }
+
+    case 'SAVE_STRAVA_TOKEN': {
+      let nextState = {
+        ...state,
+        stravaData: action.data,
       };
       return nextState || state;
     }

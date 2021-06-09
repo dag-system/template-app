@@ -28,4 +28,11 @@ export default interface AppState {
   isOkPopupBAttery2: boolean;
   isOkPopupGps: boolean;
   currentLiveSummary : Live;
+  stravaData : StravaData;
+}
+
+interface StravaData{
+  accessToken : string;
+  refreshToken : string;
+  accessTokenExpirationDate : Date;
 }
