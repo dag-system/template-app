@@ -1,6 +1,6 @@
 export default class Live {
   idLive!: number;
-  statsLive: string |undefined;
+  statsLive: any |undefined;
   idSport!: number;
   libelleLive!: string;
   codeLive: string |undefined;

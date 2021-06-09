@@ -6,7 +6,7 @@ import UserData from './UserDate';
 import PhoneData from './PhoneData';
 import Challenge from './Challenge';
 
-export default class AppState {
+export default interface AppState {
   lives: Live[];
   pointsInterets: Interest[];
   polylines: Polyline[];

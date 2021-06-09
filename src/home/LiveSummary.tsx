@@ -58,7 +58,7 @@ import {
 import {TemplateSportLive, textAutoBackgroundColor} from '../globalsModifs';
 import GpxService from '../services/GpxServices';
 import HeaderComponent from './HeaderComponent';
-import ShareComponent from './ShareComponent';
+import ShareComponent from './Share/ShareComponent';
 
 const mapStateToProps = (state) => {
   return {
@@ -239,6 +239,7 @@ class LiveSummary extends Component<Props, State> {
         this.setState({isloading: false});
 
         let dataMap = this.getCoordinatesForMap(data);
+        this.calculateGpsStats(dataMap);
         this.setState({coordinates: dataMap}, () =>
           this.centerMapOnGpx(dataMap),
         );
@@ -268,9 +269,12 @@ class LiveSummary extends Component<Props, State> {
     positions.forEach((element) => {
       element = Object.values(element);
 
+      let time = Object.values(element[2]);
+
       var coordinate = {
         latitude: parseFloat(element[0]),
         longitude: parseFloat(element[1]),
+        gpsTime: time[0],
       };
       coordinates.push(coordinate);
     });
@@ -328,6 +332,57 @@ class LiveSummary extends Component<Props, State> {
     this.props.dispatch(action);
 
     //this.calculateTimeForEachKm(positions);
+  }
+
+  async calculateGpsStats(coordinates) {
+    let dist = 0;
+    let splits = [];
+    let startPoint = coordinates[0];
+    let speedData = [];
+
+    for (let i = 1; i < coordinates.length; i++) {
+      let currentDist = GpxService.calculateDistBetweenTwoPoints(
+        coordinates[i],
+        coordinates[i - 1],
+      );
+      dist += currentDist;
+    }
+    console.log(dist);
+
+    let startTime = moment(coordinates[0].gpsTime);
+    let finalTime = moment(coordinates[coordinates.length - 1].gpsTime);
+    let totalTime = finalTime.diff(startTime, 's');
+
+    let time = moment('2015-01-01')
+      .startOf('day')
+      .seconds(totalTime)
+      .format('HH:mm:ss');
+
+    dist = dist / 1000;
+
+    let statsLive: any = {
+      distance: dist,
+    };
+
+    if (totalTime > 0) {
+      statsLive.duree = time;
+
+      let vMoy = GpxService.convertTokmH(
+        GpxService.calculateSpeed(dist * 1000, totalTime),
+      );
+
+      let pace = GpxService.paceDisplay(totalTime);
+      statsLive.allureKm = pace;
+      statsLive.vMoy = vMoy.toFixed(1);
+    }
+
+
+    this.setState({statsLive: statsLive});
+
+    let live = this.state.live;
+    live.statsLive = statsLive;
+    var action = {type: 'SAVE_CURRENT_LIVE', data: live};
+    this.props.dispatch(action);
   }
 
   async calculateTimeForEachKm(coordinates) {
@@ -1187,8 +1242,7 @@ class LiveSummary extends Component<Props, State> {
                   </Text>
 
                   {this.state.statsLive == null &&
-                  !this.state.isloading ? null : this.state.live
-                      .IsImportedFromGpx == 0 ? (
+                  !this.state.isloading ? null : (
                     <View>
                       <View
                         style={{
@@ -1202,7 +1256,7 @@ class LiveSummary extends Component<Props, State> {
                         <View style={styles.resultCol}>
                           <Text style={[GlobalStyles.uppercase]}>DISTANCE</Text>
                           <Text style={styles.resultNumber}>
-                            {this.state.statsLive?.distance} km
+                            {this.state.statsLive?.distance?.toFixed(1)} km
                           </Text>
                           <View
                             style={{
@@ -1298,7 +1352,7 @@ class LiveSummary extends Component<Props, State> {
                         </View>
                       </View>
                     </View>
-                  ) : null}
+                  )}
 
                   {this.state.splits != null && this.state.splits.length > 0 ? (
                     <View>

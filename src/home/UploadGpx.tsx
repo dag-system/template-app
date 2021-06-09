@@ -39,8 +39,9 @@ import {
   textAutoBackgroundColor,
 } from '../globalsModifs';
 import HeaderComponent from './HeaderComponent';
+import AppState from '../models/AppState';
 
-const mapStateToProps = (state) => {
+const mapStateToProps = (state : AppState) => {
   return {
     userData: state.userData,
     currentLive: state.currentLive,
