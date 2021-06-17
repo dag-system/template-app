@@ -1,4 +1,4 @@
-export const TemplateDisplayName = 'Terre de courses';
+export const TemplateDisplayName = 'Sanary Terre de courses';
 export const IsDemo = false;
 export const TemplateExpirationDate = new Date('2021-06-29T22:00:00.000Z'); // Fait
 export const TemplateAppName = purgeString(
