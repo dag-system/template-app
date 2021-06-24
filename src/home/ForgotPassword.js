@@ -35,10 +35,13 @@ import ValidationComponent from 'react-native-form-validator';
 import {TemplateIsPaying} from './../globalsModifs';
 import {Sponsors} from './Sponsors';
 
+import tradRes from './../lang/traduction.json';
+
 const mapStateToProps = (state) => {
   return {
     userData: state.userData,
     folocodes: state.folocodes,
+    lang: state.lang,
   };
 };
 
@@ -117,7 +120,7 @@ class ForgotPassword extends ValidationComponent {
               this.onClickNavigate('Introduction');
             }
           } else {
-            alert("Votre folocode n'est pas valide");
+            alert(tradRes[this.props.lang].forgotPassword.folocodeInvalid);
           }
         })
         .catch((e) => {
@@ -129,7 +132,7 @@ class ForgotPassword extends ValidationComponent {
             this.setState({noConnection: true});
 
             Toast.show({
-              text: "Vous n'avez pas de connection internet, merci de réessayer",
+              text: tradRes[this.props.lang].utils.noInternet,
               buttonText: 'Ok',
               type: 'danger',
               position: 'bottom',
@@ -176,7 +179,7 @@ class ForgotPassword extends ValidationComponent {
           this.setState({noConnection: true});
 
           Toast.show({
-            text: "Vous n'avez pas de connection internet, merci de réessayer",
+            text: tradRes[this.props.lang].utils.noInternet,
             buttonText: 'Ok',
             type: 'danger',
             position: 'bottom',
@@ -227,7 +230,7 @@ class ForgotPassword extends ValidationComponent {
           <Content>
             <View style={styles.loginButtonSection}>
               <Text style={{textAlign: 'justify'}}>
-                Entrez votre email ci-dessous pour récuperer votre code
+                {tradRes[this.props.lang].utils.enterEmailCode}
               </Text>
 
               <Item stackedLabel style={{marginBottom: 5, marginTop: 20}}>
@@ -295,7 +298,7 @@ class ForgotPassword extends ValidationComponent {
               {this.state.folocodes.length > 0 ? (
                 <View>
                   <Text style={{textAlign: 'center', marginTop: 10}}>
-                    Vos codes
+                    {tradRes[this.props.lang].utils.yourCode}
                   </Text>
 
                   {/* {this.state.folocodes.map()} */}
@@ -380,7 +383,7 @@ class ForgotPassword extends ValidationComponent {
                             textAlign: 'center',
                             color: 'black',
                           }}>
-                          CONNEXION
+                          {tradRes[this.props.lang].utils.login}
                         </Text>
                       </TouchableOpacity>
                     </View>

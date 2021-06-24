@@ -8,10 +8,13 @@ import GpxService from '../services/GpxServices';
 import AppState from '../models/AppState';
 import LiveStatInfos from '../models/LiveStatInfos';
 import ApiUtils from '../ApiUtils';
+
+import tradRes from './../lang/traduction.json';
+
 interface State {}
 
 interface CarouselItem {
-  order : number,
+  order: number;
   id: string;
   title1: string;
   subTitle1: string;
@@ -32,9 +35,8 @@ export default function MapCarousel() {
   const [activeSlide, setActiveSlide] = useState(0);
 
   const dispatch = useDispatch();
-  const {lives, statistics, userData, challenges,isRecording} = useSelector(
-    (state: AppState) => state,
-  );
+  const {lives, statistics, userData, challenges, isRecording, lang} =
+    useSelector((state: AppState) => state);
 
   useEffect(() => {
     let totalKm = 0;
@@ -55,52 +57,28 @@ export default function MapCarousel() {
 
     let currentCarouselItems: CarouselItem[] = [];
 
-    //1 - nombre activites
     currentCarouselItems.push({
-      order : 0,
+      order: 0,
       id: 'nbActivites',
-      title1: "Nombre d'activités",
+      title1: tradRes[lang].map.numberActivities,
       subTitle1: lives.length.toString(),
-      title2: "Nombre d'activités total",
+      title2: tradRes[lang].map.totalActivities,
       subTitle2: statistics?.nbActivites,
     });
 
-    // //Nombre de participants
-    // currentCarouselItems.push({
-    //   title1: 'Nombre de km parcourus',
-    //   subTitle1: totalKm.toFixed(1) + ' km',
-    //   title2: 'Temps total',
-    //   subTitle2: moment('2015-01-01')
-    //     .startOf('day')
-    //     .seconds(totalTime)
-    //     .format('HH:mm:ss'),
-    // });
-
-    //     Km parcourus sur le total des parcours (les miens – ceux de tous les utilisateurs)
-    // Nombre de participants (il ne me semble pas que nous puissions décliner les miens/tous, d
-    //onc possible de mettre ce chiffre par parcours ?)
-    // 4 - Km parcourus sur le total des activités (les miens – ceux de tous les utilisateurs
-    // Nombre de classés (tous parcours confondus - les miens – ceux de tous les utilisateurs)
-
     currentCarouselItems.push({
-      order : 1,
+      order: 1,
       id: 'nbKm',
-      title1: 'Nb km parcourus',
+      title1: tradRes[lang].map.numberKm,
       subTitle1: totalKm.toFixed(1) + ' km',
-      title2: 'Nb km parcourus total ',
-      subTitle2: statistics?.nbKmTotal != null ? statistics?.nbKmTotal + ' km' : "- km",
+      title2: tradRes[lang].map.totalKm,
+      subTitle2:
+        statistics?.nbKmTotal != null ? statistics?.nbKmTotal + ' km' : '- km',
     });
-
-    // currentCarouselItems.push({
-    //   title1: "Nombre d'activités",
-    //   subTitle1: lives.length,
-    //   title2: 'D+ total',
-    //   subTitle2: totalDplus + ' m',
-    // });
 
     setCarouselItems(currentCarouselItems);
     // this.setState({carouselItems: carouselItems});
-  }, [lives, statistics, isRecording]);
+  }, [lives, statistics, isRecording, lang]);
 
   const getLiveStatsInfo = (json: string | undefined): LiveStatInfos => {
     if (json != undefined) {
@@ -131,14 +109,20 @@ export default function MapCarousel() {
       .then(ApiUtils.checkStatus)
       .then((response) => response.json()) //;
       .then((responseJson) => {
-
         let newCarouselItem: CarouselItem = {
-          order : idSegment,
+          order: idSegment,
           id: idSegment.toString(),
           title1: responseJson.nomSegment + ' : ',
-          subTitle1: responseJson.efforts.bestEffort !=null ? responseJson.efforts.bestEffort.tempsEffort : "Pas de temps",
+          subTitle1:
+            responseJson.efforts.bestEffort != null
+              ? responseJson.efforts.bestEffort.tempsEffort
+              : 'Pas de temps',
           title2: responseJson.nomSegment + ' 1er :' + '',
-          subTitle2: responseJson.classement !=null && responseJson.classement.length > 0 ?responseJson.classement[0].tempsEffort : "",
+          subTitle2:
+            responseJson.classement != null &&
+            responseJson.classement.length > 0
+              ? responseJson.classement[0].tempsEffort
+              : '',
         };
 
         // console.log(newCarouselItem);

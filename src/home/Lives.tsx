@@ -48,6 +48,8 @@ import {
   textAutoBackgroundColor,
 } from '../globalsModifs';
 
+import tradRes from './../lang/traduction.json';
+
 const mapStateToProps = (state) => {
   return {
     userData: state.userData,
@@ -60,6 +62,7 @@ const mapStateToProps = (state) => {
     isOkPopupBAttery2: state.isOkPopupBAttery2,
     notifications: state.notifications,
     phoneData: state.phoneData,
+    lang: state.lang,
   };
 };
 
@@ -778,7 +781,7 @@ class Lives extends Component<Props, State> {
                       marginTop: 10,
                       marginBottom: 10,
                     }}>
-                    Nouveaux résultats
+                    {tradRes[this.props.lang].lives.newResults}
                   </H3>
                   {this.props.notifications?.map((notification) => {
                     return (
@@ -829,7 +832,7 @@ class Lives extends Component<Props, State> {
                                     alignSelf: 'center',
                                     marginBottom: 3,
                                   }}>
-                                  Distance
+                                  {tradRes[this.props.lang].utils.distance}
                                 </Text>
                                 <Text>{notification.distanceSegment} km</Text>
                               </View>
@@ -841,7 +844,7 @@ class Lives extends Component<Props, State> {
                                     textAlign: 'center',
                                     marginBottom: 3,
                                   }}>
-                                  Temps
+                                  {tradRes[this.props.lang].utils.time}
                                 </Text>
                                 <Text>{notification.tempsSegmentString}</Text>
                               </View>
@@ -852,7 +855,7 @@ class Lives extends Component<Props, State> {
                                     textAlign: 'center',
                                     marginBottom: 3,
                                   }}>
-                                  Allure
+                                  {tradRes[this.props.lang].utils.rythme}
                                 </Text>
                                 <Text>
                                   {notification.vitesseMoyenneSegment}/km
@@ -868,7 +871,7 @@ class Lives extends Component<Props, State> {
                                     fontWeight: 'bold',
                                     color: 'black',
                                   }}>
-                                  Voir
+                                  {tradRes[this.props.lang].utils.see}
                                 </Text>
                               </View>
                             </View>
@@ -881,7 +884,7 @@ class Lives extends Component<Props, State> {
               ) : null}
               {/* <Text>{JSON.stringify(this.props.notifications)}</Text> */}
               <H3 style={{textAlign: 'center', marginTop: 10}}>
-                Mes activités
+                {tradRes[this.props.lang].lives.myActivities}
               </H3>
               <View style={styles.loginButtonSection}>
                 {this.props.lives == null || this.props.lives.length == 0 ? (
@@ -892,7 +895,7 @@ class Lives extends Component<Props, State> {
                       paddingRight: 15,
                       color: 'black',
                     }}>
-                    Vous n'avez pas encore créé d'activités
+                    {tradRes[this.props.lang].lives.noActivities}
                   </Text>
                 ) : (
                   <FlatList
@@ -1051,7 +1054,10 @@ class Lives extends Component<Props, State> {
                                         style={{
                                           fontWeight: 'bold',
                                         }}>
-                                        Fichier Gpx importé
+                                        {
+                                          tradRes[this.props.lang].lives
+                                            .gpxImported
+                                        }
                                       </Text>
                                     </View>
                                   )}
@@ -1180,7 +1186,7 @@ class Lives extends Component<Props, State> {
                     </Left>
                     <Body style={{justifyContent: 'center', flex: 1}}>
                       <Text style={{fontWeight: 'bold'}}>
-                        Démarrer une activité
+                        {tradRes[this.props.lang].utils.startActivity}
                       </Text>
                     </Body>
                     <Right style={{flex: 1}} />
@@ -1199,7 +1205,9 @@ class Lives extends Component<Props, State> {
                           style={{marginTop: 0}}
                           selectedValue={this.state.selectedSport}
                           onValueChange={this.onValueSportChange.bind(this)}
-                          placeholder={'Choisissez votre sport'}
+                          placeholder={
+                            tradRes[this.props.lang].utils.chooseSport
+                          }
                           placeholderStyle={{
                             color: 'black',
                           }}
@@ -1241,7 +1249,7 @@ class Lives extends Component<Props, State> {
                               paddingLeft: 5,
                               fontStyle: 'italic',
                             }}>
-                            Le type de sport doit être renseigné
+                            {tradRes[this.props.lang].utils.typeSportNeeded}
                           </Text>
                         ) : null}
                       </View>
@@ -1262,7 +1270,7 @@ class Lives extends Component<Props, State> {
                           style={{
                             color: this.isErrorFormCreate() ? 'black' : 'white',
                           }}>
-                          C'est parti
+                          {tradRes[this.props.lang].utils.letsgo}
                         </Text>
                       </Button>
 
@@ -1270,7 +1278,7 @@ class Lives extends Component<Props, State> {
                         <Text
                           style={styles.ignoreActivityLink}
                           onPress={() => this.toggleModalChooseSport()}>
-                          Annuler
+                          {tradRes[this.props.lang].utils.cancel}
                         </Text>
                       </View>
 

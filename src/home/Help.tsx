@@ -37,7 +37,7 @@ import {
 } from '../globalsModifs';
 const mapStateToProps = (state) => {
   return {
-    userData: state.userData,
+    lang: state.lang,
   };
 };
 
@@ -174,128 +174,265 @@ class Help extends Component {
               </Header>
             )}
 
-            <Content style={{padding: 5, paddingTop: 20}} scrollEnabled={true}>
-              <View style={[GlobalStyles.row, {justifyContent: 'center'}]}>
-                <Image resizeMode="contain" source={Logo} style={styles.logo} />
-              </View>
-              <Text
-                style={{
-                  textAlign: 'center',
-                  fontWeight: 'bold',
-                  color: ApiUtils.getColor(),
-                  marginTop: 10,
-                }}>
-                Bienvenue sur votre application sportive !
-              </Text>
-
-              <Text style={{marginTop: 10}}>
-                Entrainez-vous et affrontez vos amis et collègues en toute
-                sécurité, et sans jamais vous croiser !
-              </Text>
-
-              <Text style={{marginTop: 10}}>
-                Découvrez le fonctionnement de l'application dans la vidéo
-                ci-dessous :
-              </Text>
-
-              <Modal visible={this.state.isVideoFullScreen} style={{flex: 1}}>
-                <TouchableOpacity
-                  style={{
-                    position: 'absolute',
-                    top: Platform.OS == 'ios' ? 90 : 20,
-                    zIndex: 30,
-                  }}
-                  onPress={() => this.closeVideo()}>
-                  <Icon
-                    name="times"
-                    type="FontAwesome5"
-                    style={{color: 'white', marginLeft: 15}}
+            {this.props.lang === 'fr' ? (
+              <Content
+                style={{padding: 5, paddingTop: 20}}
+                scrollEnabled={true}>
+                <View style={[GlobalStyles.row, {justifyContent: 'center'}]}>
+                  <Image
+                    resizeMode="contain"
+                    source={Logo}
+                    style={styles.logo}
                   />
-                </TouchableOpacity>
-
-                <VideoModal />
-              </Modal>
-
-              <TouchableOpacity
-                style={{
-                  position: 'relative',
-                  top: Platform.OS == 'ios' ? 60 : 40,
-                  zIndex: 100,
-                  marginLeft: 10,
-                }}
-                onPress={() => this.openVideo()}>
-                <View
-                  style={{
-                    display: 'flex',
-                    flexDirection: 'row',
-                  }}>
-                  <Icon
-                    style={{marginTop: -5, color: 'black'}}
-                    name="expand-alt"
-                    type="FontAwesome5"
-                  />
-                  <Text style={{textAlign: 'center', color: 'white'}}>
-                    {' '}
-                    Voir en grand
-                  </Text>
                 </View>
-              </TouchableOpacity>
-
-              {!this.state.isVideoFullScreen ? (
-                <Video
-                  source={VideoPrez} // Can be a URL or a local file.
-                  ref={(ref) => {
-                    this.player = ref;
-                  }} // Store reference
-                  repeat={true}
-                  onBuffer={this.onBuffer} // Callback when remote video is buffering
-                  onError={this.videoError} // Callback when video cannot be loaded
-                  style={[styles.video, {}]}
-                  // style={[this.state.isFullScreen ? styles.video : styles.fullScreenVideo,{height : 10}]}
-                />
-              ) : null}
-
-              {/* {!this.props.noHeader ? ( */}
-              {!this.props.noHeader ? (
-                <View style={{height: '100%'}}>
-                  <BatteryModalContent noHeader={false} isInline={true} />
-                </View>
-              ) : null}
-
-              {/* // ) : null} */}
-
-              {this.props.noHeader ? (
-                <Text style={{textAlign: 'center', marginTop: 10}}>
-                  Vous retrouverez ces informations dans le menu d'aide
-                </Text>
-              ) : null}
-              <Text style={{textAlign: 'center', marginTop: 10}}>
-                Bonne course !
-              </Text>
-              {this.props.noHeader ? (
-                <TouchableOpacity
-                  onPress={() => this.onPopupOk()}
+                <Text
                   style={{
-                    // paddingBottom: 200,
+                    textAlign: 'center',
+                    fontWeight: 'bold',
+                    color: ApiUtils.getColor(),
                     marginTop: 10,
-                    justifyContent: 'center',
-                    borderColor: textAutoBackgroundColor,
-                    backgroundColor: TemplateBackgroundColor,
-                    padding: 10,
-                    borderWidth: 1,
-                    marginBottom: 75,
                   }}>
-                  <Text
+                  Bienvenue sur votre application sportive !
+                </Text>
+
+                <Text style={{marginTop: 10}}>
+                  Entrainez-vous et affrontez vos amis et collègues en toute
+                  sécurité, et sans jamais vous croiser !
+                </Text>
+
+                <Text style={{marginTop: 10}}>
+                  Découvrez le fonctionnement de l'application dans la vidéo
+                  ci-dessous :
+                </Text>
+
+                <Modal visible={this.state.isVideoFullScreen} style={{flex: 1}}>
+                  <TouchableOpacity
                     style={{
-                      textAlign: 'center',
-                      textTransform: 'uppercase',
-                      color: textAutoBackgroundColor,
+                      position: 'absolute',
+                      top: Platform.OS == 'ios' ? 90 : 20,
+                      zIndex: 30,
+                    }}
+                    onPress={() => this.closeVideo()}>
+                    <Icon
+                      name="times"
+                      type="FontAwesome5"
+                      style={{color: 'white', marginLeft: 15}}
+                    />
+                  </TouchableOpacity>
+
+                  <VideoModal />
+                </Modal>
+
+                <TouchableOpacity
+                  style={{
+                    position: 'relative',
+                    top: Platform.OS == 'ios' ? 60 : 40,
+                    zIndex: 100,
+                    marginLeft: 10,
+                  }}
+                  onPress={() => this.openVideo()}>
+                  <View
+                    style={{
+                      display: 'flex',
+                      flexDirection: 'row',
                     }}>
-                    C'est parti
-                  </Text>
+                    <Icon
+                      style={{marginTop: -5, color: 'black'}}
+                      name="expand-alt"
+                      type="FontAwesome5"
+                    />
+                    <Text style={{textAlign: 'center', color: 'white'}}>
+                      {' '}
+                      Voir en grand
+                    </Text>
+                  </View>
                 </TouchableOpacity>
-              ) : null}
-            </Content>
+
+                {!this.state.isVideoFullScreen ? (
+                  <Video
+                    source={VideoPrez} // Can be a URL or a local file.
+                    ref={(ref) => {
+                      this.player = ref;
+                    }} // Store reference
+                    repeat={true}
+                    onBuffer={this.onBuffer} // Callback when remote video is buffering
+                    onError={this.videoError} // Callback when video cannot be loaded
+                    style={[styles.video, {}]}
+                    // style={[this.state.isFullScreen ? styles.video : styles.fullScreenVideo,{height : 10}]}
+                  />
+                ) : null}
+
+                {/* {!this.props.noHeader ? ( */}
+                {!this.props.noHeader ? (
+                  <View style={{height: '100%'}}>
+                    <BatteryModalContent noHeader={false} isInline={true} />
+                  </View>
+                ) : null}
+
+                {/* // ) : null} */}
+
+                {this.props.noHeader ? (
+                  <Text style={{textAlign: 'center', marginTop: 10}}>
+                    Vous retrouverez ces informations dans le menu d'aide
+                  </Text>
+                ) : null}
+                <Text style={{textAlign: 'center', marginTop: 10}}>
+                  Bonne course !
+                </Text>
+                {this.props.noHeader ? (
+                  <TouchableOpacity
+                    onPress={() => this.onPopupOk()}
+                    style={{
+                      // paddingBottom: 200,
+                      marginTop: 10,
+                      justifyContent: 'center',
+                      borderColor: textAutoBackgroundColor,
+                      backgroundColor: TemplateBackgroundColor,
+                      padding: 10,
+                      borderWidth: 1,
+                      marginBottom: 75,
+                    }}>
+                    <Text
+                      style={{
+                        textAlign: 'center',
+                        textTransform: 'uppercase',
+                        color: textAutoBackgroundColor,
+                      }}>
+                      C'est parti
+                    </Text>
+                  </TouchableOpacity>
+                ) : null}
+              </Content>
+            ) : (
+              <Content
+                style={{padding: 5, paddingTop: 20}}
+                scrollEnabled={true}>
+                <View style={[GlobalStyles.row, {justifyContent: 'center'}]}>
+                  <Image
+                    resizeMode="contain"
+                    source={Logo}
+                    style={styles.logo}
+                  />
+                </View>
+                <Text
+                  style={{
+                    textAlign: 'center',
+                    fontWeight: 'bold',
+                    color: ApiUtils.getColor(),
+                    marginTop: 10,
+                  }}>
+                  Welcome to your sports application !
+                </Text>
+
+                <Text style={{marginTop: 10}}>
+                  Train and face your friends and colleagues In complete safety
+                  and without ever crossing paths !
+                </Text>
+
+                <Text style={{marginTop: 10}}>
+                  Discover how the application works in the video bellow :
+                </Text>
+
+                <Modal visible={this.state.isVideoFullScreen} style={{flex: 1}}>
+                  <TouchableOpacity
+                    style={{
+                      position: 'absolute',
+                      top: Platform.OS == 'ios' ? 90 : 20,
+                      zIndex: 30,
+                    }}
+                    onPress={() => this.closeVideo()}>
+                    <Icon
+                      name="times"
+                      type="FontAwesome5"
+                      style={{color: 'white', marginLeft: 15}}
+                    />
+                  </TouchableOpacity>
+
+                  <VideoModal />
+                </Modal>
+
+                <TouchableOpacity
+                  style={{
+                    position: 'relative',
+                    top: Platform.OS == 'ios' ? 60 : 40,
+                    zIndex: 100,
+                    marginLeft: 10,
+                  }}
+                  onPress={() => this.openVideo()}>
+                  <View
+                    style={{
+                      display: 'flex',
+                      flexDirection: 'row',
+                    }}>
+                    <Icon
+                      style={{marginTop: -5, color: 'black'}}
+                      name="expand-alt"
+                      type="FontAwesome5"
+                    />
+                    <Text style={{textAlign: 'center', color: 'white'}}>
+                      {' '}
+                      See in full
+                    </Text>
+                  </View>
+                </TouchableOpacity>
+
+                {!this.state.isVideoFullScreen ? (
+                  <Video
+                    source={VideoPrez} // Can be a URL or a local file.
+                    ref={(ref) => {
+                      this.player = ref;
+                    }} // Store reference
+                    repeat={true}
+                    onBuffer={this.onBuffer} // Callback when remote video is buffering
+                    onError={this.videoError} // Callback when video cannot be loaded
+                    style={[styles.video, {}]}
+                    // style={[this.state.isFullScreen ? styles.video : styles.fullScreenVideo,{height : 10}]}
+                  />
+                ) : null}
+
+                {/* {!this.props.noHeader ? ( */}
+                {!this.props.noHeader ? (
+                  <View style={{height: '100%'}}>
+                    <BatteryModalContent noHeader={false} isInline={true} />
+                  </View>
+                ) : null}
+
+                {/* // ) : null} */}
+
+                {this.props.noHeader ? (
+                  <Text style={{textAlign: 'center', marginTop: 10}}>
+                    You will found those informations in the help menu
+                  </Text>
+                ) : null}
+                <Text style={{textAlign: 'center', marginTop: 10}}>
+                  Bonne course !
+                </Text>
+                {this.props.noHeader ? (
+                  <TouchableOpacity
+                    onPress={() => this.onPopupOk()}
+                    style={{
+                      // paddingBottom: 200,
+                      marginTop: 10,
+                      justifyContent: 'center',
+                      borderColor: textAutoBackgroundColor,
+                      backgroundColor: TemplateBackgroundColor,
+                      padding: 10,
+                      borderWidth: 1,
+                      marginBottom: 75,
+                    }}>
+                    <Text
+                      style={{
+                        textAlign: 'center',
+                        textTransform: 'uppercase',
+                        color: textAutoBackgroundColor,
+                      }}>
+                      Let's go !
+                    </Text>
+                  </TouchableOpacity>
+                ) : null}
+              </Content>
+            )}
+
             <Sponsors />
           </Root>
         </Container>

@@ -883,7 +883,6 @@ class Replay extends Component {
                         />
                       );
                     })}
-                    {/* <Picker.Item label="My Cross" value={58} /> */}
                   </Picker>
 
                   {!this.state.isloadingChallenge &&
@@ -1056,9 +1055,7 @@ class Replay extends Component {
                         onPress={() => this.validateRunners()}>
                         <Text
                           style={{
-                            color: this.isUserSelected()
-                              ? 'white'
-                              : 'black',
+                            color: this.isUserSelected() ? 'white' : 'black',
                           }}>
                           Comparer
                         </Text>

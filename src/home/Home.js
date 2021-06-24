@@ -50,10 +50,13 @@ import {
   textAutoBackgroundColor,
 } from '../globalsModifs';
 
+import tradRes from './../lang/traduction.json';
+
 const mapStateToProps = (state) => {
   return {
     userData: state.userData,
     folocodes: state.folocodes,
+    lang: state.lang,
   };
 };
 
@@ -223,7 +226,7 @@ class Home extends Component {
           this.setState({noConnection: true});
 
           Toast.show({
-            text: "Vous n'avez pas de connection internet, merci de réessayer",
+            text: tradRes[this.props.lang].utils.noInternet,
             buttonText: 'Ok',
             type: 'danger',
             position: 'bottom',
@@ -279,7 +282,7 @@ class Home extends Component {
               this.onClickNavigate('Introduction');
             }
           } else {
-            alert("Votre folocode n'est pas valide");
+            alert(tradRes[this.props.lang].utils.folocodeInvalid);
           }
         })
         .catch((e) => {
@@ -292,7 +295,7 @@ class Home extends Component {
             this.setState({noConnection: true});
 
             Toast.show({
-              text: "Vous n'avez pas de connection internet, merci de réessayer",
+              text: tradRes[this.props.lang].utils.noInternet,
               buttonText: 'Ok',
               type: 'danger',
               position: 'bottom',
@@ -465,7 +468,7 @@ class Home extends Component {
                 telephoneInteret: interest.telephoneInteret,
                 lienInteret: interest.lienInteret,
                 photoInteret: interest.photoInteret,
-                idTypeInteret : interest.idTypeInteret,
+                idTypeInteret: interest.idTypeInteret,
               };
 
               if (
@@ -581,7 +584,7 @@ class Home extends Component {
                           color: textAutoBackgroundColor,
                           textTransform: 'uppercase',
                         }}>
-                        Créer un compte
+                        {tradRes[this.props.lang].utils.createAccount}
                       </Text>
                     </TouchableOpacity>
                   </View>
@@ -612,7 +615,7 @@ class Home extends Component {
                           color: ApiUtils.getBackgroundColor(),
                           textTransform: 'uppercase',
                         }}>
-                        Je me connecte
+                        {tradRes[this.props.lang].utils.createAccount}
                       </Text>
                     </TouchableOpacity>
                   </View>
@@ -642,7 +645,7 @@ class Home extends Component {
                           color: textAutoBackgroundColor,
                           textTransform: 'uppercase',
                         }}>
-                        J'ai oublié mon code ?
+                        {tradRes[this.props.lang].utils.forgotMyCode}
                       </Text>
                     </TouchableOpacity>
                   </View>
@@ -711,7 +714,7 @@ class Home extends Component {
                         marginTop: 30,
                         color: 'black',
                       }}>
-                      Vous avez déjà un compte ?
+                      {tradRes[this.props.lang].utils.alreadyAccount}
                     </Text>
 
                     {this.props.folocodes?.length > 0 ? (
@@ -823,7 +826,7 @@ class Home extends Component {
                                 ? 'black'
                                 : 'white',
                           }}>
-                          CONNEXION
+                          {tradRes[this.props.lang].utils.login}
                         </Text>
                       </TouchableOpacity>
                     </View>

@@ -33,7 +33,16 @@ import {
   TemplateArrayImagesPartenairesPath,
 } from './../globalsModifs';
 
-export default class Sidebar extends Component {
+import tradRes from './../lang/traduction.json';
+
+import {connect} from 'react-redux';
+const mapStateToProps = (state) => {
+  return {
+    lang: state.lang,
+  };
+};
+
+class Sidebar extends Component {
   constructor(props) {
     super(props);
 
@@ -128,7 +137,7 @@ export default class Sidebar extends Component {
                       : textAutoBackgroundColor,
                 },
               ]}>
-              Carte
+              {tradRes[this.props.lang].sidebar.map}
             </Text>
           </View>
         </TouchableHighlight>
@@ -170,7 +179,7 @@ export default class Sidebar extends Component {
                       : textAutoBackgroundColor,
                 },
               ]}>
-              Mes activités
+              {tradRes[this.props.lang].sidebar.myActivities}
             </Text>
           </View>
         </TouchableHighlight>
@@ -212,7 +221,7 @@ export default class Sidebar extends Component {
                       : textAutoBackgroundColor,
                 },
               ]}>
-              Mon profil
+              {tradRes[this.props.lang].sidebar.myProfile}
             </Text>
           </View>
         </TouchableHighlight>
@@ -254,7 +263,7 @@ export default class Sidebar extends Component {
                       : textAutoBackgroundColor,
                 },
               ]}>
-              Résultats
+              {tradRes[this.props.lang].sidebar.results}
             </Text>
           </View>
         </TouchableHighlight>
@@ -297,7 +306,7 @@ export default class Sidebar extends Component {
                       : textAutoBackgroundColor,
                 },
               ]}>
-              Comparateur
+              {tradRes[this.props.lang].sidebar.comparator}
             </Text>
           </View>
         </TouchableHighlight>
@@ -343,7 +352,7 @@ export default class Sidebar extends Component {
                         : textAutoBackgroundColor,
                   },
                 ]}>
-                Partenaires
+                {tradRes[this.props.lang].sidebar.partners}
               </Text>
             </View>
           </TouchableHighlight>
@@ -365,7 +374,7 @@ export default class Sidebar extends Component {
                 style={[styles.icon, {color: textAutoBackgroundColor}]}
               />
               <Text style={[styles.menuText, {color: textAutoBackgroundColor}]}>
-                Faire un don
+                {tradRes[this.props.lang].sidebar.donation}
               </Text>
             </View>
           </TouchableOpacity>
@@ -409,7 +418,7 @@ export default class Sidebar extends Component {
                       : textAutoBackgroundColor,
                 },
               ]}>
-              Guide d'utilisation
+              {tradRes[this.props.lang].sidebar.userManual}
             </Text>
           </View>
         </TouchableHighlight>
@@ -430,7 +439,7 @@ export default class Sidebar extends Component {
               style={[styles.icon, {color: textAutoBackgroundColor}]}
             />
             <Text style={[styles.menuText, {color: textAutoBackgroundColor}]}>
-              Se déconnecter
+              {tradRes[this.props.lang].utils.signOut}
             </Text>
           </View>
         </TouchableHighlight>
@@ -439,6 +448,41 @@ export default class Sidebar extends Component {
             width: '100%',
             marginTop: 50,
           }}>
+          <TouchableHighlight
+            underlayColor="rgba(255,255,255,1,0.6)"
+            onPress={() => {
+              const action =
+                this.props.lang === 'fr'
+                  ? {type: 'CHANGE_LANG', data: 'en'}
+                  : {type: 'CHANGE_LANG', data: 'fr'};
+              this.props.dispatch(action);
+            }}
+            style={{
+              width: '90%',
+              height: 30,
+              backgroundColor: 'black',
+              marginLeft: 'auto',
+              marginRight: 'auto',
+              borderRadius: 30,
+              marginBottom: 10,
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}>
+            <Text
+              style={[
+                {
+                  color: 'white',
+                  textDecorationLine: 'none',
+                  textAlign: 'center',
+                  fontSize: 14,
+                },
+              ]}>
+              {this.props.lang === 'fr'
+                ? tradRes[this.props.lang].utils.changeToEn
+                : tradRes[this.props.lang].utils.changeToFr}
+            </Text>
+          </TouchableHighlight>
           <TouchableHighlight
             underlayColor="rgba(255,255,255,1,0.6)"
             onPress={() =>
@@ -460,7 +504,7 @@ export default class Sidebar extends Component {
                   fontSize: 12,
                 },
               ]}>
-              Politique de confidentialité
+              {tradRes[this.props.lang].utils.privacyPolicy}
             </Text>
           </TouchableHighlight>
           <TouchableHighlight
@@ -484,7 +528,7 @@ export default class Sidebar extends Component {
                   fontSize: 12,
                 },
               ]}>
-              Conditions de service
+              {tradRes[this.props.lang].utils.termsOfService}
             </Text>
           </TouchableHighlight>
           <TouchableHighlight
@@ -606,3 +650,5 @@ const styles = StyleSheet.create({
     marginRight: '20%',
   },
 });
+
+export default connect(mapStateToProps)(Sidebar);

@@ -9,9 +9,12 @@ import {
   textAutoBackgroundColor,
 } from '../globalsModifs';
 
+import tradRes from './../lang/traduction.json';
+
 const mapStateToProps = (state) => {
   return {
     userData: state.userData,
+    lang: state.lang,
   };
 };
 
@@ -58,7 +61,7 @@ class IsExpired extends Component {
               fontSize: 21,
               marginBottom: 15,
             }}>
-            License d'utilisation perimée
+            {tradRes[this.props.lang].isExpired.licenceExpired}
           </Text>
         </View>
         <View>
@@ -67,8 +70,7 @@ class IsExpired extends Component {
               fontSize: 17,
               textAlign: 'center',
             }}>
-            La license d'utilisation de cette application est terminée. Merci de
-            renouvelez votre abonement.
+            {tradRes[this.props.lang].isExpired.licenceRenew}
           </Text>
         </View>
         <TouchableOpacity
@@ -90,7 +92,7 @@ class IsExpired extends Component {
               fontSize: 17,
               color: textAutoBackgroundColor,
             }}>
-            Quitter
+            {tradRes[this.props.lang].utils.leave}
           </Text>
         </TouchableOpacity>
       </View>

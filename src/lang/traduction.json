@@ -1,0 +1,277 @@
+{
+  "fr": {
+    "map": {
+      "numberActivities": "Nombre d'activités",
+      "totalActivities": "Nombre d'activité total",
+      "numberKm": "Nombre km parcourus",
+      "totalKm": "Nombre km parcourus total"
+    },
+    "sidebar": {
+      "map": "Carte",
+      "myActivities": "Mes activités",
+      "myProfile": "Mon profil",
+      "results": "Résultats",
+      "comparator": "Comparateur",
+      "userManual": "Guide d'utilisation",
+      "partners": "Partenaires",
+      "donation": "Faire un don"
+    },
+    "myActivities": {
+      "importGpx": "Importer un fichier GPX",
+      "sendGpx": "Envoyer un fichier GPX",
+      "addGpx": "Ajouter un fichier GPX",
+      "newImportedActivity": "Nouvelle activité importée"
+    },
+    "myProfil": {},
+    "result": {
+      "resultApp": "Résultats des challenges de votre application",
+      "chooseCourse": "Choisissez un parcours"
+    },
+    "comparator": {
+      "compare": "Comparer les performances",
+      "compareChronos": "Comparer 2 chronos et trouvez où vous pouvez gagner du temps sur la piste",
+      "chooseRace": "Choisissez une épreuve"
+    },
+    "deconnected": {
+      "willDisconnect": "Vous allez êtres déconnecté, si vous ne souhaitez pas vous déconnecter, cliquez sur le bouton de retour",
+      "returnActivities": "Retourner à mes activités"
+    },
+    "createAccount": {},
+    "gpsModal": {
+      "gpsAccess": "Accès à votre position GPS en arrière plan",
+      "needPosition": "L'application a besoin d'accèder à votre position en arrière plan pour pouvoir enregistrer la totalité de votre activité. Nous enregistrons votre position GPS même quand l'application est arretée ou en arrière plan."
+    },
+    "newLive": {
+      "morningActivity": "Activité matinale",
+      "afternoonActivity": "Activité de l'après-midi",
+      "eveningActivity": "Activité du soir"
+    },
+    "forgotPassword": {
+      "folocodeInvalid": "Votre folocode n'est pas valide"
+    },
+    "isExpired": {
+      "licenceExpired": "License d'utilisation perimée.",
+      "licenceRenew": "La license d'utilisation de cette application est terminée. Merci de renouvelez votre abonement."
+    },
+    "lives": {
+      "newResult": "Nouveaux résultats",
+      "myActivities": "Mes activités",
+      "noActivites": "Vous n'avez pas encore créé d'activités",
+      "gpxImported": "Fichier GPX importé"
+    },
+    "liveSummary": {
+      "discoverMyActivity": "Découvrez mon activité",
+      "permissionRefused": "Permission refusée",
+      "permissionAccept": "Vous devez accepter cette permission pour pouvoir télécharger le gpx",
+      "challengeBeingCalculated": "Votre challenge est en cours de calcul.",
+      "getResumeActivity": "Cliquez ici plus tard pour recevoir un résumé de votre Challenge",
+      "waitingActivity": "Patientez, votre challenge est toujours en cours de calcul. Voici en attendant votre activité globale de votre journée",
+      "notCompleted": "Le parcours effectué n'a pas été consideré comme complet. Cette activité n'est donc pas dans les résultats.",
+      "noChallengeDetected": "Aucun challenge détécté",
+      "globalActivity": "Voici l'activité globale de votre journée :"
+    },
+    "liveSummaryFromSegment": {},
+    "utils": {
+      "step": "Etape",
+      "demo": "Démo",
+      "signOut": "Se déconnecter",
+      "privacyPolicy": "Politique de confidentialité",
+      "termsOfService": "Conditions de service",
+      "version": "Version",
+      "comment": "Commentaire",
+      "register": "Enregistrer",
+      "lastName": "Nom",
+      "firstName": "Prénom",
+      "email": "email",
+      "sexe": "sexe",
+      "tel": "Numéro de téléphone",
+      "postalCode": "Code postal",
+      "adress": "Adresse",
+      "city": "Ville",
+      "country": "Pays",
+      "businessChallenge": "Challenge Entreprise",
+      "clubChallenge": "Challenge Club",
+      "familyChallenge": "Challenge Famille",
+      "women": "Femme",
+      "man": "Homme",
+      "other": "Autre",
+      "dateBirth": "Date de naissance",
+      "catResult": "Important pour les résultats par catégorie",
+      "agreeName": "J'accepte que mon nom apparaisse dans les résultats",
+      "agreeRGPD": "J'accepte que mes données personnelles soient utilisées à des fins d'informations",
+      "errorCNIL": "Vous devez acceptez que vos données soient utilisées à des fins d'informations",
+      "allSex": "Tous sexes confondus",
+      "rank": "Rang",
+      "time": "Temps",
+      "previous": "Précédent",
+      "next": "Suivant",
+      "waitingGps": "En attente du signal Gps",
+      "gpsFound": "Signal Gps trouvé",
+      "startActivity": "Démarrer une activité",
+      "chooseSport": "Choisissez votre sport",
+      "typeSportNeeded": "Le type de sport doit être renseigné",
+      "cancel": "Annuler",
+      "letsgo": "C'est parti !",
+      "acceptTel": "",
+      "registering": "Enregistrement en cours",
+      "changeLang": "Changer de langue",
+      "changeToEn": "Change to English",
+      "noInternet": "Vous n'avez pas de connection internet, merci de réessayer",
+      "enterEmailCode": "Entrez votre email ci-dessous pour récuperer votre code",
+      "yourCodes": "Vos codes",
+      "login": "Connexion",
+      "getFolo": "Obtenir un folocode",
+      "folocodeInvalid": "Votre folocode n'est pas valide",
+      "createAccount": "Créer un compte",
+      "iConnect": "Je me connecte",
+      "forgotMyCode": "J'ai oublier mon code",
+      "alreadyAccount": "Vous avez déjà un compte ?",
+      "leave": "Quitter",
+      "distance": "Distance",
+      "rythme": "Allure",
+      "see": "Voir",
+      "challenge": "Challenge",
+      "speedMoy": "Vitesse moyenne",
+      "replayCourse": "Rejouer votre parcours",
+      "share": "Partager",
+      "downloadGpx": "Télécharger le GPX"
+    }
+  },
+  "en": {
+    "map": {
+      "numberActivities": "Number of activities",
+      "totalActivities": "Total number of activities",
+      "numberKm": "Number of km traveled",
+      "totalKm": "Total number of km traveled"
+    },
+    "sidebar": {
+      "map": "Map",
+      "myActivities": "My activities",
+      "myProfile": "My profile",
+      "results": "Results",
+      "comparator": "Comparator",
+      "userManual": "User manual",
+      "partners": "Partners",
+      "donation": "Make a donation"
+    },
+    "myActivities": {
+      "importGpx": "Import a GPX file",
+      "sendGpx": "Send a GPX file",
+      "addGpx": "Add a GPX file",
+      "newImportedActivity": "New imported activity"
+    },
+    "myProfile": {},
+    "result": {
+      "resultApp": "Results of your application challenges",
+      "chooseCourse": "Choose a track"
+    },
+    "comparator": {
+      "compare": "Compare performance",
+      "compareChronos": "Compare 2 lap times and find where you can save time on the track",
+      "chooseRace": "Choose a race"
+    },
+    "deconnected": {
+      "willDisconnect": "You will be disconnected, if you do not want to disconnect, click on the back button.",
+      "returnActivities": "Return to my activities"
+    },
+    "createAccount": {},
+    "gpsModal": {
+      "gpsAccess": "Accès à votre position GPS en arrière plan",
+      "needPosition": "L'application a besoin d'accèder à votre position en arrière plan pour pouvoir enregistrer la totalité de votre activité. Nous enregistrons votre position GPS même quand l'application est arretée ou en arrière plan."
+    },
+    "newLive": {
+      "morningActivity": "Morning Activity",
+      "afternoonActivity": "Afternoon Activity",
+      "eveningActivity": "Evening Activity"
+    },
+    "forgotPassword": {
+      "folocodeInvalid": "Invalid folocode"
+    },
+    "isExpired": {
+      "licenceExpired": "Your licence is expired.",
+      "licenceRenew": "The license to use this application has expired. Please, renew your subscription."
+    },
+    "lives": {
+      "newResult": "New results",
+      "myActivities": "My activities",
+      "noActivites": "You have no activities",
+      "gpxImported": "GPX File imported"
+    },
+    "liveSummary": {
+      "discoverMyActivity": "Discover my activity",
+      "permissionRefused": "Permission refused",
+      "permissionAccept": "Should must accept this permission to download your gpx",
+      "challengeBeingCalculated": "Your challenge is being calculated.",
+      "getResumeActivity": "Click here later to get your challenge resume",
+      "waitingActivity": "Patientez, votre challenge est toujours en cours de calcul. Voici en attendant votre activité globale de votre journée",
+      "notCompleted": "Le parcours effectué n'a pas été consideré comme complet. Cette activité n'est donc pas dans les résultats.",
+      "noChallengeDetected": "Aucun challenge détécté",
+      "globalActivity": "Voici l'activité globale de votre journée :"
+    },
+    "utils": {
+      "step": "Step",
+      "demo": "Demo",
+      "signOut": "Sign Out",
+      "privacyPolicy": "Privacy Policy",
+      "termsOfService": "Terms of service",
+      "version": "Version",
+      "comment": "Comment",
+      "register": "Register",
+      "lastName": "Last name",
+      "firstName": "First name",
+      "email": "email",
+      "sexe": "sexe",
+      "tel": "Phone number",
+      "postalCode": "Postal code",
+      "adress": "Adress",
+      "city": "City",
+      "country": "Country",
+      "businessChallenge": "Business challenge",
+      "clubChallenge": "Club challenge",
+      "familyChallenge": "Family challenge",
+      "women": "Women",
+      "man": "Man",
+      "other": "Other",
+      "dateBirth": "Date of birth",
+      "catResult": "Important for results by category",
+      "agreeName": "I accept that my name appears in the results",
+      "agreeRGPD": "I agree that my personnal informations will be used for informations purposes",
+      "errorCNIL": "You must agree that your data will be used for informations purposes",
+      "allSex": "All sexes combined",
+      "rank": "Rank",
+      "time": "Time",
+      "previous": "Previous",
+      "next": "Next",
+      "waitingGps": "Waiting for Gps signal",
+      "gpsFound": "Gps signal found",
+      "startActivity": "Start an activity",
+      "chooseSport": "Choose your sport",
+      "typeSportNeeded": "Sport type is needed",
+      "cancel": "Cancel",
+      "letsgo": "Let's go !",
+      "acceptTel": "",
+      "registering": "Registration...",
+      "changeLang": "Change language",
+      "changeToFr": "Passer en Français",
+      "noInternet": "No internet, please try again later.",
+      "enterEmailCode": "Enter your email to get your code",
+      "yourCodes": "Your codes",
+      "login": "Login",
+      "getFolo": "Get your code",
+      "folocodeInvalid": "Invalid folocode",
+      "createAccount": "Create account",
+      "iConnect": "Login",
+      "forgotMyCode": "I forgot my code",
+      "alreadyAccount": "Your already have a account ?",
+      "leave": "Leave",
+      "distance": "Distance",
+      "rythme": "Rythme",
+      "see": "See",
+      "challenge": "Challenge",
+      "speedMoy": "Average speed",
+      "replayCourse": "Replay track",
+      "share": "Share",
+      "downloadGpx": "Download GPX"
+    }
+  }
+}

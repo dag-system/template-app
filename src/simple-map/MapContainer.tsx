@@ -33,7 +33,7 @@ export default function MapContainer() {
   const geolocComponent = useRef<any>(null);
 
   const navigation = useNavigation();
-  const {isRecording, userData} = useSelector((state: AppState) => state);
+  const {isRecording, userData, lang} = useSelector((state: AppState) => state);
 
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
@@ -275,7 +275,7 @@ export default function MapContainer() {
                 descriptionInteret: interest.descriptionInteret,
                 telephoneInteret: interest.telephoneInteret,
                 lienInteret: interest.lienInteret,
-                idTypeInteret : interest.idTypeInteret,
+                idTypeInteret: interest.idTypeInteret,
                 photoInteret: interest.photoInteret,
                 description: '',
               };
@@ -383,7 +383,6 @@ export default function MapContainer() {
         />
         <Map ref={mapRef} />
 
-
         {TemplateArrayImagesSponsorPath.length > 0 ? (
           // <Footer style={{backgroundColor: 'white', paddingBottom: 64}}>
           <Sponsors />
@@ -416,5 +415,3 @@ const styles = StyleSheet.create({
     flex: 1,
   },
 });
-
-// export default connect(mapStateToProps)(MapContainer);

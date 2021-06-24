@@ -43,12 +43,21 @@ import AppState from '../models/AppState';
 import {useNavigation} from '@react-navigation/core';
 import StopActivity from './StopLive';
 
+import tradRes from './../lang/traduction.json';
+
+import {connect} from 'react-redux';
+const mapStateToProps = (state) => {
+  return {
+    lang: state.lang,
+  };
+};
+
 interface Props {
   openTraceModal(isDemo: boolean): void;
   onCenter(): void;
   onStart(): void;
 }
-export default function MapButtons(props: Props) {
+function MapButtons(props: Props) {
   const [modalStopVisible, setModalStopVisible] = useState(false);
 
   const [libelleLive, setLibelleLive] = useState('');
@@ -57,15 +66,11 @@ export default function MapButtons(props: Props) {
   const [selectedSport, setSelectedSport] = useState(-1);
   const [comments, setComments] = useState('');
   const [spinner, setSpinner] = useState(false);
-  const [
-    extraButtonPosition,
-    setExtraButtonPosition,
-  ] = useState<LayoutRectangle>();
+  const [extraButtonPosition, setExtraButtonPosition] =
+    useState<LayoutRectangle>();
 
-  const [
-    acceptChallengeNameUtilisateur,
-    setAcceptChallengeNameUtilisateur,
-  ] = useState(false);
+  const [acceptChallengeNameUtilisateur, setAcceptChallengeNameUtilisateur] =
+    useState(false);
 
   const [modalChooseSportVisible, setModalChooseSportVisible] = useState(false);
   const [isOpenExtraButtons, setIsOpenExtraButtons] = useState(false);
@@ -83,6 +88,7 @@ export default function MapButtons(props: Props) {
     coordinatesString,
     currentMapStyle,
     isGpsNotOk,
+    lang,
   } = useSelector((state: AppState) => state);
 
   useEffect(() => {
@@ -382,7 +388,7 @@ export default function MapButtons(props: Props) {
               <View>
                 <Text style={{color: 'white'}}>
                   {isGpsNotOk}
-                  En attente de l’acquisition du signal GPS
+                  {tradRes[lang].utils.waitingGps}
                 </Text>
               </View>
             </View>
@@ -409,7 +415,7 @@ export default function MapButtons(props: Props) {
                 },
               ]}>
               <Text style={{color: 'white', textAlign: 'center'}}>
-                Signal GPS Trouvé
+                {tradRes[lang].utils.gpsFound}
               </Text>
             </Animated.View>
           </TouchableOpacity>
@@ -650,7 +656,7 @@ export default function MapButtons(props: Props) {
               elevation: 20,
             }}>
             <Icon name="eye" style={[{fontSize: 22}]} type="FontAwesome5" />
-            <Text style={{marginLeft: 10}}>Démo</Text>
+            <Text style={{marginLeft: 10}}>{tradRes[lang].utils.demo}</Text>
             {/* </View> */}
           </TouchableOpacity>
         )}
@@ -694,11 +700,17 @@ export default function MapButtons(props: Props) {
                   onPress={() => {
                     toggleModalChooseSport();
                   }}>
-                  <Icon name="chevron-left" type="FontAwesome5"  style={{ color : 'black'}}/>
+                  <Icon
+                    name="chevron-left"
+                    type="FontAwesome5"
+                    style={{color: 'black'}}
+                  />
                 </Button>
               </Left>
               <Body style={{justifyContent: 'center', flex: 1}}>
-                <Text style={{fontWeight: 'bold'}}>Démarrer une activité</Text>
+                <Text style={{fontWeight: 'bold'}}>
+                  {tradRes[lang].utils.startActivity}
+                </Text>
               </Body>
               <Right style={{flex: 1}} />
             </Header>
@@ -714,7 +726,7 @@ export default function MapButtons(props: Props) {
                     style={{marginTop: 0}}
                     selectedValue={selectedSport.toString()}
                     onValueChange={(value) => onValueSportChange(value)}
-                    placeholder={'Choisissez votre sport'}
+                    placeholder={tradRes[lang].utils.chooseSport}
                     placeholderStyle={{
                       color: 'black',
                     }}
@@ -732,7 +744,10 @@ export default function MapButtons(props: Props) {
                       borderBottomColor: 'black',
                       borderBottomWidth: 1,
                     }}>
-                    <Picker.Item label="Choisissez votre sport" value="-1" />
+                    <Picker.Item
+                      label={tradRes[lang].utils.chooseSport}
+                      value="-1"
+                    />
                     {TemplateSportLive.map((sport, index) => {
                       return (
                         <Picker.Item
@@ -753,7 +768,7 @@ export default function MapButtons(props: Props) {
                         paddingLeft: 5,
                         fontStyle: 'italic',
                       }}>
-                      Le type de sport doit être renseigné
+                      {tradRes[lang].utils.typeSportNeeded}
                     </Text>
                   ) : null}
                 </View>
@@ -774,7 +789,7 @@ export default function MapButtons(props: Props) {
                     style={{
                       color: isErrorFormCreate() ? 'black' : 'white',
                     }}>
-                    C'est parti
+                    {tradRes[lang].utils.letsgo}
                   </Text>
                 </Button>
 
@@ -782,7 +797,7 @@ export default function MapButtons(props: Props) {
                   <Text
                     style={styles.ignoreActivityLink}
                     onPress={() => toggleModalChooseSport()}>
-                    Annuler
+                    {tradRes[lang].utils.cancel}
                   </Text>
                 </View>
 
@@ -854,3 +869,5 @@ const styles = StyleSheet.create({
     paddingBottom: 5,
   },
 });
+
+export default connect(mapStateToProps)(MapButtons);

@@ -28,8 +28,12 @@ import AutoHeightWebView from 'react-native-autoheight-webview';
 
 import {TemplateSiteLink, textAutoBackgroundColor} from './../globalsModifs';
 
-const mapStateToProps = () => {
-  return {};
+import tradRes from './../lang/traduction.json';
+
+const mapStateToProps = (state) => {
+  return {
+    lang: state.lang,
+  };
 };
 
 interface Props {
@@ -128,40 +132,13 @@ class Classement extends Component<Props, State> {
                 style={{
                   fontWeight: 'bold',
                   textAlign: 'center',
-                  color: ApiUtils.getColor() ,
+                  color: ApiUtils.getColor(),
                   fontSize: 20,
                   marginBottom: 10,
                   textTransform: 'uppercase',
                 }}>
-                Résultats du challenge de votre application
+                {tradRes[this.props.lang].result.resultApp}
               </Text>
-
-              {TemplateSiteLink !== 'www.dag-system.com' ? (
-                <TouchableOpacity
-                  onPress={() => this.openLink(TemplateSiteLink)}>
-                  <Text
-                    style={{
-                      textAlign: 'center',
-                      color: ApiUtils.getColor(),
-                    }}>
-                    Retrouvez tous les résultats sur notre site internet : A
-                    RENTRER
-                  </Text>
-                </TouchableOpacity>
-              ) : null}
-
-              {/* {this.state.isPortrait ? (
-                <View>
-                  <Image
-                    source={Rotate}
-                    style={{height: 70, width: 100, alignSelf: 'center'}}
-                    resizeMode="contain"
-                  />
-                  <Text style={{textAlign: 'center'}}>
-                    Tourner votre écran pour voir plus d'infos
-                  </Text>
-                </View>
-              ) : null} */}
 
               <AutoHeightWebView
                 source={{

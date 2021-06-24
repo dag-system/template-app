@@ -58,6 +58,8 @@ import {
 import {TemplateSportLive, textAutoBackgroundColor} from '../globalsModifs';
 import GpxService from '../services/GpxServices';
 
+import tardRes from './../lang/traduction.json';
+
 const mapStateToProps = (state) => {
   return {
     userData: state.userData,
@@ -65,6 +67,7 @@ const mapStateToProps = (state) => {
     currentMapStyle: state.currentMapStyle,
     polylines: state.polylines,
     sports: state.sports,
+    lang: state.lang,
   };
 };
 
@@ -202,7 +205,7 @@ class LiveSummary extends Component<Props, State> {
         console.log(e);
         if (e.message == 'Timeout' || e.message == 'Network request failed') {
           Toast.show({
-            text: "Vous n'avez pas de connection internet, merci de réessayer",
+            text: tradRes[this.props.lang].utils.noInternet,
             buttonText: 'Ok',
             type: 'danger',
             position: 'bottom',
@@ -249,7 +252,7 @@ class LiveSummary extends Component<Props, State> {
         console.log(e);
         if (e.message == 'Timeout' || e.message == 'Network request failed') {
           Toast.show({
-            text: "Vous n'avez pas de connection internet, merci de réessayer",
+            text: tradRes[this.props.lang].utils.noInternet,
             buttonText: 'Ok',
             type: 'danger',
             position: 'bottom',
@@ -477,12 +480,14 @@ class LiveSummary extends Component<Props, State> {
 
     ShareRn.share(
       {
-        message: 'Découvrez mon activité : ' + url,
-        title: 'Découvrez mon activité !',
+        message:
+          tradRes[this.props.lang].liveSummary.discoverMyActivity + ' : ' + url,
+        title: tradRes[this.props.lang].liveSummary.discoverMyActivity + ' !',
       },
       {
         // Android only:
-        dialogTitle: 'Découvrez mon activité ! ',
+        dialogTitle:
+          tradRes[this.props.lang].liveSummary.discoverMyActivity + ' ! ',
       },
     );
   }
@@ -511,11 +516,11 @@ class LiveSummary extends Component<Props, State> {
 
   share = (base64image) => {
     let shareOptions = {
-      title: 'Découvrez mon activité',
+      title: tradRes[this.props.lang].liveSummary.discoverMyActivity,
       url: base64image,
       message:
         'https://folomi.fr/s/compte/partage.php?c=' + this.state.live.codeLive,
-      subject: 'Découvrez mon activité',
+      subject: tradRes[this.props.lang].liveSummary.discoverMyActivity,
     };
 
     Share.open(shareOptions)
@@ -765,7 +770,10 @@ class LiveSummary extends Component<Props, State> {
                       style={{
                         textAlign: 'center',
                       }}>
-                      Votre challenge est en cours de calcul.
+                      {
+                        tradRes[this.props.lang].liveSummary
+                          .challengeBeingCalculated
+                      }
                     </Text>
                   </TouchableOpacity>
                   <TouchableOpacity
@@ -778,8 +786,7 @@ class LiveSummary extends Component<Props, State> {
                         textDecorationLine: 'underline',
                         marginTop: 10,
                       }}>
-                      Cliquez ici plus tard pour recevoir un résumé de votre
-                      Challenge
+                      {tradRes[this.props.lang].liveSummary.getResumeActivity}
                     </Text>
                   </TouchableOpacity>
                 </View>
@@ -793,9 +800,7 @@ class LiveSummary extends Component<Props, State> {
                     <View style={{marginTop: 10}}>
                       <Text
                         style={{textAlign: 'center', paddingHorizontal: 12}}>
-                        Patientez, votre challenge est toujours en cours de
-                        calcul. Voici en attendant votre activité globale de
-                        votre journée
+                        {tradRes[this.props.lang].liveSummary.waitingActivity}
                       </Text>
                       <TouchableOpacity
                         onPress={() =>
@@ -807,8 +812,10 @@ class LiveSummary extends Component<Props, State> {
                             textDecorationLine: 'underline',
                             marginTop: 10,
                           }}>
-                          Cliquez ici plus tard pour recevoir un résumé de votre
-                          Challenge
+                          {
+                            tradRes[this.props.lang].liveSummary
+                              .getResumeActivity
+                          }
                         </Text>
                       </TouchableOpacity>
                     </View>
@@ -830,7 +837,7 @@ class LiveSummary extends Component<Props, State> {
                           color: ApiUtils.getColor(),
                           // backgroundColor: '#E6E6E6',
                         }}>
-                        Challenge
+                        {tradRes[this.props.lang].utils.challenge}
                       </Text>
 
                       {this.state.live.segmentEfforts.map((segment) => {
@@ -880,7 +887,7 @@ class LiveSummary extends Component<Props, State> {
                                         alignSelf: 'center',
                                         marginBottom: 3,
                                       }}>
-                                      Distance
+                                      {tradRes[this.props.lang].utils.distance}
                                     </Text>
                                     <Text>{segment.distanceSegment} km</Text>
                                   </View>
@@ -892,7 +899,7 @@ class LiveSummary extends Component<Props, State> {
                                         textAlign: 'center',
                                         marginBottom: 3,
                                       }}>
-                                      Temps
+                                      {tradRes[this.props.lang].utils.time}
                                     </Text>
                                     <Text>{segment.tempsSegmentString}</Text>
                                   </View>
@@ -903,7 +910,7 @@ class LiveSummary extends Component<Props, State> {
                                         textAlign: 'center',
                                         marginBottom: 3,
                                       }}>
-                                      Allure
+                                      {tradRes[this.props.lang].utils.rythme}
                                     </Text>
                                     <Text>
                                       {segment.vitesseMoyenneSegment}/km
@@ -931,9 +938,10 @@ class LiveSummary extends Component<Props, State> {
                                         textAlign: 'center',
                                         marginTop: 5,
                                       }}>
-                                      Le parcours effectué n'a pas été consideré
-                                      comme complet. Cette activité n'est donc
-                                      pas dans les résultats.
+                                      {
+                                        tradRes[this.props.lang].liveSummary
+                                          .notCompleted
+                                      }
                                     </Text>
                                   ) : null}
                                 </View>
@@ -954,7 +962,10 @@ class LiveSummary extends Component<Props, State> {
                           marginTop: 10,
                           marginBottom: 10,
                         }}>
-                        Aucun challenge détécté
+                        {
+                          tradRes[this.props.lang].liveSummary
+                            .noChallengeDetected
+                        }
                       </Text>
                     </View>
                   ) : null}
@@ -974,7 +985,7 @@ class LiveSummary extends Component<Props, State> {
                       marginTop: 0,
                       marginBottom: 10,
                     }}>
-                    Voici l'activité globale de votre journée :
+                    {tradRes[this.props.lang].liveSummary.globalActibity}
                   </Text>
 
                   <Text style={styles.bold}>{this.state.live.libelleLive}</Text>
@@ -1175,12 +1186,6 @@ class LiveSummary extends Component<Props, State> {
                     paddingLeft: 20,
                     justifyContent: 'space-evenly',
                   }}>
-                  {/* <View
-                      style={{
-                        flexDirection: 'row',
-                        width: '100%',
-                       
-                      }}> */}
                   <Text
                     style={{
                       fontWeight: 'bold',
@@ -1277,7 +1282,7 @@ class LiveSummary extends Component<Props, State> {
                         </View>
                         <View style={styles.resultCol}>
                           <Text style={[GlobalStyles.uppercase]}>
-                            VITESSE MOY
+                            {tradRes[this.props.lang].utils.speedMoy}
                           </Text>
                           <Text style={styles.resultNumber}>
                             {this.state.statsLive?.vMoy} km/h
@@ -1292,7 +1297,9 @@ class LiveSummary extends Component<Props, State> {
                           />
                         </View>
                         <View style={styles.resultCol}>
-                          <Text style={[GlobalStyles.uppercase]}>ALLURE</Text>
+                          <Text style={[GlobalStyles.uppercase]}>
+                            {tradRes[this.props.lang].utils.rythm}
+                          </Text>
                           <Text style={styles.resultNumber}>
                             {this.state.statsLive?.allureKm}
                           </Text>
@@ -1378,7 +1385,7 @@ class LiveSummary extends Component<Props, State> {
                         paddingLeft: 5,
                       }}>
                       <Text style={{marginTop: 10, fontWeight: 'bold'}}>
-                        Commentaires :
+                        {tradRes[this.props.lang].utils.comment} :
                       </Text>
                       <Text style={{marginTop: 5, paddingLeft: 5}}>
                         {this.state.live.commentLive}
@@ -1408,7 +1415,7 @@ class LiveSummary extends Component<Props, State> {
                           textTransform: 'uppercase',
                           fontWeight: 'bold',
                         }}>
-                        Revoir votre parcours
+                        {tradRes[this.props.lang].utils.replayCourse}
                       </Text>
                     </TouchableOpacity>
                   ) : (
@@ -1433,7 +1440,7 @@ class LiveSummary extends Component<Props, State> {
                           textTransform: 'uppercase',
                           fontWeight: 'bold',
                         }}>
-                        PARTAGER
+                        {tradRes[this.props.lang].utils.share}
                       </Text>
                     </TouchableOpacity>
                   ) : (
@@ -1463,7 +1470,7 @@ class LiveSummary extends Component<Props, State> {
                           textTransform: 'uppercase',
                           fontWeight: 'bold',
                         }}>
-                        Télécharger le fichier GPX
+                        {tradRes[this.props.lang].utils.downloadGpx}
                       </Text>
                     </TouchableOpacity>
                   ) : null}

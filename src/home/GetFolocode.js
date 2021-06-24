@@ -8,7 +8,15 @@ import {connect} from 'react-redux';
 import {Container, Button, Icon, Header, Body} from 'native-base';
 import ApiUtils from '../ApiUtils';
 
-export default class GetFolocode extends Component {
+import tradRes from './../lang/traduction.json';
+
+const mapStateToProps = (state) => {
+  return {
+    lang: state.lang,
+  };
+};
+
+class GetFolocode extends Component {
   constructor(props) {
     super(props);
   }
@@ -40,7 +48,7 @@ export default class GetFolocode extends Component {
               <Icon name="arrow-back" style={styles.title} />
             </Button>
             <Text style={{marginTop: 15, width: '70%', fontSize: 18}}>
-              Obtenir un folocode
+              {tradRes[this.props.lang].utils.getFolo}
             </Text>
           </View>
         </View>
@@ -78,3 +86,5 @@ var styles = StyleSheet.create({
     color: '#fff',
   },
 });
+
+export default connect(mapStateToProps)(GetFolocode);

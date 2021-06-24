@@ -16,17 +16,17 @@ import Challenge from '../models/Challenge';
 import AppState from '../models/AppState';
 import {useNavigation} from '@react-navigation/core';
 import {CommonActions} from '@react-navigation/native';
-import BackgroundGeolocation, { Config } from 'react-native-background-geolocation';
+import BackgroundGeolocation, {
+  Config,
+} from 'react-native-background-geolocation';
+
+import tradRes from './../lang/traduction.json';
 
 export default function Introduction() {
   const navigation = useNavigation();
   const dispatch = useDispatch();
-  const {
-    userData,
-    isOkPopupBAttery,
-    isOkPopupBAttery2,
-    isOkPopupGps,
-  } = useSelector((state: AppState) => state);
+  const {userData, isOkPopupBAttery, isOkPopupBAttery2, isOkPopupGps, lang} =
+    useSelector((state: AppState) => state);
 
   useEffect(() => {
     if (userData != null && isOkPopupBAttery) {
@@ -127,7 +127,7 @@ export default function Introduction() {
               challenge.positionsTrace = positionArray;
 
               finalChallenge = {
-                isActive : true,
+                isActive: true,
                 positionsTrace: positionArray,
                 idChallenge: finalChallenge.idChallenge,
                 libelleChallenge: finalChallenge.libelleChallenge,
@@ -153,7 +153,7 @@ export default function Introduction() {
               var finalInterest = {
                 id: 'interest' + count,
                 idInteret: interest.idInteret,
-                idTypeInteret : interest.idTypeInteret,
+                idTypeInteret: interest.idTypeInteret,
                 idStation: interest.idStation,
                 coordinates: coordinate,
                 libelleInteret: interest.libelleInteret,
@@ -249,7 +249,6 @@ export default function Introduction() {
   };
 
   const configGeoloc = () => {
- 
     let config: Config = {
       debug: false,
       distanceFilter: 10,
@@ -305,7 +304,6 @@ export default function Introduction() {
 
     BackgroundGeolocation.ready(config, () => {
       BackgroundGeolocation.start(() => {
-
         BackgroundGeolocation.changePace(true);
         BackgroundGeolocation.stop();
         onClickNavigate('SimpleMap');
@@ -341,9 +339,10 @@ export default function Introduction() {
       ) {
         // Supply "Purpose" key from Info.plist as 1st argument.
         try {
-          let accuracyAuthorization = await BackgroundGeolocation.requestTemporaryFullAccuracy(
-            'Delivery',
-          );
+          let accuracyAuthorization =
+            await BackgroundGeolocation.requestTemporaryFullAccuracy(
+              'Delivery',
+            );
           if (
             accuracyAuthorization ==
             BackgroundGeolocation.ACCURACY_AUTHORIZATION_FULL
@@ -391,11 +390,11 @@ export default function Introduction() {
       <Modal visible={isOkPopupBAttery2 && isOkPopupBAttery && !isOkPopupGps}>
         <Container style={{flex: 1}}>
           <View style={{flex: 1, justifyContent: 'center'}}>
-            <AskGpsModal onValidate={() => 
-              {
+            <AskGpsModal
+              onValidate={() => {
                 configGeoloc();
-                
-              }} />
+              }}
+            />
           </View>
         </Container>
       </Modal>

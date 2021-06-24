@@ -30,6 +30,7 @@ const initialState = {
   isGpsNotOk: true,
   phoneData: null,
   notifications: [],
+  lang: 'fr',
 };
 
 const initialMockState = {
@@ -63,6 +64,7 @@ const initialMockState = {
   isOkPopupGps: false,
   isOkPopupBAttery: false,
   notifications: [{type: 'newEffort', idLive: 12}],
+  lang: 'fr',
 };
 
 const reducer = (state = initialState, action) => {
@@ -82,52 +84,45 @@ const reducer = (state = initialState, action) => {
       ) {
         folocodes.push(newFolocode);
       }
-
-      let nextState = {
+      return {
         ...state,
         folocodes: folocodes,
         userData: action.data,
       };
-      return nextState || state;
     }
     case 'LOGOUT': {
-      let nextState = initialState;
-      nextState.folocodes = state.folocodes;
-      return nextState || state;
+      return {
+        ...initialState,
+        folocodes: state.folocodes,
+      };
     }
-    case 'GET_LIVES':
-      {
-        let nextState = {
-          ...state,
-          lives: action.data,
-        };
-        return nextState || state;
-      }
-      ``;
+    case 'GET_LIVES': {
+      return {
+        ...state,
+        lives: action.data,
+      };
+    }
     case 'GET_CLUBS': {
-      let nextState = {
+      return {
         ...state,
         clubs: action.data,
       };
-      return nextState || state;
     }
 
     case 'ADD_FOLOCODE': {
-      let nextState = {
+      return {
         ...state,
         folocodes: [...state.folocodes, action.data],
       };
-      return nextState || state;
     }
 
     case 'ADD_NOTIFICATION': {
       let notifs = JSON.parse(JSON.stringify(state.notifications));
       if (notifs.filter((n) => n.idLive == action.data.idLive).length == 0) {
-        let nextState = {
+        return {
           ...state,
           notifications: [...state.notifications, action.data],
         };
-        return nextState || state;
       } else {
         return state;
       }
@@ -136,91 +131,78 @@ const reducer = (state = initialState, action) => {
     case 'DELETE_NOTIFICATION': {
       let notifs = [];
       notifs = state.notifications.filter((n) => n.idLive != action.data);
-      let nextState = {
+      return {
         ...state,
         notifications: notifs,
       };
-      return nextState || state;
     }
 
     case 'UPDATE_PHONE_DATA': {
-      let nextState = {
+      return {
         ...state,
         phoneData: action.data,
       };
-      return nextState || state;
     }
 
     case 'VIEW_POPUPAIDE': {
-      let nextState = {
+      return {
         ...state,
         isOkPopupBAttery: true,
       };
-      return nextState || state;
     }
 
     case 'VIEW_POPUPGPS': {
-      let nextState = {
+      return {
         ...state,
         isOkPopupGps: true,
       };
-      return nextState || state;
     }
 
     case 'VIEW_POPUPBATTERY': {
-      let nextState = {
+      return {
         ...state,
         isOkPopupBAttery2: true,
       };
-      return nextState || state;
     }
 
     case 'GET_SPORTS': {
-      let nextState = {
+      return {
         ...state,
         sports: action.data,
       };
-      return nextState || state;
     }
     case 'DELETE_LIVE': {
       var currentLives = new Object(state.lives);
       currentLives = currentLives.filter((l) => l.idLive != action.data);
-      let nextState = {
+      return {
         ...state,
         lives: currentLives,
       };
-      return nextState || state;
     }
 
     case 'CREATE_LIVE': {
-      let nextState = {
+      return {
         ...state,
         lives: [...state.lives, action.data],
         currentLive: action.data,
       };
-
-      return nextState || state;
     }
     case 'UPDATE_MAP_STYLE': {
-      let nextState = {
+      return {
         ...state,
         currentMapStyle: action.data,
       };
-      return nextState || state;
     }
 
     case 'SAVE_CURRENT_LIVE': {
-      let nextState = {
+      return {
         ...state,
         currentLiveSummary: action.data,
       };
-      // alert(JSON.stringify(action.data));
-
-      return nextState || state;
     }
 
     case 'UPDATE_ACCEPT_CHALLENGE': {
-      let nextState = {
+      return {
         ...state,
         userData: {
           ...state.userData,
@@ -229,53 +211,42 @@ const reducer = (state = initialState, action) => {
             action.data.acceptChallengeNameUtilisateur,
         },
       };
-      // alert(JSON.stringify(action.data));
-
-      return nextState || state;
     }
 
     case 'SAVE_IS_RECORDING': {
-      let nextState = {
+      return {
         ...state,
         isRecording: action.data,
       };
-
-      return nextState || state;
     }
 
     case 'GET_USER_CLUBS': {
-      let nextState = {
+      return {
         ...state,
         userClubs: action.data,
       };
-      return nextState || state;
     }
 
     case 'SAVE_MARKERS': {
-      let nextState = {
+      return {
         ...state,
         markers: action.data,
       };
-
-      return nextState || state;
     }
     case 'SAVE_COORDINATES': {
-      let nextState = {
+      return {
         ...state,
         // coordinates: action.data,
         coordinatesString: JSON.stringify(action.data),
       };
-
-      return nextState || state;
     }
 
     case 'UPDATE_GPS_OK': {
-      let nextState = {
+      return {
         ...state,
         isGpsNotOk: action.data.isGpsNotOk,
         currentPosition: action.data.location.coords,
       };
-      return nextState || state;
     }
 
     case 'ADD_COORDINATE': {
@@ -295,30 +266,26 @@ const reducer = (state = initialState, action) => {
       }
 
       coords.push(action.data);
-
-      let nextState = {
+      return {
         ...state,
         coordinatesString: JSON.stringify(coords),
         currentPosition: action.data,
         isGpsNotOk: isGpsNotOk,
         odometer: odometer,
       };
-      return nextState || state;
     }
     case 'IGNORE_LIVE': {
       let lives = JSON.parse(JSON.stringify(state.lives));
 
       lives = lives.filter((l) => l.idLive != action.data);
 
-      let nextState = {
+      return {
         ...state,
         lives: lives,
       };
-
-      return nextState || state;
     }
     case 'CLEAR_MAP': {
-      let nextState = {
+      return {
         ...state,
         coordinates: [],
         coordinatesString: '[]',
@@ -332,38 +299,31 @@ const reducer = (state = initialState, action) => {
         // currentPosition: null,
         currentLive: null,
       };
-
-      return nextState || state;
     }
 
     case 'ADD_DATE': {
-      let nextState = {
+      return {
         ...state,
         dates: [...state.dates, action.data],
       };
-      return nextState || state;
     }
 
     case 'UPDATE_ODOMETER': {
-      var data = action.data;
-      let nextState = {
+      return {
         ...state,
-        odometer: data.odometer,
+        odometer: action.data.odometer,
       };
-
-      return nextState || state;
     }
 
     case 'IS_MOVING': {
-      let nextState = {
+      return {
         ...state,
         isMoving: action.data,
       };
-      return nextState || state;
     }
 
     case 'UPDATE_STATION_DATA': {
-      let nextState = {
+      return {
         ...state,
         polylines: action.data.polylines,
         nomStation: action.data.nomStation,
@@ -372,18 +332,13 @@ const reducer = (state = initialState, action) => {
         challenges: action.data.challenges,
         statistics: action.data.statistics,
       };
-      return nextState || state;
     }
 
     case 'ADD_TRACE': {
-      var trace = action.data;
-      var traces = new Object(state.polylines);
-      traces.push(trace);
-      let nextState = {
+      return {
         ...state,
         polylines: traces,
       };
-      return nextState || state;
     }
 
     case 'SET_DEMO_TRACE': {
@@ -392,20 +347,17 @@ const reducer = (state = initialState, action) => {
       var trace = traces.filter(
         (pol) => pol.nomTrace == action.data.nomTrace,
       )[0];
-
-      let nextState = {
+      return {
         ...state,
         demoTrace: trace,
         isDemoMode: true,
       };
-      return nextState || state;
     }
     case 'REFRESH': {
-      let nextState = {
+      return {
         ...state,
         refresh: action.data,
       };
-      return nextState || state;
     }
 
     case 'TOGGLE_TRACE': {
@@ -413,28 +365,29 @@ const reducer = (state = initialState, action) => {
 
       var trace = traces.filter((pol) => pol.nomTrace == action.data)[0];
       trace.isActive = !trace.isActive;
-
-      let nextState = {
+      return {
         ...state,
         polylines: traces,
       };
-      return nextState || state;
     }
     case 'CURRENT_LIVE_FOR_SEGMENT': {
-      let nextState = {
+      return {
         ...state,
         currentLiveFromSegmentId: action.data.idLive,
         currentLiveFromSegment: action.data,
       };
-      return nextState || state;
     }
     case 'CURRENT_LIVE_FOR_SEGMENT_ID': {
-      let nextState = {
+      return {
         ...state,
         currentLiveFromSegmentId: action.data,
       };
-      // console.log(nextState.polylines)
-      return nextState || state;
+    }
+    case 'CHANGE_LANG': {
+      return {
+        ...state,
+        lang: action.data,
+      };
     }
     default: {
       return state;

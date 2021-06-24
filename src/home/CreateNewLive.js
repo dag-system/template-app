@@ -34,12 +34,16 @@ import {
 import {connect} from 'react-redux';
 import ApiUtils from '../ApiUtils';
 import Logo from '../assets/logo.png';
+
+import tradRes from './../lang/traduction.json';
+
 const mapStateToProps = (state) => {
   return {
     userData: state.userData,
     recordingState: state.recordingState,
     lives: state.lives,
     sports: state.sports,
+    lang: state.lang,
   };
 };
 
@@ -123,14 +127,14 @@ class CreateNewLive extends Component {
     var hour = date.getHours();
 
     if (hour <= 11) {
-      return 'Activité matinale';
+      return tradRes[this.props.lang].newLive.morningActivity;
     }
     if (hour > 11 && hour < 19) {
-      return "Activité de l'après-midi";
+      return tradRes[this.props.lang].newLive.afternoonActivity;
     }
 
     if (hour >= 19) {
-      return 'Activité du soir';
+      return tradRes[this.props.lang].newLive.eveningActivity;
     }
   }
 

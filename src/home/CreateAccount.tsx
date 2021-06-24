@@ -28,12 +28,15 @@ import {
 } from 'native-base';
 import ApiUtils from '../ApiUtils';
 import Logo from '../assets/logo.png';
+// @ts-ignore
 import ValidationComponent from 'react-native-form-validator';
 import defaultMessages from './defaultMessages';
 import {connect} from 'react-redux';
 import {KeyboardAvoidingView, Dimensions} from 'react-native';
 import VersionCheck from 'react-native-version-check';
 import GlobalStyles from '../styles';
+
+import tradRes from './../lang/traduction.json';
 
 import {
   TemplateNameAsk,
@@ -63,6 +66,7 @@ const mapStateToProps = (state) => {
     lives: state.lives,
     sports: state.sports,
     currentLive: state.currentLive,
+    lang: state.lang,
   };
 };
 
@@ -413,7 +417,7 @@ class CreateAccount extends ValidationComponent {
               <Form>
                 {this.state.isNameAsk ? (
                   <Item stackedLabel style={{marginBottom: 5}}>
-                    <Label>Nom *</Label>
+                    <Label>{tradRes[this.props.lang].utils.lastName} *</Label>
                     <Input
                       //  autoCapitalize="characters"
                       ref="nomUtilisateur"
@@ -430,15 +434,15 @@ class CreateAccount extends ValidationComponent {
 
                 {this.isFieldInError('nomUtilisateur') &&
                   this.state.isNameAsk &&
-                  this.getErrorsInField(
-                    'nomUtilisateur',
-                  ).map((errorMessage) => (
-                    <Text style={styles.error}>{errorMessage}</Text>
-                  ))}
+                  this.getErrorsInField('nomUtilisateur').map(
+                    (errorMessage) => (
+                      <Text style={styles.error}>{errorMessage}</Text>
+                    ),
+                  )}
 
                 {this.state.isFirstNameAsk ? (
                   <Item stackedLabel style={{marginBottom: 5}}>
-                    <Label>Prénom *</Label>
+                    <Label>{tradRes[this.props.lang].utils.firstName} *</Label>
                     <Input
                       //  autoCapitalize="characters"
                       ref="prenomUtilisateur"
@@ -454,15 +458,15 @@ class CreateAccount extends ValidationComponent {
                 ) : null}
                 {this.isFieldInError('prenomUtilisateur') &&
                   this.state.isFirstNameAsk &&
-                  this.getErrorsInField(
-                    'prenomUtilisateur',
-                  ).map((errorMessage) => (
-                    <Text style={styles.error}>{errorMessage}</Text>
-                  ))}
+                  this.getErrorsInField('prenomUtilisateur').map(
+                    (errorMessage) => (
+                      <Text style={styles.error}>{errorMessage}</Text>
+                    ),
+                  )}
 
                 {this.state.isMailAsk ? (
                   <Item stackedLabel style={{marginBottom: 5}}>
-                    <Label>Email *</Label>
+                    <Label>{tradRes[this.props.lang].utils.email} *</Label>
                     <Input
                       ref="emailUtilisateur"
                       autoCompleteType="email"
@@ -482,15 +486,17 @@ class CreateAccount extends ValidationComponent {
 
                 {this.isFieldInError('emailUtilisateur') &&
                   this.state.isMailAsk &&
-                  this.getErrorsInField(
-                    'emailUtilisateur',
-                  ).map((errorMessage) => (
-                    <Text style={styles.error}>{errorMessage}</Text>
-                  ))}
+                  this.getErrorsInField('emailUtilisateur').map(
+                    (errorMessage) => (
+                      <Text style={styles.error}>{errorMessage}</Text>
+                    ),
+                  )}
 
                 {this.state.isSexeAsk ? (
                   <View>
-                    <Text style={styles.label}>Sexe</Text>
+                    <Text style={styles.label}>
+                      {tradRes[this.props.lang].utils.sexe}
+                    </Text>
 
                     <View
                       style={{
@@ -508,7 +514,7 @@ class CreateAccount extends ValidationComponent {
                           justifyContent: 'space-around',
                         }}
                         onPress={() => this.setState({sexeUtilisateur: 'F'})}>
-                        <Text>Femme</Text>
+                        <Text>{tradRes[this.props.lang].utils.women}</Text>
                         <Radio
                           selected={this.state.sexeUtilisateur == 'F'}
                           onPress={() => this.setState({sexeUtilisateur: 'F'})}
@@ -522,7 +528,7 @@ class CreateAccount extends ValidationComponent {
                           justifyContent: 'space-around',
                         }}
                         onPress={() => this.setState({sexeUtilisateur: 'H'})}>
-                        <Text>Homme</Text>
+                        <Text>{tradRes[this.props.lang].utils.man}</Text>
                         <Radio
                           selected={this.state.sexeUtilisateur == 'H'}
                           onPress={() => this.setState({sexeUtilisateur: 'H'})}
@@ -537,7 +543,7 @@ class CreateAccount extends ValidationComponent {
                           justifyContent: 'space-around',
                         }}
                         onPress={() => this.setState({sexeUtilisateur: 'A'})}>
-                        <Text>Autre</Text>
+                        <Text>{tradRes[this.props.lang].utils.other}</Text>
                         <Radio
                           selected={this.state.sexeUtilisateur == 'A'}
                           onPress={() => this.setState({sexeUtilisateur: 'A'})}
@@ -551,7 +557,7 @@ class CreateAccount extends ValidationComponent {
                   <Item stackedLabel style={{marginBottom: 5}}>
                     <Label>Date de naissance</Label>
                     <Label style={{fontSize: 12}}>
-                      Important pour les résultats par catégorie
+                      {tradRes[this.props.lang].utils.catResult}
                     </Label>
                     <View style={[GlobalStyles.row]}>
                       <Picker
@@ -657,7 +663,7 @@ class CreateAccount extends ValidationComponent {
 
                 {this.state.isTelAsk ? (
                   <Item stackedLabel style={{marginBottom: 5}}>
-                    <Label>Numéro de télephone * </Label>
+                    <Label>{tradRes[this.props.lang].utils.tel} * </Label>
                     <Input
                       returnKeyType="next"
                       ref="telUtilisateur"
@@ -692,15 +698,14 @@ class CreateAccount extends ValidationComponent {
                       value={this.state.acceptChallengeTelUtilisateur == 1}
                     />
                     <Text style={{marginLeft: 10}}>
-                      J’accepte l’utilisation de mon numéro de téléphone pour le
-                      tirage au sort des lots
+                      {tradRes[this.props.lang].utils.acceptTel}
                     </Text>
                   </View>
                 ) : null}
 
                 {this.state.isAdressAsk ? (
                   <Item stackedLabel style={{marginBottom: 5}}>
-                    <Label>Adresse</Label>
+                    <Label>{tradRes[this.props.lang].utils.adress}</Label>
                     <Input
                       returnKeyType="next"
                       clearButtonMode="always"
@@ -715,7 +720,7 @@ class CreateAccount extends ValidationComponent {
 
                 {this.state.isPostalAsk ? (
                   <Item stackedLabel style={{marginBottom: 5}}>
-                    <Label>Code Postal</Label>
+                    <Label>{tradRes[this.props.lang].utils.postalCode}</Label>
                     <Input
                       returnKeyType="next"
                       clearButtonMode="always"
@@ -730,7 +735,7 @@ class CreateAccount extends ValidationComponent {
 
                 {this.state.isCityAsk ? (
                   <Item stackedLabel style={{marginBottom: 5}}>
-                    <Label>Ville</Label>
+                    <Label>{tradRes[this.props.lang].utils.city}</Label>
                     <Input
                       autoCapitalize="characters"
                       returnKeyType="next"
@@ -746,7 +751,7 @@ class CreateAccount extends ValidationComponent {
 
                 {this.state.isCountyAsk ? (
                   <Item stackedLabel style={{marginBottom: 5}}>
-                    <Label>Ville</Label>
+                    <Label>{tradRes[this.props.lang].utils.country}</Label>
                     <Input
                       autoCapitalize="characters"
                       returnKeyType="next"
@@ -762,7 +767,9 @@ class CreateAccount extends ValidationComponent {
 
                 {this.state.isChallengeEntrepriseAsk ? (
                   <Item stackedLabel style={{marginBottom: 5}}>
-                    <Label>Challenge Entreprise</Label>
+                    <Label>
+                      {tradRes[this.props.lang].utils.businessChallenge}
+                    </Label>
                     <Input
                       autoCapitalize="characters"
                       returnKeyType="next"
@@ -778,7 +785,9 @@ class CreateAccount extends ValidationComponent {
 
                 {this.state.isChallengeClubAsk ? (
                   <Item stackedLabel style={{marginBottom: 5}}>
-                    <Label>Challenge Club</Label>
+                    <Label>
+                      {tradRes[this.props.lang].utils.clubChallenge}
+                    </Label>
                     <Input
                       autoCapitalize="characters"
                       returnKeyType="next"
@@ -792,7 +801,9 @@ class CreateAccount extends ValidationComponent {
 
                 {this.state.isChallengeFamilleAsk ? (
                   <Item stackedLabel style={{marginBottom: 5}}>
-                    <Label>Challenge Famille</Label>
+                    <Label>
+                      {tradRes[this.props.lang].utils.familyChallenge}
+                    </Label>
                     <Input
                       autoCapitalize="characters"
                       returnKeyType="next"
@@ -841,12 +852,12 @@ class CreateAccount extends ValidationComponent {
                   <TouchableOpacity
                     onPress={() =>
                       this.setState({
-                        acceptChallengeNameUtilisateur: !this.state
-                          .acceptChallengeNameUtilisateur,
+                        acceptChallengeNameUtilisateur:
+                          !this.state.acceptChallengeNameUtilisateur,
                       })
                     }>
                     <Text style={{marginLeft: 10}}>
-                      Je souhaite voir mon nom apparaître dans les résultats
+                      {tradRes[this.props.lang].utils.agreeName}
                     </Text>
                   </TouchableOpacity>
                 </View>
@@ -870,11 +881,12 @@ class CreateAccount extends ValidationComponent {
                   <TouchableOpacity
                     onPress={() =>
                       this.setState({
-                        acceptChallengeUtilisateur: !this.state
-                          .acceptChallengeUtilisateur,
+                        acceptChallengeUtilisateur:
+                          !this.state.acceptChallengeUtilisateur,
                       })
                     }>
                     <Text style={{marginLeft: 10}}>
+                      {tradRes[this.props.lang].utils.agreeName}
                       J'accepte que mes données personnelles soient utilisées à
                       des fins d'informations
                     </Text>
@@ -889,8 +901,7 @@ class CreateAccount extends ValidationComponent {
                       fontSize: 18,
                       color: 'red',
                     }}>
-                    Vous devez acceptez que vos données soient utilisées à des
-                    fins d'informations
+                    {tradRes[this.props.lang].utils.errorCNIL}
                   </Text>
                 ) : null}
               </Form>
@@ -906,7 +917,9 @@ class CreateAccount extends ValidationComponent {
                     display: 'flex',
                   }}>
                   <ActivityIndicator color="black" />
-                  <Text style={{marginLeft: 5}}>Enregistrement en cours</Text>
+                  <Text style={{marginLeft: 5}}>
+                    {tradRes[this.props.lang].utils.registering}
+                  </Text>
                 </View>
               ) : (
                 <TouchableOpacity

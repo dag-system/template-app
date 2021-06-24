@@ -11,6 +11,9 @@ import {Container, Header, Body, Text, Button, Icon} from 'native-base';
 import MapView from 'react-native-maps';
 import ApiUtils from '../ApiUtils';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+
+import tradRes from './../lang/traduction.json';
+
 import {connect} from 'react-redux';
 const mapStateToProps = (state) => {
   return {
@@ -412,7 +415,7 @@ class LiveSummaryFromSegment extends Component {
                         )
                       }
                       disabled={this.props.currentLive.followCode == ''}>
-                      <Text>REJOUER VOTRE ACTIVITE</Text>
+                      <Text>{tradRes[this.props.lang].utils.replayCourse}</Text>
                     </Button>
                   ) : (
                     <View></View>
@@ -423,7 +426,7 @@ class LiveSummaryFromSegment extends Component {
                       style={[styles.buttonok, {marginTop: 5}]}
                       onPress={() => this.onClickShare()}
                       disabled={this.props.currentLive.followCode == ''}>
-                      <Text>PARTAGER</Text>
+                      <Text>{tradRes[this.props.lang].utils.share}</Text>
                     </Button>
                   ) : (
                     <View></View>
