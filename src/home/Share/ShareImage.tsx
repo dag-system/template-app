@@ -9,11 +9,11 @@ export default function ShareImage(props: any) {
   const ITEM_WIDTH = 300;
   return (
     <>
-      {props.image == null ? (
+      {props.image == null && props.customImage !== null ? (
         <View>
           <ShareData style={{position: 'absolute', top: 0,  zIndex: 10004}} />
           <Image
-            source={Skieur}
+            source={props.customImage}
             width={ITEM_WIDTH}
             resizeMode="cover"
             style={{width: ITEM_WIDTH, height: ITEM_WIDTH}}
