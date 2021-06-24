@@ -39,6 +39,7 @@ import FranceBleu from '../assets/france-bleu.svg';
 import Dauphine from '../assets/dauphine.png';
 import SkiChrono from '../assets/skichrono.jpg';
 import Rossignol from '../assets/rossignol.jpg';
+import MaisonBleue from '../assets/maisonBleue.png';
 import Deva from '../assets/deva.png';
 import Dag from '../assets/dag.png';
 import HeaderComponent from './HeaderComponent';
@@ -390,7 +391,6 @@ class Partenaires extends Component {
                   }}
                 />
               </View>
-
               <View
                 style={{
                   borderBottomWidth: 1,

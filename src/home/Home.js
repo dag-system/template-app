@@ -51,6 +51,7 @@ import {
   TemplateIdOrganisation,
   TemplateIsPaying,
   textAutoBackgroundColor,
+  TemplateArrayImagesSponsorPath,
 } from '../globalsModifs';
 import {ScrollView} from 'react-native-gesture-handler';
 
@@ -853,40 +854,44 @@ class Home extends Component {
         </View>
 
         {/* <View style={{backgroundColor: 'transparent'}}> */}
-          <View
-            style={{
-              backgroundColor: 'white',
-              width: '100%',
-              opacity: 0.4,
-              height: 80,
-              position: 'absolute',
-              // marginBottom: 20,
-              bottom: Platform.OS == 'ios' ? 0 : 0,
-            }}>
-          </View>
-          <Animated.View animation="bounceInUp" delay={200}  style={{
-                display: 'flex',
-                flexDirection: 'row',
-                marginTop: 0,
-                width: '100%',
-                paddingHorizontal: 10,
-                position: 'absolute',
-                bottom: 0,
-                backgroundColor: 'transparent',
-              }}>
-              {/* <View style={{width: '30%', height: 50}}> */}
-                <Autrans
-                  width={100}
-                  height={50}
-                  style={{
-                    alignSelf: 'center',
-                    opacity: 1,
-                    marginLeft: 10,
-                    marginBottom : 20
-                  }}
+        <View
+          style={{
+            backgroundColor: 'white',
+            width: '100%',
+            opacity: 0.4,
+            height: 80,
+            position: 'absolute',
+            // marginBottom: 20,
+            bottom: Platform.OS == 'ios' ? 0 : 0,
+          }}></View>
+        <Animated.View
+          animation="bounceInUp"
+          delay={200}
+          style={{
+            display: 'flex',
+            flexDirection: 'row',
+            marginTop: 0,
+            width: '100%',
+            paddingHorizontal: 10,
+            position: 'absolute',
+            bottom: 0,
+            backgroundColor: 'transparent',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+          }}>
+          {TemplateArrayImagesSponsorPath.map((sponsor, index) => {
+            return (
+              <View style={{width: '20%', height: 80}}>
+                <Image
+                  source={sponsor}
+                  resizeMethod="resize"
+                  resizeMode="contain"
+                  style={{height: '100%', width: '100%'}}
                 />
-              {/* </View> */}
-          </Animated.View>
+              </View>
+            );
+          })}
+        </Animated.View>
         {/* </View> */}
         {/* </Container> */}
       </Root>

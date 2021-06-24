@@ -1,9 +1,6 @@
 import React, {Component} from 'react';
-import {StyleSheet, Image, View, Dimensions} from 'react-native';
-import Autrans from '../assets/autrans.svg';
-import Region from '../assets/region.jpg';
-import Ccmv from '../assets/CCMV.png';
-import Isere from '../assets/isere.svg';
+import {StyleSheet, Image, View, Dimensions, Text} from 'react-native';
+import {TemplateArrayImagesSponsorPath} from '../globalsModifs';
 
 export class Sponsors extends Component {
   constructor(props) {
@@ -31,7 +28,7 @@ export class Sponsors extends Component {
 
   render() {
     return (
-      <View style={{   backgroundColor :'transparent'}}>
+      <View style={{backgroundColor: 'transparent'}}>
         <View
           style={{
             borderBottomWidth: 1,
@@ -45,24 +42,26 @@ export class Sponsors extends Component {
           style={{
             display: 'flex',
             flexDirection: 'row',
-            marginTop: 10,
             width: '100%',
+            justifyContent:
+              TemplateArrayImagesSponsorPath.length !== 1
+                ? 'space-between'
+                : 'center',
+            alignItems: 'center',
             paddingHorizontal: 10,
-            marginBottom: 20,
           }}>
-
-          <View style={{width: '30%', height: 50}}>
-            <Autrans
-              width={'80%'}
-              height={50}
-              style={{
-                alignSelf: 'center',
-                opacity: 1,
-                marginLeft: 10,
-                marginBottom: 5,
-              }}
-            />
-          </View>
+          {TemplateArrayImagesSponsorPath.map((sponsor, index) => {
+            return (
+              <View style={{width: '20%', height: 80}}>
+                <Image
+                  source={sponsor}
+                  resizeMethod="resize"
+                  resizeMode="contain"
+                  style={{height: '100%', width: '100%'}}
+                />
+              </View>
+            );
+          })}
         </View>
       </View>
     );

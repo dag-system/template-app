@@ -17,6 +17,10 @@ import ViewShot, {captureRef} from 'react-native-view-shot';
 import ShareImage from './ShareImage';
 import Share from 'react-native-share';
 import ShareMap from './ShareMap';
+// @ts-ignore
+import autransShare from './../../assets/autrans.jpg';
+import charandeShare from './../../assets/charande.jpg';
+import {Sponsors} from '../Sponsors';
 
 export default function ShareComponent(props: any) {
   const card = React.createRef<ViewShot>();
@@ -53,7 +57,6 @@ export default function ShareComponent(props: any) {
   };
 
   const importImage = () => {
-
     ImagePicker.openPicker({
       width: 700,
       height: 700,
@@ -62,10 +65,10 @@ export default function ShareComponent(props: any) {
     }).then((image) => {
       console.log(image);
       scrollview.current?.scrollTo({
-        x: ITEM_WIDTH +SCROLL_ITEM_PADDING*5,
+        x: ITEM_WIDTH + SCROLL_ITEM_PADDING * 5,
         y: 0,
         animated: true,
-    });
+      });
       setImage(image);
     });
   };
@@ -86,7 +89,7 @@ export default function ShareComponent(props: any) {
           Partager votre activité
         </Text>
         <ScrollView
-         ref={scrollview}
+          ref={scrollview}
           showsHorizontalScrollIndicator={true}
           horizontal
           contentContainerStyle={{paddingRight: 0, paddingBottom: 20}}
@@ -182,7 +185,49 @@ export default function ShareComponent(props: any) {
               <ViewShot
                 ref={card}
                 style={{width: ITEM_WIDTH, height: ITEM_HEIGHT}}>
-                <ShareImage />
+                <ShareImage customImage={autransShare} />
+              </ViewShot>
+            </View>
+
+            <TouchableOpacity
+              onPress={() => takeSnapshot(card)}
+              style={[
+                GlobalStyles.button,
+                {
+                  width: '80%',
+                  alignSelf: 'center',
+                  marginTop: 13,
+
+                  marginBottom: 13,
+                  paddingVertical: 12,
+                },
+              ]}>
+              <Text
+                style={{
+                  textAlign: 'center',
+                  textTransform: 'uppercase',
+                  fontWeight: 'bold',
+                }}>
+                PARTAGER
+              </Text>
+            </TouchableOpacity>
+          </View>
+
+          <View
+            style={{
+              marginHorizontal: SCROLL_ITEM_PADDING,
+              width: SCROLL_ITEM_WIDTH,
+            }}>
+            <View
+              style={{
+                justifyContent: 'center',
+                flexDirection: 'row',
+                display: 'flex',
+              }}>
+              <ViewShot
+                ref={card}
+                style={{width: ITEM_WIDTH, height: ITEM_HEIGHT}}>
+                <ShareImage customImage={charandeShare} />
               </ViewShot>
             </View>
 
@@ -262,9 +307,8 @@ export default function ShareComponent(props: any) {
             </TouchableOpacity>
           </View>
         </ScrollView>
-
-        <View style={{marginBottom: 300}} />
       </Content>
+      <Sponsors />
     </Container>
   );
 }

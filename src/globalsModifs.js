@@ -31,11 +31,14 @@ export const TemplateChallengeEntreprise = true;
 export const TemplateHasAppDonation = false;
 export const TemplateIsPaying = false;
 export const TemplateChallengeAutreName = null;
-export const TemplateSportLive = [{sportName : "Course à pied", idSport : 25}];
+export const TemplateSportLive = [{sportName: 'Course à pied', idSport: 25}];
 export const TemplateArrayImagesSponsorPath = [
+  require('./assets/autrans.png'),
+  // require('./assets/region.jpg'),
+  // require('./assets/CCMV.png'),
+  // require('./assets/isere.png'),
 ];
-export const TemplateArrayImagesPartenairesPath = [
-];
+export const TemplateArrayImagesPartenairesPath = [];
 function purgeString(str) {
   const accents =
     'ÀÁÂÃÄÅàáâãäåÒÓÔÕÕÖØòóôõöøÈÉÊËèéêëðÇçÐÌÍÎÏìíîïÙÚÛÜùúûüÑñŠšŸÿýŽž\' ,*-_#|/="~';
