@@ -17,10 +17,12 @@ import ViewShot, {captureRef} from 'react-native-view-shot';
 import ShareImage from './ShareImage';
 import Share from 'react-native-share';
 import ShareMap from './ShareMap';
+import { Sponsors } from '../Sponsors';
+
 // @ts-ignore
-import autransShare from './../../assets/autrans.jpg';
-import charandeShare from './../../assets/charande.jpg';
-import {Sponsors} from '../Sponsors';
+import autransShare from "./../../assets/autransShare.jpg";
+// @ts-ignore
+import charandeShare from "./../../assets/charandeShare.jpg";
 
 export default function ShareComponent(props: any) {
   const card = React.createRef<ViewShot>();
