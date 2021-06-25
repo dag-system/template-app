@@ -131,11 +131,11 @@ android {
     }
 
     defaultConfig {
-            applicationId "com.dag.templateappname.app"
+            applicationId "com.dag.forestlive.app"
             minSdkVersion rootProject.ext.minSdkVersion
             targetSdkVersion rootProject.ext.targetSdkVersion
-            versionCode 547
-            versionName "1.1.39"
+            versionCode 550
+            versionName "1.1.42"
     }
     splits {
         abi {
