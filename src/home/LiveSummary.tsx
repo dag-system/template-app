@@ -58,7 +58,7 @@ import {
 import {TemplateSportLive, textAutoBackgroundColor} from '../globalsModifs';
 import GpxService from '../services/GpxServices';
 
-import tardRes from './../lang/traduction.json';
+import tradRes from './../lang/traduction.json';
 
 const mapStateToProps = (state) => {
   return {

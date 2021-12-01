@@ -1,56 +1,52 @@
-import React, {Component} from 'react';
+import md5 from 'md5';
+import moment from 'moment';
 import {
-  Platform,
-  StyleSheet,
-  Linking,
-  View,
-  TextInput,
-  SafeAreaView,
-  TouchableHighlight,
-  TouchableOpacity,
-  KeyboardAvoidingView,
-  Image,
-  ImageBackground,
-} from 'react-native';
-import {
+  Body,
+  Button,
   Container,
   Content,
-  Text,
-  Button,
   Header,
-  Left,
-  Right,
   Icon,
+  Left,
   Picker,
-  Toast,
+  Right,
   Root,
-  Body,
+  Text,
+  Toast,
 } from 'native-base';
+import React, {Component} from 'react';
+import {
+  Image,
+  ImageBackground,
+  KeyboardAvoidingView,
+  Linking,
+  Modal,
+  Platform,
+  SafeAreaView,
+  StyleSheet,
+  TextInput,
+  TouchableHighlight,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import * as Animated from 'react-native-animatable';
-import md5 from 'md5';
 import BackgroundGeolocation from 'react-native-background-geolocation';
-import {connect} from 'react-redux';
 import DeviceInfo from 'react-native-device-info';
-
+import VersionCheck from 'react-native-version-check';
+import {connect} from 'react-redux';
 import ApiUtils from '../ApiUtils';
 import Logo from '../assets/logo.png';
-import Loading from './Loading';
-import {Modal} from 'react-native';
-import WebviewJetCode from './WebviewJetCode';
-import GlobalStyles from '../styles';
-import {Sponsors} from './Sponsors';
-import VersionCheck from 'react-native-version-check';
-import moment from 'moment';
-
 import {
-  TemplateAppName,
   TemplateExpirationDate,
   TemplateIdOrganisation,
   TemplateIsPaying,
   textAutoBackgroundColor,
 } from '../globalsModifs';
-
+import GlobalStyles from '../styles';
 import tradRes from './../lang/traduction.json';
+import Loading from './Loading';
+import {Sponsors} from './Sponsors';
+import WebviewJetCode from './WebviewJetCode';
 
 const mapStateToProps = (state) => {
   return {
@@ -615,7 +611,7 @@ class Home extends Component {
                           color: ApiUtils.getBackgroundColor(),
                           textTransform: 'uppercase',
                         }}>
-                        {tradRes[this.props.lang].utils.createAccount}
+                        {tradRes[this.props.lang].utils.login}
                       </Text>
                     </TouchableOpacity>
                   </View>

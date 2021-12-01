@@ -5,6 +5,7 @@
 	};
 	objectVersion = 46;
 	objects = {
+
 /* Begin PBXBuildFile section */
 		00E356F31AD99517003FC87E /* FolomiTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* FolomiTests.m */; };
 		13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.m */; };
@@ -16,6 +17,7 @@
 		2D02E4BF1E0B4AB3006451C7 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		2DCD954D1E0B4F2C00145EB5 /* FolomiTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* FolomiTests.m */; };
 		52F49165CCB68B9662E42DFF /* libPods-Folomi-FolomiTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = FFCDCBE1BD50FE3C1797D3B0 /* libPods-Folomi-FolomiTests.a */; };
+		5FC5B523274BC902002104B2 /* libswiftWebKit.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 5FC5B522274BC901002104B2 /* libswiftWebKit.tbd */; };
 		63459692252F15C3009B6634 /* logo.png in Resources */ = {isa = PBXBuildFile; fileRef = 63459691252F15C3009B6634 /* logo.png */; };
 		76217856F4841B15FA5C82F9 /* libPods-Folomi.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 19E1B9EDC7E69DA79F07BE2C /* libPods-Folomi.a */; };
 		7E5993D1057E2699E6F72442 /* libPods-Folomi-tvOSTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 797C270D0BE2B35ED59F2A8D /* libPods-Folomi-tvOSTests.a */; };
@@ -65,6 +67,7 @@
 		4B916CC16CC64C0285C93FE7 /* AntDesign.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = AntDesign.ttf; path = "../node_modules/native-base/Fonts/AntDesign.ttf"; sourceTree = "<group>"; };
 		5D9F6EC227A0926ABB7AB96F /* Pods-Folomi.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Folomi.debug.xcconfig"; path = "Target Support Files/Pods-Folomi/Pods-Folomi.debug.xcconfig"; sourceTree = "<group>"; };
 		5DDDDD42BCB547BD9FD1BC82 /* FontAwesome.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = FontAwesome.ttf; path = "../node_modules/native-base/Fonts/FontAwesome.ttf"; sourceTree = "<group>"; };
+		5FC5B522274BC901002104B2 /* libswiftWebKit.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libswiftWebKit.tbd; path = usr/lib/swift/libswiftWebKit.tbd; sourceTree = SDKROOT; };
 		63459691252F15C3009B6634 /* logo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = logo.png; path = ../src/assets/logo.png; sourceTree = "<group>"; };
 		63DFC7BA26020B5700C875E8 /* My Cross.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = "My Cross.entitlements"; path = "Folomi/My Cross.entitlements"; sourceTree = "<group>"; };
 		66951B8E65B642B4AEB699F1 /* Entypo.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Entypo.ttf; path = "../node_modules/native-base/Fonts/Entypo.ttf"; sourceTree = "<group>"; };
@@ -103,6 +106,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5FC5B523274BC902002104B2 /* libswiftWebKit.tbd in Frameworks */,
 				76217856F4841B15FA5C82F9 /* libPods-Folomi.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -162,6 +166,7 @@
 		2D16E6871FA4F8E400B85C8A /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				5FC5B522274BC901002104B2 /* libswiftWebKit.tbd */,
 				ED297162215061F000B7C4FE /* JavaScriptCore.framework */,
 				ED2971642150620600B7C4FE /* JavaScriptCore.framework */,
 				19E1B9EDC7E69DA79F07BE2C /* libPods-Folomi.a */,
@@ -259,6 +264,7 @@
 				00E356EB1AD99517003FC87E /* Frameworks */,
 				00E356EC1AD99517003FC87E /* Resources */,
 				DD61D9665D3D27E79C90F273 /* [CP] Copy Pods Resources */,
+				0390CD53783E9111A094DC05 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -282,6 +288,7 @@
 				00DD1BFF1BD5951E006B06BC /* Bundle React Native code and images */,
 				07C7C66EE6E6FBF34E848D39 /* [CP] Copy Pods Resources */,
 				AA65631F710547BA9B4F6C02 /* Upload Debug Symbols to Sentry */,
+				A71CE579E15CBA7C99249368 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -430,6 +437,24 @@
 			shellPath = /bin/sh;
 			shellScript = "export SENTRY_PROPERTIES=sentry.properties\nexport EXTRA_PACKAGER_ARGS=\"--sourcemap-output $DERIVED_FILE_DIR/main.jsbundle.map\"\nexport NODE_BINARY=node\n../node_modules/@sentry/cli/bin/sentry-cli react-native xcode ../node_modules/react-native/scripts/react-native-xcode.sh\n";
 		};
+		0390CD53783E9111A094DC05 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Folomi-FolomiTests/Pods-Folomi-FolomiTests-frameworks.sh",
+				"${PODS_XCFRAMEWORKS_BUILD_DIR}/OpenSSL/OpenSSL.framework/OpenSSL",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/OpenSSL.framework",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Folomi-FolomiTests/Pods-Folomi-FolomiTests-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
 		07C7C66EE6E6FBF34E848D39 /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -557,6 +582,24 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "export SENTRY_PROPERTIES=sentry.properties\nexport EXTRA_PACKAGER_ARGS=\"--sourcemap-output $DERIVED_FILE_DIR/main.jsbundle.map\"\nexport NODE_BINARY=node\n../node_modules/@sentry/cli/bin/sentry-cli react-native xcode ../node_modules/react-native/scripts/react-native-xcode.sh";
+		};
+		A71CE579E15CBA7C99249368 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Folomi/Pods-Folomi-frameworks.sh",
+				"${PODS_XCFRAMEWORKS_BUILD_DIR}/OpenSSL/OpenSSL.framework/OpenSSL",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/OpenSSL.framework",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Folomi/Pods-Folomi-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
 		};
 		AA65631F710547BA9B4F6C02 /* Upload Debug Symbols to Sentry */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -806,6 +849,10 @@
 				);
 				INFOPLIST_FILE = Folomi/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(SDKROOT)/usr/lib/swift",
+				);
 				MARKETING_VERSION = 1.4;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
@@ -834,6 +881,10 @@
 				DEVELOPMENT_TEAM = U22Y8S3CHH;
 				INFOPLIST_FILE = Folomi/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(SDKROOT)/usr/lib/swift",
+				);
 				MARKETING_VERSION = 1.4;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
