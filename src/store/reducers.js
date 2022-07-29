@@ -109,6 +109,16 @@ const reducer = (state = initialState, action) => {
       };
     }
 
+    case 'DELETE_ACCOUNT': {
+      const newFolo = state.folocodes.filter(
+        (item) => item.folocode != action.data.folocode,
+      );
+      return {
+        ...initialState,
+        folocodes: newFolo,
+      };
+    }
+
     case 'ADD_FOLOCODE': {
       return {
         ...state,

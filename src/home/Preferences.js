@@ -1,56 +1,46 @@
-import React, {Component} from 'react';
-import {StyleSheet, View, Switch, TouchableOpacity} from 'react-native';
+import moment from 'moment';
 import {
-  Container,
-  Header,
-  Body,
-  Text,
-  DatePicker,
   Button,
-  Toast,
-  Form,
-  Item,
-  Input,
-  Label,
-  Root,
-  Spinner,
-  Drawer,
+  Container,
   Content,
-  Radio,
-  Left,
-  Right,
-  Picker,
+  Drawer,
+  Header,
   Icon,
+  Input,
+  Item,
+  Label,
+  Left,
+  Picker,
+  Radio,
+  Right,
+  Spinner,
+  Text,
+  Toast,
 } from 'native-base';
-import GlobalStyles from '../styles';
-import md5 from 'md5';
+import React, {Component} from 'react';
+import {Switch, TouchableOpacity, View} from 'react-native';
+import Modal from 'react-native-modal';
+import {connect} from 'react-redux';
 import ApiUtils from '../ApiUtils';
 import ErrorMessage from './ErrorMessage';
-import {connect} from 'react-redux';
 import Sidebar from './SideBar';
-import moment from 'moment';
-import {Platform} from 'react-native';
-import {Dimensions} from 'react-native';
-import VersionCheck from 'react-native-version-check';
 
 import {
-  TemplateNameAsk,
-  TemplateFirstNameAsk,
-  TemplateSexeAsk,
-  TemplateDdnAsk,
-  TemplateMailAsk,
-  TemplateTelAsk,
   TemplateAdressAsk,
-  TemplatePostalAsk,
+  TemplateChallengeAutre,
+  TemplateChallengeClub,
+  TemplateChallengeEntreprise,
+  TemplateChallengeFamille,
   TemplateCityAsk,
   TemplateCountryAsk,
+  TemplateDdnAsk,
+  TemplateFirstNameAsk,
+  TemplateMailAsk,
+  TemplateNameAsk,
+  TemplatePostalAsk,
+  TemplateSexeAsk,
+  TemplateTelAsk,
   TemplateTelVerifAsk,
-  TemplateChallengeClub,
-  TemplateChallengeFamille,
-  TemplateChallengeAutre,
-  TemplateChallengeEntreprise,
-  TemplateChallengeAutreName,
-  IsDemo,
   textAutoBackgroundColor,
 } from './../globalsModifs';
 
@@ -190,6 +180,7 @@ class Preferences extends Component {
       clubAutre: '',
       acceptChallengeNameUtilisateur: false,
       acceptChallengeUtilisateur: false,
+      deleteModalOpen: false,
     };
   }
 
@@ -341,7 +332,8 @@ class Preferences extends Component {
   }
 
   validateEmail(email) {
-    var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    var re =
+      /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     return re.test(email);
   }
 
@@ -1054,6 +1046,64 @@ class Preferences extends Component {
                 J'accepte que mon nom apparaisse dans les résultats
               </Text>
             </View>
+
+            <Button
+              style={{
+                backgroundColor: 'red',
+                width: '100%',
+                marginBottom: 20,
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}
+              onPress={() =>
+                this.setState({deleteModalOpen: !this.state.deleteModalOpen})
+              }>
+              <Text style={{textAlign: 'center'}}>Supprimer mon compte</Text>
+            </Button>
+
+            <Modal isVisible={this.state.deleteModalOpen}>
+              <View style={{backgroundColor: 'white', padding: 20}}>
+                <Text>Êtes vous sur de vouloir supprimer votre compte ?</Text>
+                <View
+                  style={{
+                    display: 'flex',
+                    flexDirection: 'row',
+                    justifyContent: 'space-around',
+                    marginTop: 20,
+                  }}>
+                  <Button
+                    onPress={() => this.setState({deleteModalOpen: false})}>
+                    <Text>Annuler</Text>
+                  </Button>
+                  <Button
+                    style={{backgroundColor: 'red'}}
+                    onPress={async () => {
+                      await axios.delete(
+                        'https://apict.dag-system.com/auth/user/' +
+                          this.state.userdata.idUtilisateur,
+                        {headers: {appname: 'dashboard'}},
+                      );
+                      BackgroundGeolocation.stop();
+                      var action = {
+                        type: 'DELETE_ACCOUNT',
+                        data: {
+                          folocode: this.state.userdata.folocodeUtilisateur,
+                        },
+                      };
+                      this.props.dispatch(action);
+
+                      this.setState({
+                        deleteModalOpen: !this.state.deleteModalOpen,
+                      });
+
+                      this.props.navigation.navigate('Home');
+                    }}>
+                    <Text>Supprimer mon compte</Text>
+                  </Button>
+                </View>
+              </View>
+            </Modal>
           </Content>
         </Container>
       </Drawer>

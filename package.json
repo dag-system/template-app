@@ -27,6 +27,7 @@
     "@sentry/react-native": "^2.2.2",
     "@types/react-native-snap-carousel": "^3.8.2",
     "@welldone-software/why-did-you-render": "^6.0.5",
+    "axios": "^0.27.2",
     "geolib": "^3.3.1",
     "gpx-builder": "^3.6.21",
     "haversine": "^1.1.1",
